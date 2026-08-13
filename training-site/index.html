@@ -26,7 +26,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation (右上角手冊導覽已改為「保費計算器」) -->
+    <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <!-- 右上角按鈕：由原本的手冊導覽改為「保費計算器」（免費開放） -->
+                <!-- 右上角按鈕：改為橙色「🧮 保費計算器」（如圖一） -->
                 <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
                     <span>🧮 保費計算器</span>
                 </button>
@@ -60,7 +60,7 @@
         </div>
     </nav>
 
-    <!-- PAGE 1: 預設首頁（保持圖二 OGOR 歡迎封面與大家庭畫面） -->
+    <!-- PAGE 1: 預設首頁（保持圖二畫面：OGOR 歡迎封面與大家庭） -->
     <div id="page-home" class="page-view space-y-12 pb-16">
         <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
@@ -198,7 +198,7 @@
         </section>
     </div>
 
-    <!-- PAGE: 保費計算器 (免費免登入) -->
+    <!-- PAGE: 保費計算器 (免費開放免登入) -->
     <div id="page-calc" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-3xl mx-auto space-y-2">
@@ -909,7 +909,7 @@
         </div>
     </div>
 
-    <!-- 🔥 登入 / 註冊 Modal (完全鎖定背景滾動，徹底解決點擊無反應) -->
+    <!-- 🔥 登入 / 註冊 Modal -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
         
@@ -922,7 +922,7 @@
                 <p id="authModalDesc" class="text-xs text-slate-500">請輸入您的 Agent Code 及密碼登入系統</p>
             </div>
 
-            <!-- 登入 Form (手機秒聚焦秒彈鍵盤) -->
+            <!-- 登入 Form -->
             <form id="loginFormSection" onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label>
@@ -1833,7 +1833,7 @@
                 bAnnualDisp.classList.remove('hidden'); bMonthlyDisp.classList.add('hidden');
             } else if (mode === 'monthly') {
                 bMon.className = "px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer";
-                bAnnualDisp.add('hidden'); bMonthlyDisp.classList.remove('hidden');
+                bAnnualDisp.classList.add('hidden'); bMonthlyDisp.classList.remove('hidden');
             }
         }
 
@@ -2217,8 +2217,8 @@
         }
 
         window.onload = function() {
-            // 🔥 強制預設進入「保費計算器」頁面
-            switchPage('page-calc');
+            // 🔥 預設進入圖二畫面（OGOR 歡迎主頁）
+            switchPage('page-home');
 
             var defaultBtn = document.querySelector('.comm-category-item');
             setCommCategory('whole_life', defaultBtn);
