@@ -71,7 +71,7 @@
         </div>
     </nav>
 
-    <!-- PAGE 1: 預設首頁：醫療 & 危疾保費查詢 (免費開放免登入) -->
+    <!-- PAGE: 醫療 & 危疾保費查詢 (強制預設開啟首頁) -->
     <div id="page-calc" class="page-view py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-3xl mx-auto space-y-2">
@@ -915,11 +915,11 @@
         </div>
     </div>
 
-    <!-- 🔥 登入 / 註冊 Modal (完全鎖定背景滾動，徹底解決點擊無反應) -->
+    <!-- 🔥 登入 / 註冊 Modal (完全解決手機遮罩與輸入框無反應) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
         
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-slate-100 my-auto z-[1000] pointer-events-auto">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-slate-100 my-auto z-[1000] pointer-events-auto" style="pointer-events: auto; position: relative; z-index: 10000;">
             <button type="button" onclick="closeAuthModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-colors cursor-pointer">✕</button>
             
             <div id="authModalHeader" class="text-center space-y-2">
@@ -932,13 +932,13 @@
             <form id="loginFormSection" onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label>
-                    <input id="loginAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" inputmode="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
+                    <input id="loginAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" inputmode="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold" style="pointer-events: auto;">
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">密碼</label>
-                    <input id="loginPassword" type="password" required placeholder="請輸入密碼" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
+                    <input id="loginPassword" type="password" required placeholder="請輸入密碼" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold" style="pointer-events: auto;">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">立即登入</button>
+                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer" style="pointer-events: auto;">立即登入</button>
                 <div class="text-center pt-2">
                     <span class="text-xs text-slate-500">仲未有帳號？</span>
                     <button type="button" onclick="switchAuthMode('register')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">立即申請註冊</button>
@@ -2223,6 +2223,9 @@
         }
 
         window.onload = function() {
+            // 🔥 強制預設載入「保費計算器」
+            switchPage('page-calc');
+
             var defaultBtn = document.querySelector('.comm-category-item');
             setCommCategory('whole_life', defaultBtn);
             updateCalcOptions();
