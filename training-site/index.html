@@ -26,7 +26,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation (已整理重複項：新人堂改為手冊導覽，中間重複計算器已刪除) -->
+    <!-- Top Navigation (頂部按鈕改為「保費計算器」，選單按指定順序排列) -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
@@ -37,33 +37,42 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <!-- 左側手冊導覽下拉按鈕 -->
-                <div class="relative dropdown-container py-2 shrink-0">
-                    <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
-                        <svg class="w-4 h-4 fill-current text-orange-500" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                        <span>手冊導覽</span>
-                        <span class="text-[10px] opacity-70">▼</span>
-                    </button>
-                    <div class="dropdown-menu absolute left-0 top-full w-48 bg-white border border-slate-100 rounded-2xl shadow-xl p-2 z-50 text-xs sm:text-sm">
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#welcome-msg')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👋 Welcome</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#vision')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🚩 願景使命</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#culture')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👥 Team 精神</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#onboarding')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">📅 30 天攻略</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🔑 成功秘訣</button>
-                    </div>
-                </div>
+                <!-- 1. 頂部懸浮按鈕：改為「🧮 保費計算器」（免費開放） -->
+                <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
+                    <span>🧮 保費計算器</span>
+                </button>
 
-                <!-- 中間選單 (新人堂已改為手冊導覽，重複計算器已刪除) -->
+                <!-- 中間選單順序：下拉式手冊導覽 -> 新人禮遇 -> 一般保險 -> FWD專區 -> 佣金計算機 -> 知識遊戲 -->
                 <div class="hidden md:flex items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold whitespace-nowrap">
-                    <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer">手冊導覽</button>
+                    
+                    <!-- 下拉式手冊導覽 -->
+                    <div class="relative dropdown-container py-2 shrink-0">
+                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
+                            <span>手冊導覽</span>
+                            <span class="text-[10px] opacity-70">▼</span>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 top-full w-48 bg-white border border-slate-100 rounded-2xl shadow-xl p-2 z-50 text-xs sm:text-sm">
+                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#welcome-msg')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👋 Welcome</button>
+                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#vision')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🚩 願景使命</button>
+                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#culture')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👥 Team 精神</button>
+                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#onboarding')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">📅 30 天攻略</button>
+                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🔑 成功秘訣</button>
+                        </div>
+                    </div>
+
+                    <!-- 新人禮遇 -->
                     <button type="button" onclick="checkAndSwitchPage('page-home', '新人禮遇', '#onboarding')" class="text-amber-500 hover:opacity-80 cursor-pointer">新人禮遇</button>
+                    <!-- 一般保險 -->
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
+                    <!-- FWD專區 -->
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
+                    <!-- 佣金計算機 -->
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
-                    <button type="button" onclick="switchPage('page-calc')" class="text-[#E87722] font-black hover:opacity-80 cursor-pointer">🧮 保費計算器</button>
+                    <!-- 知識遊戲 -->
                     <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
                 </div>
 
+                <!-- 登入 / 註冊 -->
                 <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
                     <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
                     <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
@@ -72,7 +81,7 @@
         </div>
     </nav>
 
-    <!-- PAGE 1: 預設首頁（保持圖二 OGOR 歡迎封面與大家庭畫面） -->
+    <!-- PAGE 1: 預設首頁（保持圖二畫面：OGOR 歡迎封面與大家庭） -->
     <div id="page-home" class="page-view space-y-12 pb-16">
         <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
@@ -921,7 +930,7 @@
         </div>
     </div>
 
-    <!-- 🔥 登入 / 註冊 Modal -->
+    <!-- 🔥 登入 / 註冊 Modal (完全鎖定背景滾動，徹底解決點擊無反應) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
         
