@@ -12,7 +12,6 @@
         .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease-in-out; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
         
-        /* 鎖定背景滾動 Class */
         body.modal-open { overflow: hidden !important; height: 100vh !important; touch-action: none !important; }
 
         input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; touch-action: manipulation; }
@@ -27,10 +26,10 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation -->
+    <!-- Top Navigation (右上角手冊導覽已改為「保費計算器」) -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-calc')">
+            <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
                 <img src="https://i.imgur.com/jLd8kGT.jpeg" alt="OGOR Logo" class="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center p-0.5 shadow-md object-cover border border-orange-100">
                 <div>
                     <span class="text-base sm:text-lg font-black tracking-wider text-slate-900 block leading-none whitespace-nowrap">ONE GOAL ONE REGION</span>
@@ -38,20 +37,10 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <div class="relative dropdown-container py-2 shrink-0">
-                    <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
-                        <svg class="w-4 h-4 fill-current text-orange-500" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                        <span>手冊導覽</span>
-                        <span class="text-[10px] opacity-70">▼</span>
-                    </button>
-                    <div class="dropdown-menu absolute left-0 top-full w-48 bg-white border border-slate-100 rounded-2xl shadow-xl p-2 z-50 text-xs sm:text-sm">
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#welcome-msg')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👋 Welcome</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#vision')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🚩 願景使命</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#culture')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👥 Team 精神</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#onboarding')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">📅 30 天攻略</button>
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🔑 成功秘訣</button>
-                    </div>
-                </div>
+                <!-- 右上角按鈕：由原本的手冊導覽改為「保費計算器」（免費開放） -->
+                <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
+                    <span>🧮 保費計算器</span>
+                </button>
 
                 <div class="hidden md:flex items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold whitespace-nowrap">
                     <button type="button" onclick="checkAndSwitchPage('page-home', '新人堂', '#onboarding')" class="text-orange-500 hover:opacity-80 cursor-pointer">新人堂</button>
@@ -71,8 +60,146 @@
         </div>
     </nav>
 
-    <!-- PAGE: 醫療 & 危疾保費查詢 (強制預設開啟首頁) -->
-    <div id="page-calc" class="page-view py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
+    <!-- PAGE 1: 預設首頁（保持圖二 OGOR 歡迎封面與大家庭畫面） -->
+    <div id="page-home" class="page-view space-y-12 pb-16">
+        <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase">⚡ ONE GOAL ONE REGION</div>
+                <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+                    歡迎來到 <span class="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">OGOR 團隊手冊</span>
+                </h1>
+                <p class="text-base sm:text-lg text-slate-600">這裡匯聚咗 OGOR 團隊的核心系統、成功秘笈與培訓資源。攜手同行，共創高峰！</p>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white mb-8">
+                <img src="https://i.imgur.com/YgI1rdY.jpeg" alt="OGOR 大家庭" class="w-full h-auto object-cover">
+            </div>
+        </section>
+
+        <!-- 👋 Welcome 歡迎辭 -->
+        <section id="welcome-msg" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="text-2xl">👋</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Welcome 歡迎辭</h2>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p class="font-bold text-base text-slate-900">歡迎加入 ONE GOAL ONE REGION (OGOR) 大家庭！</p>
+                    <p><b>ONE GOAL ONE REGION</b> 代表著我們的核心信念：<b>「一個目標，一個團隊」</b>。</p>
+                    <p>不論背景、不分彼此，只要來到 OGOR，我們就是心懷同一個夢想、朝著同一個方向並肩作戰的精銳戰隊。我們深信，單打獨鬥或許能走得快，但唯有團結一心，才能走得遠、攀得高！</p>
+                    <p>無論您是剛入行的新人，還是經驗豐富的保險精英，在這裡我們都有全方位的培訓體系與系統支援。這份團隊手冊是您事業啟航的指引，請善用當中的工具與資源，讓我們一齊「一個目標，一個團隊」，共創事業高峰！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🚩 願景使命 -->
+        <section id="vision" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="text-2xl">🚩</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">願景使命 (Vision & Mission)</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+                    <div class="bg-orange-50/50 p-6 rounded-2xl border border-orange-100 space-y-2">
+                        <h3 class="font-bold text-orange-800 text-base flex items-center gap-2">🎯 我們的團隊願景</h3>
+                        <p>成為最具專業影響力與凝聚力的保險團隊，為每一位成員提供頂尖的成長平台，共同開創事業高峰。</p>
+                    </div>
+                    <div class="bg-amber-50/50 p-6 rounded-2xl border border-amber-100 space-y-2">
+                        <h3 class="font-bold text-amber-800 text-base flex items-center gap-2">🚀 我們的使命</h3>
+                        <p>以客戶利益為核心，透過專業知識與科技賦能，為千萬家庭提供最完善保障，成就團隊成員事業夢想。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 👥 Team 精神與文化 -->
+        <section id="culture" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="text-2xl">👥</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Team 精神與文化</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100 space-y-2">
+                        <div class="text-3xl">🤝</div>
+                        <h4 class="font-black text-purple-900 text-sm">互助共享</h4>
+                        <p class="text-xs text-slate-600">團隊無私分享成功經驗，一人有難百人支援。</p>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100 space-y-2">
+                        <div class="text-3xl">🔥</div>
+                        <h4 class="font-black text-blue-900 text-sm">追求卓越</h4>
+                        <p class="text-xs text-slate-600">不斷突破自我極限，保持高昂鬥志與專業水準。</p>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 space-y-2">
+                        <div class="text-3xl">💡</div>
+                        <h4 class="font-black text-emerald-900 text-sm">創新賦能</h4>
+                        <p class="text-xs text-slate-600">全面擁抱科技與 AI 工具，提升工作效率與客展能力。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📅 30 天通關攻略 -->
+        <section id="onboarding" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="text-2xl">📅</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">新人 30 天通關攻略</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 font-bold">第 1 - 10 天</span>
+                        <h4 class="font-black text-slate-900 text-sm">基礎建構期</h4>
+                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
+                            <li>熟悉公司主要產品 (尊衛您/危疾應援保)</li>
+                            <li>完成系統帳戶設定與手冊導覽</li>
+                            <li>熟練使用保費計算器</li>
+                        </ul>
+                    </div>
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 font-bold">第 11 - 20 天</span>
+                        <h4 class="font-black text-slate-900 text-sm">實戰演練期</h4>
+                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
+                            <li>參與團隊客展技巧與異議應對演練</li>
+                            <li>學習使用活動量油門器記錄進度</li>
+                            <li>進行首次客戶保障需求分析</li>
+                        </ul>
+                    </div>
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold">第 21 - 30 天</span>
+                        <h4 class="font-black text-slate-900 text-sm">獨立簽單期</h4>
+                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
+                            <li>獨立完成方案擬定與報價輸出</li>
+                            <li>主管陪同面談與實戰簽單</li>
+                            <li>結算首月目標，設定下階段成長計劃</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔑 成功秘訣 -->
+        <section id="training" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="text-2xl">🔑</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">OGOR 成功秘訣</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 space-y-2">
+                        <h4 class="font-bold text-indigo-900 text-sm">💡 習慣決定高度</h4>
+                        <p class="text-slate-600 leading-relaxed">每日保持穩定活動量，堅持拜訪與跟進。將簡單的事情重複做，你就是專家！</p>
+                    </div>
+                    <div class="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 space-y-2">
+                        <h4 class="font-bold text-indigo-900 text-sm">🤖 科技加速成長</h4>
+                        <p class="text-slate-600 leading-relaxed">善用 AI Sammy 智能助手解答疑難，利用保費快算工具即時產出專業報價，事半功倍！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: 保費計算器 (免費免登入) -->
+    <div id="page-calc" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-3xl mx-auto space-y-2">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">醫療 & 危疾保費查詢</h2>
@@ -259,143 +386,10 @@
         </div>
     </div>
 
-    <!-- PAGE 2: OGOR 手冊內頁 (需登入) -->
-    <div id="page-home" class="page-view hidden space-y-12 pb-16">
-        <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase">⚡ ONE GOAL ONE REGION</div>
-                <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-                    歡迎來到 <span class="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">OGOR 團隊手冊</span>
-                </h1>
-                <p class="text-base sm:text-lg text-slate-600">這裡匯聚咗 OGOR 團隊的核心系統、成功秘笈與培訓資源。攜手同行，共創高峰！</p>
-            </div>
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white mb-8">
-                <img src="https://i.imgur.com/YgI1rdY.jpeg" alt="OGOR 大家庭" class="w-full h-auto object-cover">
-            </div>
-        </section>
-
-        <section id="welcome-msg" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <span class="text-2xl">👋</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Welcome 歡迎辭</h2>
-                </div>
-                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 space-y-4 text-sm text-slate-700 leading-relaxed">
-                    <p class="font-bold text-base text-slate-900">歡迎加入 ONE GOAL ONE REGION (OGOR) 大家庭！</p>
-                    <p><b>ONE GOAL ONE REGION</b> 代表著我們的核心信念：<b>「一個目標，一個團隊」</b>。</p>
-                    <p>不論背景、不分彼此，只要來到 OGOR，我們就是心懷同一個夢想、朝著同一個方向並肩作戰的精銳戰隊。我們深信，單打獨鬥或許能走得快，但唯有團結一心，才能走得遠、攀得高！</p>
-                    <p>無論您是剛入行的新人，還是經驗豐富的保險精英，在這裡我們都有全方位的培訓體系與系統支援。這份團隊手冊是您事業啟航的指引，請善用當中的工具與資源，讓我們一齊「一個目標，一個團隊」，共創事業高峰！</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="vision" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <span class="text-2xl">🚩</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">願景使命 (Vision & Mission)</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
-                    <div class="bg-orange-50/50 p-6 rounded-2xl border border-orange-100 space-y-2">
-                        <h3 class="font-bold text-orange-800 text-base flex items-center gap-2">🎯 我們的團隊願景</h3>
-                        <p>成為最具專業影響力與凝聚力的保險團隊，為每一位成員提供頂尖的成長平台，共同開創事業高峰。</p>
-                    </div>
-                    <div class="bg-amber-50/50 p-6 rounded-2xl border border-amber-100 space-y-2">
-                        <h3 class="font-bold text-amber-800 text-base flex items-center gap-2">🚀 我們的使命</h3>
-                        <p>以客戶利益為核心，透過專業知識與科技賦能，為千萬家庭提供最完善保障，成就團隊成員事業夢想。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="culture" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <span class="text-2xl">👥</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Team 精神與文化</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                    <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100 space-y-2">
-                        <div class="text-3xl">🤝</div>
-                        <h4 class="font-black text-purple-900 text-sm">互助共享</h4>
-                        <p class="text-xs text-slate-600">團隊無私分享成功經驗，一人有難百人支援。</p>
-                    </div>
-                    <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100 space-y-2">
-                        <div class="text-3xl">🔥</div>
-                        <h4 class="font-black text-blue-900 text-sm">追求卓越</h4>
-                        <p class="text-xs text-slate-600">不斷突破自我極限，保持高昂鬥志與專業水準。</p>
-                    </div>
-                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 space-y-2">
-                        <div class="text-3xl">💡</div>
-                        <h4 class="font-black text-emerald-900 text-sm">創新賦能</h4>
-                        <p class="text-xs text-slate-600">全面擁抱科技與 AI 工具，提升工作效率與客展能力。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="onboarding" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <span class="text-2xl">📅</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">新人 30 天通關攻略</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
-                        <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 font-bold">第 1 - 10 天</span>
-                        <h4 class="font-black text-slate-900 text-sm">基礎建構期</h4>
-                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
-                            <li>熟悉公司主要產品 (尊衛您/危疾應援保)</li>
-                            <li>完成系統帳戶設定與手冊導覽</li>
-                            <li>熟練使用保費計算器</li>
-                        </ul>
-                    </div>
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
-                        <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 font-bold">第 11 - 20 天</span>
-                        <h4 class="font-black text-slate-900 text-sm">實戰演練期</h4>
-                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
-                            <li>參與團隊客展技巧與異議應對演練</li>
-                            <li>學習使用活動量油門器記錄進度</li>
-                            <li>進行首次客戶保障需求分析</li>
-                        </ul>
-                    </div>
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3">
-                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold">第 21 - 30 天</span>
-                        <h4 class="font-black text-slate-900 text-sm">獨立簽單期</h4>
-                        <ul class="space-y-1.5 text-slate-600 list-disc list-inside">
-                            <li>獨立完成方案擬定與報價輸出</li>
-                            <li>主管陪同面談與實戰簽單</li>
-                            <li>結算首月目標，設定下階段成長計劃</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="training" class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <span class="text-2xl">🔑</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">OGOR 成功秘訣</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                    <div class="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 space-y-2">
-                        <h4 class="font-bold text-indigo-900 text-sm">💡 習慣決定高度</h4>
-                        <p class="text-slate-600 leading-relaxed">每日保持穩定活動量，堅持拜訪與跟進。將簡單的事情重複做，你就是專家！</p>
-                    </div>
-                    <div class="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 space-y-2">
-                        <h4 class="font-bold text-indigo-900 text-sm">🤖 科技加速成長</h4>
-                        <p class="text-slate-600 leading-relaxed">善用 AI Sammy 智能助手解答疑難，利用保費快算工具即時產出專業報價，事半功倍！</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
     <!-- PAGE: FWD專區 -->
     <div id="page-fwd" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
         <div class="flex items-center justify-between">
-            <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回保費計算器</button>
+            <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
         </div>
 
         <div class="text-center space-y-3">
@@ -641,7 +635,7 @@
     <!-- PAGE 2: 佣金計算機 -->
     <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
-            <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回保費計算器</button>
+            <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
             <span class="text-xs font-bold text-[#E87722] bg-orange-50 px-3 py-1 rounded-full">🧮 FWD 澳門佣金試算 (2025.12 最新版)</span>
         </div>
 
@@ -701,7 +695,7 @@
     <!-- PAGE 4: OGOR 100題知識闖關遊戲 -->
     <div id="page-game" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
-            <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回保費計算器</button>
+            <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
             <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">🎮 富衛保險指南 100 題大挑戰</span>
         </div>
 
@@ -744,7 +738,7 @@
     <!-- PAGE 5: 一般保險主頁 -->
     <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
         <div class="flex items-center justify-between">
-            <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回保費計算器</button>
+            <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
         </div>
 
         <div class="text-center space-y-3">
@@ -915,7 +909,7 @@
         </div>
     </div>
 
-    <!-- 🔥 登入 / 註冊 Modal (完全解決手機遮罩與輸入框無反應) -->
+    <!-- 🔥 登入 / 註冊 Modal (完全鎖定背景滾動，徹底解決點擊無反應) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
         
@@ -1368,7 +1362,7 @@
             updateAuthUI();
             closeAuthModal();
             showToast('已安全登出系統');
-            switchPage('page-calc');
+            switchPage('page-home');
         }
 
         // 9 大官方車險 Google Drive 檔案 ID
@@ -1839,7 +1833,7 @@
                 bAnnualDisp.classList.remove('hidden'); bMonthlyDisp.classList.add('hidden');
             } else if (mode === 'monthly') {
                 bMon.className = "px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer";
-                bAnnualDisp.classList.add('hidden'); bMonthlyDisp.classList.remove('hidden');
+                bAnnualDisp.add('hidden'); bMonthlyDisp.classList.remove('hidden');
             }
         }
 
@@ -2223,7 +2217,7 @@
         }
 
         window.onload = function() {
-            // 🔥 強制預設載入「保費計算器」
+            // 🔥 強制預設進入「保費計算器」頁面
             switchPage('page-calc');
 
             var defaultBtn = document.querySelector('.comm-category-item');
