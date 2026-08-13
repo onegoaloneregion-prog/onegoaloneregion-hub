@@ -26,7 +26,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation (頂部按鈕改為「保費計算器」，選單按指定順序排列) -->
+    <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
@@ -37,15 +37,11 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <!-- 1. 頂部懸浮按鈕：改為「🧮 保費計算器」（免費開放） -->
                 <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
                     <span>🧮 保費計算器</span>
                 </button>
 
-                <!-- 中間選單順序：下拉式手冊導覽 -> 新人禮遇 -> 一般保險 -> FWD專區 -> 佣金計算機 -> 知識遊戲 -->
                 <div class="hidden md:flex items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold whitespace-nowrap">
-                    
-                    <!-- 下拉式手冊導覽 -->
                     <div class="relative dropdown-container py-2 shrink-0">
                         <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
                             <span>手冊導覽</span>
@@ -59,20 +55,13 @@
                             <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🔑 成功秘訣</button>
                         </div>
                     </div>
-
-                    <!-- 新人禮遇 -->
                     <button type="button" onclick="checkAndSwitchPage('page-home', '新人禮遇', '#onboarding')" class="text-amber-500 hover:opacity-80 cursor-pointer">新人禮遇</button>
-                    <!-- 一般保險 -->
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
-                    <!-- FWD專區 -->
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
-                    <!-- 佣金計算機 -->
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
-                    <!-- 知識遊戲 -->
                     <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
                 </div>
 
-                <!-- 登入 / 註冊 -->
                 <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
                     <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
                     <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
@@ -81,7 +70,7 @@
         </div>
     </nav>
 
-    <!-- PAGE 1: 預設首頁（保持圖二畫面：OGOR 歡迎封面與大家庭） -->
+    <!-- PAGE 1: 預設首頁（圖二 OGOR 歡迎封面與大家庭） -->
     <div id="page-home" class="page-view space-y-12 pb-16">
         <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
@@ -568,7 +557,7 @@
                             <b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">5. 更衛您 (優越版) 醫療計劃</b>
                             <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">個人醫療</span>
                         </div>
-                        <p class="text-slate-600 leading-relaxed">提供全額病房、膳食、雜費及手術費保障，設日間手術現金及樂賞健康保障。</p>
+                        <p class="text-slate-600 leading-relaxed">提供全額病房,膳食、雜費及手術費保障，設日間手術現金及樂賞健康保障。</p>
                     </div>
                     <div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
                 </div>
@@ -930,7 +919,7 @@
         </div>
     </div>
 
-    <!-- 🔥 登入 / 註冊 Modal (完全鎖定背景滾動，徹底解決點擊無反應) -->
+    <!-- 🔥 登入 / 註冊 Modal -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
         
@@ -943,7 +932,7 @@
                 <p id="authModalDesc" class="text-xs text-slate-500">請輸入您的 Agent Code 及密碼登入系統</p>
             </div>
 
-            <!-- 登入 Form (手機秒聚焦秒彈鍵盤) -->
+            <!-- 登入 Form -->
             <form id="loginFormSection" onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label>
@@ -1643,7 +1632,7 @@
             { diff: "簡單", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2, ref: "危疾應援保家添守護條款：可獲支付本保單原有投保額的20%。" },
             { diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0, ref: "全意守護意外保障計劃小冊子：投保年齡為15日個天至70歲。" },
             { diff: "簡單", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1, ref: "尊衛您（寰譽版）醫療計劃小冊子：標準保障級別為每保單年度11,000,000港元。" },
-            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
+            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核准", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
         ];
 
         var currentQuizIndex = 0;
@@ -1671,7 +1660,7 @@
 
             if (currentQuizIndex >= quizQuestions.length) {
                 document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成所有闖關題目！OGOR 團隊因您而驕傲！";
-                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新挑戰關卡 (再次全隨機抽題)</button>';
+                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新挑戰關卡 (再次全隨機洗牌)</button>';
                 return;
             }
 
