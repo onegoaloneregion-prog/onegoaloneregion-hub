@@ -12,7 +12,6 @@
         .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease-in-out; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
         
-        /* 提升觸控相容性 */
         button, a, select, input, div[onclick] { touch-action: manipulation; cursor: pointer; }
 
         /* AI 浮窗動畫 */
@@ -24,10 +23,10 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation (完整 9 大項，對接手機/iPad 觸控) -->
+    <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="checkAndSwitchPage('page-home', '主頁手冊')" ontouchend="checkAndSwitchPage('page-home', '主頁手冊')">
+            <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="checkAndSwitchPage('page-home', '主頁手冊')">
                 <img src="https://i.imgur.com/jLd8kGT.jpeg" alt="OGOR Logo" class="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center p-0.5 shadow-md object-cover border border-orange-100">
                 <div>
                     <span class="text-base sm:text-lg font-black tracking-wider text-slate-900 block leading-none whitespace-nowrap">ONE GOAL ONE REGION</span>
@@ -36,7 +35,7 @@
 
             <div class="flex items-center space-x-3 sm:space-x-5">
                 <div class="relative dropdown-container py-2 shrink-0">
-                    <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" ontouchend="checkAndSwitchPage('page-home', '手冊導覽')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
+                    <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
                         <svg class="w-4 h-4 fill-current text-orange-500" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
                         <span>手冊導覽</span>
                         <span class="text-[10px] opacity-70">▼</span>
@@ -56,14 +55,13 @@
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
-                    <!-- 保費計算器：免登入免費使用 -->
                     <button type="button" onclick="switchPage('page-calc')" class="text-[#E87722] font-black hover:opacity-80 cursor-pointer">保費計算器</button>
                     <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
                 </div>
 
                 <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
                     <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
-                    <button type="button" id="authBtnAction" onclick="openAuthModal('login')" ontouchend="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
+                    <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
                 </div>
             </div>
         </div>
@@ -228,7 +226,7 @@
                 <p class="text-xs text-slate-500 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
             </div>
 
-            <div onclick="switchPage('page-fwd-brochures')" ontouchend="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group">
+            <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div>
                     <span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span>
@@ -237,7 +235,7 @@
                 <p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等熱門計劃。</p>
             </div>
 
-            <div onclick="switchPage('page-fwd-promo')" ontouchend="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group">
+            <div onclick="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-3xl">🎁</div>
                     <span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看優惠專頁 →</span>
@@ -246,7 +244,7 @@
                 <p class="text-xs text-slate-500 leading-relaxed">即時查閱最新客戶促銷優惠，包含 2026 年第 3 季客戶保費折扣優惠及盈聚天下 II 專屬優惠。</p>
             </div>
 
-            <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" ontouchend="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group">
+            <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div>
                     <span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span>
@@ -274,7 +272,7 @@
             </div>
 
             <div id="fwdPromoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                <div onclick="window.open('https://drive.google.com/file/d/1QJrod6sRY_dwKoCqF_3ZxuiCb65r59MT/view?usp=sharing', '_blank')" ontouchend="window.open('https://drive.google.com/file/d/1QJrod6sRY_dwKoCqF_3ZxuiCb65r59MT/view?usp=sharing', '_blank')" class="p-6 rounded-2xl border-2 border-amber-200 bg-amber-50/30 hover:border-amber-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between">
+                <div onclick="window.open('https://drive.google.com/file/d/1QJrod6sRY_dwKoCqF_3ZxuiCb65r59MT/view?usp=sharing', '_blank')" class="p-6 rounded-2xl border-2 border-amber-200 bg-amber-50/30 hover:border-amber-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between border-b border-amber-100 pb-3">
                             <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs">2026 Q3 優惠</span>
@@ -286,7 +284,7 @@
                     <div class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟官方 PDF 檔</div>
                 </div>
 
-                <div onclick="window.open('https://drive.google.com/file/d/1Hct5vR3mWVPoq74Eklf8sD8LQKIwGRn5/view?usp=sharing', '_blank')" ontouchend="window.open('https://drive.google.com/file/d/1Hct5vR3mWVPoq74Eklf8sD8LQKIwGRn5/view?usp=sharing', '_blank')" class="p-6 rounded-2xl border-2 border-orange-200 bg-orange-50/30 hover:border-orange-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between">
+                <div onclick="window.open('https://drive.google.com/file/d/1Hct5vR3mWVPoq74Eklf8sD8LQKIwGRn5/view?usp=sharing', '_blank')" class="p-6 rounded-2xl border-2 border-orange-200 bg-orange-50/30 hover:border-orange-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between border-b border-orange-100 pb-3">
                             <span class="px-2.5 py-1 rounded-lg bg-orange-100 text-orange-700 font-bold text-xs">旗艦儲蓄專享</span>
@@ -922,9 +920,9 @@
         </div>
     </div>
 
-    <!-- 登入 / 註冊 / 審批管理 Modal -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-slate-100">
+    <!-- 🔥 登入 / 註冊 / 審批管理 Modal (已重構為 Form 表單提交及最高層級 z-[100]，完美支援手機 iPad) -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-slate-100 my-auto">
             <button type="button" onclick="closeAuthModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-colors cursor-pointer">✕</button>
             
             <div id="authModalHeader" class="text-center space-y-2">
@@ -933,53 +931,53 @@
                 <p id="authModalDesc" class="text-xs text-slate-500">請輸入您的 Agent Code 及密碼登入系統</p>
             </div>
 
-            <!-- 登入表單 -->
-            <div id="loginFormSection" class="space-y-4">
+            <!-- 登入 Form (手機100%可按) -->
+            <form id="loginFormSection" onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label>
-                    <input id="loginAgentCode" type="text" placeholder="例如: 88888" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
+                    <input id="loginAgentCode" type="text" required placeholder="例如: 88888" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">密碼</label>
-                    <input id="loginPassword" type="password" placeholder="請輸入密碼" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
+                    <input id="loginPassword" type="password" required placeholder="請輸入密碼" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold">
                 </div>
-                <button type="button" onclick="submitLogin()" class="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">立即登入</button>
+                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">立即登入</button>
                 <div class="text-center pt-2">
                     <span class="text-xs text-slate-500">仲未有帳號？</span>
                     <button type="button" onclick="switchAuthMode('register')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">立即申請註冊</button>
                 </div>
-            </div>
+            </form>
 
-            <!-- 註冊表單 -->
-            <div id="registerFormSection" class="space-y-4 hidden">
+            <!-- 註冊 Form (手機100%可按) -->
+            <form id="registerFormSection" onsubmit="event.preventDefault(); submitRegister();" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 leading-relaxed space-y-1">
                     <b class="block">⏳ 審批溫馨提示：</b>
                     <span>提交註冊後，審批時間約需 1 個工作天。經管理員批準後即可憑 Agent Code 登入！</span>
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">姓名 (中文 / 英文)</label>
-                    <input id="regFullName" type="text" placeholder="例如: Sammy / Chan Tai Man" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
+                    <input id="regFullName" type="text" required placeholder="例如: Sammy / Chan Tai Man" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (將成為您的登入帳號)</label>
-                    <input id="regAgentCode" type="text" placeholder="例如: 88888" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
+                    <input id="regAgentCode" type="text" required placeholder="例如: 88888" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">直屬經理姓名</label>
-                    <input id="regManagerName" type="text" placeholder="請輸入經理姓名" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
+                    <input id="regManagerName" type="text" required placeholder="請輸入經理姓名" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
                 </div>
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">設定密碼</label>
-                    <input id="regPassword" type="password" placeholder="請設定您的登入密碼" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
+                    <input id="regPassword" type="password" required placeholder="請設定您的登入密碼" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50">
                 </div>
-                <button type="button" onclick="submitRegister()" class="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">提交註冊審批申請</button>
+                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">提交註冊審批申請</button>
                 <div class="text-center pt-2">
                     <span class="text-xs text-slate-500">已經有帳號？</span>
                     <button type="button" onclick="switchAuthMode('login')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">返回登入</button>
                 </div>
-            </div>
+            </form>
 
-            <!-- 管理員後台審批面板 (雙分頁切換) -->
+            <!-- 管理員後台審批面板 -->
             <div id="adminApprovalSection" class="space-y-4 hidden max-h-[400px] overflow-y-auto">
                 <div class="flex items-center justify-between border-b pb-2">
                     <b class="text-slate-900 text-sm">👑 管理員審批與權限控制台</b>
@@ -1003,8 +1001,8 @@
     </div>
 
     <!-- 🔒 權限攔截提示 Modal -->
-    <div id="lockModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6 relative border border-slate-100 animate-in fade-in zoom-in duration-200">
+    <div id="lockModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6 relative border border-slate-100 my-auto">
             <button type="button" onclick="closeLockModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-colors cursor-pointer">✕</button>
             <div class="w-16 h-16 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-3xl mx-auto shadow-inner">
                 🔒
@@ -1013,7 +1011,7 @@
                 <h3 class="text-xl font-black text-slate-900">請先登入</h3>
                 <p id="lockModalDesc" class="text-xs text-slate-500 leading-relaxed">登入後即可使用該版塊功能</p>
             </div>
-            <button type="button" onclick="goToLoginFromLock()" class="w-full py-3.5 bg-[#E87722] hover:bg-[#d66513] text-white font-black rounded-xl text-sm transition-colors shadow-lg cursor-pointer">立即登入</button>
+            <button type="button" onclick="goToLoginFromLock()" class="w-full py-3.5 bg-[#E87722] active:bg-[#d66513] text-white font-black rounded-xl text-sm transition-colors shadow-lg cursor-pointer">立即登入</button>
         </div>
     </div>
 
@@ -1023,7 +1021,7 @@
         <span id="toastMsgText">已複製！可直接貼到 WeChat 分享</span>
     </div>
 
-    <!-- AI Sammy 浮窗助手 (點擊與問答均增加登入檢查攔截) -->
+    <!-- AI Sammy 浮窗助手 -->
     <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all">
             <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
@@ -1072,7 +1070,7 @@
             </div>
         </div>
 
-        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" ontouchend="toggleAiWindow()" class="drag-handle group relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center select-none z-50">
+        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle group relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center select-none z-50">
             <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
             <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
                 <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
@@ -1089,7 +1087,7 @@
 
         var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
 
-        // 🔥 用戶認證與權限控制系統 (強制覆蓋舊快取，將 80937 修正為: 最高管理員 Sammy)
+        // 用戶認證與權限控制系統 (強制覆蓋舊快取: 最高管理員 Sammy)
         function getStoredUsers() {
             var usersStr = localStorage.getItem('ogor_team_users');
             var users = usersStr ? JSON.parse(usersStr) : [];
@@ -1105,7 +1103,6 @@
 
             localStorage.setItem('ogor_team_users', JSON.stringify(users));
 
-            // 同步更新當前登入者快取
             var currentUser = sessionStorage.getItem('ogor_current_user');
             if (currentUser) {
                 var cUserObj = JSON.parse(currentUser);
@@ -1133,21 +1130,18 @@
                 if (user.role === 'admin') {
                     btn.innerText = '👑 管理後台';
                     btn.setAttribute('onclick', 'openAdminPanel()');
-                    btn.setAttribute('ontouchend', 'openAdminPanel()');
                 } else {
                     btn.innerText = '登出系統';
                     btn.setAttribute('onclick', 'logoutAccount()');
-                    btn.setAttribute('ontouchend', 'logoutAccount()');
                 }
             } else {
                 badge.classList.add('hidden');
                 btn.innerText = '🔒 登入 / 註冊';
                 btn.setAttribute('onclick', 'openAuthModal("login")');
-                btn.setAttribute('ontouchend', 'openAuthModal("login")');
             }
         }
 
-        // 核心權限檢查：除保費計算器外，點擊其他功能必須先登入
+        // 核心權限檢查
         function checkAndSwitchPage(pageId, pageName, scrollToId) {
             var user = getCurrentUser();
             if (!user) {
@@ -1627,7 +1621,7 @@
             { diff: "簡單", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2, ref: "危疾應援保家添守護條款：可獲支付本保單原有投保額的20%。" },
             { diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0, ref: "全意守護意外保障計劃小冊子：投保年齡為15日個天至70歲。" },
             { diff: "簡單", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1, ref: "尊衛您（寰譽版）醫療計劃小冊子：標準保障級別為每保單年度11,000,000港元。" },
-            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核准", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
+            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
         ];
 
         var currentQuizIndex = 0;
@@ -2084,7 +2078,7 @@
             }
         }
 
-        // AI Sammy 浮窗開關與拖曳獨立邏輯 (增加 Touch 相容與登入檢查攔截)
+        // AI Sammy 浮窗開關與拖曳獨立邏輯
         function toggleAiWindow() {
             var user = getCurrentUser();
             if (!user) {
@@ -2151,7 +2145,7 @@
             }, 400);
         }
 
-        // 全局高靈敏拖曳與觸控腳本 (支援 Phone/iPad touch 觸控)
+        // 全局高靈敏拖曳腳本
         function makeElementDraggable(dragArea, container, isTriggerBtn) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             var isDragging = false;
