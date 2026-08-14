@@ -24,10 +24,10 @@
         .drag-handle:active { cursor: grabbing; }
     </style>
 
-    <!-- Firebase 雲端資料庫核心邏輯 -->
+    <!-- Firebase 雲端資料庫核心邏輯 (純雲端判定，徹底解決快取誤判) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDxoV4QF6JiLcOLz2_WVRyKro-XZd5g7EM",
@@ -41,6 +41,9 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // 強制清理手機舊有殘留快取
+        localStorage.removeItem('ogor_team_users');
 
         // 初始化管理員帳號 (80937)
         async function ensureAdminExists() {
@@ -64,6 +67,7 @@
         }
         ensureAdminExists();
 
+        // 註冊申請 (100% 雲端查重)
         window.submitRegister = async function() {
             var name = document.getElementById('regFullName').value.trim();
             var code = document.getElementById('regAgentCode').value.trim();
@@ -76,16 +80,27 @@
             }
 
             try {
+                // 僅向 Firebase 雲端核對是否已存在
                 const querySnapshot = await getDocs(collection(db, "users"));
-                let exist = false;
+                let existUser = null;
                 querySnapshot.forEach((d) => {
-                    if (d.data().code === code) exist = true;
+                    if (d.data().code === code) {
+                        existUser = { id: d.id, ...d.data() };
+                    }
                 });
-                if (exist) {
-                    alert('此 Agent Code 已經註冊過，請直接登入！');
+
+                if (existUser) {
+                    if (existUser.status === 'pending') {
+                        alert('⏳ 您的註冊申請已在審批中，請等待 Sammy 管理員批準！');
+                    } else if (existUser.status === 'suspended') {
+                        alert('❌ 此 Agent Code 目前已被停權，請聯絡 Sammy 管理員為您恢復權限！');
+                    } else {
+                        alert('此 Agent Code 已經註冊過，請直接登入！');
+                    }
                     return;
                 }
 
+                // 寫入雲端
                 await addDoc(collection(db, "users"), {
                     name, code, manager, pass, status: 'pending', role: 'user'
                 });
@@ -96,6 +111,7 @@
             }
         };
 
+        // 登入驗證
         window.submitLogin = async function() {
             var code = document.getElementById('loginAgentCode').value.trim();
             var pass = document.getElementById('loginPassword').value.trim();
@@ -121,7 +137,7 @@
                         return;
                     }
                     if (found.status === 'suspended') {
-                        alert('❌ 您的帳號已被停權，如有疑問請聯絡管理員！');
+                        alert('❌ 您的帳號已被停權，請聯絡 Sammy 管理員為您恢復權限！');
                         return;
                     }
                     sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
@@ -130,16 +146,17 @@
                     showToast('🎉 歡迎回來，' + found.name + '！');
                     if (found.role === 'admin') openAdminPanel();
                 } else {
-                    alert('登入失敗：Agent Code 或密碼錯誤，或帳號尚未通過審批！');
+                    alert('登入失敗：Agent Code 或密碼錯誤！');
                 }
             } catch(e) {
                 alert('登入發生錯誤，請檢查網絡。');
             }
         };
 
+        // 審批面板：待審批用戶
         window.renderPendingUsers = async function() {
             const listEl = document.getElementById('pendingUsersList');
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">載入中...</p>';
+            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
                 let pending = [];
@@ -163,45 +180,47 @@
                         '</div>' +
                         '<div class="flex gap-2">' +
                             '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg cursor-pointer">批準</button>' +
-                            '<button type="button" onclick="deleteUserDoc(\'' + u.id + '\')" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg cursor-pointer">拒絕</button>' +
+                            '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'suspended\')" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg cursor-pointer">拒絕</button>' +
                         '</div>' +
                     '</div>';
                 });
                 listEl.innerHTML = html;
             } catch(e) {
-                listEl.innerHTML = '<p class="text-red-400 text-center py-4">載入失敗</p>';
+                listEl.innerHTML = '<p class="text-red-400 text-center py-4">載入失敗，請檢查網絡</p>';
             }
         };
 
+        // 審批面板：已批準與已停權用戶 (包含一鍵恢復權限按鈕)
         window.renderApprovedUsers = async function() {
             const listEl = document.getElementById('approvedUsersList');
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">載入中...</p>';
+            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
-                let approvedList = [];
+                let userList = [];
                 querySnapshot.forEach((d) => {
                     const u = d.data();
                     if (u.role !== 'admin' && (u.status === 'approved' || u.status === 'suspended')) {
-                        approvedList.push({ id: d.id, ...u });
+                        userList.push({ id: d.id, ...u });
                     }
                 });
 
-                if (approvedList.length === 0) {
-                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無已批準的普通用戶</p>';
+                if (userList.length === 0) {
+                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無任何成員紀錄</p>';
                     return;
                 }
 
                 let html = '';
-                approvedList.forEach(function(u) {
-                    var statusText = (u.status === 'suspended') ? '已停權' : '正常存取';
-                    var btnText = (u.status === 'suspended') ? '恢復權限' : '取消權限 / 停權';
-                    var btnTargetStatus = (u.status === 'suspended') ? 'approved' : 'suspended';
-                    var btnClass = (u.status === 'suspended') ? 'bg-blue-500 hover:bg-blue-600' : 'bg-red-500 hover:bg-red-600';
+                userList.forEach(function(u) {
+                    var isSuspended = (u.status === 'suspended');
+                    var statusBadge = isSuspended ? '<span class="text-red-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
+                    var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
+                    var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
+                    var btnClass = isSuspended ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-500 hover:bg-red-600';
 
                     html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">' +
                         '<div>' +
-                            '<b class="text-slate-800">' + u.name + '</b> (Code: ' + u.code + ')<br>' +
-                            '<span class="text-slate-500 text-[11px]">經理: ' + u.manager + ' · 狀態: ' + statusText + '</span>' +
+                            '<b class="text-slate-800">' + u.name + '</b> (Code: ' + u.code + ') ' + statusBadge + '<br>' +
+                            '<span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span>' +
                         '</div>' +
                         '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3 py-1.5 ' + btnClass + ' text-white font-bold rounded-lg cursor-pointer shrink-0">' + btnText + '</button>' +
                     '</div>';
@@ -212,24 +231,16 @@
             }
         };
 
+        // 更新用戶雲端狀態 (已改為切換狀態，永不直接刪除資料)
         window.updateUserStatus = async function(id, newStatus) {
             try {
                 await updateDoc(doc(db, "users", id), { status: newStatus });
-                showToast('✓ 狀態更新成功');
+                var msg = (newStatus === 'approved') ? '✓ 已批準/恢復用戶權限！' : '✓ 已停止該用戶權限！';
+                showToast(msg);
                 renderPendingUsers();
                 renderApprovedUsers();
             } catch(e) {
-                alert('更新失敗');
-            }
-        };
-
-        window.deleteUserDoc = async function(id) {
-            try {
-                await deleteDoc(doc(db, "users", id));
-                showToast('✓ 已拒絕並移除申請');
-                renderPendingUsers();
-            } catch(e) {
-                alert('操作失敗');
+                alert('操作失敗，請檢查網絡連線');
             }
         };
     </script>
@@ -247,15 +258,11 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <!-- 右上角懸浮按鈕：保費計算器 -->
                 <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
                     <span>🧮 保費計算器</span>
                 </button>
 
-                <!-- 選單順序：下拉式手冊導覽 -> 新人禮遇 -> 一般保險 -> FWD專區 -> 佣金計算機 -> 知識遊戲 -->
                 <div class="hidden md:flex items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold whitespace-nowrap">
-                    
-                    <!-- 下拉式手冊導覽 -->
                     <div class="relative dropdown-container py-2 shrink-0">
                         <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
                             <span>手冊導覽</span>
@@ -270,19 +277,13 @@
                         </div>
                     </div>
 
-                    <!-- 新人禮遇 -->
                     <button type="button" onclick="checkAndSwitchPage('page-home', '新人禮遇', '#onboarding')" class="text-amber-500 hover:opacity-80 cursor-pointer">新人禮遇</button>
-                    <!-- 一般保險 -->
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
-                    <!-- FWD專區 -->
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
-                    <!-- 佣金計算機 -->
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
-                    <!-- 知識遊戲 -->
                     <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
                 </div>
 
-                <!-- 登入 / 註冊 -->
                 <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
                     <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
                     <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
@@ -1208,7 +1209,7 @@
 
                 <div class="flex border-b border-slate-200 text-xs font-bold">
                     <button type="button" id="tabPendingBtn" onclick="switchAdminTab('pending')" class="px-3 py-2 border-b-2 border-orange-500 text-orange-600 cursor-pointer">待審批申請</button>
-                    <button type="button" id="tabApprovedBtn" onclick="switchAdminTab('approved')" class="px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">已批準用戶 (可停權)</button>
+                    <button type="button" id="tabApprovedBtn" onclick="switchAdminTab('approved')" class="px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">已批準用戶 (可停權/恢復)</button>
                 </div>
 
                 <div id="pendingUsersList" class="space-y-2 text-xs">
@@ -1701,7 +1702,7 @@
             { diff: "簡單", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2, ref: "危疾應援保家添守護條款：可獲支付本保單原有投保額的20%。" },
             { diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0, ref: "全意守護意外保障計劃小冊子：投保年齡為15日個天至70歲。" },
             { diff: "簡單", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1, ref: "尊衛您（寰譽版）醫療計劃小冊子：標準保障級別為每保單年度11,000,000港元。" },
-            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核准", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
+            { diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須獲得FDA批准且處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門其中之一批准，且處於臨床試驗的第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1, ref: "危疾應援保小冊子：試驗性藥物必須獲得監管機構批准用於人體測試，且處於臨床試驗的第III階段。" }
         ];
 
         var currentQuizIndex = 0;
@@ -1729,7 +1730,7 @@
 
             if (currentQuizIndex >= quizQuestions.length) {
                 document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成所有闖關題目！OGOR 團隊因您而驕傲！";
-                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新挑戰關卡 (再次全隨機洗牌)</button>';
+                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新挑戰關卡 (再次全隨機抽題)</button>';
                 return;
             }
 
@@ -2220,7 +2221,7 @@
 
             setTimeout(function() {
                 var aiReply = getAiKnowledgeResponse(msg);
-                container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
+                container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
                 container.scrollTop = container.scrollHeight;
             }, 400);
         }
@@ -2277,7 +2278,7 @@
                 var dx = Math.abs(touch.clientX - startX); var dy = Math.abs(touch.clientY - startY);
                 if (dx > 5 || dy > 5) isDragging = true;
 
-                pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY;
+                pos1 = pos3 - touch.clientX; pos2 = touch.clientY;
                 pos3 = touch.clientX; pos4 = touch.clientY;
 
                 container.style.top = (container.offsetTop - pos2) + "px";
@@ -2296,7 +2297,7 @@
         }
 
         window.onload = function() {
-            // 🔥 預設返回圖二主頁畫面（手冊歡迎頁）
+            // 預設進入圖二畫面（OGOR 歡迎主頁）
             switchPage('page-home');
 
             var defaultBtn = document.querySelector('.comm-category-item');
