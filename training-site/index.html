@@ -24,10 +24,10 @@
         .drag-handle:active { cursor: grabbing; }
     </style>
 
-    <!-- Firebase 雲端資料庫核心邏輯 (純雲端判定，徹底解決快取誤判) -->
+    <!-- Firebase 雲端資料庫核心邏輯 (全域掛載，徹底修復按鈕無反應與跨裝置同步問題) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDxoV4QF6JiLcOLz2_WVRyKro-XZd5g7EM",
@@ -42,7 +42,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 強制清理手機舊有殘留快取
+        // 強制清理手機舊有殘留快取，防止混淆
         localStorage.removeItem('ogor_team_users');
 
         // 初始化管理員帳號 (80937)
@@ -63,11 +63,11 @@
                         status: 'approved'
                     });
                 }
-            } catch(e) { console.log("Admin init error", e); }
+            } catch(e) { console.log("Firebase 尚未開放權限：", e); }
         }
         ensureAdminExists();
 
-        // 註冊申請 (100% 雲端查重)
+        // 1. 全域掛載：註冊申請 (直接寫入 Firebase 雲端)
         window.submitRegister = async function() {
             var name = document.getElementById('regFullName').value.trim();
             var code = document.getElementById('regAgentCode').value.trim();
@@ -80,7 +80,7 @@
             }
 
             try {
-                // 僅向 Firebase 雲端核對是否已存在
+                // 100% 雲端查重
                 const querySnapshot = await getDocs(collection(db, "users"));
                 let existUser = null;
                 querySnapshot.forEach((d) => {
@@ -91,27 +91,34 @@
 
                 if (existUser) {
                     if (existUser.status === 'pending') {
-                        alert('⏳ 您的註冊申請已在審批中，請等待 Sammy 管理員批準！');
+                        alert('⏳ 您的註冊申請已在審批中，請等待高總管理員批準！');
                     } else if (existUser.status === 'suspended') {
-                        alert('❌ 此 Agent Code 目前已被停權，請聯絡 Sammy 管理員為您恢復權限！');
+                        alert('❌ 此 Agent Code 目前已被停權，請聯絡高總管理員為您恢復權限！');
                     } else {
                         alert('此 Agent Code 已經註冊過，請直接登入！');
                     }
                     return;
                 }
 
-                // 寫入雲端
+                // 強制直接寫入 Firebase 雲端
                 await addDoc(collection(db, "users"), {
-                    name, code, manager, pass, status: 'pending', role: 'user'
+                    name: name,
+                    code: code,
+                    manager: manager,
+                    pass: pass,
+                    status: 'pending',
+                    role: 'user',
+                    createdAt: new Date().toISOString()
                 });
-                alert('✅ 註冊申請已成功提交！審批時間約需 1 個工作天，通過後即可登入。');
+                alert('✅ 註冊申請已成功提交至雲端！請通知高總進行審批。');
                 closeAuthModal();
             } catch(e) {
-                alert('註冊失敗，請檢查網絡連線。');
+                console.error("Register Error:", e);
+                alert('雲端連線失敗，請檢查網路。');
             }
         };
 
-        // 登入驗證
+        // 2. 全域掛載：登入驗證
         window.submitLogin = async function() {
             var code = document.getElementById('loginAgentCode').value.trim();
             var pass = document.getElementById('loginPassword').value.trim();
@@ -133,11 +140,11 @@
 
                 if (found) {
                     if (found.status === 'pending') {
-                        alert('⏳ 您的帳號正在等待管理員審批，審批時間約需 1 個工作天，請稍候！');
+                        alert('⏳ 您的帳號正在等待管理員審批，請稍候！');
                         return;
                     }
                     if (found.status === 'suspended') {
-                        alert('❌ 您的帳號已被停權，請聯絡 Sammy 管理員為您恢復權限！');
+                        alert('❌ 您的帳號已被停權，請聯絡高總管理員為您恢復權限！');
                         return;
                     }
                     sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
@@ -149,11 +156,12 @@
                     alert('登入失敗：Agent Code 或密碼錯誤！');
                 }
             } catch(e) {
-                alert('登入發生錯誤，請檢查網絡。');
+                console.error("Login Error:", e);
+                alert('登入連線失敗，請檢查網路。');
             }
         };
 
-        // 審批面板：待審批用戶
+        // 3. 全域掛載：渲染待審批用戶清單
         window.renderPendingUsers = async function() {
             const listEl = document.getElementById('pendingUsersList');
             listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
@@ -173,24 +181,25 @@
 
                 let html = '';
                 pending.forEach(function(u) {
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">' +
+                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
                         '<div>' +
-                            '<b>' + u.name + '</b> (Code: ' + u.code + ')<br>' +
+                            '<b class="text-slate-900 text-sm">' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span><br>' +
                             '<span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span>' +
                         '</div>' +
                         '<div class="flex gap-2">' +
-                            '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg cursor-pointer">批準</button>' +
-                            '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'suspended\')" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg cursor-pointer">拒絕</button>' +
+                            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">批準</button>' +
+                            '<button type="button" onclick="window.deleteUserDoc(\'' + u.id + '\')" class="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">拒絕</button>' +
                         '</div>' +
                     '</div>';
                 });
                 listEl.innerHTML = html;
             } catch(e) {
-                listEl.innerHTML = '<p class="text-red-400 text-center py-4">載入失敗，請檢查網絡</p>';
+                console.error("Fetch Pending Error:", e);
+                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗，請檢查 Firebase Rules 權限設定！</p>';
             }
         };
 
-        // 審批面板：已批準與已停權用戶 (包含一鍵恢復權限按鈕)
+        // 4. 全域掛載：渲染已批準/已停權用戶清單
         window.renderApprovedUsers = async function() {
             const listEl = document.getElementById('approvedUsersList');
             listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
@@ -212,35 +221,49 @@
                 let html = '';
                 userList.forEach(function(u) {
                     var isSuspended = (u.status === 'suspended');
-                    var statusBadge = isSuspended ? '<span class="text-red-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
+                    var statusBadge = isSuspended ? '<span class="text-rose-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
                     var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
                     var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
-                    var btnClass = isSuspended ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-500 hover:bg-red-600';
+                    var btnClass = isSuspended ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-rose-500 hover:bg-rose-600';
 
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">' +
+                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
                         '<div>' +
-                            '<b class="text-slate-800">' + u.name + '</b> (Code: ' + u.code + ') ' + statusBadge + '<br>' +
+                            '<b class="text-slate-800 text-sm">' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span> ' + statusBadge + '<br>' +
                             '<span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span>' +
                         '</div>' +
-                        '<button type="button" onclick="updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3 py-1.5 ' + btnClass + ' text-white font-bold rounded-lg cursor-pointer shrink-0">' + btnText + '</button>' +
+                        '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3.5 py-1.5 ' + btnClass + ' text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer shrink-0">' + btnText + '</button>' +
                     '</div>';
                 });
                 listEl.innerHTML = html;
             } catch(e) {
-                listEl.innerHTML = '<p class="text-red-400 text-center py-4">載入失敗</p>';
+                console.error("Fetch Approved Error:", e);
+                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗，請檢查 Firebase 規則設定</p>';
             }
         };
 
-        // 更新用戶雲端狀態 (已改為切換狀態，永不直接刪除資料)
+        // 5. 全域掛載：更新用戶雲端狀態 (100% 有效觸發)
         window.updateUserStatus = async function(id, newStatus) {
             try {
                 await updateDoc(doc(db, "users", id), { status: newStatus });
-                var msg = (newStatus === 'approved') ? '✓ 已批準/恢復用戶權限！' : '✓ 已停止該用戶權限！';
+                var msg = (newStatus === 'approved') ? '✓ 已成功批準 / 恢復用戶權限！' : '✓ 已成功停止該用戶權限！';
                 showToast(msg);
-                renderPendingUsers();
-                renderApprovedUsers();
+                window.renderPendingUsers();
+                window.renderApprovedUsers();
             } catch(e) {
-                alert('操作失敗，請檢查網絡連線');
+                console.error("Update Status Error:", e);
+                alert('操作失敗，請檢查網路連線或 Firebase Rules 設定！');
+            }
+        };
+
+        // 6. 全域掛載：刪除用戶 Document (拒絕申請時使用)
+        window.deleteUserDoc = async function(id) {
+            try {
+                await deleteDoc(doc(db, "users", id));
+                showToast('✓ 已拒絕並刪除該註冊申請！');
+                window.renderPendingUsers();
+            } catch(e) {
+                console.error("Delete Doc Error:", e);
+                alert('刪除失敗，請檢查網路連線！');
             }
         };
     </script>
@@ -258,11 +281,15 @@
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
+                <!-- 右上角懸浮按鈕：保費計算器 -->
                 <button type="button" onclick="switchPage('page-calc')" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
                     <span>🧮 保費計算器</span>
                 </button>
 
+                <!-- 選單順序：下拉式手冊導覽 -> 新人禮遇 -> 一般保險 -> FWD專區 -> 佣金計算機 -> 知識遊戲 -->
                 <div class="hidden md:flex items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold whitespace-nowrap">
+                    
+                    <!-- 下拉式手冊導覽 -->
                     <div class="relative dropdown-container py-2 shrink-0">
                         <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
                             <span>手冊導覽</span>
@@ -277,10 +304,15 @@
                         </div>
                     </div>
 
+                    <!-- 新人禮遇 -->
                     <button type="button" onclick="checkAndSwitchPage('page-home', '新人禮遇', '#onboarding')" class="text-amber-500 hover:opacity-80 cursor-pointer">新人禮遇</button>
+                    <!-- 一般保險 -->
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
+                    <!-- FWD專區 -->
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
+                    <!-- 佣金計算機 -->
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
+                    <!-- 知識遊戲 -->
                     <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
                 </div>
 
@@ -292,7 +324,7 @@
         </div>
     </nav>
 
-    <!-- PAGE 1: 預設首頁（圖二 OGOR 歡迎封面與大家庭） -->
+    <!-- PAGE 1: 預設首頁（OGOR 歡迎封面與大家庭） -->
     <div id="page-home" class="page-view space-y-12 pb-16">
         <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
@@ -1155,7 +1187,7 @@
             </div>
 
             <!-- 登入 Form -->
-            <form id="loginFormSection" onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
+            <form id="loginFormSection" onsubmit="event.preventDefault(); window.submitLogin();" class="space-y-4">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label>
                     <input id="loginAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" inputmode="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold" style="pointer-events: auto;">
@@ -1172,7 +1204,7 @@
             </form>
 
             <!-- 註冊 Form -->
-            <form id="registerFormSection" onsubmit="event.preventDefault(); submitRegister();" class="space-y-4 hidden">
+            <form id="registerFormSection" onsubmit="event.preventDefault(); window.submitRegister();" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 leading-relaxed space-y-1">
                     <b class="block">⏳ 審批溫馨提示：</b>
                     <span>提交註冊後，審批時間約需 1 個工作天。經管理員批準後即可憑 Agent Code 登入！</span>
@@ -2278,7 +2310,7 @@
                 var dx = Math.abs(touch.clientX - startX); var dy = Math.abs(touch.clientY - startY);
                 if (dx > 5 || dy > 5) isDragging = true;
 
-                pos1 = pos3 - touch.clientX; pos2 = touch.clientY;
+                pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY;
                 pos3 = touch.clientX; pos4 = touch.clientY;
 
                 container.style.top = (container.offsetTop - pos2) + "px";
