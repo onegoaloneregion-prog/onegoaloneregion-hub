@@ -356,7 +356,12 @@
 
                 <div class="lg:col-span-8 space-y-6">
                     <div class="bg-white border-2 border-orange-100 rounded-3xl p-6 shadow-md space-y-5">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3"><div class="text-sm font-black text-slate-800" id="cardMainTitle">--</div><button type="button" onclick="copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm">📋 複製結果</button></div>
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div class="text-sm font-black text-slate-800" id="cardMainTitle">--</div>
+                            <button type="button" onclick="window.copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
+                                📋 複製結果
+                            </button>
+                        </div>
                         <div class="flex items-center justify-between"><div class="inline-flex p-1 bg-slate-100 rounded-xl text-xs font-bold"><button type="button" id="btnModeAnnual" onclick="setDisplayMode('annual')" class="px-3 py-1.5 text-slate-600 transition-all cursor-pointer">年供</button><button type="button" id="btnModeMonthly" onclick="setDisplayMode('monthly')" class="px-3 py-1.5 text-slate-600 transition-all cursor-pointer">月供</button><button type="button" id="btnModeBoth" onclick="setDisplayMode('both')" class="px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer">年供+月供</button></div></div>
                         <div class="bg-orange-50/40 rounded-2xl p-5 border border-orange-100 space-y-3"><div id="blockAnnualDisplay" class="space-y-1"><span class="text-xs font-bold text-slate-500 block">原年供</span><p id="valAnnualText" class="text-3xl sm:text-4xl font-black text-slate-900">$0.00</p></div><div id="blockMonthlyDisplay" class="space-y-1 pt-2 border-t border-orange-100/60"><span class="text-xs font-bold text-slate-500 block">原月供</span><p id="valMonthlyText" class="text-2xl sm:text-3xl font-black text-[#E87722]">$0.00</p></div></div>
                         <div id="purplePromoBadge" class="bg-[#E87722] text-white rounded-xl p-3 text-xs font-bold flex items-center justify-between shadow-sm"><span id="promoBadgeText">--</span><span class="text-[11px] font-normal opacity-90">促銷期至: 2026年9月30日</span></div>
@@ -515,7 +520,7 @@
         </div>
     </div>
 
-    <!-- PAGE: 佣金計算機 -->
+    <!-- PAGE 2: 佣金計算機 -->
     <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-[#E87722] bg-orange-50 px-3 py-1 rounded-full">🧮 FWD 澳門佣金試算 (2025.12 最新版)</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
@@ -523,11 +528,11 @@
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">1. 選擇產品類別</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs font-bold"><button type="button" onclick="setCommCategory('whole_life', this)" class="comm-category-item p-3 rounded-xl border border-[#E87722] bg-orange-50 text-[#E87722] shadow-sm cursor-pointer">終身壽險<br><span class="text-[10px] opacity-60 font-normal">Whole Life</span></button><button type="button" onclick="setCommCategory('medical', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人醫療 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Medical & Riders</span></button><button type="button" onclick="setCommCategory('crisis', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人危疾<br><span class="text-[10px] opacity-60 font-normal">Crisis</span></button><button type="button" onclick="setCommCategory('accident', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人意外 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Accident & Riders</span></button><button type="button" onclick="setCommCategory('universal', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">萬用壽險<br><span class="text-[10px] opacity-60 font-normal">Universal Life</span></button></div></div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4"><div class="sm:col-span-8 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. 選擇計劃</label><select id="planSelect" onchange="updateCommAgeOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div><div class="sm:col-span-4 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">投保年齡 (影響部分產品佣金率)</label><select id="commAgeSelect" onchange="calculateCommission()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div></div>
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. 輸入首年保費 (HKD)</label><div class="relative"><span class="absolute left-4 top-3.5 text-slate-400 font-bold">$</span><input id="premiumInput" type="text" value="50,000" oninput="formatFormattedInput(this); calculateCommission();" class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-lg font-black text-slate-900 focus:outline-none focus:border-[#E87722]"></div></div>
-            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2">📋 複製結果</button></div>
+            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="window.copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
         </div>
     </div>
 
-    <!-- PAGE: OGOR 100題知識闖關遊戲 (已徹底修復選項殘留焦點/框線問題) -->
+    <!-- PAGE 4: OGOR 100題知識闖關遊戲 -->
     <div id="page-game" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">🎮 富衛保險指南 100 題大挑戰</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-6">
@@ -537,19 +542,19 @@
         </div>
     </div>
 
-    <!-- PAGE: 一般保險主頁 -->
+    <!-- PAGE 5: 一般保險主頁 -->
     <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p></div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
+            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
     </div>
 
-    <!-- PAGE: 車險表格專頁 -->
+    <!-- PAGE 6: 車險表格專頁 -->
     <div id="page-motor" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-gi')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回一般保險</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">🚗 車險下載專區 (Google Drive 官方庫)</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
@@ -606,7 +611,7 @@
     </div>
 
     <!-- Toast 提示 -->
-    <div id="copyToast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-50">
+    <div id="copyToast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-[100000]">
         <span class="bg-emerald-500 text-white rounded-full p-1 text-[10px]">✓</span><span id="toastMsgText">已複製！</span>
     </div>
 
@@ -684,7 +689,98 @@
             var targetPage = document.getElementById(pageId); if (targetPage) targetPage.classList.remove('hidden');
             if (scrollToId) { setTimeout(function() { var el = document.querySelector(scrollToId); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
-        function showToast(msg) { var toast = document.getElementById('copyToast'); document.getElementById('toastMsgText').innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); setTimeout(function() { toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); }, 2500); }
+        
+        function showToast(msg) { 
+            var toast = document.getElementById('copyToast'); 
+            var txt = document.getElementById('toastMsgText'); 
+            if (txt && msg) txt.innerText = msg; 
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); 
+            setTimeout(function() { 
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); 
+            }, 2500); 
+        }
+
+        // 現代通用剪貼簿複製核心函數 (全面支援 iOS/iPad/Android/PC)
+        window.performCopyText = async function(text, successMsg) {
+            var copied = false;
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    copied = true;
+                } catch (err) {
+                    copied = false;
+                }
+            }
+            if (!copied) {
+                var textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                textArea.setAttribute("readonly", "");
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                textArea.setSelectionRange(0, 99999);
+                try {
+                    copied = document.execCommand('copy');
+                } catch (err) {
+                    copied = false;
+                }
+                document.body.removeChild(textArea);
+            }
+            if (copied) {
+                showToast(successMsg || "已複製到剪貼簿！");
+            } else {
+                prompt("📋 請直接複製以下文字：", text);
+            }
+        };
+
+        window.copyVideoStyleResult = function() {
+            runPremiumQuery();
+            var pSelect = document.getElementById('calcProduct'); 
+            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
+            var ageInput = document.getElementById('calcAge'); 
+            var age = ageInput ? ageInput.value : "30";
+            var gSelect = document.getElementById('calcGender'); 
+            var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
+            var currSelect = document.getElementById('calcCurrency'); 
+            var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
+            var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
+            var annualFormatted = formatMoney(currentCalcResult.annual); 
+            var monthlyFormatted = formatMoney(currentCalcResult.monthly);
+            
+            var copyText = "🟢 FWD 保費快算試算\n" +
+                           "產品：" + pNameText + "\n" +
+                           "年齡：" + age + " 歲 (" + gender + ")\n\n" +
+                           "💵 預估保費 (" + currUnit + ")\n" +
+                           "年供：" + currSymbol + annualFormatted + " /年\n" +
+                           "月供：" + currSymbol + monthlyFormatted + " /月\n\n" +
+                           "數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
+            
+            window.performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
+        };
+
+        window.copyCommissionResult = function() {
+            var planSelect = document.getElementById('planSelect'); 
+            var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
+            var ageSelect = document.getElementById('commAgeSelect'); 
+            var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
+            var premInput = document.getElementById('premiumInput'); 
+            var premium = parseCleanNumber(premInput ? premInput.value : "0");
+            var rateEl = document.getElementById('commRate'); 
+            var rate = rateEl ? rateEl.innerText : "--%";
+            var resEl = document.getElementById('commResult'); 
+            var result = resEl ? resEl.innerText : "HK$ 0";
+            
+            var copyText = "【OGOR 佣金試算結果】\n" +
+                           "計劃： " + selectedPlanText + " (" + ageText + ")\n" +
+                           "首年保費： HK$ " + premium.toLocaleString('en-US') + "\n" +
+                           "首年佣金率： " + rate + "\n" +
+                           "預計首年佣金收入： " + result;
+            
+            window.performCopyText(copyText, "已複製佣金試算結果！可直接貼到 WeChat 分享");
+        };
 
         // AI Sammy 專屬開關與拖曳獨立邏輯
         function toggleAiWindow() {
@@ -810,34 +906,6 @@
         function parseCleanNumber(val) { if (!val) return 0; return parseFloat(String(val).replace(/,/g, '')) || 0; }
         function formatFormattedInput(inputEl) { var rawVal = inputEl.value.replace(/[^0-9]/g, ''); if (rawVal === '') { inputEl.value = ''; return; } var num = parseInt(rawVal, 10); inputEl.value = num.toLocaleString('en-US'); }
 
-        function performCopyText(text, successMsg) {
-            var textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "0"; textArea.style.top = "0"; textArea.style.opacity = "0"; document.body.appendChild(textArea); textArea.focus(); textArea.select();
-            var copied = false; try { copied = document.execCommand('copy'); } catch (err) { copied = false; } document.body.removeChild(textArea);
-            if (copied) { showToast(successMsg); } else { prompt("📋 請複製：", text); }
-        }
-
-        function copyVideoStyleResult() {
-            runPremiumQuery();
-            var pSelect = document.getElementById('calcProduct'); var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge'); var age = ageInput ? ageInput.value : "30";
-            var gSelect = document.getElementById('calcGender'); var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
-            var currSelect = document.getElementById('calcCurrency'); var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
-            var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
-            var annualFormatted = formatMoney(currentCalcResult.annual); var monthlyFormatted = formatMoney(currentCalcResult.monthly);
-            var copyText = "🟢 FWD 保費快算試算\n產品：" + pNameText + "\n年齡：" + age + " 歲 (" + gender + ")\n\n💵 預估保費 (" + currUnit + ")\n年供：" + currSymbol + annualFormatted + " /年\n月供：" + currSymbol + monthlyFormatted + " /月\n\n數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
-            performCopyText(copyText, "已複製保費試算結果！");
-        }
-
-        function copyCommissionResult() {
-            var planSelect = document.getElementById('planSelect'); var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
-            var ageSelect = document.getElementById('commAgeSelect'); var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
-            var premInput = document.getElementById('premiumInput'); var premium = parseCleanNumber(premInput ? premInput.value : "0");
-            var rateEl = document.getElementById('commRate'); var rate = rateEl ? rateEl.innerText : "--%";
-            var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
-            var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
-            performCopyText(copyText, "已複製佣金試算結果！");
-        }
-
         var commissionData = {
             whole_life: [
                 { id: "gfd_1", name: "盈聚．天下 II 保險計劃 (GFD) - 躉繳/整付", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66-70歲", rate: 0.025 }] },
@@ -903,12 +971,10 @@
         function restartQuizGame() { startQuizGame(); }
         function startQuizGame() { currentQuizIndex = 0; currentQuizScore = 0; currentQuizStreak = 0; quizQuestions.sort(function() { return 0.5 - Math.random(); }); renderQuizQuestion(); }
         
-        // 渲染闖關題目 (強制清空殘留焦點/框線)
         function renderQuizQuestion() {
             var fbBox = document.getElementById('quizFeedbackBox'); 
             if (fbBox) fbBox.classList.add('hidden');
             
-            // 強制清除任何焦點殘留
             if (document.activeElement && document.activeElement.blur) {
                 document.activeElement.blur();
             }
@@ -934,7 +1000,6 @@
         }
 
         function handleQuizAnswer(selectedIdx) {
-            // 點擊後立刻移除焦點，防止下一題繼承邊框
             if (document.activeElement && document.activeElement.blur) {
                 document.activeElement.blur();
             }
