@@ -17,13 +17,10 @@
         input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; touch-action: manipulation; }
         button, a, div[onclick] { cursor: pointer; -webkit-touch-callout: none; }
 
-        /* 防止按鈕在 iPad/手機上殘留 focus 框 */
-        .quiz-opt-btn:focus, .quiz-opt-btn:active { outline: none !important; box-shadow: none !important; }
-
-        /* AI 浮窗動畫與觸控拖曳支援 */
+        /* AI 浮窗動畫與高層級修正 */
         .ai-window-enter { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .ai-window-active { opacity: 1 !important; transform: translateY(0) scale(1) !important; pointer-events: auto !important; }
-        .drag-handle { cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none !important; }
+        .drag-handle { cursor: grab; user-select: none; }
         .drag-handle:active { cursor: grabbing; }
     </style>
 
@@ -144,8 +141,8 @@
                     html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
                         '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span><br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
                         '<div class="flex gap-2">' +
-                            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">批準</button>' +
-                            '<button type="button" onclick="window.deleteUserDoc(\'' + u.id + '\')" class="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">拒絕</button>' +
+                            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">批準</button>' +
+                            '<button type="button" onclick="window.deleteUserDoc(\'' + u.id + '\')" class="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">拒絕</button>' +
                         '</div>' +
                     '</div>';
                 });
@@ -211,7 +208,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
 
-    <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
@@ -358,7 +354,7 @@
                     <div class="bg-white border-2 border-orange-100 rounded-3xl p-6 shadow-md space-y-5">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <div class="text-sm font-black text-slate-800" id="cardMainTitle">--</div>
-                            <button type="button" onclick="window.copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
+                            <button type="button" onclick="copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
                                 📋 複製結果
                             </button>
                         </div>
@@ -528,7 +524,7 @@
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">1. 選擇產品類別</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs font-bold"><button type="button" onclick="setCommCategory('whole_life', this)" class="comm-category-item p-3 rounded-xl border border-[#E87722] bg-orange-50 text-[#E87722] shadow-sm cursor-pointer">終身壽險<br><span class="text-[10px] opacity-60 font-normal">Whole Life</span></button><button type="button" onclick="setCommCategory('medical', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人醫療 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Medical & Riders</span></button><button type="button" onclick="setCommCategory('crisis', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人危疾<br><span class="text-[10px] opacity-60 font-normal">Crisis</span></button><button type="button" onclick="setCommCategory('accident', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人意外 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Accident & Riders</span></button><button type="button" onclick="setCommCategory('universal', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">萬用壽險<br><span class="text-[10px] opacity-60 font-normal">Universal Life</span></button></div></div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4"><div class="sm:col-span-8 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. 選擇計劃</label><select id="planSelect" onchange="updateCommAgeOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div><div class="sm:col-span-4 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">投保年齡 (影響部分產品佣金率)</label><select id="commAgeSelect" onchange="calculateCommission()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div></div>
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. 輸入首年保費 (HKD)</label><div class="relative"><span class="absolute left-4 top-3.5 text-slate-400 font-bold">$</span><input id="premiumInput" type="text" value="50,000" oninput="formatFormattedInput(this); calculateCommission();" class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-lg font-black text-slate-900 focus:outline-none focus:border-[#E87722]"></div></div>
-            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="window.copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
+            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
         </div>
     </div>
 
@@ -721,12 +717,12 @@
     </div>
 
     <!-- Toast 提示 -->
-    <div id="copyToast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-[100000]">
+    <div id="copyToast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-50">
         <span class="bg-emerald-500 text-white rounded-full p-1 text-[10px]">✓</span><span id="toastMsgText">已複製！</span>
     </div>
 
-    <!-- AI Sammy 浮窗助手 (獨立高層級 z-[99999]，支援點擊開關與手勢拖曳) -->
-    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-auto select-none">
+    <!-- AI Sammy 浮窗助手 (已修復：確保點擊與拖曳功能正常) -->
+    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all">
             <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
                 <div class="flex items-center gap-2.5 pointer-events-none"><div class="w-10 h-10 rounded-full bg-white p-0.5 shrink-0 flex items-center justify-center overflow-hidden border-2 border-white"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div><div><h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">AI Sammy <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">OGOR 智慧助手</span></h4><p class="text-[11px] text-sky-100 opacity-90">按住此處可隨意拖拽浮窗位置</p></div></div>
@@ -757,9 +753,12 @@
             </div>
         </div>
 
-        <button id="aiTriggerBtn" type="button" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white">
-            <img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full pointer-events-none">
-            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white pointer-events-none">1</span>
+        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white select-none">
+            <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
+            <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
+                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
+            </div>
+            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 pointer-events-none">1</span>
         </button>
     </div>
 
@@ -799,98 +798,128 @@
             var targetPage = document.getElementById(pageId); if (targetPage) targetPage.classList.remove('hidden');
             if (scrollToId) { setTimeout(function() { var el = document.querySelector(scrollToId); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
-        
-        function showToast(msg) { 
-            var toast = document.getElementById('copyToast'); 
-            var txt = document.getElementById('toastMsgText'); 
-            if (txt && msg) txt.innerText = msg; 
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            setTimeout(function() { 
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            }, 2500); 
+        function showToast(msg) { var toast = document.getElementById('copyToast'); document.getElementById('toastMsgText').innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); setTimeout(function() { toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); }, 2500); }
+
+        // 現代通用剪貼簿複製 (相容全平台)
+        function performCopyText(text, successMsg) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showToast(successMsg);
+                }).catch(function() {
+                    fallbackCopyText(text, successMsg);
+                });
+            } else {
+                fallbackCopyText(text, successMsg);
+            }
         }
 
-        // 現代通用剪貼簿複製核心函數 (全面支援 iOS/iPad/Android/PC)
-        window.performCopyText = async function(text, successMsg) {
+        function fallbackCopyText(text, successMsg) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
             var copied = false;
-            if (navigator.clipboard && window.isSecureContext) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                    copied = true;
-                } catch (err) {
-                    copied = false;
-                }
-            }
-            if (!copied) {
-                var textArea = document.createElement("textarea");
-                textArea.value = text;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                textArea.style.top = "0";
-                textArea.setAttribute("readonly", "");
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                textArea.setSelectionRange(0, 99999);
-                try {
-                    copied = document.execCommand('copy');
-                } catch (err) {
-                    copied = false;
-                }
-                document.body.removeChild(textArea);
-            }
-            if (copied) {
-                showToast(successMsg || "已複製到剪貼簿！");
-            } else {
-                prompt("📋 請直接複製以下文字：", text);
-            }
-        };
+            try { copied = document.execCommand('copy'); } catch (err) { copied = false; }
+            document.body.removeChild(textArea);
+            if (copied) { showToast(successMsg); } else { prompt("📋 請複製：", text); }
+        }
 
-        window.copyVideoStyleResult = function() {
+        function copyVideoStyleResult() {
             runPremiumQuery();
-            var pSelect = document.getElementById('calcProduct'); 
-            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge'); 
-            var age = ageInput ? ageInput.value : "30";
-            var gSelect = document.getElementById('calcGender'); 
-            var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
-            var currSelect = document.getElementById('calcCurrency'); 
-            var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
+            var pSelect = document.getElementById('calcProduct'); var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
+            var ageInput = document.getElementById('calcAge'); var age = ageInput ? ageInput.value : "30";
+            var gSelect = document.getElementById('calcGender'); var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
+            var currSelect = document.getElementById('calcCurrency'); var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
             var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
-            var annualFormatted = formatMoney(currentCalcResult.annual); 
-            var monthlyFormatted = formatMoney(currentCalcResult.monthly);
-            
-            var copyText = "🟢 FWD 保費快算試算\n" +
-                           "產品：" + pNameText + "\n" +
-                           "年齡：" + age + " 歲 (" + gender + ")\n\n" +
-                           "💵 預估保費 (" + currUnit + ")\n" +
-                           "年供：" + currSymbol + annualFormatted + " /年\n" +
-                           "月供：" + currSymbol + monthlyFormatted + " /月\n\n" +
-                           "數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
-            
-            window.performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
-        };
+            var annualFormatted = formatMoney(currentCalcResult.annual); var monthlyFormatted = formatMoney(currentCalcResult.monthly);
+            var copyText = "🟢 FWD 保費快算試算\n產品：" + pNameText + "\n年齡：" + age + " 歲 (" + gender + ")\n\n💵 預估保費 (" + currUnit + ")\n年供：" + currSymbol + annualFormatted + " /年\n月供：" + currSymbol + monthlyFormatted + " /月\n\n數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
+            performCopyText(copyText, "已複製保費試算結果！");
+        }
 
-        window.copyCommissionResult = function() {
-            var planSelect = document.getElementById('planSelect'); 
-            var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
-            var ageSelect = document.getElementById('commAgeSelect'); 
-            var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
-            var premInput = document.getElementById('premiumInput'); 
-            var premium = parseCleanNumber(premInput ? premInput.value : "0");
-            var rateEl = document.getElementById('commRate'); 
-            var rate = rateEl ? rateEl.innerText : "--%";
-            var resEl = document.getElementById('commResult'); 
-            var result = resEl ? resEl.innerText : "HK$ 0";
-            
-            var copyText = "【OGOR 佣金試算結果】\n" +
-                           "計劃： " + selectedPlanText + " (" + ageText + ")\n" +
-                           "首年保費： HK$ " + premium.toLocaleString('en-US') + "\n" +
-                           "首年佣金率： " + rate + "\n" +
-                           "預計首年佣金收入： " + result;
-            
-            window.performCopyText(copyText, "已複製佣金試算結果！可直接貼到 WeChat 分享");
-        };
+        function copyCommissionResult() {
+            var planSelect = document.getElementById('planSelect'); var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
+            var ageSelect = document.getElementById('commAgeSelect'); var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
+            var premInput = document.getElementById('premiumInput'); var premium = parseCleanNumber(premInput ? premInput.value : "0");
+            var rateEl = document.getElementById('commRate'); var rate = rateEl ? rateEl.innerText : "--%";
+            var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
+            var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
+            performCopyText(copyText, "已複製佣金試算結果！");
+        }
+
+        // 掛載全域以供按鈕安全點擊
+        window.copyVideoStyleResult = copyVideoStyleResult;
+        window.copyCommissionResult = copyCommissionResult;
+
+        // AI Sammy 專屬開關與對話邏輯
+        function toggleAiWindow() {
+            var user = getCurrentUser();
+            if (!user) {
+                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+            var win = document.getElementById('aiFloatingWindow');
+            if (win.classList.contains('ai-window-active')) {
+                win.classList.remove('ai-window-active');
+            } else {
+                win.classList.add('ai-window-active');
+            }
+        }
+        window.toggleAiWindow = toggleAiWindow;
+
+        function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
+        function sendQuickAiQuery(text) { 
+            var user = getCurrentUser();
+            if (!user) {
+                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+            document.getElementById('aiInput').value = text; 
+            submitAiQuery(); 
+        }
+        function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
+
+        function getAiKnowledgeResponse(query) {
+            var q = query.toLowerCase().trim();
+            if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
+                return "👋 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧兩三代！』";
+            }
+            if (q.indexOf('異議') !== -1 || q.indexOf('買咗') !== -1 || q.indexOf('銀行') !== -1) {
+                return "👋 <b>常見異議應對策略：</b><br><br>『銀行定期係短期過渡，但保險儲蓄（例如盈聚·天下 II）係幫你鎖定中長期滾存。除了有高達 54%-75.4% 的首年保費優惠之外，仲內建咗「失去行為能力權益」同「富傳家選項」，銀行定期係做唔到資產免爭議傳承。』";
+            }
+            if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1) {
+                return "👋 <b>盈聚．天下 II 核心亮點：</b><br><br>• 歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年行使。<br>• 四大保證獎賞（初生嬰兒、傑出表現、享悅人生、長壽獎賞）。<br>• 8月推廣：美元保單預繳 5% 保證年利率，總優惠高達 54%-75.4%！";
+            }
+            return "手足，呢個問題我收到！建議可於團隊群組交流或請教直屬經理取得最新實戰策略！🔥";
+        }
+
+        function submitAiQuery() {
+            var user = getCurrentUser();
+            if (!user) {
+                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+
+            var input = document.getElementById('aiInput');
+            var msg = input.value.trim();
+            if (!msg) return;
+
+            var container = document.getElementById('aiChatMessages');
+            container.innerHTML += '<div class="flex justify-end mb-2"><div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-3 rounded-2xl text-xs max-w-[85%] shadow-sm leading-relaxed">' + msg + '</div></div>';
+            input.value = ''; container.scrollTop = container.scrollHeight;
+
+            setTimeout(function() {
+                var aiReply = getAiKnowledgeResponse(msg);
+                container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
+                container.scrollTop = container.scrollHeight;
+            }, 400);
+        }
 
         // 9 大官方車險 Google Drive 檔案 ID
         var googleDriveFileIds = {
@@ -936,7 +965,7 @@
         function renderDynamicBrochures(items) {
             var container = document.getElementById('fwdBrochuresContainer'); if (!container) return; var html = '';
             items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">' + item.badge + '</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
             });
             container.innerHTML = html;
         }
@@ -1014,47 +1043,30 @@
 
         function restartQuizGame() { startQuizGame(); }
         function startQuizGame() { currentQuizIndex = 0; currentQuizScore = 0; currentQuizStreak = 0; quizQuestions.sort(function() { return 0.5 - Math.random(); }); renderQuizQuestion(); }
-        
         function renderQuizQuestion() {
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            if (fbBox) fbBox.classList.add('hidden');
-            
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
+            var fbBox = document.getElementById('quizFeedbackBox'); if (fbBox) fbBox.classList.add('hidden');
             if (currentQuizIndex >= quizQuestions.length) {
                 document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成所有闖關題目！OGOR 團隊因您而驕傲！";
                 document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新挑戰關卡 (再次全隨機抽題)</button>';
                 return;
             }
-
             var qObj = quizQuestions[currentQuizIndex];
             document.getElementById('quizDifficultyTag').innerText = qObj.diff + " 題目 (第 " + (currentQuizIndex + 1) + " / " + quizQuestions.length + " 題)";
             document.getElementById('quizQuestionText').innerText = qObj.q;
             var pct = Math.round(((currentQuizIndex) / quizQuestions.length) * 100);
             document.getElementById('quizProgressBar').style.width = pct + "%";
             document.getElementById('quizScoreText').innerText = currentQuizScore + " 分 (" + currentQuizStreak + "連勝)";
-            
             var optHtml = "";
             qObj.options.forEach(function(optText, idx) {
-                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="quiz-opt-btn w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 text-slate-800 font-semibold text-xs transition-all shadow-xs cursor-pointer flex items-center gap-3 bg-white select-none"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
+                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 text-slate-800 font-semibold text-xs transition-all shadow-xs cursor-pointer flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
             });
             document.getElementById('quizOptionsContainer').innerHTML = optHtml;
         }
 
         function handleQuizAnswer(selectedIdx) {
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
-            var qObj = quizQuestions[currentQuizIndex]; 
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            fbBox.classList.remove('hidden');
-
+            var qObj = quizQuestions[currentQuizIndex]; var fbBox = document.getElementById('quizFeedbackBox'); fbBox.classList.remove('hidden');
             if (selectedIdx === qObj.ans) {
-                currentQuizScore += 10; 
-                currentQuizStreak += 1;
+                currentQuizScore += 10; currentQuizStreak += 1;
                 var randPraise = praiseMsgList[Math.floor(Math.random() * praiseMsgList.length)];
                 fbBox.className = "p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs leading-relaxed space-y-1 transition-all";
                 fbBox.innerHTML = '<b class="text-sm block">✓ ' + randPraise + '</b><p><b>正確答案：</b>' + qObj.options[qObj.ans] + '</p>';
@@ -1183,98 +1195,9 @@
             ageList.forEach(function(a) { var aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p==='crisis_supporter_pro')); if (curr === 'USD') aAnn = aAnn / 7.8; var aMon = aAnn * 0.09; var isCurrentAge = (a === age); var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; }); document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
 
-        // iPad / 手機高靈敏觸控拖曳與點擊分離核心腳本
-        function makeElementDraggable(dragArea, container, isTriggerBtn) {
-            var startX = 0, startY = 0, initialLeft = 0, initialTop = 0;
-            var isDragging = false;
-
-            if (!dragArea || !container) return;
-
-            // 滑鼠事件
-            dragArea.addEventListener('mousedown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && !isTriggerBtn)) return;
-                isDragging = false;
-                startX = e.clientX;
-                startY = e.clientY;
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-
-                function onMouseMove(e) {
-                    var dx = e.clientX - startX;
-                    var dy = e.clientY - startY;
-                    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
-                    if (isDragging) {
-                        container.style.position = 'fixed';
-                        container.style.left = (initialLeft + dx) + 'px';
-                        container.style.top = (initialTop + dy) + 'px';
-                        container.style.bottom = 'auto';
-                        container.style.right = 'auto';
-                    }
-                }
-
-                function onMouseUp() {
-                    document.removeEventListener('mousemove', onMouseMove);
-                    document.removeEventListener('mouseup', onMouseUp);
-                    if (isTriggerBtn && !isDragging) {
-                        toggleAiWindow();
-                    }
-                }
-
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-            });
-
-            // 觸控事件 (iPad / iPhone / Android)
-            dragArea.addEventListener('touchstart', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && !isTriggerBtn)) return;
-                var touch = e.touches[0];
-                isDragging = false;
-                startX = touch.clientX;
-                startY = touch.clientY;
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-
-                function onTouchMove(e) {
-                    if (e.cancelable) e.preventDefault();
-                    var touch = e.touches[0];
-                    var dx = touch.clientX - startX;
-                    var dy = touch.clientY - startY;
-                    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
-                    if (isDragging) {
-                        container.style.position = 'fixed';
-                        container.style.left = (initialLeft + dx) + 'px';
-                        container.style.top = (initialTop + dy) + 'px';
-                        container.style.bottom = 'auto';
-                        container.style.right = 'auto';
-                    }
-                }
-
-                function onTouchEnd() {
-                    document.removeEventListener('touchmove', onTouchMove);
-                    document.removeEventListener('touchend', onTouchEnd);
-                    if (isTriggerBtn && !isDragging) {
-                        toggleAiWindow();
-                    }
-                }
-
-                document.addEventListener('touchmove', onTouchMove, { passive: false });
-                document.addEventListener('touchend', onTouchEnd);
-            }, { passive: true });
-        }
-
         window.onload = function() {
             switchPage('page-home');
             var defaultBtn = document.querySelector('.comm-category-item'); setCommCategory('whole_life', defaultBtn); updateCalcOptions(); fetchGoogleSheetData(); updateAuthUI();
-            
-            // 初始化拖曳
-            var aiContainer = document.getElementById('aiFloatingContainer');
-            var aiHeader = document.getElementById('aiWindowHeader');
-            var aiTriggerBtn = document.getElementById('aiTriggerBtn');
-
-            makeElementDraggable(aiHeader, aiContainer, false);
-            makeElementDraggable(aiTriggerBtn, aiContainer, true);
         };
     </script>
 </body>
