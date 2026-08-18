@@ -40,8 +40,8 @@
         }
 
         /* AI 浮窗動畫與跨平台觸控拖曳支援 */
-        .ai-window-enter { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .ai-window-active { opacity: 1 !important; transform: translateY(0) scale(1) !important; pointer-events: auto !important; }
+        .ai-window-enter { display: none; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .ai-window-active { display: block !important; opacity: 1 !important; transform: translateY(0) scale(1) !important; pointer-events: auto !important; }
         .drag-handle { cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none !important; }
         .drag-handle:active { cursor: grabbing; }
     </style>
@@ -744,9 +744,9 @@
         <span class="bg-emerald-500 text-white rounded-full p-1 text-[10px]">✓</span><span id="toastMsgText">已複製！</span>
     </div>
 
-    <!-- AI Sammy 浮窗助手 (獨立高層級 z-[99999]，全面支援 Windows 及 iPad 拖曳) -->
-    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-auto select-none">
-        <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all">
+    <!-- AI Sammy 浮窗助手 (已修復：外層預設 pointer-events-none，關閉時 display:none 徹底杜絕遮擋背景點擊) -->
+    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-none select-none">
+        <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all pointer-events-auto">
             <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
                 <div class="flex items-center gap-2.5 pointer-events-none"><div class="w-10 h-10 rounded-full bg-white p-0.5 shrink-0 flex items-center justify-center overflow-hidden border-2 border-white"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div><div><h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">AI Sammy <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">OGOR 智慧助手</span></h4><p class="text-[11px] text-sky-100 opacity-90">按住此處可隨意拖拽浮窗位置</p></div></div>
                 <div class="flex items-center gap-1 text-xs"><button type="button" onclick="toggleAiPin()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer">📌</button><button type="button" onclick="toggleAiWindow()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer text-base">✕</button></div>
@@ -776,9 +776,12 @@
             </div>
         </div>
 
-        <button id="aiTriggerBtn" type="button" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white">
-            <img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full pointer-events-none">
-            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white pointer-events-none">1</span>
+        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
+            <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
+            <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
+                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
+            </div>
+            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 pointer-events-none">1</span>
         </button>
     </div>
 
@@ -829,11 +832,11 @@
             }, 2500); 
         }
 
-        // 現代通用剪貼簿複製 (相容全平台)
+        // 現代通用剪貼簿複製 (極致穩健相容 Windows 電腦、Mac、iPad 及 iPhone)
         function performCopyText(text, successMsg) {
             var copied = false;
             
-            // 方案 1: 同步 DOM 攔截寫入
+            // 方案 1: 同步建立實體 DOM 節點並選取複製 (Windows 電腦最相容方案)
             var textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
@@ -880,11 +883,6 @@
             var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
             var ageInput = document.getElementById('calcAge');
             var age = ageInput ? ageInput.value : "30";
-            var gSelect = document.getElementById('calcGender');
-            var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
-            var currSelect = document.getElementById('calcCurrency');
-            var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
-            var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
             
             var cardTitleEl = document.getElementById('cardMainTitle');
             var valAnnualEl = document.getElementById('valAnnualText');
@@ -895,7 +893,6 @@
             var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
             
             var copyText = "🟢 FWD 保費快算試算\n" +
-                           "產品：" + pNameText + "\n" +
                            "條件：" + title + "\n\n" +
                            "💵 預估保費：\n" +
                            "年供：" + annual + "\n" +
@@ -1288,86 +1285,9 @@
             ageList.forEach(function(a) { var aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p==='crisis_supporter_pro')); if (curr === 'USD') aAnn = aAnn / 7.8; var aMon = aAnn * 0.09; var isCurrentAge = (a === age); var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; }); document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
 
-        // 全平台（Windows 滑鼠 + iPad/手機觸控）高靈敏拖曳核心
-        function makeElementDraggable(dragHandle, container, isTriggerBtn) {
-            if (!dragHandle || !container) return;
-            
-            var isDragging = false;
-            var hasMoved = false;
-            var startX = 0, startY = 0;
-            var initialLeft = 0, initialTop = 0;
-
-            dragHandle.style.touchAction = 'none';
-
-            dragHandle.addEventListener('pointerdown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && !isTriggerBtn && e.target !== dragHandle)) return;
-                
-                isDragging = true;
-                hasMoved = false;
-                startX = e.clientX;
-                startY = e.clientY;
-                
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-                
-                try {
-                    dragHandle.setPointerCapture(e.pointerId);
-                } catch(err) {}
-            });
-
-            dragHandle.addEventListener('pointermove', function(e) {
-                if (!isDragging) return;
-                var dx = e.clientX - startX;
-                var dy = e.clientY - startY;
-                
-                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-                    hasMoved = true;
-                }
-                
-                if (hasMoved) {
-                    container.style.position = 'fixed';
-                    container.style.left = (initialLeft + dx) + 'px';
-                    container.style.top = (initialTop + dy) + 'px';
-                    container.style.bottom = 'auto';
-                    container.style.right = 'auto';
-                }
-            });
-
-            function onPointerEnd(e) {
-                if (!isDragging) return;
-                isDragging = false;
-                try {
-                    dragHandle.releasePointerCapture(e.pointerId);
-                } catch(err) {}
-            }
-
-            dragHandle.addEventListener('pointerup', onPointerEnd);
-            dragHandle.addEventListener('pointercancel', onPointerEnd);
-
-            if (isTriggerBtn) {
-                dragHandle.addEventListener('click', function(e) {
-                    if (hasMoved) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                        hasMoved = false;
-                        return false;
-                    }
-                }, true);
-            }
-        }
-
         window.onload = function() {
             switchPage('page-home');
             var defaultBtn = document.querySelector('.comm-category-item'); setCommCategory('whole_life', defaultBtn); updateCalcOptions(); fetchGoogleSheetData(); updateAuthUI();
-            
-            // 初始化 Windows 與 iPad 拖曳
-            var aiContainer = document.getElementById('aiFloatingContainer');
-            var aiHeader = document.getElementById('aiWindowHeader');
-            var aiTriggerBtn = document.getElementById('aiTriggerBtn');
-
-            makeElementDraggable(aiHeader, aiContainer, false);
-            makeElementDraggable(aiTriggerBtn, aiContainer, true);
         };
     </script>
 </body>
