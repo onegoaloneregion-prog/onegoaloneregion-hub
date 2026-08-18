@@ -8,15 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
         .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease-in-out; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
         
         body.modal-open { overflow: hidden !important; height: 100vh !important; touch-action: none !important; }
 
-        input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; touch-action: manipulation; }
-        button, a, div[onclick], [onclick] { cursor: pointer; -webkit-touch-callout: none; touch-action: manipulation; }
+        input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; }
+        button, a, [onclick] { cursor: pointer; }
 
         /* 徹底根治知識遊戲按鈕殘留框線問題 */
         .quiz-opt-btn {
@@ -830,20 +829,28 @@
             }, 2500); 
         }
 
-        // 現代通用剪貼簿複製 (相容 Windows 電腦與全平台)
+        // 現代通用剪貼簿複製 (極致穩健相容 Windows 電腦、Mac、iPad 及 iPhone)
         function performCopyText(text, successMsg) {
             var copied = false;
-            // 方案 1: 同步 DOM 攔截寫入 (Windows 電腦端最穩健相容方案)
+            
+            // 方案 1: 同步建立實體 DOM 節點並選取複製 (Windows 電腦最相容方案)
             var textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
+            textArea.style.left = "0";
             textArea.style.top = "0";
-            textArea.setAttribute("readonly", "");
+            textArea.style.width = "2em";
+            textArea.style.height = "2em";
+            textArea.style.padding = "0";
+            textArea.style.border = "none";
+            textArea.style.outline = "none";
+            textArea.style.boxShadow = "none";
+            textArea.style.background = "transparent";
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            textArea.setSelectionRange(0, 99999);
+            textArea.setSelectionRange(0, textArea.value.length);
+            
             try {
                 copied = document.execCommand('copy');
             } catch (err) {
@@ -851,7 +858,7 @@
             }
             document.body.removeChild(textArea);
 
-            // 方案 2: 若方案 1 失敗則嘗試 navigator.clipboard
+            // 方案 2: 若未成功則嘗試使用現代 Clipboard API
             if (!copied && navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(function() {
                     showToast(successMsg || "已複製到剪貼簿！");
@@ -869,14 +876,21 @@
         }
 
         function copyVideoStyleResult() {
-            runPremiumQuery();
-            var pSelect = document.getElementById('calcProduct'); var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge'); var age = ageInput ? ageInput.value : "30";
-            var gSelect = document.getElementById('calcGender'); var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
-            var currSelect = document.getElementById('calcCurrency'); var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
-            var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
-            var annualFormatted = formatMoney(currentCalcResult.annual); var monthlyFormatted = formatMoney(currentCalcResult.monthly);
-            var copyText = "🟢 FWD 保費快算試算\n產品：" + pNameText + "\n年齡：" + age + " 歲 (" + gender + ")\n\n💵 預估保費 (" + currUnit + ")\n年供：" + currSymbol + annualFormatted + " /年\n月供：" + currSymbol + monthlyFormatted + " /月\n\n數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
+            var cardTitleEl = document.getElementById('cardMainTitle');
+            var valAnnualEl = document.getElementById('valAnnualText');
+            var valMonthlyEl = document.getElementById('valMonthlyText');
+            
+            var title = cardTitleEl ? cardTitleEl.innerText.trim() : "保費試算";
+            var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
+            var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
+            
+            var copyText = "🟢 FWD 保費快算試算\n" +
+                           "條件：" + title + "\n\n" +
+                           "💵 預估保費：\n" +
+                           "年供：" + annual + "\n" +
+                           "月供：" + monthly + "\n\n" +
+                           "數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
+            
             performCopyText(copyText, "已複製保費試算結果！");
         }
 
@@ -1024,7 +1038,7 @@
             whole_life: [
                 { id: "gfd_1", name: "盈聚．天下 II 保險計劃 (GFD) - 躉繳/整付", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66-70歲", rate: 0.025 }] },
                 { id: "gfd_2", name: "盈聚．天下 II 保險計劃 (GFD) - 2年供", rates: [{ ages: "1-60歲", rate: 0.070 }, { ages: "61-70歲", rate: 0.050 }] },
-                { id: "gfd_3", name: "盈聚．天下 II 保險計劃 (GFD) - 3年供", rates: [{ ages: "1-60歲", rate: 0.110 }, { ages: "61-70歲", rate: 0.080 }] },
+                { id: "gfd_3", name: "盈聚．天下 II 保險計劃 (GFD) - 3年供", rates: [{ ages: "1-60歲", rate: 0.0110 }, { ages: "61-70歲", rate: 0.080 }] },
                 { id: "gfd_5", name: "盈聚．天下 II 保險計劃 (GFD) - 5年供", rates: [{ ages: "1-60歲", rate: 0.275 }, { ages: "61-70歲", rate: 0.225 }] },
                 { id: "gfd_10", name: "盈聚．天下 II 保險計劃 (GFD) - 10年供", rates: [{ ages: "1-60歲", rate: 0.350 }, { ages: "61-70歲", rate: 0.300 }] },
                 { id: "gfd_18", name: "盈聚．天下 II 保險計劃 (GFD) - 18年供", rates: [{ ages: "1-62歲", rate: 0.420 }] },
