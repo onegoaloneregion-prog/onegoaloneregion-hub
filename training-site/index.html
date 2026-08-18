@@ -8,16 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * { -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
         .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease-in-out; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
         
         body.modal-open { overflow: hidden !important; height: 100vh !important; touch-action: none !important; }
 
         input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; touch-action: manipulation; }
-        button, a, div[onclick] { cursor: pointer; -webkit-touch-callout: none; }
+        button, a, div[onclick], [onclick] { cursor: pointer; -webkit-touch-callout: none; touch-action: manipulation; }
 
-        /* 徹底根治知識遊戲按鈕殘留框線與偽類問題 */
+        /* 徹底根治知識遊戲按鈕殘留框線問題 */
         .quiz-opt-btn {
             border: 1px solid #e2e8f0 !important;
             background-color: #ffffff !important;
@@ -377,7 +378,7 @@
                     <div class="bg-white border-2 border-orange-100 rounded-3xl p-6 shadow-md space-y-5">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <div class="text-sm font-black text-slate-800" id="cardMainTitle">--</div>
-                            <button type="button" onclick="window.copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
+                            <button type="button" onclick="copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
                                 📋 複製結果
                             </button>
                         </div>
@@ -830,7 +831,7 @@
         }
 
         // 現代通用剪貼簿複製 (相容全平台)
-        window.performCopyText = function(text, successMsg) {
+        function performCopyText(text, successMsg) {
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(function() {
                     showToast(successMsg);
@@ -840,7 +841,7 @@
             } else {
                 fallbackCopyText(text, successMsg);
             }
-        };
+        }
 
         function fallbackCopyText(text, successMsg) {
             var textArea = document.createElement("textarea");
@@ -857,7 +858,7 @@
             if (copied) { showToast(successMsg); } else { prompt("📋 請複製：", text); }
         }
 
-        window.copyVideoStyleResult = function() {
+        function copyVideoStyleResult() {
             runPremiumQuery();
             var pSelect = document.getElementById('calcProduct'); var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
             var ageInput = document.getElementById('calcAge'); var age = ageInput ? ageInput.value : "30";
@@ -866,18 +867,22 @@
             var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
             var annualFormatted = formatMoney(currentCalcResult.annual); var monthlyFormatted = formatMoney(currentCalcResult.monthly);
             var copyText = "🟢 FWD 保費快算試算\n產品：" + pNameText + "\n年齡：" + age + " 歲 (" + gender + ")\n\n💵 預估保費 (" + currUnit + ")\n年供：" + currSymbol + annualFormatted + " /年\n月供：" + currSymbol + monthlyFormatted + " /月\n\n數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
-            window.performCopyText(copyText, "已複製保費試算結果！");
-        };
+            performCopyText(copyText, "已複製保費試算結果！");
+        }
 
-        window.copyCommissionResult = function() {
+        function copyCommissionResult() {
             var planSelect = document.getElementById('planSelect'); var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
             var ageSelect = document.getElementById('commAgeSelect'); var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
             var premInput = document.getElementById('premiumInput'); var premium = parseCleanNumber(premInput ? premInput.value : "0");
             var rateEl = document.getElementById('commRate'); var rate = rateEl ? rateEl.innerText : "--%";
             var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
             var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
-            window.performCopyText(copyText, "已複製佣金試算結果！");
-        };
+            performCopyText(copyText, "已複製佣金試算結果！");
+        }
+
+        // 掛載全域以供按鈕安全點擊
+        window.copyVideoStyleResult = copyVideoStyleResult;
+        window.copyCommissionResult = copyCommissionResult;
 
         // AI Sammy 專屬開關與對話邏輯
         function toggleAiWindow() {
@@ -990,7 +995,7 @@
         function renderDynamicBrochures(items) {
             var container = document.getElementById('fwdBrochuresContainer'); if (!container) return; var html = '';
             items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">' + item.badge + '</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
             });
             container.innerHTML = html;
         }
@@ -1069,7 +1074,6 @@
         function restartQuizGame() { startQuizGame(); }
         function startQuizGame() { currentQuizIndex = 0; currentQuizScore = 0; currentQuizStreak = 0; quizQuestions.sort(function() { return 0.5 - Math.random(); }); renderQuizQuestion(); }
         
-        // 渲染題目：徹底重置焦點，杜絕預先框線
         function renderQuizQuestion() {
             var fbBox = document.getElementById('quizFeedbackBox'); 
             if (fbBox) fbBox.classList.add('hidden');
