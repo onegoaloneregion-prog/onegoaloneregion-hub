@@ -15,7 +15,7 @@
         body.modal-open { overflow: hidden !important; height: 100vh !important; touch-action: none !important; }
 
         input, select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; }
-        button, a, [onclick] { cursor: pointer; }
+        button, a, [onclick] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
         /* 徹底根治知識遊戲按鈕殘留框線問題 */
         .quiz-opt-btn {
@@ -377,7 +377,7 @@
                     <div class="bg-white border-2 border-orange-100 rounded-3xl p-6 shadow-md space-y-5">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <div class="text-sm font-black text-slate-800" id="cardMainTitle">--</div>
-                            <button type="button" onclick="copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
+                            <button type="button" id="copyResultBtn" onclick="copyVideoStyleResult()" class="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#E87722] text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
                                 📋 複製結果
                             </button>
                         </div>
@@ -547,7 +547,7 @@
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">1. 選擇產品類別</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs font-bold"><button type="button" onclick="setCommCategory('whole_life', this)" class="comm-category-item p-3 rounded-xl border border-[#E87722] bg-orange-50 text-[#E87722] shadow-sm cursor-pointer">終身壽險<br><span class="text-[10px] opacity-60 font-normal">Whole Life</span></button><button type="button" onclick="setCommCategory('medical', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人醫療 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Medical & Riders</span></button><button type="button" onclick="setCommCategory('crisis', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人危疾<br><span class="text-[10px] opacity-60 font-normal">Crisis</span></button><button type="button" onclick="setCommCategory('accident', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人意外 (含附約)<br><span class="text-[10px] opacity-60 font-normal">Accident & Riders</span></button><button type="button" onclick="setCommCategory('universal', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">萬用壽險<br><span class="text-[10px] opacity-60 font-normal">Universal Life</span></button></div></div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4"><div class="sm:col-span-8 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. 選擇計劃</label><select id="planSelect" onchange="updateCommAgeOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div><div class="sm:col-span-4 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">投保年齡 (影響部分產品佣金率)</label><select id="commAgeSelect" onchange="calculateCommission()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div></div>
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. 輸入首年保費 (HKD)</label><div class="relative"><span class="absolute left-4 top-3.5 text-slate-400 font-bold">$</span><input id="premiumInput" type="text" value="50,000" oninput="formatFormattedInput(this); calculateCommission();" class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-lg font-black text-slate-900 focus:outline-none focus:border-[#E87722]"></div></div>
-            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
+            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="window.copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
         </div>
     </div>
 
@@ -829,11 +829,11 @@
             }, 2500); 
         }
 
-        // 現代通用剪貼簿複製 (極致穩健相容 Windows 電腦、Mac、iPad 及 iPhone)
+        // 現代通用剪貼簿複製 (相容全平台)
         function performCopyText(text, successMsg) {
             var copied = false;
             
-            // 方案 1: 同步建立實體 DOM 節點並選取複製 (Windows 電腦最相容方案)
+            // 方案 1: 同步 DOM 攔截寫入
             var textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
@@ -876,22 +876,42 @@
         }
 
         function copyVideoStyleResult() {
+            var pSelect = document.getElementById('calcProduct');
+            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
+            var ageInput = document.getElementById('calcAge');
+            var age = ageInput ? ageInput.value : "30";
+            var gSelect = document.getElementById('calcGender');
+            var gender = (gSelect && gSelect.value === 'male') ? '男性' : '女性';
+            var currSelect = document.getElementById('calcCurrency');
+            var currUnit = (currSelect && currSelect.value === 'USD') ? 'USD' : 'HKD';
+            var currSymbol = (currUnit === 'USD') ? '$' : 'HKD ';
+            
             var cardTitleEl = document.getElementById('cardMainTitle');
             var valAnnualEl = document.getElementById('valAnnualText');
             var valMonthlyEl = document.getElementById('valMonthlyText');
             
-            var title = cardTitleEl ? cardTitleEl.innerText.trim() : "保費試算";
+            var title = cardTitleEl ? cardTitleEl.innerText.trim() : (age + " 歲 · " + pNameText);
             var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
             var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
             
             var copyText = "🟢 FWD 保費快算試算\n" +
+                           "產品：" + pNameText + "\n" +
                            "條件：" + title + "\n\n" +
                            "💵 預估保費：\n" +
                            "年供：" + annual + "\n" +
                            "月供：" + monthly + "\n\n" +
                            "數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
             
-            performCopyText(copyText, "已複製保費試算結果！");
+            performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
+
+            var btn = document.getElementById('copyResultBtn');
+            if (btn) {
+                var origText = btn.innerHTML;
+                btn.innerHTML = "✅ 已複製！";
+                setTimeout(function() {
+                    btn.innerHTML = origText;
+                }, 1500);
+            }
         }
 
         function copyCommissionResult() {
@@ -1099,6 +1119,7 @@
         function restartQuizGame() { startQuizGame(); }
         function startQuizGame() { currentQuizIndex = 0; currentQuizScore = 0; currentQuizStreak = 0; quizQuestions.sort(function() { return 0.5 - Math.random(); }); renderQuizQuestion(); }
         
+        // 渲染題目：徹底重置焦點，杜絕預先框線
         function renderQuizQuestion() {
             var fbBox = document.getElementById('quizFeedbackBox'); 
             if (fbBox) fbBox.classList.add('hidden');
@@ -1300,7 +1321,7 @@
                 var dx = e.clientX - startX;
                 var dy = e.clientY - startY;
                 
-                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
                     hasMoved = true;
                 }
                 
@@ -1319,14 +1340,21 @@
                 try {
                     dragHandle.releasePointerCapture(e.pointerId);
                 } catch(err) {}
-                
-                if (isTriggerBtn && !hasMoved) {
-                    toggleAiWindow();
-                }
             }
 
             dragHandle.addEventListener('pointerup', onPointerEnd);
             dragHandle.addEventListener('pointercancel', onPointerEnd);
+
+            if (isTriggerBtn) {
+                dragHandle.addEventListener('click', function(e) {
+                    if (hasMoved) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        hasMoved = false;
+                        return false;
+                    }
+                }, true);
+            }
         }
 
         window.onload = function() {
