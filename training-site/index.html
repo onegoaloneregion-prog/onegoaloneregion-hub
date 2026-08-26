@@ -402,10 +402,34 @@
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-orange-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-orange-500"></span> FWD 保障與資源智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">FWD 專區</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋銷售話術、官方產品小冊子、客戶促銷折扣及線上培訓頻道支援</p></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🗣️</div><h3 class="font-black text-slate-900 text-lg">話術</h3><p class="text-xs text-slate-500 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p></div>
+            <div onclick="switchPage('page-fwd-scripts')" class="p-8 rounded-3xl border-2 border-sky-200 bg-sky-50/20 shadow-sm hover:shadow-lg hover:border-sky-400 transition-all cursor-pointer space-y-4 relative group">
+                <div class="flex items-center justify-between">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-3xl">🗣️</div>
+                    <span class="text-xs font-black text-sky-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看話術專區 →</span>
+                </div>
+                <h3 class="font-black text-slate-900 text-lg group-hover:text-sky-700 transition-colors">話術</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
+            </div>
             <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等熱門計劃。</p></div>
             <div onclick="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-3xl">🎁</div><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看優惠專頁 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-amber-700 transition-colors">客戶折扣優惠</h3><p class="text-xs text-slate-500 leading-relaxed">即時查閱最新客戶促銷優惠，包含 2026 年第 3 季客戶保費折扣優惠及盈聚天下 II 專屬優惠。</p></div>
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
+        </div>
+    </div>
+
+    <!-- PAGE: FWD 話術與培訓專區 -->
+    <div id="page-fwd-scripts" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-sky-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端動態同步中</span></div>
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-sky-50 text-sky-600 text-xs font-bold">🗣️ Sales Scripts & Training Hub</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">銷售話術與培訓手冊庫</h2><p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 話術與培訓 PDF 文件</p></div>
+            <div id="fwdScriptsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div onclick="window.open('https://drive.google.com/', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">1. 儲蓄傳承理念與話術攻略</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">實戰話術</span></div>
+                        <p class="text-slate-600 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
+                    </div>
+                    <div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -744,7 +768,7 @@
         <span class="bg-emerald-500 text-white rounded-full p-1 text-[10px]">✓</span><span id="toastMsgText">已複製！</span>
     </div>
 
-    <!-- AI Sammy 浮窗助手 (已修復：外層預設 pointer-events-none，關閉時 display:none 徹底杜絕遮擋背景點擊) -->
+    <!-- AI Sammy 浮窗助手 (獨立高層級 z-[99999]，全面支援 Windows 及 iPad 拖曳) -->
     <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-none select-none">
         <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all pointer-events-auto">
             <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
@@ -776,7 +800,7 @@
             </div>
         </div>
 
-        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
+        <button id="aiTriggerBtn" type="button" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
             <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
             <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
                 <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
@@ -893,6 +917,7 @@
             var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
             
             var copyText = "🟢 FWD 保費快算試算\n" +
+                           "產品：" + pNameText + "\n" +
                            "條件：" + title + "\n\n" +
                            "💵 預估保費：\n" +
                            "年供：" + annual + "\n" +
@@ -919,6 +944,15 @@
             var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
             var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
             performCopyText(copyText, "已複製佣金試算結果！");
+
+            var btn = document.querySelector('button[onclick*="copyCommissionResult"]');
+            if (btn) {
+                var origText = btn.innerHTML;
+                btn.innerHTML = "✅ 已複製！";
+                setTimeout(function() {
+                    btn.innerHTML = origText;
+                }, 1500);
+            }
         }
 
         // 掛載全域以供按鈕安全點擊
@@ -1012,17 +1046,19 @@
             var url = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID + '/gviz/tq?tqx=out:json';
             fetch(url).then(function(res) { return res.text(); }).then(function(data) {
                 var jsonStr = data.substring(47, data.length - 2); var json = JSON.parse(jsonStr); var rows = json.table.rows;
-                var promoItems = []; var brochureItems = [];
+                var promoItems = []; var brochureItems = []; var scriptItems = [];
                 rows.forEach(function(row) {
                     var c = row.c;
                     if (c && c[0] && c[0].v) {
                         var category = String(c[0].v).toLowerCase().trim(); var title = c[1] ? String(c[1].v) : ''; var desc = c[2] ? String(c[2].v) : ''; var linkUrl = c[3] ? String(c[3].v) : ''; var badge = c[4] ? String(c[4].v) : '官方正本';
                         if (category === 'promo') promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
                         else if (category === 'brochure') brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+                        else if (category === 'script') scriptItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
                     }
                 });
                 if (promoItems.length > 0) renderDynamicPromo(promoItems);
                 if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
+                if (scriptItems.length > 0) renderDynamicScripts(scriptItems);
             }).catch(function(err) { console.log('使用預設數據載入中。', err); });
         }
 
@@ -1037,7 +1073,15 @@
         function renderDynamicBrochures(items) {
             var container = document.getElementById('fwdBrochuresContainer'); if (!container) return; var html = '';
             items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">' + item.badge + '</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function renderDynamicScripts(items) {
+            var container = document.getElementById('fwdScriptsContainer'); if (!container) return; var html = '';
+            items.forEach(function(item, idx) {
+                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">' + item.badge + '</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
             });
             container.innerHTML = html;
         }
@@ -1285,9 +1329,90 @@
             ageList.forEach(function(a) { var aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p==='crisis_supporter_pro')); if (curr === 'USD') aAnn = aAnn / 7.8; var aMon = aAnn * 0.09; var isCurrentAge = (a === age); var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; }); document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
 
+        // 全平台（Windows 滑鼠 + iPad/手機觸控）高靈敏拖曳核心
+        function makeElementDraggable(dragHandle, container, isTriggerBtn) {
+            if (!dragHandle || !container) return;
+            
+            var isPointerDown = false;
+            var isDragging = false;
+            var startX = 0, startY = 0;
+            var initialLeft = 0, initialTop = 0;
+
+            dragHandle.style.touchAction = 'none';
+
+            dragHandle.addEventListener('pointerdown', function(e) {
+                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && !isTriggerBtn && e.target !== dragHandle)) return;
+                
+                isPointerDown = true;
+                isDragging = false;
+                startX = e.clientX;
+                startY = e.clientY;
+                
+                var rect = container.getBoundingClientRect();
+                initialLeft = rect.left;
+                initialTop = rect.top;
+                
+                try {
+                    dragHandle.setPointerCapture(e.pointerId);
+                } catch(err) {}
+            });
+
+            dragHandle.addEventListener('pointermove', function(e) {
+                if (!isPointerDown) return;
+                var dx = e.clientX - startX;
+                var dy = e.clientY - startY;
+                
+                if (!isDragging && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+                    isDragging = true;
+                }
+                
+                if (isDragging) {
+                    var newLeft = initialLeft + dx;
+                    var newTop = initialTop + dy;
+                    
+                    var maxLeft = window.innerWidth - container.offsetWidth - 10;
+                    var maxTop = window.innerHeight - container.offsetHeight - 10;
+                    
+                    newLeft = Math.max(10, Math.min(newLeft, maxLeft));
+                    newTop = Math.max(10, Math.min(newTop, maxTop));
+                    
+                    container.style.position = 'fixed';
+                    container.style.left = newLeft + 'px';
+                    container.style.top = newTop + 'px';
+                    container.style.bottom = 'auto';
+                    container.style.right = 'auto';
+                }
+            });
+
+            function onPointerEnd(e) {
+                if (!isPointerDown) return;
+                isPointerDown = false;
+                
+                try {
+                    dragHandle.releasePointerCapture(e.pointerId);
+                } catch(err) {}
+
+                if (isTriggerBtn && !isDragging) {
+                    toggleAiWindow();
+                }
+                isDragging = false;
+            }
+
+            dragHandle.addEventListener('pointerup', onPointerEnd);
+            dragHandle.addEventListener('pointercancel', onPointerEnd);
+        }
+
         window.onload = function() {
             switchPage('page-home');
             var defaultBtn = document.querySelector('.comm-category-item'); setCommCategory('whole_life', defaultBtn); updateCalcOptions(); fetchGoogleSheetData(); updateAuthUI();
+            
+            // 初始化 Windows 與 iPad 拖曳
+            var aiContainer = document.getElementById('aiFloatingContainer');
+            var aiHeader = document.getElementById('aiWindowHeader');
+            var aiTriggerBtn = document.getElementById('aiTriggerBtn');
+
+            makeElementDraggable(aiHeader, aiContainer, false);
+            makeElementDraggable(aiTriggerBtn, aiContainer, true);
         };
     </script>
 </body>
