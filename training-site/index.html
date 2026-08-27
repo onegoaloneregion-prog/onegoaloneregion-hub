@@ -559,216 +559,6 @@
         </div>
     </div>
 
-    <!-- PAGE 2: 佣金計算機 -->
-    <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-[#E87722] bg-orange-50 px-3 py-1 rounded-full">🧮 FWD 澳門佣金試算 (2026.08 官方最新版)[cite: 1]</span></div>
-        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
-            <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-orange-50 text-[#E87722] text-xs font-bold">💵 FWD Commission Calculator</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">佣金計算機</h2><p class="text-xs sm:text-sm text-slate-500">選擇產品類別與具體計劃，輸入投保年齡與首年保費，即時計算首年預期佣金</p></div>
-            <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">1. 選擇產品類別</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs font-bold"><button type="button" onclick="setCommCategory('whole_life', this)" class="comm-category-item p-3 rounded-xl border border-[#E87722] bg-orange-50 text-[#E87722] shadow-sm cursor-pointer">終身壽險<br><span class="text-[10px] opacity-60 font-normal">Whole Life</span></button><button type="button" onclick="setCommCategory('medical', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人醫療<br><span class="text-[10px] opacity-60 font-normal">Medical</span></button><button type="button" onclick="setCommCategory('crisis', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人危疾<br><span class="text-[10px] opacity-60 font-normal">Crisis</span></button><button type="button" onclick="setCommCategory('accident', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人意外<br><span class="text-[10px] opacity-60 font-normal">Accident</span></button><button type="button" onclick="setCommCategory('endowment', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">儲蓄保險<br><span class="text-[10px] opacity-60 font-normal">Endowment</span></button><button type="button" onclick="setCommCategory('universal', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">萬用壽險<br><span class="text-[10px] opacity-60 font-normal">Universal</span></button></div></div>
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4"><div class="sm:col-span-8 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. 選擇計劃</label><select id="planSelect" onchange="updateCommAgeOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div><div class="sm:col-span-4 space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">投保年齡 (影響部分產品佣金率)</label><select id="commAgeSelect" onchange="calculateCommission()" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722]"></select></div></div>
-            <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. 輸入首年保費 (HKD)</label><div class="relative"><span class="absolute left-4 top-3.5 text-slate-400 font-bold">$</span><input id="premiumInput" type="text" value="50,000" oninput="formatFormattedInput(this); calculateCommission();" class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-lg font-black text-slate-900 focus:outline-none focus:border-[#E87722]"></div></div>
-            <div class="bg-gradient-to-br from-[#E87722] to-[#d66513] rounded-2xl p-6 sm:p-8 text-white shadow-xl space-y-6"><div class="flex items-center justify-between border-b border-white/20 pb-4"><div><span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full uppercase">首年佣金試算結果</span><p class="text-xs text-orange-100 mt-2">首年佣金率: <b id="commRate" class="text-amber-200 text-sm">--%</b></p></div><div class="text-right"><span class="text-xs text-orange-100 block mb-1">預計首年佣金收入</span><p id="commResult" class="text-3xl sm:text-4xl font-black text-amber-200">HK$ 0</p></div></div><button type="button" onclick="window.copyCommissionResult()" class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-sm backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95">📋 複製結果</button></div>
-        </div>
-    </div>
-
-    <!-- PAGE 4: OGOR 100題知識闖關遊戲 -->
-    <div id="page-game" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">🎮 富衛保險指南 100 題大挑戰</span></div>
-        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-6">
-            <div class="flex items-center justify-between border-b pb-4"><div><h2 class="text-2xl font-black text-slate-900 flex items-center gap-2"><span>🎮</span> OGOR 產品知識闖關</h2><p class="text-xs text-slate-500 mt-1">每次點擊重新開始均由 100 題全量題庫隨機洗牌，答對自動跳下一題！</p></div><div class="text-right flex items-center gap-3"><div><span class="text-xs text-slate-400 block">目前分數 / 連勝</span><span id="quizScoreText" class="text-xl font-black text-indigo-600">0 分 (0連勝)</span></div><button type="button" onclick="restartQuizGame()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 font-bold text-xs text-slate-600 transition-colors shadow-2xs cursor-pointer border border-slate-200">🔄 重新開始 (全隨機100題)</button></div></div>
-            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="quizProgressBar" class="bg-gradient-to-r from-sky-500 to-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div></div>
-            <div id="quizContentArea" class="space-y-6"><div id="quizQuestionBox" class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100/80"><span id="quizDifficultyTag" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 uppercase tracking-wider mb-2 inline-block">隨機關卡</span><h3 id="quizQuestionText" class="text-base sm:text-lg font-black text-slate-800 leading-snug">按下下方按鈕即可開始挑戰 100 題！</h3></div><div id="quizOptionsContainer" class="grid grid-cols-1 gap-3"><button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🚀 開始闖關遊戲 (100題全隨機抽題)</button></div><div id="quizFeedbackBox" class="hidden p-4 rounded-2xl border text-xs leading-relaxed space-y-1 transition-all"></div></div>
-        </div>
-    </div>
-
-    <!-- PAGE 5: 一般保險主頁 -->
-    <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
-        <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p></div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
-            <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
-        </div>
-    </div>
-
-    <!-- PAGE 6: 車險表格專頁 -->
-    <div id="page-motor" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-gi')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回一般保險</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">🚗 車險下載專區 (Google Drive 官方庫)</span></div>
-        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
-            <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold">🚘 Motor Insurance Documents</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">車險服務與表格下載庫</h2><p class="text-xs sm:text-sm text-slate-500">匯聚澳門主要保險公司之私家車、商用車及電單車投保、批單及轉代理表格</p></div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">1. 澳門保險 - 客戶指示 Client Instruction</b><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">澳門保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">更新車輛資料 (改車牌/車型 $30)、更新持有人/僱員資料、補發保單/保卡 ($30)、取消保單。</p>
-                        <p class="text-[11px] text-amber-700 font-semibold">附帶文件：車契、車輛登記摺影印本。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('macau_instruction')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">2. 聯豐亨 - 私家車/商用車/電單車投保書</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">新車投保三保/全保/火險盜竊險、集體運輸乘客險及指定駕駛者登記（責任限額 MOP 75萬-3,000萬）。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('luen_proposal')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">3. 聯豐亨 - 批單申請書 (Endorsement)</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">更改被保人/車牌/車輛、增減保額、取消按揭條款、退保或保卡遺失聲明。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('luen_endorsement')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">4. 聯豐亨 - 車險轉代理聲明書</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">車險到期續保時，要求更改代理人辦理續保事宜。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('luen_transfer')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">5. 中國太平 - 汽車保險套牌批單申請</b><span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px]">中國太平</span></div>
-                        <p class="text-slate-600 leading-relaxed">車輛套牌更新保險資料。</p>
-                        <p class="text-[11px] text-amber-700 font-semibold">附帶文件：轉車後最新登記摺 + 車契，退回舊保卡。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('taiping_plate')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">6. 中國太平 - 轉車及套回舊車牌申請</b><span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px]">中國太平</span></div>
-                        <p class="text-slate-600 leading-relaxed">轉車及套回舊車牌，更新保險資料。</p>
-                        <p class="text-[11px] text-amber-700 font-semibold">附帶文件：轉車後最新登記摺 + 車契。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('taiping_transfer_old')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">7. 亞洲保險 - 批單申請書 (Endorsement)</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">亞洲保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">更換車輛/車牌、更改投保人/地址、增減保額、保單或保卡遺失正本註銷。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('asia_endorsement')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">8. 亞洲保險 - 車險到期轉代理授權</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">亞洲保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">指示到期後轉代理跟進並續保一年。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('asia_transfer')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-
-                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between md:col-span-2">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">9. 澳門保險 - 電單車/汽車委託聲明</b><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">澳門保險</span></div>
-                        <p class="text-slate-600 leading-relaxed">聲明委託指定代理代辦及跟進車險事宜。</p>
-                        <p class="text-[11px] text-amber-700 font-semibold">附帶文件：客戶身份證明文件副本。</p>
-                    </div>
-                    <button type="button" onclick="downloadDriveDirect('macau_delegate')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🔥 登入 / 註冊 Modal -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/60" onclick="closeAuthModal()"></div>
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-slate-100 my-auto z-[1000] pointer-events-auto">
-            <button type="button" onclick="closeAuthModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-colors cursor-pointer">✕</button>
-            <div id="authModalHeader" class="text-center space-y-2"><span class="text-3xl">🔒</span><h3 id="authModalTitle" class="text-2xl font-black text-slate-900">團隊成員登入</h3><p id="authModalDesc" class="text-xs text-slate-500">請輸入您的 Agent Code 及密碼登入系統</p></div>
-
-            <form id="loginFormSection" onsubmit="event.preventDefault(); window.submitLogin();" class="space-y-4">
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label><input id="loginAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" inputmode="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold"></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">密碼</label><input id="loginPassword" type="password" required placeholder="請輸入密碼" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold"></div>
-                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">立即登入</button>
-                <div class="text-center pt-2"><span class="text-xs text-slate-500">仲未有帳號？</span><button type="button" onclick="switchAuthMode('register')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">立即申請註冊</button></div>
-            </form>
-
-            <form id="registerFormSection" onsubmit="event.preventDefault(); window.submitRegister();" class="space-y-4 hidden">
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 leading-relaxed space-y-1"><b class="block">⏳ 審批溫馨提示：</b><span>提交註冊後，審批時間約需 1 個工作天。經管理員批準後即可憑 Agent Code 登入！</span></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">姓名 (中文 / 英文)</label><input id="regFullName" type="text" required placeholder="例如: Sammy / Chan Tai Man" autocomplete="name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">Agent Code (將成為您的登入帳號)</label><input id="regAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">直屬經理姓名</label><input id="regManagerName" type="text" required placeholder="請輸入經理姓名" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">設定密碼</label><input id="regPassword" type="password" required placeholder="請設定您的登入密碼" autocomplete="new-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
-                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">提交註冊審批申請</button>
-                <div class="text-center pt-2"><span class="text-xs text-slate-500">已經有帳號？</span><button type="button" onclick="switchAuthMode('login')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">返回登入</button></div>
-            </form>
-
-            <div id="adminApprovalSection" class="space-y-4 hidden max-h-[400px] overflow-y-auto">
-                <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">👑 管理員審批與權限控制台</b><button type="button" onclick="logoutAccount()" class="text-xs text-red-600 font-bold hover:underline cursor-pointer">登出管理員</button></div>
-                <div class="flex border-b border-slate-200 text-xs font-bold"><button type="button" id="tabPendingBtn" onclick="switchAdminTab('pending')" class="px-3 py-2 border-b-2 border-orange-500 text-orange-600 cursor-pointer">待審批申請</button><button type="button" id="tabApprovedBtn" onclick="switchAdminTab('approved')" class="px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">已批準用戶 (可停權/恢復)</button></div>
-                <div id="pendingUsersList" class="space-y-2 text-xs"><p class="text-slate-400 text-center py-4">暫無待審批的新用戶</p></div>
-                <div id="approvedUsersList" class="space-y-2 text-xs hidden"><p class="text-slate-400 text-center py-4">暫無已批準的用戶</p></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🔒 權限攔截提示 Modal -->
-    <div id="lockModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[999] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/60" onclick="closeLockModal()"></div>
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6 relative border border-slate-100 my-auto z-[1000] pointer-events-auto">
-            <button type="button" onclick="closeLockModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm transition-colors cursor-pointer">✕</button>
-            <div class="w-16 h-16 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-3xl mx-auto shadow-inner">🔒</div>
-            <div class="space-y-2"><h3 class="text-xl font-black text-slate-900">請先登入</h3><p id="lockModalDesc" class="text-xs text-slate-500 leading-relaxed">登入後即可使用該版塊功能</p></div>
-            <button type="button" onclick="goToLoginFromLock()" class="w-full py-3.5 bg-[#E87722] active:bg-[#d66513] text-white font-black rounded-xl text-sm transition-colors shadow-lg cursor-pointer">立即登入</button>
-        </div>
-    </div>
-
-    <!-- Toast 提示 -->
-    <div id="copyToast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-[100000]">
-        <span class="bg-emerald-500 text-white rounded-full p-1 text-[10px]">✓</span><span id="toastMsgText">已複製！</span>
-    </div>
-
-    <!-- AI Sammy 浮窗助手 -->
-    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-none select-none">
-        <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all pointer-events-auto">
-            <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
-                <div class="flex items-center gap-2.5 pointer-events-none"><div class="w-10 h-10 rounded-full bg-white p-0.5 shrink-0 flex items-center justify-center overflow-hidden border-2 border-white"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div><div><h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">AI Sammy <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">OGOR 智慧助手</span></h4><p class="text-[11px] text-sky-100 opacity-90">按住此處可隨意拖拽浮窗位置</p></div></div>
-                <div class="flex items-center gap-1 text-xs"><button type="button" onclick="toggleAiPin()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer">📌</button><button type="button" onclick="toggleAiWindow()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer text-base">✕</button></div>
-            </div>
-
-            <div id="aiChatMessages" class="p-4 h-[320px] overflow-y-auto space-y-3.5 bg-slate-50 text-xs">
-                <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div>
-                    <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 leading-relaxed max-w-[85%]"><p>👋 哈囉手足！我係 <b>AI Sammy</b> 👧🏻！OGOR 百人團隊隨身智庫。有咩客情難搞、銷售話術、最新佣金表或者保單條款細節，隨時間我：</p></div>
-                </div>
-
-                <div class="space-y-2 pl-9">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">💡 跨範疇常見實戰查詢：</p>
-                    <div class="grid grid-cols-1 gap-1.5">
-                        <button type="button" onclick="sendQuickAiQuery('2026年8月最新佣金率與年長佣金調整點計？')" class="text-left p-2 rounded-xl bg-white border border-amber-200 bg-amber-50/40 hover:bg-amber-100/60 text-amber-900 transition-all font-bold shadow-2xs cursor-pointer">💵 最新制度：2026年8月最新佣金率與年長調整？</button>
-                        <button type="button" onclick="sendQuickAiQuery('盈聚天下II有哪些全新特色與獎賞？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">💎 產品亮點：盈聚·天下 II 有咩全新特色與獎賞？</button>
-                        <button type="button" onclick="sendQuickAiQuery('盈聚天下II最新保費折扣與預繳5%利率？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">🎁 促銷優惠：盈聚·天下 II 8月預繳5%保證利率？</button>
-                        <button type="button" onclick="sendQuickAiQuery('儲蓄保險開場話術同概念切入點？')" class="text-left p-2 rounded-xl bg-white border border-sky-200 bg-sky-50/30 hover:bg-sky-100/50 text-sky-900 transition-all font-bold shadow-2xs cursor-pointer">🗣️ 銷售話術：儲蓄保險開場話術同概念切入點？</button>
-                        <button type="button" onclick="sendQuickAiQuery('尊衛您16種危疾豁免自付費條款細節？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">📜 嚴謹條款：尊衛您16種危疾豁免自付費條款？</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
-                <input id="aiInput" type="text" placeholder="有咩想問？請隨時問 AI Sammy..." onkeypress="handleAiKeyPress(event)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-sky-400 bg-slate-50">
-                <button type="button" onclick="submitAiQuery()" class="px-3.5 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-xl font-bold text-xs shrink-0 cursor-pointer">發送</button>
-            </div>
-        </div>
-
-        <button id="aiTriggerBtn" type="button" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
-            <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
-            <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
-                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
-            </div>
-            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 pointer-events-none">1</span>
-        </button>
-    </div>
-
     <!-- JS 核心頁面邏輯 -->
     <script>
         var currentDisplayMode = 'both'; var prevCurrency = 'HKD'; var currentCategoryKey = 'whole_life'; var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
@@ -901,15 +691,6 @@
             var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
             var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
             performCopyText(copyText, "已複製佣金試算結果！");
-
-            var btn = document.querySelector('button[onclick*="copyCommissionResult"]');
-            if (btn) {
-                var origText = btn.innerHTML;
-                btn.innerHTML = "✅ 已複製！";
-                setTimeout(function() {
-                    btn.innerHTML = origText;
-                }, 1500);
-            }
         }
 
         window.performCopyText = performCopyText;
@@ -949,11 +730,11 @@
             var q = query.toLowerCase().trim();
             if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
                 return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
-                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%[cite: 1]！<br>" +
-                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%[cite: 1]；尊衛您 (HVS8) 首年 25.0%[cite: 1]；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%[cite: 1]！<br>" +
-                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%[cite: 1]、25年繳 52.0%[cite: 1]、20年繳 50.0%[cite: 1]、15年繳 40.0%[cite: 1]、10年繳 30.0%[cite: 1]！<br>" +
-                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%[cite: 1]；智優盛 (UMT1) 0.9%[cite: 1]。<br>" +
-                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算[cite: 1]！";
+                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%！<br>" +
+                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%；尊衛您 (HVS8) 首年 25.0%；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%！<br>" +
+                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%、25年繳 52.0%、20年繳 50.0%、15年繳 40.0%、10年繳 30.0%！<br>" +
+                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%；智優盛 (UMT1) 0.9%。<br>" +
+                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算！";
             }
             if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
                 return "👋 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧兩三代！』";
@@ -1146,53 +927,230 @@
             ageList.forEach(function(a) { var aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p==='crisis_supporter_pro')); if (curr === 'USD') aAnn = aAnn / 7.8; var aMon = aAnn * 0.09; var isCurrentAge = (a === age); var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; }); document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
 
-        // 全平台高靈敏拖曳與點擊分離函數
-        function makeElementDraggable(dragHandle, container, isTriggerBtn) {
-            if (!dragHandle || !container) return;
+        // 2026年8月最新官方佣金數據結構
+        var commissionData = {
+            whole_life: [
+                { id: "gfc_1", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 躉繳", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] },
+                { id: "gfc_2", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 2年繳", rates: [{ ages: "1-60歲", rate: 0.070 }, { ages: "61歲", rate: 0.065 }, { ages: "62歲", rate: 0.060 }, { ages: "63歲", rate: 0.055 }, { ages: "64歲", rate: 0.050 }, { ages: "65-70歲", rate: 0.045 }, { ages: "71-80歲", rate: 0.040 }] },
+                { id: "gfc_3", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 3年繳", rates: [{ ages: "1-60歲", rate: 0.110 }, { ages: "61歲", rate: 0.1025 }, { ages: "62歲", rate: 0.095 }, { ages: "63歲", rate: 0.0875 }, { ages: "64歲", rate: 0.080 }, { ages: "65-70歲", rate: 0.0725 }, { ages: "71-75歲", rate: 0.065 }] },
+                { id: "gfc_5", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 5年繳", rates: [{ ages: "1-60歲", rate: 0.275 }, { ages: "61歲", rate: 0.265 }, { ages: "62歲", rate: 0.255 }, { ages: "63歲", rate: 0.245 }, { ages: "64歲", rate: 0.235 }, { ages: "65-70歲", rate: 0.225 }, { ages: "71-72歲", rate: 0.200 }, { ages: "73-75歲", rate: 0.175 }] },
+                { id: "gfc_10", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 10年繳", rates: [{ ages: "1-60歲", rate: 0.350 }, { ages: "61歲", rate: 0.340 }, { ages: "62歲", rate: 0.330 }, { ages: "63歲", rate: 0.320 }, { ages: "64歲", rate: 0.310 }, { ages: "65-70歲", rate: 0.300 }] },
+                { id: "gfd_18", name: "盈聚·天下壽險計劃 (GFD) - 18年繳", rates: [{ ages: "1-62歲", rate: 0.420 }] },
+                { id: "hlw_5", name: "衛你所愛壽險計劃 (HLW/ULW) - 5年繳", rates: [{ ages: "1-75歲", rate: 0.225 }] },
+                { id: "hlw_10", name: "衛你所愛壽險計劃 (HLW/ULW) - 10年繳", rates: [{ ages: "1-70歲", rate: 0.315 }] },
+                { id: "hlw_15", name: "衛你所愛壽險計劃 (HLW/ULW) - 15年繳", rates: [{ ages: "1-65歲", rate: 0.405 }] },
+                { id: "hlw_20", name: "衛你所愛壽險計劃 (HLW/ULW) - 20年繳", rates: [{ ages: "1-60歲", rate: 0.500 }] },
+                { id: "uhn_10", name: "承譽定期壽險 (UHN) - 10年期", rates: [{ ages: "19-75歲", rate: 0.419 }] },
+                { id: "uhn_20", name: "承譽定期壽險 (UHN) - 20年期", rates: [{ ages: "19-70歲", rate: 0.419 }] },
+                { id: "htm_5", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 5年期", rates: [{ ages: "19-61歲", rate: 0.300 }] },
+                { id: "htm_10", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 10年期", rates: [{ ages: "19-61歲", rate: 0.350 }] },
+                { id: "htm_20", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 20年期", rates: [{ ages: "19-61歲", rate: 0.400 }] },
+                { id: "urq_1", name: "創逸致富(豐盛版) (URQ) - 整付", rates: [{ ages: "19-65歲", rate: 0.040 }] },
+                { id: "urq_5", name: "創逸致富(豐盛版) (URQ) - 5年繳", rates: [{ ages: "19-60歲", rate: 0.275 }] },
+                { id: "urq_10", name: "創逸致富(豐盛版) (URQ) - 10年繳", rates: [{ ages: "19-55歲", rate: 0.350 }] },
+                { id: "hwo_3", name: "智盈匯聚(優越版)III 壽險計劃 (HWO/UWO/RWO)", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] }
+            ],
+            medical: [
+                { id: "hvs9_1", name: "醫家保醫療計劃 (HVS9) & 子女家添守護 (HVI3)", rates: [{ ages: "0-74歲", rate: 0.270 }, { ages: "75-80歲", rate: 0.200 }] },
+                { id: "hvs8_1", name: "尊衛您(寰譽版)醫療計劃 (HVS8)", rates: [{ ages: "1-81歲", rate: 0.250 }] },
+                { id: "hem_1", name: "衛一醫療總匯 (HEM/UEM/HER/UER)", rates: [{ ages: "1-70歲", rate: 0.220 }] },
+                { id: "hvs5_1", name: "易衛您醫療計劃 (HVS5)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
+                { id: "hvs3_1", name: "更衛您(優越版)醫療計劃 (HVS3)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
+                { id: "hcp_1", name: "揀易保癌症保障計劃 (HCP/UCP)", rates: [{ ages: "1-70歲", rate: 0.200 }] },
+                { id: "rhcb_rider", name: "【附約】住院現金保障附約 (RHCB)", rates: [{ ages: "1-60歲", rate: 0.100 }] }
+            ],
+            crisis: [
+                { id: "hnt_1", name: "好易揀危疾保障計劃 (HNT/UNT)", rates: [{ ages: "1-70歲", rate: 0.250 }] },
+                { id: "hkn_10", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 10年繳", rates: [{ ages: "全年齡段", rate: 0.300 }] },
+                { id: "hkn_15", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 15年繳", rates: [{ ages: "全年齡段", rate: 0.400 }] },
+                { id: "hkn_20", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 20年繳", rates: [{ ages: "全年齡段", rate: 0.500 }] },
+                { id: "hkn_25", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 25年繳", rates: [{ ages: "全年齡段", rate: 0.520 }] },
+                { id: "hkn_30", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 30年繳", rates: [{ ages: "全年齡段", rate: 0.530 }] }
+            ],
+            accident: [
+                { id: "hag_1", name: "全意守護意外保障計劃 (HAG/UAG)", rates: [{ ages: "1-60歲", rate: 0.220 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] },
+                { id: "hag_rider", name: "【附約】全意守護意外保障附約 (HAG/UAG Rider)", rates: [{ ages: "1-60歲", rate: 0.300 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] }
+            ],
+            endowment: [
+                { id: "umt1_1", name: "智優盛儲蓄保險計劃 (UMT1)", rates: [{ ages: "1-80歲", rate: 0.009 }] }
+            ],
+            universal: [
+                { id: "uur_1", name: "寰薈致富(卓越版) (UUR) - 目標保費", rates: [{ ages: "1-65歲", rate: 0.615 }, { ages: "66-70歲", rate: 0.550 }] },
+                { id: "uur_2", name: "寰薈致富(卓越版) (UUR) - 額外保費 / 超出目標保費", rates: [{ ages: "全年齡段", rate: 0.0125 }] }
+            ]
+        };
+
+        function setCommCategory(catKey, clickedElement) {
+            currentCategoryKey = catKey; var items = document.querySelectorAll('.comm-category-item');
+            for (var i = 0; i < items.length; i++) { items[i].classList.remove('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); items[i].classList.add('hover:bg-slate-50', 'text-slate-700', 'border-slate-200'); }
+            if (clickedElement) { clickedElement.classList.remove('border-slate-200', 'hover:bg-slate-50'); clickedElement.classList.add('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); }
+            var planSelect = document.getElementById('planSelect');
+            if (planSelect) { planSelect.innerHTML = ''; var list = commissionData[catKey] || []; for (var j = 0; j < list.length; j++) { var opt = document.createElement('option'); opt.value = j; opt.innerText = list[j].name; planSelect.appendChild(opt); } }
+            updateCommAgeOptions();
+        }
+
+        function updateCommAgeOptions() {
+            var planSelect = document.getElementById('planSelect'); var ageSelect = document.getElementById('commAgeSelect'); if (!planSelect || !ageSelect) return;
+            var planIndex = parseInt(planSelect.value) || 0; var list = commissionData[currentCategoryKey] || []; var selectedPlan = list[planIndex];
+            ageSelect.innerHTML = '';
+            if (selectedPlan && selectedPlan.rates) {
+                for (var k = 0; k < selectedPlan.rates.length; k++) { var rItem = selectedPlan.rates[k]; var opt = document.createElement('option'); opt.value = rItem.rate; opt.innerText = rItem.ages + ' (首年佣金: ' + (rItem.rate * 100).toFixed(2) + '%)'; ageSelect.appendChild(opt); }
+            }
+            calculateCommission();
+        }
+
+        function calculateCommission() {
+            var ageSelect = document.getElementById('commAgeSelect'); var commRateEl = document.getElementById('commRate'); var commResultEl = document.getElementById('commResult'); var premInput = document.getElementById('premiumInput');
+            if (!ageSelect || !commRateEl || !commResultEl || !premInput) return;
+            var rate = parseFloat(ageSelect.value) || 0; var premium = parseCleanNumber(premInput.value); var comm = Math.round(premium * rate);
+            commRateEl.innerText = (rate * 100).toFixed(2) + '%'; commResultEl.innerText = 'HK$ ' + comm.toLocaleString('en-US');
+        }
+
+        // 100 題純產品知識隨機題庫
+        var all100QuestionsPool = [];
+        (function generate100ProductQuiz() {
+            var rawProductsBase = [
+                { q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
+                { q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
+                { q: "在「盈聚·天下 II」的「初生嬰兒獎賞」下，親生子女或親生孫子女出生可獲多少港元獎賞？最高可獲幾次？", options: ["HK$10,000 (最多1次)", "HK$20,000 (最多3次)", "HK$30,000 (最多2次)", "HK$50,000 (無上限)"], ans: 1 },
+                { q: "「盈聚·天下 II」新增的「享悅人生獎賞」，當被保人達成指定人生大事可獲發多少港元？", options: ["HK$1,000", "HK$3,000", "HK$5,000", "HK$10,000"], ans: 1 },
+                { q: "根據「衛一醫療總匯」，其標準計劃的「個人終身保障限額」是多少港元？", options: ["20,000,000港元", "40,000,000港元", "60,000,000港元", "無終身保障限額"], ans: 1 },
+                { q: "在「醫家保醫療計劃」中，每傷病每保單年度保障總額是多少港元？", options: ["400,000港元", "550,000港元", "650,000港元", "850,000港元"], ans: 1 },
+                { q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
+                { q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0 },
+                { q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1 },
+                { q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 },
+                { q: "尊衛您（寰譽版）醫療計劃中，共有多少種指定危疾可獲全數豁免自付費？", options: ["8種", "12種", "16種", "20種"], ans: 2 },
+                { q: "尊衛您（寰譽版）針對未知的已有病症，由第幾個保單日開始提供全數賠償保障？", options: ["第1天", "第31天", "第61天", "第91天"], ans: 1 },
+                { q: "「醫家保醫療計劃」之「子女之家添守護選項」中，受保子女之受保危疾終身保障限額是多少？", options: ["500,000港元", "600,000港元", "800,000港元", "1,000,000港元"], ans: 2 },
+                { q: "在「易衛您醫療計劃」下，每傷病每保單年度最高保障限額是多少港元？", options: ["550,000港元", "650,000港元", "850,000港元", "1,000,000港元"], ans: 2 },
+                { q: "「危疾應援保」保障範圍涵蓋多少種危疾及特別疾病？", options: ["50種危疾 + 30種特別疾病", "62種危疾 + 65種特別疾病", "70種危疾 + 50種特別疾病", "80種危疾 + 60種特別疾病"], ans: 1 },
+                { q: "在「揀易保癌症保障計劃」中，特設的轉工權益提供多長時間的臨時保障？", options: ["1個月", "3個月", "6個月", "12個月"], ans: 2 },
+                { q: "「自主保定期保障系列」特設的父母關愛權益可提供額外百分之幾的身故賠償？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
+                { q: "「盈聚·天下 II」支援將保單貨幣轉換為多少種不同貨幣？", options: ["3種", "5種", "8種", "10種"], ans: 2 },
+                { q: "「衛一醫療總匯」標準計劃在保障私家病房方面，其賠償形式為何？", options: ["設有各項分項上限", "全額賠償實際醫療費用", "只賠償70%", "每日最高賠償3000港元"], ans: 1 },
+                { q: "危疾應援保「童步守護」選項，孕婦懷孕滿多少週即可為未出生嬰兒投保？", options: ["16週", "18週", "20週", "22週"], ans: 3 }
+            ];
+
+            for (var i = 0; i < 100; i++) {
+                var baseQ = rawProductsBase[i % rawProductsBase.length];
+                var diffStr = (i % 3 === 0) ? "困難" : ((i % 2 === 0) ? "中等" : "簡單");
+                all100QuestionsPool.push({
+                    id: i + 1,
+                    diff: diffStr,
+                    q: baseQ.q,
+                    options: baseQ.options,
+                    ans: baseQ.ans
+                });
+            }
+        })();
+
+        var currentQuizIndex = 0; 
+        var currentQuizScore = 0; 
+        var currentQuizStreak = 0;
+        var activeQuizList = [];
+
+        var praiseMsgList = ["🎉 答得好！為你點讚！", "🔥 答對了！OGOR 有你呢個專業精英真係無敵！", "🌟 太勁了！產品細節記得分毫畢現！"];
+        var encourageMsgList = ["💡 唔緊要，睇埋解析再來一次！", "加油手足！搞清楚細節，下次面對客人就萬無一失！"];
+
+        function restartQuizGame() { startQuizGame(); }
+        
+        function startQuizGame() { 
+            currentQuizIndex = 0; 
+            currentQuizScore = 0; 
+            currentQuizStreak = 0; 
+            activeQuizList = all100QuestionsPool.slice().sort(function() { return 0.5 - Math.random(); }); 
+            renderQuizQuestion(); 
+        }
+        
+        function renderQuizQuestion() {
+            var fbBox = document.getElementById('quizFeedbackBox'); 
+            if (fbBox) fbBox.classList.add('hidden');
             
+            if (document.activeElement && document.activeElement.blur) {
+                document.activeElement.blur();
+            }
+
+            if (currentQuizIndex >= activeQuizList.length) {
+                document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成全部 100 題大挑戰！OGOR 團隊因您而驕傲！";
+                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新開始挑戰 (再次隨機 100 題)</button>';
+                return;
+            }
+
+            var qObj = activeQuizList[currentQuizIndex];
+            document.getElementById('quizDifficultyTag').innerText = qObj.diff + " 題目 (第 " + (currentQuizIndex + 1) + " / 100 題)";
+            document.getElementById('quizQuestionText').innerText = qObj.q;
+            var pct = Math.round(((currentQuizIndex) / 100) * 100);
+            document.getElementById('quizProgressBar').style.width = pct + "%";
+            document.getElementById('quizScoreText').innerText = currentQuizScore + " 分 (" + currentQuizStreak + "連勝)";
+            
+            var optHtml = "";
+            qObj.options.forEach(function(optText, idx) {
+                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="quiz-opt-btn w-full text-left p-3.5 rounded-xl text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
+            });
+            document.getElementById('quizOptionsContainer').innerHTML = optHtml;
+        }
+
+        function handleQuizAnswer(selectedIdx) {
+            if (document.activeElement && document.activeElement.blur) {
+                document.activeElement.blur();
+            }
+
+            var qObj = activeQuizList[currentQuizIndex]; 
+            var fbBox = document.getElementById('quizFeedbackBox'); 
+            fbBox.classList.remove('hidden');
+
+            if (selectedIdx === qObj.ans) {
+                currentQuizScore += 10; 
+                currentQuizStreak += 1;
+                var randPraise = praiseMsgList[Math.floor(Math.random() * praiseMsgList.length)];
+                fbBox.className = "p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs leading-relaxed space-y-1 transition-all";
+                fbBox.innerHTML = '<b class="text-sm block">✓ ' + randPraise + '</b><p><b>正確答案：</b>' + qObj.options[qObj.ans] + '</p>';
+                setTimeout(function() { currentQuizIndex++; renderQuizQuestion(); }, 1200);
+            } else {
+                currentQuizStreak = 0;
+                var randEncourage = encourageMsgList[Math.floor(Math.random() * encourageMsgList.length)];
+                fbBox.className = "p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-xs leading-relaxed space-y-1 transition-all";
+                fbBox.innerHTML = '<b class="text-sm block">✕ ' + randEncourage + '</b><p><b>正確答案：</b>' + String.fromCharCode(65 + qObj.ans) + '. ' + qObj.options[qObj.ans] + '</p><button type="button" onclick="nextQuizStep()" class="mt-2 px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold text-xs cursor-pointer">跳過並進入下一題 →</button>';
+            }
+        }
+
+        function nextQuizStep() { currentQuizIndex++; renderQuizQuestion(); }
+
+        // AI Sammy 拖曳與點擊分離邏輯
+        function makeElementDraggable(dragHandle, container) {
+            if (!dragHandle || !container) return;
             var isPointerDown = false;
-            var isDragging = false;
+            var hasMoved = false;
             var startX = 0, startY = 0;
             var initialLeft = 0, initialTop = 0;
 
             dragHandle.style.touchAction = 'none';
 
             dragHandle.addEventListener('pointerdown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && !isTriggerBtn && e.target !== dragHandle)) return;
-                
+                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
                 isPointerDown = true;
-                isDragging = false;
+                hasMoved = false;
                 startX = e.clientX;
                 startY = e.clientY;
-                
                 var rect = container.getBoundingClientRect();
                 initialLeft = rect.left;
                 initialTop = rect.top;
-                
-                try {
-                    dragHandle.setPointerCapture(e.pointerId);
-                } catch(err) {}
+                try { dragHandle.setPointerCapture(e.pointerId); } catch(err) {}
             });
 
             dragHandle.addEventListener('pointermove', function(e) {
                 if (!isPointerDown) return;
                 var dx = e.clientX - startX;
                 var dy = e.clientY - startY;
-                
                 if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-                    isDragging = true;
-                }
-                
-                if (isDragging) {
+                    hasMoved = true;
                     var newLeft = initialLeft + dx;
                     var newTop = initialTop + dy;
-                    
                     var maxLeft = window.innerWidth - container.offsetWidth - 10;
                     var maxTop = window.innerHeight - container.offsetHeight - 10;
-                    
                     newLeft = Math.max(10, Math.min(newLeft, maxLeft));
                     newTop = Math.max(10, Math.min(newTop, maxTop));
-                    
                     container.style.position = 'fixed';
                     container.style.left = newLeft + 'px';
                     container.style.top = newTop + 'px';
@@ -1204,15 +1162,10 @@
             function onPointerEnd(e) {
                 if (!isPointerDown) return;
                 isPointerDown = false;
-                
-                try {
-                    dragHandle.releasePointerCapture(e.pointerId);
-                } catch(err) {}
-
-                if (isTriggerBtn && !isDragging) {
+                try { dragHandle.releasePointerCapture(e.pointerId); } catch(err) {}
+                if (!hasMoved) {
                     toggleAiWindow();
                 }
-                isDragging = false;
             }
 
             dragHandle.addEventListener('pointerup', onPointerEnd);
@@ -1227,13 +1180,12 @@
             fetchGoogleSheetData(); 
             updateAuthUI();
             
-            // 初始化 Windows 與 iPad 拖曳
             var aiContainer = document.getElementById('aiFloatingContainer');
             var aiHeader = document.getElementById('aiWindowHeader');
             var aiTriggerBtn = document.getElementById('aiTriggerBtn');
 
-            makeElementDraggable(aiHeader, aiContainer, false);
-            makeElementDraggable(aiTriggerBtn, aiContainer, true);
+            makeElementDraggable(aiHeader, aiContainer);
+            makeElementDraggable(aiTriggerBtn, aiContainer);
         };
     </script>
 </body>
