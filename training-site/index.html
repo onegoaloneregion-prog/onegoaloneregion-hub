@@ -8,10 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; }
         .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease-in-out; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-        body.modal-open { overflow: hidden !important; height: 100vh !important; touch-action: none !important; }
+        
         input:not([type="radio"]):not([type="checkbox"]), select, button, textarea { -webkit-appearance: none; -webkit-user-select: text; user-select: text; }
         input[type="radio"], input[type="checkbox"] { accent-color: #E87722; cursor: pointer; }
         button, a, [onclick] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -39,9 +39,9 @@
         }
 
         /* AI 浮窗動畫 */
-        .ai-window-enter { display: none; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .ai-window-enter { display: none !important; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .ai-window-active { display: block !important; opacity: 1 !important; transform: translateY(0) scale(1) !important; pointer-events: auto !important; }
-        .drag-handle { cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none !important; }
+        .drag-handle { cursor: grab; user-select: none; -webkit-user-select: none; }
         .drag-handle:active { cursor: grabbing; }
     </style>
 
@@ -600,7 +600,7 @@
 
     <!-- PAGE 2: 佣金計算機 -->
     <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-[#E87722] bg-orange-50 px-3 py-1 rounded-full">🧮 FWD 澳門佣金試算 (2026.08 官方最新版)[cite: 1]</span></div>
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button><span class="text-xs font-bold text-[#E87722] bg-orange-50 px-3 py-1 rounded-full">🧮 FWD 澳門佣金試算 (2026.08 官方最新版)</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-orange-50 text-[#E87722] text-xs font-bold">💵 FWD Commission Calculator</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">佣金計算機</h2><p class="text-xs sm:text-sm text-slate-500">選擇產品類別與具體計劃，輸入投保年齡與首年保費，即時計算首年預期佣金</p></div>
             <div class="space-y-3"><label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">1. 選擇產品類別</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs font-bold"><button type="button" onclick="setCommCategory('whole_life', this)" class="comm-category-item p-3 rounded-xl border border-[#E87722] bg-orange-50 text-[#E87722] shadow-sm cursor-pointer">終身壽險<br><span class="text-[10px] opacity-60 font-normal">Whole Life</span></button><button type="button" onclick="setCommCategory('medical', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人醫療<br><span class="text-[10px] opacity-60 font-normal">Medical</span></button><button type="button" onclick="setCommCategory('crisis', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人危疾<br><span class="text-[10px] opacity-60 font-normal">Crisis</span></button><button type="button" onclick="setCommCategory('accident', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">個人意外<br><span class="text-[10px] opacity-60 font-normal">Accident</span></button><button type="button" onclick="setCommCategory('endowment', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">儲蓄保險<br><span class="text-[10px] opacity-60 font-normal">Endowment</span></button><button type="button" onclick="setCommCategory('universal', this)" class="comm-category-item p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 cursor-pointer">萬用壽險<br><span class="text-[10px] opacity-60 font-normal">Universal</span></button></div></div>
@@ -827,11 +827,11 @@
             var q = query.toLowerCase().trim();
             if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
                 return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
-                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%[cite: 1]！<br>" +
-                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%[cite: 1]；尊衛您 (HVS8) 首年 25.0%[cite: 1]；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%[cite: 1]！<br>" +
-                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%[cite: 1]、25年繳 52.0%[cite: 1]、20年繳 50.0%[cite: 1]、15年繳 40.0%[cite: 1]、10年繳 30.0%[cite: 1]！<br>" +
-                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%[cite: 1]；智優盛 (UMT1) 0.9%[cite: 1]。<br>" +
-                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算[cite: 1]！";
+                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%！<br>" +
+                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%；尊衛您 (HVS8) 首年 25.0%；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%！<br>" +
+                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%、25年繳 52.0%、20年繳 50.0%、15年繳 40.0%、10年繳 30.0%！<br>" +
+                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%；智優盛 (UMT1) 0.9%。<br>" +
+                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算！";
             }
             if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
                 return "👋 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧兩三代！』";
