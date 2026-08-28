@@ -229,7 +229,7 @@
         };
     </script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased relative">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased relative min-h-screen">
 
     <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
@@ -775,13 +775,13 @@
                 <div class="flex items-center gap-1 text-xs"><button type="button" onclick="toggleAiPin()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer">📌</button><button type="button" onclick="toggleAiWindow()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer text-base">✕</button></div>
             </div>
 
-            <div id="aiChatMessages" class="p-4 h-[320px] overflow-y-auto space-y-3.5 bg-slate-50 text-xs">
+            <div id="aiChatMessages" class="p-4 h-[320px] overflow-y-auto space-y-3.5 bg-slate-50 text-xs pointer-events-auto">
                 <div class="flex items-start gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div>
                     <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 leading-relaxed max-w-[85%]"><p>👋 哈囉手足！我係 <b>AI Sammy</b> 👧🏻！OGOR 百人團隊隨身智庫。有咩客情難搞、銷售話術、最新佣金表或者保單條款細節，隨時間我：</p></div>
                 </div>
 
-                <div class="space-y-2 pl-9">
+                <div class="space-y-2 pl-9 pointer-events-auto">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">💡 跨範疇常見實戰查詢：</p>
                     <div class="grid grid-cols-1 gap-1.5">
                         <button type="button" onclick="sendQuickAiQuery('2026年8月最新佣金率與年長佣金調整點計？')" class="text-left p-2 rounded-xl bg-white border border-amber-200 bg-amber-50/40 hover:bg-amber-100/60 text-amber-900 transition-all font-bold shadow-2xs cursor-pointer">💵 最新制度：2026年8月最新佣金率與年長調整？</button>
@@ -1114,7 +1114,7 @@
             { id: 23, diff: "簡單", q: "危疾應援保（升級版）針對癌症、急性心肌梗塞及中風，提供最多幾次的多重保障賠償？", options: ["最多2次", "最多3次", "最多5次", "無限制"], ans: 2 },
             { id: 24, diff: "中等", q: "醫家保醫療計劃的「兒童發展評估及訓練保障」主要針對受保子女的哪些問題？", options: ["近視與弱視", "自閉症、過度活躍症或言語發展遲緩", "身高發育不良", "一般情緒壓力"], ans: 1 },
             { id: 25, diff: "困難", q: "更衛您（優越版）醫療計劃中，若在保單年度內未曾作出任何賠償，可享有什麼獎勵？", options: ["樂賞健康保費折扣", "現金紅利返還", "免費身體檢查券", "保額自動提升20%"], ans: 0 },
-            { id: 26, diff: "簡單", q: "好易揀危疾保障計劃主要聚焦於哪三大核心疾病？", options: ["癌症、心臟病、腎衰竭", "癌症、急性心肌梗塞、中風", "中風、糖尿病、阿茲海默症", "心臟病、肝硬化、嚴重燒傷"], ans: 1 },
+            { id: 26, diff: "簡單", q: "好易揀危疾保障計劃主要聚焦於哪三大核心疾病？", options: ["癌症、心臟病、腎衰竭", "癌症、急性心肌梗塞、中風", "中風、糖尿病、阿茲海助症", "心臟病、肝硬化、嚴重燒傷"], ans: 1 },
             { id: 27, diff: "中等", q: "全意守護意外保障計劃中，意外身故賠償金額通常為投保額的多少倍？", options: ["1倍 (100%)", "1.5倍", "2倍", "3倍"], ans: 0 },
             { id: 28, diff: "簡單", q: "自主保定期壽險計劃是否具備儲蓄或現金價值成分？", options: ["具備高保證現金價值", "具備非保證紅利", "純保障型定期壽險，不含現金價值", "滿期退還全數保費"], ans: 2 },
             { id: 29, diff: "中等", q: "在盈聚·天下 II 下，保單持有人最多可指定幾位後續被保人？", options: ["1位", "2位", "3位", "無上限指定"], ans: 3 },
@@ -1628,6 +1628,64 @@
                 }
             }, { passive: true });
             window.addEventListener('touchend', endDrag);
+        }
+
+        function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
+        function sendQuickAiQuery(text) { 
+            var user = getCurrentUser();
+            if (!user) {
+                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+            document.getElementById('aiInput').value = text; 
+            submitAiQuery(); 
+        }
+        function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
+
+        function getAiKnowledgeResponse(query) {
+            var q = query.toLowerCase().trim();
+            if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
+                return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
+                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%[cite: 1]！<br>" +
+                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%[cite: 1]；尊衛您 (HVS8) 首年 25.0%[cite: 1]；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%[cite: 1]！<br>" +
+                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%[cite: 1]、25年繳 52.0%[cite: 1]、20年繳 50.0%[cite: 1]、15年繳 40.0%[cite: 1]、10年繳 30.0%[cite: 1]！<br>" +
+                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%[cite: 1]；智優盛 (UMT1) 0.9%[cite: 1]。<br>" +
+                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算[cite: 1]！";
+            }
+            if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
+                return "👋 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧兩三代！』";
+            }
+            if (q.indexOf('異議') !== -1 || q.indexOf('買咗') !== -1 || q.indexOf('銀行') !== -1) {
+                return "👋 <b>常見異議應對策略：</b><br><br>『銀行定期係短期過渡，但保險儲蓄（例如盈聚·天下 II）係幫你鎖定中長期滾存。除了有高達 54%-75.4% 的首年保費優惠之外，仲內建咗「失去行為能力權益」同「富傳家選項」，銀行定期係做唔到資產免爭議傳承。』";
+            }
+            if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1) {
+                return "👋 <b>盈聚．天下 II 核心亮點：</b><br><br>• 歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年行使。<br>• 四大保證獎賞（初生嬰兒、傑出表現、享悅人生、長壽獎賞）。<br>• 8月推廣：美元保單預繳 5% 保證年利率，總優惠高達 54%-75.4%！";
+            }
+            return "手足，呢個問題我收到！建議可於團隊群組交流或請教直屬經理取得最新實戰策略！🔥";
+        }
+
+        function submitAiQuery() {
+            var user = getCurrentUser();
+            if (!user) {
+                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+
+            var input = document.getElementById('aiInput');
+            var msg = input.value.trim();
+            if (!msg) return;
+
+            var container = document.getElementById('aiChatMessages');
+            container.innerHTML += '<div class="flex justify-end mb-2"><div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-3 rounded-2xl text-xs max-w-[85%] shadow-sm leading-relaxed">' + msg + '</div></div>';
+            input.value = ''; container.scrollTop = container.scrollHeight;
+
+            setTimeout(function() {
+                var aiReply = getAiKnowledgeResponse(msg);
+                container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
+                container.scrollTop = container.scrollHeight;
+            }, 400);
         }
 
         window.onload = function() {
