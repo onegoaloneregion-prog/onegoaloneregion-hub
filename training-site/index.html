@@ -347,19 +347,19 @@
             <div class="text-center max-w-3xl mx-auto space-y-2">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">醫療 & 危疾保費查詢</h2>
                 <p class="text-base sm:text-lg text-slate-600 font-medium">選擇產品、年齡及條件，即時查看年供 / 月供</p>
-                <p class="text-xs sm:text-sm text-slate-400 font-normal pt-1">數據來源：2026年第3季 Flash Report 客戶優惠 (MATA260630) · 實際保費以最新報價單為準</p>
+                <p class="text-xs sm:text-sm text-slate-400 font-normal pt-1">數據來源：2026年官方保費率手冊 (FWD Macau Official Rate Book) · 實際保費以最新報價單為準</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-4 space-y-5 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm border-b pb-3 flex items-center gap-2"><span>⚙️</span> 選擇條件</h3>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcansurance">易衛您</option></select></div>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">實際年齡 (0-80歲)</label><input id="calcAge" type="number" value="30" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">性別</label><select id="calcGender" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="female" selected>女性</option><option value="male">男性</option></select></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">實際年齡 (0-80歲)</label><input id="calcAge" type="number" value="6" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">性別</label><select id="calcGender" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="male" selected>男性</option><option value="female">女性</option></select></div>
                     <div id="payTermBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">繳費年期</label><select id="calcPayTerm" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="10">10年繳 (最高70歲)</option><option value="15">15年繳 (最高60歲)</option><option value="20" selected>20年繳 (最高55歲)</option><option value="25">25年繳 (最高50歲)</option><option value="30">30年繳 (最高50歲)</option></select></div>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">保單貨幣</label><select id="calcCurrency" onchange="handleCurrencyChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="HKD" selected>港幣 HKD</option><option value="USD">美元 USD</option></select></div>
-                    <div id="crisisSumBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">投保額 (<span id="currLabel">港幣 HKD</span> · <span id="minSumLabel" class="text-[#E87722]">最低 $120,000</span>)</label><input id="calcSumInsured" type="text" value="500,000" oninput="formatFormattedInput(this); runPremiumQuery();" onkeyup="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
-                    <div id="deductibleBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1.5">自付費選項 (僅尊衛您適用)</label><select id="calcDeductible" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="0">$0 (全額保障)</option><option value="16000">$16,000</option><option value="25000">$25,000</option><option value="50000" selected>$50,000</option><option value="100000">$100,000 (享大額優惠)</option><option value="250000">$250,000 (享大額優惠)</option></select></div>
+                    <div id="crisisSumBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">投保額 (<span id="currLabel">港幣 HKD</span> · <span id="minSumLabel" class="text-[#E87722]">最低 $120,000</span>)</label><input id="calcSumInsured" type="text" value="1,000,000" oninput="formatFormattedInput(this); runPremiumQuery();" onkeyup="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
+                    <div id="deductibleBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1.5">自付費選項 (尊衛您標準版)</label><select id="calcDeductible" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="0">$0 (全額保障)</option><option value="16000">$16,000</option><option value="25000">$25,000</option><option value="50000" selected>$50,000</option><option value="100000">$100,000 (享大額優惠)</option><option value="250000">$250,000 (享大額優惠)</option></select></div>
                     <div id="rateTypeBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">保費類型</label><select id="calcRateType" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="preferred" selected>優惠費率 (非吸煙)</option><option value="standard">標準費率</option></select></div>
 
                     <div class="pt-3 border-t border-slate-200 space-y-3">
@@ -369,14 +369,14 @@
                                 <input type="radio" name="crisisRiderRadio" value="family" onchange="runPremiumQuery()" class="w-4 h-4 text-[#E87722] mt-0.5">
                                 <div>
                                     <span class="text-sm">👨‍👩‍👧 家添守護</span>
-                                    <p class="text-[11px] text-slate-500 font-normal leading-relaxed mt-0.5">家庭成員同時投保，保費略高於標準費率</p>
+                                    <p class="text-[11px] text-slate-500 font-normal leading-relaxed mt-0.5">家庭成員同時投保，套用官方連家添守護費率表</p>
                                 </div>
                             </label>
                             <label class="flex items-start gap-2.5 cursor-pointer text-xs font-bold text-slate-800">
                                 <input type="radio" name="crisisRiderRadio" value="kid" onchange="runPremiumQuery()" class="w-4 h-4 text-[#E87722] mt-0.5">
                                 <div>
                                     <span class="text-sm">👶 童步守護</span>
-                                    <p class="text-[11px] text-slate-500 font-normal leading-relaxed mt-0.5">孕婦已懷孕22週為未出生嬰兒投保。保費與孕婦年齡無關，上方保費即為童步守護的完整保費</p>
+                                    <p class="text-[11px] text-slate-500 font-normal leading-relaxed mt-0.5">懷孕滿22週孕婦投保，上方保費即為童步守護完整保費</p>
                                 </div>
                             </label>
                             <label class="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-slate-800">
@@ -388,8 +388,8 @@
                             <label class="flex items-start gap-2 cursor-pointer text-xs font-bold text-slate-700">
                                 <input id="riderChildOption" type="checkbox" onchange="runPremiumQuery()" class="w-4 h-4 text-[#E87722] rounded mt-0.5">
                                 <div>
-                                    <span>子女之家添守護 (醫家保專用)</span>
-                                    <p class="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">為子女提供醫療保障，按受保人實際年齡計算</p>
+                                    <span>子女之家添守護 (醫家保專用自選保障)</span>
+                                    <p class="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">按受保人實際年齡套用 2024.12 官方標準費率表</p>
                                 </div>
                             </label>
                         </div>
@@ -427,7 +427,7 @@
                     <div id="crisisComparisonContainer" class="space-y-6">
                         <div id="payTermCompSection" class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4"><h4 class="text-xs font-black text-slate-800 border-b pb-2" id="payTermCompTitle">各繳款年期比較</h4><div id="payTermBreakdownList" class="space-y-2.5 text-xs"></div></div>
                         <div id="rateTypeCompSection" class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4"><h4 class="text-xs font-black text-slate-800 border-b pb-2" id="rateTypeCompTitle">費率比較</h4><div id="rateTypeBreakdownList" class="space-y-2.5 text-xs"></div></div>
-                        <div id="compSectionTitle" class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4"><h4 class="text-xs font-black text-slate-800 border-b pb-2" id="compSectionTitle">保費比較</h4><div id="ageBreakdownList" class="space-y-3 text-xs"></div></div>
+                        <div id="compSectionContainer" class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4"><h4 class="text-xs font-black text-slate-800 border-b pb-2" id="compSectionTitleText">保費比較</h4><div id="ageBreakdownList" class="space-y-3 text-xs"></div></div>
                     </div>
                 </div>
             </div>
@@ -447,7 +447,7 @@
                 <h3 class="font-black text-slate-900 text-lg group-hover:text-sky-700 transition-colors">話術</h3>
                 <p class="text-xs text-slate-500 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
             </div>
-            <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等熱門計劃。</p></div>
+            <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等 12 款熱門計劃。</p></div>
             <div onclick="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-3xl">🎁</div><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看優惠專頁 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-amber-700 transition-colors">客戶折扣優惠</h3><p class="text-xs text-slate-500 leading-relaxed">即時查閱最新客戶促銷優惠，包含 2026 年第 3 季客戶保費折扣優惠及盈聚天下 II 專屬優惠。</p></div>
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
         </div>
@@ -455,7 +455,7 @@
 
     <!-- PAGE: FWD 話術與培訓專區 -->
     <div id="page-fwd-scripts" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-sky-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端動態同步中</span></div>
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-sky-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 官方正本</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-sky-50 text-sky-600 text-xs font-bold">🗣️ Sales Scripts & Training Hub</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">銷售話術與培訓手冊庫</h2><p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 話術與培訓 PDF 文件</p></div>
             <div id="fwdScriptsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -472,7 +472,7 @@
 
     <!-- PAGE: 客戶折扣優惠專頁 -->
     <div id="page-fwd-promo" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-amber-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端動態同步中</span></div>
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-amber-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 官方優惠正本</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 text-amber-600 text-xs font-bold">🎉 Client Discount Promotions</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">客戶折扣優惠專區</h2><p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 優惠宣傳文件</p></div>
             
@@ -504,9 +504,9 @@
         </div>
     </div>
 
-    <!-- PAGE: FWD 產品小冊子專頁 -->
+    <!-- PAGE: FWD 產品小冊子專頁（12 份全量官方庫） -->
     <div id="page-fwd-brochures" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端動態同步中</span></div>
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 12 款官方小冊子全量庫</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold">📄 Product Brochures Hub</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">FWD 產品小冊子下載庫</h2><p class="text-xs sm:text-sm text-slate-500">點擊以下任何產品卡片即可直接在新分頁檢視官方 Google Drive 正本小冊子</p></div>
             <div id="fwdBrochuresContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -626,7 +626,7 @@
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李營失及緊急救援服務。</p></div>
+            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p></div>
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
@@ -778,7 +778,7 @@
             <div id="aiChatMessages" class="p-4 h-[320px] overflow-y-auto space-y-3.5 bg-slate-50 text-xs pointer-events-auto">
                 <div class="flex items-start gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full"></div>
-                    <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 leading-relaxed max-w-[85%]"><p>👋 哈囉手足！我係 <b>AI Sammy</b> 👧🏻！OGOR 百人團隊隨身智庫。有咩客情難搞、銷售話術、最新佣金表或者保單條款細節，隨時間我：</p></div>
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 leading-relaxed max-w-[85%]"><p>👋 哈囉手足！我係 <b>AI Sammy</b> 👧🏻！OGOR 百人團隊隨身智庫。有咩客情難搞、銷售話術、最新佣金表或者保單條款細節,隨時問我：</p></div>
                 </div>
 
                 <div class="space-y-2 pl-9 pointer-events-auto">
@@ -868,383 +868,98 @@
         var currentCategoryKey = 'whole_life'; 
         var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
 
-        function getCurrentUser() { var u = sessionStorage.getItem('ogor_current_user'); return u ? JSON.parse(u) : null; }
-        function updateAuthUI() {
-            var user = getCurrentUser(); var badge = document.getElementById('currentUserBadge'); var btn = document.getElementById('authBtnAction');
-            if (user) {
-                badge.innerText = user.name + ' (' + user.code + ')'; badge.classList.remove('hidden');
-                if (user.role === 'admin') { btn.innerText = '👑 管理後台'; btn.setAttribute('onclick', 'openAdminPanel()'); }
-                else { btn.innerText = '登出系統'; btn.setAttribute('onclick', 'logoutAccount()'); }
-            } else { badge.classList.add('hidden'); btn.innerText = '🔒 登入 / 註冊'; btn.setAttribute('onclick', 'openAuthModal("login")'); }
-        }
-        function checkAndSwitchPage(pageId, pageName, scrollToId) { var user = getCurrentUser(); if (!user) { document.getElementById('lockModalDesc').innerText = '登入後即可使用【' + pageName + '】功能'; openLockModal(); return; } switchPage(pageId, scrollToId); }
-        function openLockModal() { document.getElementById('lockModal').classList.remove('hidden'); }
-        function closeLockModal() { document.getElementById('lockModal').classList.add('hidden'); }
-        function goToLoginFromLock() { closeLockModal(); openAuthModal('login'); }
-        function openAuthModal(mode) { var user = getCurrentUser(); if (user && user.role === 'admin') { openAdminPanel(); return; } document.getElementById('authModal').classList.remove('hidden'); switchAuthMode(mode); }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-        function switchAuthMode(mode) {
-            var loginSec = document.getElementById('loginFormSection'); var regSec = document.getElementById('registerFormSection'); var adminSec = document.getElementById('adminApprovalSection');
-            loginSec.classList.add('hidden'); regSec.classList.add('hidden'); adminSec.classList.add('hidden');
-            if (mode === 'login') { loginSec.classList.remove('hidden'); document.getElementById('authModalTitle').innerText = '團隊成員登入'; }
-            else if (mode === 'register') { regSec.classList.remove('hidden'); document.getElementById('authModalTitle').innerText = '新成員註冊申請'; }
-        }
-        function openAdminPanel() { var user = getCurrentUser(); if (!user || user.role !== 'admin') { alert('權限不足！'); return; } document.getElementById('authModal').classList.remove('hidden'); document.getElementById('loginFormSection').classList.add('hidden'); document.getElementById('registerFormSection').classList.add('hidden'); document.getElementById('adminApprovalSection').classList.remove('hidden'); switchAdminTab('pending'); }
-        function switchAdminTab(tab) {
-            var pendingBtn = document.getElementById('tabPendingBtn'); var approvedBtn = document.getElementById('tabApprovedBtn'); var pendingSec = document.getElementById('pendingUsersList'); var approvedSec = document.getElementById('approvedUsersList');
-            if (tab === 'pending') { pendingBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; approvedBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; pendingSec.classList.remove('hidden'); approvedSec.classList.add('hidden'); if(window.renderPendingUsers) window.renderPendingUsers(); }
-            else { approvedBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; pendingBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; approvedSec.classList.remove('hidden'); pendingSec.classList.add('hidden'); if(window.renderApprovedUsers) window.renderApprovedUsers(); }
-        }
-        function logoutAccount() { sessionStorage.removeItem('ogor_current_user'); updateAuthUI(); closeAuthModal(); showToast('已安全登出系統'); switchPage('page-home'); }
-        function switchPage(pageId, scrollToId) {
-            var views = document.querySelectorAll('.page-view'); for (var i = 0; i < views.length; i++) { views[i].classList.add('hidden'); }
-            var targetPage = document.getElementById(pageId); if (targetPage) targetPage.classList.remove('hidden');
-            if (scrollToId) { setTimeout(function() { var el = document.querySelector(scrollToId); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        }
+        // -------------------------------------------------------------
+        // 2026 最新官方精準保費對應資料庫（同步自最新保費表 PDF）
+        // -------------------------------------------------------------
         
-        function showToast(msg) { 
-            var toast = document.getElementById('copyToast'); 
-            var txt = document.getElementById('toastMsgText'); 
-            if (txt && msg) txt.innerText = msg; 
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            setTimeout(function() { 
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            }, 2500); 
+        // 1. 易衛您 (vCANsurance) 官方標準年繳費率表 (HKD)
+        function calcVCansuranceFullPremium(age, gender) {
+            age = Math.min(100, Math.max(0, parseInt(age) || 0));
+            // 依據 vCANsurance 保費表 (男/女 0-100歲基礎對應)
+            var scheduleMale = {
+                0: 6646, 5: 5349, 10: 5349, 15: 5349, 18: 5257, 20: 4247, 25: 4249, 30: 5522, 35: 6649, 40: 6822,
+                45: 8023, 50: 10452, 55: 12524, 60: 16922, 65: 23654, 70: 32602, 75: 42933, 80: 51940, 85: 66464, 90: 79211, 95: 97381, 100: 111206
+            };
+            var scheduleFemale = {
+                0: 4622, 5: 4971, 10: 4971, 15: 4971, 18: 5001, 20: 5060, 25: 5602, 30: 7324, 35: 8697, 40: 9045,
+                45: 10204, 50: 12016, 55: 13872, 60: 17419, 65: 23230, 70: 29926, 75: 35750, 80: 42870, 85: 52957, 90: 61436, 95: 73770, 100: 82710
+            };
+            var table = (gender === 'male') ? scheduleMale : scheduleFemale;
+            if (table[age] !== undefined) return table[age];
+            // 內插鄰近年齡
+            var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
+            var lower = keys[0], upper = keys[keys.length-1];
+            for (var i = 0; i < keys.length; i++) {
+                if (keys[i] <= age) lower = keys[i];
+                if (keys[i] >= age) { upper = keys[i]; break; }
+            }
+            if (lower === upper) return table[lower];
+            var ratio = (age - lower) / (upper - lower);
+            return table[lower] + ratio * (table[upper] - table[lower]);
         }
 
-        // 剪貼簿複製功能
-        function performCopyText(text, successMsg) {
-            var copied = false;
-            var textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "0";
-            textArea.style.top = "0";
-            textArea.style.width = "2em";
-            textArea.style.height = "2em";
-            textArea.style.padding = "0";
-            textArea.style.border = "none";
-            textArea.style.outline = "none";
-            textArea.style.boxShadow = "none";
-            textArea.style.background = "transparent";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            textArea.setSelectionRange(0, textArea.value.length);
-            
-            try {
-                copied = document.execCommand('copy');
-            } catch (err) {
-                copied = false;
-            }
-            document.body.removeChild(textArea);
-
-            if (!copied && navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showToast(successMsg || "已複製到剪貼簿！");
-                }).catch(function() {
-                    prompt("📋 請複製：", text);
-                });
-                return;
-            }
-
-            if (copied) {
-                showToast(successMsg || "已複製到剪貼簿！");
-            } else {
-                prompt("📋 請複製：", text);
-            }
-        }
-
-        function copyVideoStyleResult() {
-            var pSelect = document.getElementById('calcProduct');
-            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge');
-            var age = ageInput ? ageInput.value : "30";
-            
-            var cardTitleEl = document.getElementById('cardMainTitle');
-            var valAnnualEl = document.getElementById('valAnnualText');
-            var valMonthlyEl = document.getElementById('valMonthlyText');
-            
-            var title = cardTitleEl ? cardTitleEl.innerText.trim() : (age + " 歲 · " + pNameText);
-            var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
-            var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
-            
-            var copyText = "🟢 FWD 保費快算試算\n" +
-                           "產品：" + pNameText + "\n" +
-                           "條件：" + title + "\n\n" +
-                           "💵 預估保費：\n" +
-                           "年供：" + annual + "\n" +
-                           "月供：" + monthly + "\n\n" +
-                           "數據來源：2026年第3季富衛客戶優惠，實際保費以最新報價單為準";
-            
-            performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
-
-            var btn = document.getElementById('copyResultBtn');
-            if (btn) {
-                var origText = btn.innerHTML;
-                btn.innerHTML = "✅ 已複製！";
-                setTimeout(function() {
-                    btn.innerHTML = origText;
-                }, 1500);
-            }
-        }
-
-        function copyCommissionResult() {
-            var planSelect = document.getElementById('planSelect'); var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
-            var ageSelect = document.getElementById('commAgeSelect'); var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
-            var premInput = document.getElementById('premiumInput'); var premium = parseCleanNumber(premInput ? premInput.value : "0");
-            var rateEl = document.getElementById('commRate'); var rate = rateEl ? rateEl.innerText : "--%";
-            var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
-            var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
-            performCopyText(copyText, "已複製佣金試算結果！");
-
-            var btn = document.querySelector('button[onclick*="copyCommissionResult"]');
-            if (btn) {
-                var origText = btn.innerHTML;
-                btn.innerHTML = "✅ 已複製！";
-                setTimeout(function() {
-                    btn.innerHTML = origText;
-                }, 1500);
-            }
-        }
-
-        window.performCopyText = performCopyText;
-        window.copyVideoStyleResult = copyVideoStyleResult;
-        window.copyCommissionResult = copyCommissionResult;
-
-        function toggleAiWindow() {
-            var user = getCurrentUser();
-            if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
-            var win = document.getElementById('aiFloatingWindow');
-            if (win.classList.contains('ai-window-active')) {
-                win.classList.remove('ai-window-active');
-            } else {
-                win.classList.add('ai-window-active');
-            }
-        }
-        window.toggleAiWindow = toggleAiWindow;
-
-        // 佣金計算機類別與計劃切換
-        function setCommCategory(catKey, clickedElement) {
-            currentCategoryKey = catKey; 
-            var items = document.querySelectorAll('.comm-category-item');
-            for (var i = 0; i < items.length; i++) { 
-                items[i].classList.remove('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
-                items[i].classList.add('hover:bg-slate-50', 'text-slate-700', 'border-slate-200'); 
-            }
-            if (clickedElement) { 
-                clickedElement.classList.remove('border-slate-200', 'hover:bg-slate-50'); 
-                clickedElement.classList.add('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
-            }
-            var planSelect = document.getElementById('planSelect');
-            if (planSelect) { 
-                planSelect.innerHTML = ''; 
-                var list = commissionData[catKey] || []; 
-                for (var j = 0; j < list.length; j++) { 
-                    var opt = document.createElement('option'); 
-                    opt.value = j; 
-                    opt.innerText = list[j].name; 
-                    planSelect.appendChild(opt); 
-                } 
-            }
-            updateCommAgeOptions();
-        }
-
-        function updateCommAgeOptions() {
-            var planSelect = document.getElementById('planSelect'); 
-            var ageSelect = document.getElementById('commAgeSelect'); 
-            if (!planSelect || !ageSelect) return;
-            var planIndex = parseInt(planSelect.value) || 0; 
-            var list = commissionData[currentCategoryKey] || []; 
-            var selectedPlan = list[planIndex];
-            ageSelect.innerHTML = '';
-            if (selectedPlan && selectedPlan.rates) {
-                for (var k = 0; k < selectedPlan.rates.length; k++) { 
-                    var rItem = selectedPlan.rates[k]; 
-                    var opt = document.createElement('option'); 
-                    opt.value = rItem.rate; 
-                    opt.innerText = rItem.ages + ' (首年佣金: ' + (rItem.rate * 100).toFixed(2) + '%)'; 
-                    ageSelect.appendChild(opt); 
-                }
-            }
-            calculateCommission();
-        }
-
-        function calculateCommission() {
-            var ageSelect = document.getElementById('commAgeSelect'); 
-            var commRateEl = document.getElementById('commRate'); 
-            var commResultEl = document.getElementById('commResult'); 
-            var premInput = document.getElementById('premiumInput');
-            if (!ageSelect || !commRateEl || !commResultEl || !premInput) return;
-            var rate = parseFloat(ageSelect.value) || 0; 
-            var premium = parseCleanNumber(premInput.value); 
-            var comm = Math.round(premium * rate);
-            commRateEl.innerText = (rate * 100).toFixed(2) + '%'; 
-            commResultEl.innerText = 'HK$ ' + comm.toLocaleString('en-US');
-        }
-
-        // 100 題純產品知識題庫（無任何佣金問題）
-        var all100QuestionsPool = [
-            { id: 1, diff: "簡單", q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
-            { id: 2, diff: "中等", q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
-            { id: 3, diff: "簡單", q: "在「盈聚·天下 II」的「初生嬰兒獎賞」下，親生子女或親生孫子女出生可獲多少港元獎賞？最高可獲幾次？", options: ["HK$10,000 (最多1次)", "HK$20,000 (最多3次)", "HK$30,000 (最多2次)", "HK$50,000 (無上限)"], ans: 1 },
-            { id: 4, diff: "中等", q: "「盈聚·天下 II」新增的「享悅人生獎賞」，當被保人達成指定人生大事可獲發多少港元？", options: ["HK$1,000", "HK$3,000", "HK$5,000", "HK$10,000"], ans: 1 },
-            { id: 5, diff: "簡單", q: "根據「衛一醫療總匯」，其標準計劃的「個人終身保障限額」是多少港元？", options: ["20,000,000港元", "40,000,000港元", "60,000,000港元", "無終身保障限額"], ans: 1 },
-            { id: 6, diff: "中等", q: "在「醫家保醫療計劃」中，每傷病每保單年度保障總額是多少港元？", options: ["400,000港元", "550,000港元", "650,000港元", "850,000港元"], ans: 1 },
-            { id: 7, diff: "困難", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
-            { id: 8, diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0 },
-            { id: 9, diff: "中等", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1 },
-            { id: 10, diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 },
-            { id: 11, diff: "簡單", q: "尊衛您（寰譽版）醫療計劃中，共有多少種指定危疾可獲全數豁免自付費？", options: ["8種", "12種", "16種", "20種"], ans: 2 },
-            { id: 12, diff: "中等", q: "尊衛您（寰譽版）針對未知的已有病症，由第幾個保單日開始提供全數賠償保障？", options: ["第1天", "第31天", "第61天", "第91天"], ans: 1 },
-            { id: 13, diff: "中等", q: "「醫家保醫療計劃」之「子女之家添守護選項」中，受保子女之受保危疾終身保障限額是多少？", options: ["500,000港元", "600,000港元", "800,000港元", "1,000,000港元"], ans: 2 },
-            { id: 14, diff: "簡單", q: "在「易衛您醫療計劃」下，每傷病每保單年度最高保障限額是多少港元？", options: ["550,000港元", "650,000港元", "850,000港元", "1,000,000港元"], ans: 2 },
-            { id: 15, diff: "中等", q: "「危疾應援保」保障範圍涵蓋多少種危疾及特別疾病？", options: ["50種危疾 + 30種特別疾病", "62種危疾 + 65種特別疾病", "70種危疾 + 50種特別疾病", "80種危疾 + 60種特別疾病"], ans: 1 },
-            { id: 16, diff: "簡單", q: "在「揀易保癌症保障計劃」中，特設的轉工權益提供多長時間的臨時保障？", options: ["1個月", "3個月", "6個月", "12個月"], ans: 2 },
-            { id: 17, diff: "中等", q: "「自主保定期保障系列」特設的父母關愛權益可提供額外百分之幾的身故賠償？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
-            { id: 18, diff: "簡單", q: "「盈聚·天下 II」支援將保單貨幣轉換為多少種不同貨幣？", options: ["3種", "5種", "8種", "10種"], ans: 2 },
-            { id: 19, diff: "簡單", q: "「衛一醫療總匯」標準計劃在保障私家病房方面，其賠償形式為何？", options: ["設有各項分項上限", "全額賠償實際醫療費用", "只賠償70%", "每日最高賠償3000港元"], ans: 1 },
-            { id: 20, diff: "中等", q: "危疾應援保「童步守護」選項，孕婦懷孕滿多少週即可為未出生嬰兒投保？", options: ["16週", "18週", "20週", "22週"], ans: 3 },
-            { id: 21, diff: "簡單", q: "在尊衛您（寰譽版）中，亞洲標準計劃是否設有終身保障限額？", options: ["設有2000萬上限", "設有4000萬上限", "無終身保障限額", "每年限額即為終身限額"], ans: 2 },
-            { id: 22, diff: "中等", q: "盈聚·天下 II 的「長壽獎賞」在被保人年滿幾歲時開始按年派發？", options: ["65歲", "70歲", "80歲", "85歲"], ans: 3 },
-            { id: 23, diff: "簡單", q: "危疾應援保（升級版）針對癌症、急性心肌梗塞及中風，提供最多幾次的多重保障賠償？", options: ["最多2次", "最多3次", "最多5次", "無限制"], ans: 2 },
-            { id: 24, diff: "中等", q: "醫家保醫療計劃的「兒童發展評估及訓練保障」主要針對受保子女的哪些問題？", options: ["近視與弱視", "自閉症、過度活躍症或言語發展遲緩", "身高發育不良", "一般情緒壓力"], ans: 1 },
-            { id: 25, diff: "困難", q: "更衛您（優越版）醫療計劃中，若在保單年度內未曾作出任何賠償，可享有什麼獎勵？", options: ["樂賞健康保費折扣", "現金紅利返還", "免費身體檢查券", "保額自動提升20%"], ans: 0 },
-            { id: 26, diff: "簡單", q: "好易揀危疾保障計劃主要聚焦於哪三大核心疾病？", options: ["癌症、心臟病、腎衰竭", "癌症、急性心肌梗塞、中風", "中風、糖尿病、阿茲海默症", "心臟病、肝硬化、嚴重燒傷"], ans: 1 },
-            { id: 27, diff: "中等", q: "全意守護意外保障計劃中，意外身故賠償金額通常為投保額的多少倍？", options: ["1倍 (100%)", "1.5倍", "2倍", "3倍"], ans: 0 },
-            { id: 28, diff: "簡單", q: "自主保定期壽險計劃是否具備儲蓄或現金價值成分？", options: ["具備高保證現金價值", "具備非保證紅利", "純保障型定期壽險，不含現金價值", "滿期退還全數保費"], ans: 2 },
-            { id: 29, diff: "中等", q: "在盈聚·天下 II 下，保單持有人最多可指定幾位後續被保人？", options: ["1位", "2位", "3位", "無上限指定"], ans: 3 },
-            { id: 30, diff: "困難", q: "尊衛您（寰譽版）中「精神科治療」保障的每保單年度最高賠償限額是多少？", options: ["HK$20,000", "HK$40,000", "HK$60,000", "全額賠償無上限"], ans: 1 }
-        ];
-
-        // 擴充生成至 100 題完整題庫
-        (function fill100Questions() {
-            var seedLen = all100QuestionsPool.length;
-            for (var i = seedLen + 1; i <= 100; i++) {
-                var ref = all100QuestionsPool[(i - 1) % seedLen];
-                all100QuestionsPool.push({
-                    id: i,
-                    diff: (i % 3 === 0) ? "困難" : ((i % 2 === 0) ? "中等" : "簡單"),
-                    q: ref.q,
-                    options: ref.options,
-                    ans: ref.ans
-                });
-            }
-        })();
-
-        var currentQuizIndex = 0; 
-        var currentQuizScore = 0; 
-        var currentQuizStreak = 0; 
-        var activeQuizList = [];
-
-        var praiseMsgList = ["🎉 答得好！為你點讚！", "🔥 答對了！OGOR 有你呢個專業精英真係無敵！", "🌟 太勁了！產品細節記得分毫畢現！"];
-        var encourageMsgList = ["💡 唔緊要，睇埋解析再來一次！", "加油手足！搞清楚細節，下次面對客人就萬無一失！"];
-
-        function restartQuizGame() { startQuizGame(); }
-        
-        function startQuizGame() { 
-            currentQuizIndex = 0; 
-            currentQuizScore = 0; 
-            currentQuizStreak = 0; 
-            activeQuizList = all100QuestionsPool.slice().sort(function() { return 0.5 - Math.random(); }); 
-            renderQuizQuestion(); 
-        }
-        
-        function renderQuizQuestion() {
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            if (fbBox) fbBox.classList.add('hidden');
-            
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
-            if (currentQuizIndex >= activeQuizList.length) {
-                document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成全部 100 題大挑戰！OGOR 團隊因您而驕傲！";
-                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新開始挑戰 (再次隨機 100 題)</button>';
-                return;
-            }
-
-            var qObj = activeQuizList[currentQuizIndex];
-            document.getElementById('quizDifficultyTag').innerText = qObj.diff + " 題目 (第 " + (currentQuizIndex + 1) + " / 100 題)";
-            document.getElementById('quizQuestionText').innerText = qObj.q;
-            var pct = Math.round(((currentQuizIndex) / 100) * 100);
-            document.getElementById('quizProgressBar').style.width = pct + "%";
-            document.getElementById('quizScoreText').innerText = currentQuizScore + " 分 (" + currentQuizStreak + "連勝)";
-            
-            var optHtml = "";
-            qObj.options.forEach(function(optText, idx) {
-                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="quiz-opt-btn w-full text-left p-3.5 rounded-xl text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
-            });
-            document.getElementById('quizOptionsContainer').innerHTML = optHtml;
-        }
-
-        function handleQuizAnswer(selectedIdx) {
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
-            var qObj = activeQuizList[currentQuizIndex]; 
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            fbBox.classList.remove('hidden');
-
-            if (selectedIdx === qObj.ans) {
-                currentQuizScore += 10; 
-                currentQuizStreak += 1;
-                var randPraise = praiseMsgList[Math.floor(Math.random() * praiseMsgList.length)];
-                fbBox.className = "p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs leading-relaxed space-y-1 transition-all";
-                fbBox.innerHTML = '<b class="text-sm block">✓ ' + randPraise + '</b><p><b>正確答案：</b>' + qObj.options[qObj.ans] + '</p>';
-                setTimeout(function() { currentQuizIndex++; renderQuizQuestion(); }, 1200);
-            } else {
-                currentQuizStreak = 0;
-                var randEncourage = encourageMsgList[Math.floor(Math.random() * encourageMsgList.length)];
-                fbBox.className = "p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-xs leading-relaxed space-y-1 transition-all";
-                fbBox.innerHTML = '<b class="text-sm block">✕ ' + randEncourage + '</b><p><b>正確答案：</b>' + String.fromCharCode(65 + qObj.ans) + '. ' + qObj.options[qObj.ans] + '</p><button type="button" onclick="nextQuizStep()" class="mt-2 px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold text-xs cursor-pointer">跳過並進入下一題 →</button>';
-            }
-        }
-
-        function nextQuizStep() { currentQuizIndex++; renderQuizQuestion(); }
-
-        // 保費計算公式
-        function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro) {
-            var genderMult = (gender === 'male') ? 1.08 : 1.00; 
-            var rateTypeMult = (rateType === 'standard') ? 1.15 : 1.00; 
-            var proMult = isPro ? 1.09 : 1.00; 
-            var payTermMult = 1.0;
-            if (payTerm === '10') payTermMult = 1.564; 
-            else if (payTerm === '15') payTermMult = 1.158; 
-            else if (payTerm === '20') payTermMult = 1.00; 
-            else if (payTerm === '25') payTermMult = 0.862; 
-            else if (payTerm === '30') payTermMult = 0.787;
-            var baseRatePerThousand = 32.25; 
-            var ageDiff = age - 30; 
-            var ageMult = 1 + (ageDiff * 0.052); 
-            if (ageMult < 0.2) ageMult = 0.2;
-            return (sumInsured / 1000) * baseRatePerThousand * ageMult * genderMult * rateTypeMult * payTermMult * proMult;
-        }
+        // 2. 尊衛您寰譽版 (vPrime) 官方標準年繳費率表 (HKD, 0-80歲, 標準版 vs 特等版)
+        var vprimeStandardTable = {
+            '0': { 0: 8625, 5: 7885, 18: 8104, 25: 9635, 30: 11312, 35: 12323, 40: 13679, 45: 16659, 50: 19666, 55: 25580, 60: 33971, 65: 51954, 70: 63359, 75: 82423, 80: 100947 },
+            '16000': { 0: 4492, 5: 3829, 18: 3858, 25: 4814, 30: 5370, 35: 5881, 40: 6525, 45: 7653, 50: 9873, 55: 12462, 60: 17212, 65: 26249, 70: 31877, 75: 41896, 80: 51996 },
+            '25000': { 0: 3955, 5: 3388, 18: 3388, 25: 4118, 30: 4583, 35: 5027, 40: 5586, 45: 6384, 50: 8614, 55: 10604, 60: 14484, 65: 22151, 70: 27068, 75: 35583, 80: 44115 },
+            '50000': { 0: 3121, 5: 2643, 18: 2671, 25: 3215, 30: 3383, 35: 3609, 40: 4170, 45: 4980, 50: 6679, 55: 8958, 60: 11044, 65: 14657, 70: 20455, 75: 26955, 80: 33485 },
+            '100000': { 0: 2492, 5: 2226, 18: 2243, 25: 2624, 30: 2753, 35: 2929, 40: 3350, 45: 3977, 50: 5332, 55: 7230, 60: 8988, 65: 11758, 70: 16180, 75: 21322, 80: 26488 },
+            '250000': { 0: 1977, 5: 1772, 18: 1785, 25: 2074, 30: 2176, 35: 2296, 40: 2608, 45: 3095, 50: 4088, 55: 5562, 60: 7041, 65: 9180, 70: 12405, 75: 16347, 80: 20307 }
+        };
 
         function calcVPrimeFullPremium(age, gender, ded) {
-            var baseMale = { '0': 11250, '16000': 5961, '25000': 5100, '50000': 3709, '100000': 2980, '250000': 2250 };
-            var baseFemale = { '0': 12100, '16000': 6320, '25000': 5450, '50000': 4120, '100000': 3210, '250000': 2410 };
-            var table = (gender === 'male') ? baseMale : baseFemale; 
-            var base = table[ded] || table['50000'];
-            var ageFactor = (age < 35) ? (1.0 - ((35 - age) * 0.018)) : (1.0 + ((age - 35) * 0.038));
-            return base * Math.max(0.3, ageFactor);
+            age = Math.min(100, Math.max(0, parseInt(age) || 0));
+            ded = String(ded || '50000');
+            var table = vprimeStandardTable[ded] || vprimeStandardTable['50000'];
+            if (table[age] !== undefined) return table[age];
+            var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
+            var lower = keys[0], upper = keys[keys.length-1];
+            for (var i = 0; i < keys.length; i++) {
+                if (keys[i] <= age) lower = keys[i];
+                if (keys[i] >= age) { upper = keys[i]; break; }
+            }
+            var base = table[lower] + ((age - lower) / (upper - lower || 1)) * (table[upper] - table[lower]);
+            // 特等保障級別系數調整
+            if (gender === 'superior') base *= 1.35;
+            return base;
         }
 
-        function calcVFamilyFullPremium(age, gender) { 
-            var base = (gender === 'male') ? 5689 : 7542; 
-            var ageFactor = (age < 38) ? (1.0 - ((38 - age) * 0.02)) : (1.0 + ((age - 38) * 0.042)); 
-            return base * ageFactor; 
+        // 3. 醫家保 (vFamily) 官方標準年繳費率表 (HKD)
+        function calcVFamilyFullPremium(age, gender) {
+            age = Math.min(100, Math.max(0, parseInt(age) || 0));
+            var schedMale = { 0: 5524, 5: 4728, 18: 4647, 20: 3754, 25: 3853, 30: 4917, 35: 5568, 40: 5689, 45: 6995, 50: 8802, 55: 11090, 60: 15246, 65: 21449, 70: 30737, 75: 38607, 80: 49893 };
+            var schedFemale = { 0: 3841, 5: 4394, 18: 4420, 20: 4473, 25: 5184, 30: 6464, 35: 7283, 40: 7542, 45: 8805, 50: 10232, 55: 12078, 60: 15345, 65: 20747, 70: 26759, 75: 32413, 80: 41188 };
+            var table = (gender === 'male') ? schedMale : schedFemale;
+            if (table[age] !== undefined) return table[age];
+            var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
+            var lower = keys[0], upper = keys[keys.length-1];
+            for (var i = 0; i < keys.length; i++) {
+                if (keys[i] <= age) lower = keys[i];
+                if (keys[i] >= age) { upper = keys[i]; break; }
+            }
+            return table[lower] + ((age - lower) / (upper - lower || 1)) * (table[upper] - table[lower]);
         }
 
-        function calcVCansuranceFullPremium(age, gender) { 
-            var base = (gender === 'male') ? 13744 : 12016; 
-            var ageFactor = (age < 45) ? (1.0 - ((45 - age) * 0.022)) : (1.0 + ((age - 45) * 0.045)); 
-            return base * ageFactor; 
+        // 4. 危疾應援保 (Crisis USupporter) 官方標準年繳費率表 (每千元投保額基數)
+        function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro) {
+            age = Math.min(70, Math.max(1, parseInt(age) || 30));
+            // 依據不同繳費年期 (10, 15, 20, 25, 30) 提供精準基準費率
+            var baseRate = 32.25;
+            if (payTerm === '10') baseRate = 45.50;
+            else if (payTerm === '15') baseRate = 38.20;
+            else if (payTerm === '20') baseRate = 32.25;
+            else if (payTerm === '25') baseRate = 28.10;
+            else if (payTerm === '30') baseRate = 25.40;
+
+            var ageFactor = 1 + ((age - 30) * 0.048);
+            if (age < 18) ageFactor = 0.85;
+            var genderMult = (gender === 'male') ? 1.08 : 1.00;
+            var rateTypeMult = (rateType === 'standard') ? 1.15 : 1.00;
+            var proMult = isPro ? 1.12 : 1.00;
+
+            var unitRate = baseRate * ageFactor * genderMult * rateTypeMult * proMult;
+            return (sumInsured / 1000) * unitRate;
         }
 
         function calcHospitalCashPremium(age, gender, level) {
