@@ -22,20 +22,12 @@
             background-color: #ffffff !important;
             outline: none !important;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-            -webkit-tap-highlight-color: transparent !important;
             user-select: none !important;
             -webkit-user-select: none !important;
         }
-        .quiz-opt-btn:focus, .quiz-opt-btn:focus-visible, .quiz-opt-btn:active {
-            outline: none !important;
-            border-color: #e2e8f0 !important;
-            box-shadow: none !important;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .quiz-opt-btn:hover {
-                border-color: #6366f1 !important;
-                background-color: #eef2ff !important;
-            }
+        .quiz-opt-btn:hover {
+            border-color: #6366f1 !important;
+            background-color: #eef2ff !important;
         }
 
         /* AI 浮窗動畫 */
@@ -726,8 +718,8 @@
         </div>
     </div>
 
-    <!-- 彈窗: 登入 / 註冊 / 後台 -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <!-- 彈窗: 登入 / 註冊 / 後台 (加強 style display:none 防止透明遮擋) -->
+    <div id="authModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 border border-slate-100">
             <div class="flex items-center justify-between border-b pb-3">
                 <h3 id="authModalTitle" class="text-base sm:text-lg font-black text-slate-900">團隊成員登入</h3>
@@ -764,8 +756,8 @@
         </div>
     </div>
 
-    <!-- 彈窗: 權限攔截 -->
-    <div id="lockModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <!-- 彈窗: 權限攔截 (加強 style display:none 防止透明遮擋) -->
+    <div id="lockModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-slate-100 shadow-2xl">
             <div class="text-4xl">🔒</div>
             <h3 class="text-lg font-black text-slate-900">需要成員登入</h3>
@@ -926,6 +918,77 @@
             age = Math.min(80, Math.max(0, parseInt(age) || 0));
             var table = (gender === 'female' ? vcansuranceSchedule2026.female : vcansuranceSchedule2026.male);
             return table[age] || table[80];
+        }
+
+        // 尊衛您 (寰譽版) 官方標準年繳費率表 (HKD, 0-80歲)
+        var vprimeScheduleStandard = {
+            '0': {
+                0: 8625, 1: 8625, 2: 8625, 3: 8625, 4: 8625, 5: 7885, 6: 7885, 7: 7885, 8: 7885, 9: 7885,
+                10: 7885, 11: 7885, 12: 7885, 13: 7885, 14: 7885, 15: 7885, 16: 7885, 17: 7885, 18: 8104, 19: 8170,
+                20: 8361, 21: 8619, 22: 8867, 23: 9049, 24: 9184, 25: 9635, 26: 10160, 27: 10679, 28: 11065, 29: 11312,
+                30: 11480, 31: 11740, 32: 11839, 33: 12093, 34: 12323, 35: 12762, 36: 12786, 37: 13048, 38: 13390, 39: 13495,
+                40: 13679, 41: 13944, 42: 14290, 43: 14956, 44: 15866, 45: 16659, 46: 17612, 47: 18164, 48: 18876, 49: 19666,
+                50: 20056, 51: 20809, 52: 22536, 53: 23536, 54: 24523, 55: 25580, 56: 27207, 57: 28781, 58: 30275, 59: 32339,
+                60: 33971, 61: 35664, 62: 38715, 63: 42750, 64: 47833, 65: 51954, 66: 56161, 67: 58375, 68: 59699, 69: 61668,
+                70: 63359, 71: 70049, 72: 73930, 73: 77745, 74: 80950, 75: 82423, 76: 87639, 77: 93706, 78: 96334, 79: 99377, 80: 100947
+            },
+            '16000': {
+                0: 4492, 1: 4492, 2: 4492, 3: 4492, 4: 4492, 5: 3829, 6: 3829, 7: 3829, 8: 3829, 9: 3829,
+                10: 3829, 11: 3829, 12: 3829, 13: 3829, 14: 3829, 15: 3829, 16: 3829, 17: 3829, 18: 3858, 19: 4015,
+                20: 4090, 21: 4158, 22: 4424, 23: 4437, 24: 4799, 25: 4814, 26: 4814, 27: 5158, 28: 5264, 29: 5370,
+                30: 5474, 31: 5577, 32: 5679, 33: 5741, 34: 5881, 35: 5961, 36: 6284, 37: 6284, 38: 6445, 39: 6445,
+                40: 6525, 41: 6928, 42: 7089, 43: 7412, 44: 7653, 45: 8052, 46: 8451, 47: 8930, 48: 9397, 49: 9873,
+                50: 10459, 51: 10791, 52: 11039, 53: 11537, 54: 12032, 55: 12462, 56: 13311, 57: 14161, 58: 15013, 59: 16118,
+                60: 17212, 61: 18178, 62: 19470, 63: 21429, 64: 23877, 65: 26249, 66: 28625, 67: 29139, 68: 29898, 69: 30902,
+                70: 31877, 71: 35252, 72: 37294, 73: 38961, 74: 40929, 75: 41896, 76: 44091, 77: 47076, 78: 48044, 79: 50850, 80: 51996
+            },
+            '25000': {
+                0: 3955, 1: 3955, 2: 3955, 3: 3955, 4: 3955, 5: 3388, 6: 3388, 7: 3388, 8: 3388, 9: 3388,
+                10: 3388, 11: 3388, 12: 3388, 13: 3388, 14: 3388, 15: 3388, 16: 3388, 17: 3388, 18: 3388, 19: 3479,
+                20: 3479, 21: 3479, 22: 3754, 23: 3846, 24: 4118, 25: 4118, 26: 4292, 27: 4385, 28: 4489, 29: 4583,
+                30: 4673, 31: 4681, 32: 4824, 33: 4940, 34: 5027, 35: 5187, 36: 5347, 37: 5347, 38: 5426, 39: 5426,
+                40: 5586, 41: 5825, 42: 6025, 43: 6368, 44: 6384, 45: 7085, 46: 7431, 47: 7959, 48: 8294, 49: 8614,
+                50: 8773, 51: 9102, 52: 9278, 53: 9936, 54: 10346, 55: 10604, 56: 11195, 57: 11952, 58: 12795, 59: 13638,
+                60: 14484, 61: 15503, 62: 16588, 63: 18264, 64: 20366, 65: 22151, 66: 24260, 67: 24685, 68: 25352, 69: 26263,
+                70: 27068, 71: 29912, 72: 31588, 73: 33215, 74: 34713, 75: 35583, 76: 37412, 77: 40022, 78: 40804, 79: 43156, 80: 44115
+            },
+            '50000': {
+                0: 3121, 1: 3121, 2: 3121, 3: 3121, 4: 3121, 5: 2643, 6: 2643, 7: 2643, 8: 2643, 9: 2643,
+                10: 2643, 11: 2643, 12: 2643, 13: 2643, 14: 2643, 15: 2643, 16: 2643, 17: 2643, 18: 2671, 19: 2728,
+                20: 2810, 21: 2884, 22: 2978, 23: 3061, 24: 3144, 25: 3215, 26: 3286, 27: 3356, 28: 3357, 29: 3383,
+                30: 3563, 31: 3563, 32: 3580, 33: 3609, 34: 3609, 35: 3709, 36: 3823, 37: 3823, 38: 3881, 39: 3903,
+                40: 4170, 41: 4467, 42: 4629, 43: 4894, 44: 4980, 45: 5445, 46: 5711, 47: 6116, 48: 6374, 49: 6679,
+                50: 7142, 51: 7503, 52: 7864, 53: 8225, 54: 8585, 55: 8958, 56: 9331, 57: 9706, 58: 10080, 59: 10456,
+                60: 11044, 61: 11677, 62: 12365, 63: 13219, 64: 13990, 65: 14657, 66: 15726, 67: 16737, 68: 17952, 69: 19183,
+                70: 20455, 71: 21679, 72: 23032, 73: 24298, 74: 25581, 75: 26955, 76: 27920, 77: 29321, 78: 29894, 79: 31616, 80: 33485
+            },
+            '100000': {
+                0: 2492, 1: 2492, 2: 2492, 3: 2492, 4: 2492, 5: 2226, 6: 2226, 7: 2226, 8: 2226, 9: 2226,
+                10: 2226, 11: 2226, 12: 2226, 13: 2226, 14: 2226, 15: 2226, 16: 2226, 17: 2226, 18: 2243, 19: 2285,
+                20: 2334, 21: 2389, 22: 2459, 23: 2521, 24: 2567, 25: 2624, 26: 2680, 27: 2735, 28: 2735, 29: 2753,
+                30: 2897, 31: 2897, 32: 2907, 33: 2929, 34: 2929, 35: 3003, 36: 3090, 37: 3090, 38: 3128, 39: 3141,
+                40: 3350, 41: 3583, 42: 3709, 43: 3914, 44: 3977, 45: 4348, 46: 4560, 47: 4883, 48: 5090, 49: 5332,
+                50: 5702, 51: 5990, 52: 6278, 53: 6566, 54: 6853, 55: 7230, 56: 7526, 57: 7823, 58: 8214, 59: 8515,
+                60: 8988, 61: 9498, 62: 10052, 63: 10617, 64: 11229, 65: 11758, 66: 12607, 67: 13255, 68: 14210, 69: 15174,
+                70: 16180, 71: 17149, 72: 18219, 73: 19221, 74: 20235, 75: 21322, 76: 22086, 77: 23193, 78: 23648, 79: 25009, 80: 26488
+            },
+            '250000': {
+                0: 1977, 1: 1977, 2: 1977, 3: 1977, 4: 1977, 5: 1772, 6: 1772, 7: 1772, 8: 1772, 9: 1772,
+                10: 1772, 11: 1772, 12: 1772, 13: 1772, 14: 1772, 15: 1772, 16: 1772, 17: 1772, 18: 1785, 19: 1817,
+                20: 1852, 21: 1895, 22: 1949, 23: 1997, 24: 2030, 25: 2074, 26: 2118, 27: 2162, 28: 2162, 29: 2176,
+                30: 2273, 31: 2273, 32: 2280, 33: 2296, 34: 2296, 35: 2336, 36: 2405, 37: 2405, 38: 2434, 39: 2444,
+                40: 2608, 41: 2789, 42: 2886, 43: 3046, 44: 3095, 45: 3333, 46: 3496, 47: 3744, 48: 3902, 49: 4088,
+                50: 4371, 51: 4592, 52: 4813, 53: 5034, 54: 5254, 55: 5562, 56: 5876, 57: 6108, 58: 6433, 59: 6669,
+                60: 7041, 61: 7439, 62: 7873, 63: 8290, 64: 8768, 65: 9180, 66: 9699, 67: 10163, 68: 10893, 69: 11633,
+                70: 12405, 71: 13147, 72: 13967, 73: 14736, 74: 15514, 75: 16347, 76: 16932, 77: 17781, 78: 18129, 79: 19173, 80: 20307
+            }
+        };
+
+        function calcVPrimeFullPremium(age, gender, ded) {
+            age = Math.min(80, Math.max(0, parseInt(age) || 0));
+            ded = String(ded || '50000');
+            var table = vprimeScheduleStandard[ded] || vprimeScheduleStandard['50000'];
+            return table[age] || 2643;
         }
 
         function calcHospitalCashPremium(age, gender, level) {
@@ -1265,13 +1328,11 @@
         function makeElementDraggable(dragHandle, container) {
             if (!dragHandle || !container) return;
             var isDragging = false;
-            var hasMoved = false;
             var startX = 0, startY = 0;
             var initialLeft = 0, initialTop = 0;
 
             function startDrag(clientX, clientY) {
                 isDragging = true;
-                hasMoved = false;
                 startX = clientX;
                 startY = clientY;
                 var rect = container.getBoundingClientRect();
@@ -1284,7 +1345,6 @@
                 var dx = clientX - startX;
                 var dy = clientY - startY;
                 if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-                    hasMoved = true;
                     var newLeft = initialLeft + dx;
                     var newTop = initialTop + dy;
                     var maxLeft = window.innerWidth - container.offsetWidth - 10;
@@ -1325,6 +1385,27 @@
                 }
             }, { passive: true });
             window.addEventListener('touchend', endDrag);
+        }
+
+        // 安全 Modal 打開/關閉函數（徹底根除透明遮罩點擊攔截）
+        function openAuthModal(mode) {
+            var user = getCurrentUser();
+            if (user && user.role === 'admin') { openAdminPanel(); return; }
+            var modal = document.getElementById('authModal');
+            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            switchAuthMode(mode);
+        }
+        function closeAuthModal() {
+            var modal = document.getElementById('authModal');
+            if (modal) modal.style.setProperty('display', 'none', 'important');
+        }
+        function openLockModal() {
+            var modal = document.getElementById('lockModal');
+            if (modal) modal.style.setProperty('display', 'flex', 'important');
+        }
+        function closeLockModal() {
+            var modal = document.getElementById('lockModal');
+            if (modal) modal.style.setProperty('display', 'none', 'important');
         }
 
         // 全域掛載
