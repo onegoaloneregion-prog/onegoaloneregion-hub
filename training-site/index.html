@@ -528,7 +528,7 @@
         </div>
     </div>
 
-    <!-- PAGE: 一般保險專區 (補全) -->
+    <!-- PAGE: 一般保險專區 -->
     <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
             <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
@@ -574,7 +574,7 @@
         </div>
     </div>
 
-    <!-- PAGE: 佣金計算機 (補全) -->
+    <!-- PAGE: 佣金計算機 -->
     <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
             <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
@@ -625,7 +625,7 @@
         </div>
     </div>
 
-    <!-- PAGE: 產品知識遊戲區 (補全) -->
+    <!-- PAGE: 產品知識遊戲區 -->
     <div id="page-game" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
             <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
@@ -656,7 +656,7 @@
         </div>
     </div>
 
-    <!-- 彈窗: 登入 / 註冊 / 後台 (補全) -->
+    <!-- 彈窗: 登入 / 註冊 / 後台 -->
     <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 border border-slate-100">
             <div class="flex items-center justify-between border-b pb-3">
@@ -694,7 +694,7 @@
         </div>
     </div>
 
-    <!-- 彈窗: 權限攔截 (補全) -->
+    <!-- 彈窗: 權限攔截 -->
     <div id="lockModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-slate-100 shadow-2xl">
             <div class="text-4xl">🔒</div>
@@ -707,1027 +707,69 @@
         </div>
     </div>
 
-    <!-- 浮動 Toast 提示條 (補全) -->
+    <!-- 浮動 Toast 提示條 -->
     <div id="copyToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 text-white px-5 py-2.5 rounded-full text-xs font-bold shadow-lg transition-all duration-300 translate-y-20 opacity-0 pointer-events-none flex items-center gap-2">
         <span id="toastMsgText">已複製到剪貼簿！</span>
     </div>
 
-    <!-- AI Sammy 浮動助手容器 (補全) -->
-    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-40">
-        <!-- 展開對話窗 -->
-        <div id="aiFloatingWindow" class="ai-window-enter w-80 sm:w-96 bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-3">
-            <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-orange-500 to-amber-500 p-4 text-white flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="text-base">🤖</span>
-                    <b class="text-sm">AI Sammy 智慧助手</b>
+    <!-- 🤖 AI Sammy 原版浮動助手 -->
+    <div id="aiFloatingContainer" class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end pointer-events-none select-none">
+        <div id="aiFloatingWindow" class="ai-window-enter w-[360px] sm:w-[400px] bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden mb-4 transition-all pointer-events-auto">
+            <div id="aiWindowHeader" class="drag-handle bg-gradient-to-r from-sky-500 via-indigo-500 to-orange-500 p-4 text-white flex items-center justify-between shadow-md select-none">
+                <div class="flex items-center gap-2.5 pointer-events-none">
+                    <div class="w-10 h-10 rounded-full bg-white p-0.5 shrink-0 flex items-center justify-center overflow-hidden border-2 border-white shadow-xs">
+                        <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div>
+                        <h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">AI Sammy <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">OGOR 智慧助手</span></h4>
+                        <p class="text-[11px] text-sky-100 opacity-90">按住此處可隨意拖拽浮窗位置</p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <button type="button" onclick="toggleAiPin()" title="釘選" class="hover:opacity-80">📌</button>
-                    <button type="button" onclick="toggleAiWindow()" class="hover:opacity-80 font-bold text-sm">✕</button>
+                <div class="flex items-center gap-1 text-xs">
+                    <button type="button" onclick="toggleAiPin()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer">📌</button>
+                    <button type="button" onclick="toggleAiWindow()" class="p-1.5 hover:bg-white/20 rounded-lg cursor-pointer text-base">✕</button>
                 </div>
             </div>
-            <div id="aiChatMessages" class="p-4 h-72 overflow-y-auto bg-slate-50 space-y-2 text-xs">
-                <div class="flex items-start gap-2">
-                    <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-xs">🤖</div>
-                    <div class="bg-white p-3 rounded-2xl border border-slate-200 text-slate-700 leading-relaxed max-w-[85%] shadow-xs">
-                        哈囉！我是 AI Sammy。你可以問我關於 <b>盈聚天下 II、話術攻略、最新佣金表</b> 等任何產品問題！
+
+            <div id="aiChatMessages" class="p-4 h-[320px] overflow-y-auto space-y-3.5 bg-slate-50 text-xs pointer-events-auto">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5">
+                        <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 leading-relaxed max-w-[85%]">
+                        <p>👋 哈囉手足！我係 <b>AI Sammy</b> 👧🏻！OGOR 百人團隊隨身智庫。有咩客情難搞、銷售話術、最新佣金表或者保單條款細節，隨時問我：</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pl-9 pointer-events-auto">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">💡 跨範疇常見實戰查詢：</p>
+                    <div class="grid grid-cols-1 gap-1.5">
+                        <button type="button" onclick="sendQuickAiQuery('2026年8月最新佣金率與年長佣金調整點計？')" class="text-left p-2 rounded-xl bg-white border border-amber-200 bg-amber-50/40 hover:bg-amber-100/60 text-amber-900 transition-all font-bold shadow-2xs cursor-pointer">💵 最新制度：2026年8月最新佣金率與年長調整？</button>
+                        <button type="button" onclick="sendQuickAiQuery('盈聚天下II有哪些全新特色與獎賞？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">💎 產品亮點：盈聚·天下 II 有咩全新特色與獎賞？</button>
+                        <button type="button" onclick="sendQuickAiQuery('盈聚天下II最新保費折扣與預繳5%利率？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">🎁 促銷優惠：盈聚·天下 II 8月預繳5%保證利率？</button>
+                        <button type="button" onclick="sendQuickAiQuery('儲蓄保險開場話術同概念切入點？')" class="text-left p-2 rounded-xl bg-white border border-sky-200 bg-sky-50/30 hover:bg-sky-100/50 text-sky-900 transition-all font-bold shadow-2xs cursor-pointer">🗣️ 銷售話術：儲蓄保險開場話術同概念切入點？</button>
+                        <button type="button" onclick="sendQuickAiQuery('尊衛您16種危疾豁免自付費條款細節？')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 transition-all font-medium shadow-2xs cursor-pointer">📜 嚴謹條款：尊衛您16種危疾豁免自付費條款？</button>
                     </div>
                 </div>
             </div>
-            <div class="p-3 border-t bg-white flex gap-2">
-                <input id="aiInput" type="text" onkeypress="handleAiKeyPress(event)" placeholder="輸入問題（例如：盈聚天下亮點）..." class="flex-1 px-3 py-2 border rounded-xl text-xs outline-none focus:border-[#E87722]">
-                <button type="button" onclick="submitAiQuery()" class="px-3.5 py-2 bg-[#E87722] text-white font-bold rounded-xl text-xs">發送</button>
+
+            <div class="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
+                <input id="aiInput" type="text" placeholder="有咩想問？請隨時問 AI Sammy..." onkeypress="handleAiKeyPress(event)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-sky-400 bg-slate-50">
+                <button type="button" onclick="submitAiQuery()" class="px-3.5 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-xl font-bold text-xs shrink-0 cursor-pointer">發送</button>
             </div>
         </div>
 
-        <!-- 觸發按鈕 -->
-        <button type="button" id="aiTriggerBtn" onclick="toggleAiWindow()" class="drag-handle flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-[#E87722] to-amber-500 text-white font-black text-xs shadow-xl hover:scale-105 transition-all">
-            <span>🤖</span>
-            <span>AI Sammy 助手</span>
+        <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
+            <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
+            <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
+                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
+            </div>
+            <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 pointer-events-none">1</span>
         </button>
     </div>
 
     <!-- 全局 JS 腳本 -->
     <script>
-        // 1. 2026年8月最新官方佣金制度表
-        var commissionData = {
-            whole_life: [
-                { id: "gfc_1", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 躉繳", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] },
-                { id: "gfc_2", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 2年繳", rates: [{ ages: "1-60歲", rate: 0.070 }, { ages: "61歲", rate: 0.065 }, { ages: "62歲", rate: 0.060 }, { ages: "63歲", rate: 0.055 }, { ages: "64歲", rate: 0.050 }, { ages: "65-70歲", rate: 0.045 }, { ages: "71-80歲", rate: 0.040 }] },
-                { id: "gfc_3", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 3年繳", rates: [{ ages: "1-60歲", rate: 0.110 }, { ages: "61歲", rate: 0.1025 }, { ages: "62歲", rate: 0.095 }, { ages: "63歲", rate: 0.0875 }, { ages: "64歲", rate: 0.080 }, { ages: "65-70歲", rate: 0.0725 }, { ages: "71-75歲", rate: 0.065 }] },
-                { id: "gfc_5", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 5年繳", rates: [{ ages: "1-60歲", rate: 0.275 }, { ages: "61歲", rate: 0.265 }, { ages: "62歲", rate: 0.255 }, { ages: "63歲", rate: 0.245 }, { ages: "64歲", rate: 0.235 }, { ages: "65-70歲", rate: 0.225 }, { ages: "71-72歲", rate: 0.200 }, { ages: "73-75歲", rate: 0.175 }] },
-                { id: "gfc_10", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 10年繳", rates: [{ ages: "1-60歲", rate: 0.350 }, { ages: "61歲", rate: 0.340 }, { ages: "62歲", rate: 0.330 }, { ages: "63歲", rate: 0.320 }, { ages: "64歲", rate: 0.310 }, { ages: "65-70歲", rate: 0.300 }] },
-                { id: "gfd_18", name: "盈聚·天下壽險計劃 (GFD) - 18年繳", rates: [{ ages: "1-62歲", rate: 0.420 }] },
-                { id: "hlw_5", name: "衛你所愛壽險計劃 (HLW/ULW) - 5年繳", rates: [{ ages: "1-75歲", rate: 0.225 }] },
-                { id: "hlw_10", name: "衛你所愛壽險計劃 (HLW/ULW) - 10年繳", rates: [{ ages: "1-70歲", rate: 0.315 }] },
-                { id: "hlw_15", name: "衛你所愛壽險計劃 (HLW/ULW) - 15年繳", rates: [{ ages: "1-65歲", rate: 0.405 }] },
-                { id: "hlw_20", name: "衛你所愛壽險計劃 (HLW/ULW) - 20年繳", rates: [{ ages: "1-60歲", rate: 0.500 }] },
-                { id: "uhn_10", name: "承譽定期壽險 (UHN) - 10年期", rates: [{ ages: "19-75歲", rate: 0.419 }] },
-                { id: "uhn_20", name: "承譽定期壽險 (UHN) - 20年期", rates: [{ ages: "19-70歲", rate: 0.419 }] },
-                { id: "htm_5", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 5年期", rates: [{ ages: "19-61歲", rate: 0.300 }] },
-                { id: "htm_10", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 10年期", rates: [{ ages: "19-61歲", rate: 0.350 }] },
-                { id: "htm_20", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 20年期", rates: [{ ages: "19-61歲", rate: 0.400 }] },
-                { id: "urq_1", name: "創逸致富(豐盛版) (URQ) - 整付", rates: [{ ages: "19-65歲", rate: 0.040 }] },
-                { id: "urq_5", name: "創逸致富(豐盛版) (URQ) - 5年繳", rates: [{ ages: "19-60歲", rate: 0.275 }] },
-                { id: "urq_10", name: "創逸致富(豐盛版) (URQ) - 10年繳", rates: [{ ages: "19-55歲", rate: 0.350 }] },
-                { id: "hwo_3", name: "智盈匯聚(優越版)III 壽險計劃 (HWO/UWO/RWO)", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] }
-            ],
-            medical: [
-                { id: "hvs9_1", name: "醫家保醫療計劃 (HVS9) & 子女家添守護 (HVI3)", rates: [{ ages: "0-74歲", rate: 0.270 }, { ages: "75-80歲", rate: 0.200 }] },
-                { id: "hvs8_1", name: "尊衛您(寰譽版)醫療計劃 (HVS8)", rates: [{ ages: "1-81歲", rate: 0.250 }] },
-                { id: "hem_1", name: "衛一醫療總匯 (HEM/UEM/HER/UER)", rates: [{ ages: "1-70歲", rate: 0.220 }] },
-                { id: "hvs5_1", name: "易衛您醫療計劃 (HVS5)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
-                { id: "hvs3_1", name: "更衛您(優越版)醫療計劃 (HVS3)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
-                { id: "hcp_1", name: "揀易保癌症保障計劃 (HCP/UCP)", rates: [{ ages: "1-70歲", rate: 0.200 }] },
-                { id: "rhcb_rider", name: "【附約】住院現金保障附約 (RHCB)", rates: [{ ages: "1-60歲", rate: 0.100 }] }
-            ],
-            crisis: [
-                { id: "hnt_1", name: "好易揀危疾保障計劃 (HNT/UNT)", rates: [{ ages: "1-70歲", rate: 0.250 }] },
-                { id: "hkn_10", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 10年繳", rates: [{ ages: "全年齡段", rate: 0.300 }] },
-                { id: "hkn_15", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 15年繳", rates: [{ ages: "全年齡段", rate: 0.400 }] },
-                { id: "hkn_20", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 20年繳", rates: [{ ages: "全年齡段", rate: 0.500 }] },
-                { id: "hkn_25", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 25年繳", rates: [{ ages: "全年齡段", rate: 0.520 }] },
-                { id: "hkn_30", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 30年繳", rates: [{ ages: "全年齡段", rate: 0.530 }] }
-            ],
-            accident: [
-                { id: "hag_1", name: "全意守護意外保障計劃 (HAG/UAG)", rates: [{ ages: "1-60歲", rate: 0.220 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] },
-                { id: "hag_rider", name: "【附約】全意守護意外保障附約 (HAG/UAG Rider)", rates: [{ ages: "1-60歲", rate: 0.300 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] }
-            ],
-            endowment: [
-                { id: "umt1_1", name: "智優盛儲蓄保險計劃 (UMT1)", rates: [{ ages: "1-80歲", rate: 0.009 }] }
-            ],
-            universal: [
-                { id: "uur_1", name: "寰薈致富(卓越版) (UUR) - 目標保費", rates: [{ ages: "1-65歲", rate: 0.615 }, { ages: "66-70歲", rate: 0.550 }] },
-                { id: "uur_2", name: "寰薈致富(卓越版) (UUR) - 額外保費 / 超出目標保費", rates: [{ ages: "全年齡段", rate: 0.0125 }] }
-            ]
-        };
-
-        var currentDisplayMode = 'both'; 
-        var prevCurrency = 'HKD'; 
-        var currentCategoryKey = 'whole_life'; 
-        var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
-
-        function getCurrentUser() { var u = sessionStorage.getItem('ogor_current_user'); return u ? JSON.parse(u) : null; }
-        function updateAuthUI() {
-            var user = getCurrentUser(); var badge = document.getElementById('currentUserBadge'); var btn = document.getElementById('authBtnAction');
-            if (user) {
-                badge.innerText = user.name + ' (' + user.code + ')'; badge.classList.remove('hidden');
-                if (user.role === 'admin') { btn.innerText = '👑 管理後台'; btn.setAttribute('onclick', 'openAdminPanel()'); }
-                else { btn.innerText = '登出系統'; btn.setAttribute('onclick', 'logoutAccount()'); }
-            } else { badge.classList.add('hidden'); btn.innerText = '🔒 登入 / 註冊'; btn.setAttribute('onclick', 'openAuthModal("login")'); }
-        }
-        function checkAndSwitchPage(pageId, pageName, scrollToId) { var user = getCurrentUser(); if (!user) { document.getElementById('lockModalDesc').innerText = '登入後即可使用【' + pageName + '】功能'; openLockModal(); return; } switchPage(pageId, scrollToId); }
-        function openLockModal() { document.getElementById('lockModal').classList.remove('hidden'); }
-        function closeLockModal() { document.getElementById('lockModal').classList.add('hidden'); }
-        function goToLoginFromLock() { closeLockModal(); openAuthModal('login'); }
-        function openAuthModal(mode) { var user = getCurrentUser(); if (user && user.role === 'admin') { openAdminPanel(); return; } document.getElementById('authModal').classList.remove('hidden'); switchAuthMode(mode); }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-        function switchAuthMode(mode) {
-            var loginSec = document.getElementById('loginFormSection'); var regSec = document.getElementById('registerFormSection'); var adminSec = document.getElementById('adminApprovalSection');
-            loginSec.classList.add('hidden'); regSec.classList.add('hidden'); adminSec.classList.add('hidden');
-            if (mode === 'login') { loginSec.classList.remove('hidden'); document.getElementById('authModalTitle').innerText = '團隊成員登入'; }
-            else if (mode === 'register') { regSec.classList.remove('hidden'); document.getElementById('authModalTitle').innerText = '新成員註冊申請'; }
-        }
-        function openAdminPanel() { var user = getCurrentUser(); if (!user || user.role !== 'admin') { alert('權限不足！'); return; } document.getElementById('authModal').classList.remove('hidden'); document.getElementById('loginFormSection').classList.add('hidden'); document.getElementById('registerFormSection').classList.add('hidden'); document.getElementById('adminApprovalSection').classList.remove('hidden'); switchAdminTab('pending'); }
-        function switchAdminTab(tab) {
-            var pendingBtn = document.getElementById('tabPendingBtn'); var approvedBtn = document.getElementById('tabApprovedBtn'); var pendingSec = document.getElementById('pendingUsersList'); var approvedSec = document.getElementById('approvedUsersList');
-            if (tab === 'pending') { pendingBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; approvedBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; pendingSec.classList.remove('hidden'); approvedSec.classList.add('hidden'); if(window.renderPendingUsers) window.renderPendingUsers(); }
-            else { approvedBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; pendingBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; approvedSec.classList.remove('hidden'); pendingSec.classList.add('hidden'); if(window.renderApprovedUsers) window.renderApprovedUsers(); }
-        }
-        function logoutAccount() { sessionStorage.removeItem('ogor_current_user'); updateAuthUI(); closeAuthModal(); showToast('已安全登出系統'); switchPage('page-home'); }
-        function switchPage(pageId, scrollToId) {
-            var views = document.querySelectorAll('.page-view'); for (var i = 0; i < views.length; i++) { views[i].classList.add('hidden'); }
-            var targetPage = document.getElementById(pageId); if (targetPage) targetPage.classList.remove('hidden');
-            if (scrollToId) { setTimeout(function() { var el = document.querySelector(scrollToId); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        }
-        
-        function showToast(msg) { 
-            var toast = document.getElementById('copyToast'); 
-            var txt = document.getElementById('toastMsgText'); 
-            if (txt && msg) txt.innerText = msg; 
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            setTimeout(function() { 
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); 
-            }, 2500); 
-        }
-
-        // 剪貼簿複製功能
-        function performCopyText(text, successMsg) {
-            var copied = false;
-            var textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "0";
-            textArea.style.top = "0";
-            textArea.style.width = "2em";
-            textArea.style.height = "2em";
-            textArea.style.padding = "0";
-            textArea.style.border = "none";
-            textArea.style.outline = "none";
-            textArea.style.boxShadow = "none";
-            textArea.style.background = "transparent";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            textArea.setSelectionRange(0, textArea.value.length);
-            
-            try {
-                copied = document.execCommand('copy');
-            } catch (err) {
-                copied = false;
-            }
-            document.body.removeChild(textArea);
-
-            if (!copied && navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showToast(successMsg || "已複製到剪貼簿！");
-                }).catch(function() {
-                    prompt("📋 請複製：", text);
-                });
-                return;
-            }
-
-            if (copied) {
-                showToast(successMsg || "已複製到剪貼簿！");
-            } else {
-                prompt("📋 請複製：", text);
-            }
-        }
-
-        function copyVideoStyleResult() {
-            var pSelect = document.getElementById('calcProduct');
-            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge');
-            var age = ageInput ? ageInput.value : "30";
-            
-            var cardTitleEl = document.getElementById('cardMainTitle');
-            var valAnnualEl = document.getElementById('valAnnualText');
-            var valMonthlyEl = document.getElementById('valMonthlyText');
-            
-            var title = cardTitleEl ? cardTitleEl.innerText.trim() : (age + " 歲 · " + pNameText);
-            var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
-            var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
-            
-            var copyText = "🟢 FWD 保費快算試算\n" +
-                           "產品：" + pNameText + "\n" +
-                           "條件：" + title + "\n\n" +
-                           "💵 預估保費：\n" +
-                           "年供：" + annual + "\n" +
-                           "月供：" + monthly + "\n\n" +
-                           "數據來源：2026年富衛官方費率表，實際保費以最新報價單為準";
-            
-            performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
-
-            var btn = document.getElementById('copyResultBtn');
-            if (btn) {
-                var origText = btn.innerHTML;
-                btn.innerHTML = "✅ 已複製！";
-                setTimeout(function() {
-                    btn.innerHTML = origText;
-                }, 1500);
-            }
-        }
-
-        function copyCommissionResult() {
-            var planSelect = document.getElementById('planSelect'); var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
-            var ageSelect = document.getElementById('commAgeSelect'); var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
-            var premInput = document.getElementById('premiumInput'); var premium = parseCleanNumber(premInput ? premInput.value : "0");
-            var rateEl = document.getElementById('commRate'); var rate = rateEl ? rateEl.innerText : "--%";
-            var resEl = document.getElementById('commResult'); var result = resEl ? resEl.innerText : "HK$ 0";
-            var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
-            performCopyText(copyText, "已複製佣金試算結果！");
-
-            var btn = document.querySelector('button[onclick*="copyCommissionResult"]');
-            if (btn) {
-                var origText = btn.innerHTML;
-                btn.innerHTML = "✅ 已複製！";
-                setTimeout(function() {
-                    btn.innerHTML = origText;
-                }, 1500);
-            }
-        }
-
-        window.performCopyText = performCopyText;
-        window.copyVideoStyleResult = copyVideoStyleResult;
-        window.copyCommissionResult = copyCommissionResult;
-
-        function toggleAiWindow() {
-            var user = getCurrentUser();
-            if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
-            var win = document.getElementById('aiFloatingWindow');
-            if (win.classList.contains('ai-window-active')) {
-                win.classList.remove('ai-window-active');
-            } else {
-                win.classList.add('ai-window-active');
-            }
-        }
-        window.toggleAiWindow = toggleAiWindow;
-
-        // 佣金計算機類別與計劃切換
-        function setCommCategory(catKey, clickedElement) {
-            currentCategoryKey = catKey; 
-            var items = document.querySelectorAll('.comm-category-item');
-            for (var i = 0; i < items.length; i++) { 
-                items[i].classList.remove('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
-                items[i].classList.add('hover:bg-slate-50', 'text-slate-700', 'border-slate-200'); 
-            }
-            if (clickedElement) { 
-                clickedElement.classList.remove('border-slate-200', 'hover:bg-slate-50'); 
-                clickedElement.classList.add('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
-            }
-            var planSelect = document.getElementById('planSelect');
-            if (planSelect) { 
-                planSelect.innerHTML = ''; 
-                var list = commissionData[catKey] || []; 
-                for (var j = 0; j < list.length; j++) { 
-                    var opt = document.createElement('option'); 
-                    opt.value = j; 
-                    opt.innerText = list[j].name; 
-                    planSelect.appendChild(opt); 
-                } 
-            }
-            updateCommAgeOptions();
-        }
-
-        function updateCommAgeOptions() {
-            var planSelect = document.getElementById('planSelect'); 
-            var ageSelect = document.getElementById('commAgeSelect'); 
-            if (!planSelect || !ageSelect) return;
-            var planIndex = parseInt(planSelect.value) || 0; 
-            var list = commissionData[currentCategoryKey] || []; 
-            var selectedPlan = list[planIndex];
-            ageSelect.innerHTML = '';
-            if (selectedPlan && selectedPlan.rates) {
-                for (var k = 0; k < selectedPlan.rates.length; k++) { 
-                    var rItem = selectedPlan.rates[k]; 
-                    var opt = document.createElement('option'); 
-                    opt.value = rItem.rate; 
-                    opt.innerText = rItem.ages + ' (首年佣金: ' + (rItem.rate * 100).toFixed(2) + '%)'; 
-                    ageSelect.appendChild(opt); 
-                }
-            }
-            calculateCommission();
-        }
-
-        function calculateCommission() {
-            var ageSelect = document.getElementById('commAgeSelect'); 
-            var commRateEl = document.getElementById('commRate'); 
-            var commResultEl = document.getElementById('commResult'); 
-            var premInput = document.getElementById('premiumInput');
-            if (!ageSelect || !commRateEl || !commResultEl || !premInput) return;
-            var rate = parseFloat(ageSelect.value) || 0; 
-            var premium = parseCleanNumber(premInput.value); 
-            var comm = Math.round(premium * rate);
-            commRateEl.innerText = (rate * 100).toFixed(2) + '%'; 
-            commResultEl.innerText = 'HK$ ' + comm.toLocaleString('en-US');
-        }
-
-        // 100 題純產品知識題庫
-        var all100QuestionsPool = [
-            { id: 1, diff: "簡單", q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
-            { id: 2, diff: "中等", q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
-            { id: 3, diff: "簡單", q: "在「盈聚·天下 II」的「初生嬰兒獎賞」下，親生子女或親生孫子女出生可獲多少港元獎賞？最高可獲幾次？", options: ["HK$10,000 (最多1次)", "HK$20,000 (最多3次)", "HK$30,000 (最多2次)", "HK$50,000 (無上限)"], ans: 1 },
-            { id: 4, diff: "中等", q: "「盈聚·天下 II」新增的「享悅人生獎賞」，當被保人達成指定人生大事可獲發多少港元？", options: ["HK$1,000", "HK$3,000", "HK$5,000", "HK$10,000"], ans: 1 },
-            { id: 5, diff: "簡單", q: "根據「衛一醫療總匯」，其標準計劃的「個人終身保障限額」是多少港元？", options: ["20,000,000港元", "40,000,000港元", "60,000,000港元", "無終身保障限額"], ans: 1 },
-            { id: 6, diff: "中等", q: "在「醫家保醫療計劃」中，每傷病每保單年度保障總額是多少港元？", options: ["400,000港元", "550,000港元", "650,000港元", "850,000港元"], ans: 1 },
-            { id: 7, diff: "困難", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
-            { id: 8, diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0 },
-            { id: 9, diff: "中等", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1 },
-            { id: 10, diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 }
-        ];
-
-        (function fill100Questions() {
-            var seedLen = all100QuestionsPool.length;
-            for (var i = seedLen + 1; i <= 100; i++) {
-                var ref = all100QuestionsPool[(i - 1) % seedLen];
-                all100QuestionsPool.push({
-                    id: i,
-                    diff: (i % 3 === 0) ? "困難" : ((i % 2 === 0) ? "中等" : "簡單"),
-                    q: ref.q,
-                    options: ref.options,
-                    ans: ref.ans
-                });
-            }
-        })();
-
-        var currentQuizIndex = 0; 
-        var currentQuizScore = 0; 
-        var currentQuizStreak = 0; 
-        var activeQuizList = [];
-
-        var praiseMsgList = ["🎉 答得好！為你點讚！", "🔥 答對了！OGOR 有你呢個專業精英真係無敵！", "🌟 太勁了！產品細節記得分毫畢現！"];
-        var encourageMsgList = ["💡 唔緊要，睇埋解析再來一次！", "加油手足！搞清楚細節，下次面對客人就萬無一失！"];
-
-        function restartQuizGame() { startQuizGame(); }
-        
-        function startQuizGame() { 
-            currentQuizIndex = 0; 
-            currentQuizScore = 0; 
-            currentQuizStreak = 0; 
-            activeQuizList = all100QuestionsPool.slice().sort(function() { return 0.5 - Math.random(); }); 
-            renderQuizQuestion(); 
-        }
-        
-        function renderQuizQuestion() {
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            if (fbBox) fbBox.classList.add('hidden');
-            
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
-            if (currentQuizIndex >= activeQuizList.length) {
-                document.getElementById('quizQuestionText').innerText = "🏆 恭喜您完成全部 100 題大挑戰！OGOR 團隊因您而驕傲！";
-                document.getElementById('quizOptionsContainer').innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新開始挑戰 (再次隨機 100 題)</button>';
-                return;
-            }
-
-            var qObj = activeQuizList[currentQuizIndex];
-            document.getElementById('quizDifficultyTag').innerText = qObj.diff + " 題目 (第 " + (currentQuizIndex + 1) + " / 100 題)";
-            document.getElementById('quizQuestionText').innerText = qObj.q;
-            var pct = Math.round(((currentQuizIndex) / 100) * 100);
-            document.getElementById('quizProgressBar').style.width = pct + "%";
-            document.getElementById('quizScoreText').innerText = currentQuizScore + " 分 (" + currentQuizStreak + "連勝)";
-            
-            var optHtml = "";
-            qObj.options.forEach(function(optText, idx) {
-                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="quiz-opt-btn w-full text-left p-3.5 rounded-xl text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
-            });
-            document.getElementById('quizOptionsContainer').innerHTML = optHtml;
-        }
-
-        function handleQuizAnswer(selectedIdx) {
-            if (document.activeElement && document.activeElement.blur) {
-                document.activeElement.blur();
-            }
-
-            var qObj = activeQuizList[currentQuizIndex]; 
-            var fbBox = document.getElementById('quizFeedbackBox'); 
-            fbBox.classList.remove('hidden');
-
-            if (selectedIdx === qObj.ans) {
-                currentQuizScore += 10; 
-                currentQuizStreak += 1;
-                var randPraise = praiseMsgList[Math.floor(Math.random() * praiseMsgList.length)];
-                fbBox.className = "p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs leading-relaxed space-y-1 transition-all";
-                fbBox.innerHTML = '<b class="text-sm block">✓ ' + randPraise + '</b><p><b>正確答案：</b>' + qObj.options[qObj.ans] + '</p>';
-                setTimeout(function() { currentQuizIndex++; renderQuizQuestion(); }, 1200);
-            } else {
-                currentQuizStreak = 0;
-                var randEncourage = encourageMsgList[Math.floor(Math.random() * encourageMsgList.length)];
-                fbBox.className = "p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-xs leading-relaxed space-y-1 transition-all";
-                fbBox.innerHTML = '<b class="text-sm block">✕ ' + randEncourage + '</b><p><b>正確答案：</b>' + String.fromCharCode(65 + qObj.ans) + '. ' + qObj.options[qObj.ans] + '</p><button type="button" onclick="nextQuizStep()" class="mt-2 px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold text-xs cursor-pointer">跳過並進入下一題 →</button>';
-            }
-        }
-
-        function nextQuizStep() { currentQuizIndex++; renderQuizQuestion(); }
-
-        // ==========================================
-        // 官方精準保費核心演算法
-        // ==========================================
-
-        function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro, riderType, curr) {
-            curr = curr || 'HKD';
-            riderType = riderType || 'none';
-            var anb = age + 1;
-
-            if (riderType === 'kid') {
-                var kidRatesHKD = {
-                    std: { '10': 39.90, '15': 27.67, '20': 21.85, '25': 18.17, '30': 16.53 },
-                    pro: { '10': 42.63, '15': 29.56, '20': 23.40, '25': 19.42, '30': 17.68 }
-                };
-                var kidRatesUSD = {
-                    std: { '10': 37.19, '15': 26.22, '20': 20.65, '25': 17.18, '30': 15.63 },
-                    pro: { '10': 39.68, '15': 27.98, '20': 22.08, '25': 18.33, '30': 16.69 }
-                };
-                var tableKid = (curr === 'USD') ? (isPro ? kidRatesUSD.pro : kidRatesUSD.std) : (isPro ? kidRatesHKD.pro : kidRatesHKD.std);
-                var kRate = tableKid[payTerm] || tableKid['20'];
-                
-                var kDisc = 0;
-                if (curr === 'USD') {
-                    if (sumInsured >= 60000) kDisc = (payTerm === '10' ? 10.0 : (payTerm === '15' ? 7.0 : (payTerm === '20' ? 5.0 : (payTerm === '25' ? 4.5 : 4.0))));
-                    else if (sumInsured >= 30000) kDisc = (payTerm === '10' ? 6.0 : (payTerm === '15' ? 4.5 : 3.0));
-                    else if (sumInsured >= 22500) kDisc = (payTerm === '10' ? 4.0 : (payTerm === '15' ? 3.0 : 2.0));
-                } else {
-                    if (sumInsured >= 480000) kDisc = (payTerm === '10' ? 10.0 : (payTerm === '15' ? 7.0 : (payTerm === '20' ? 5.0 : (payTerm === '25' ? 4.5 : 4.0))));
-                    else if (sumInsured >= 240000) kDisc = (payTerm === '10' ? 6.0 : (payTerm === '15' ? 4.5 : 3.0));
-                    else if (sumInsured >= 180000) kDisc = (payTerm === '10' ? 4.0 : (payTerm === '15' ? 3.0 : 2.0));
-                }
-                var finalKRate = Math.max(0, kRate - kDisc);
-                return (finalKRate * sumInsured) / 1000;
-            }
-
-            var base20M_HKD = {
-                1: 22.55, 2: 22.86, 3: 23.17, 4: 23.50, 5: 24.00, 6: 24.35, 7: 24.70, 8: 25.06, 9: 25.42, 10: 25.81,
-                11: 26.19, 12: 26.57, 13: 26.97, 14: 27.38, 15: 27.79, 16: 28.29, 17: 28.78, 18: 29.28, 19: 29.80, 20: 30.33,
-                21: 30.87, 22: 31.42, 23: 31.99, 24: 32.57, 25: 33.16, 26: 33.75, 27: 34.56, 28: 35.40, 29: 36.25, 30: 37.14,
-                31: 38.05, 32: 38.98, 33: 39.93, 34: 40.93, 35: 41.95, 36: 43.33, 37: 44.76, 38: 46.24, 39: 47.77, 40: 49.35,
-                41: 50.99, 42: 52.70, 43: 54.46, 44: 56.29, 45: 58.19, 46: 59.52, 47: 60.87, 48: 62.27, 49: 63.69, 50: 65.17,
-                51: 66.66, 52: 68.20, 53: 69.75, 54: 71.37, 55: 73.02
-            };
-
-            var rBase = base20M_HKD[anb] || (anb < 1 ? 22.55 : 73.02 + (anb - 55) * 2.5);
-
-            var termFactor = 1.0;
-            if (payTerm === '10') termFactor = (anb <= 18 ? (46.76 / 24.70) : 1.90);
-            else if (payTerm === '15') termFactor = (anb <= 18 ? (32.47 / 24.70) : 1.30);
-            else if (payTerm === '20') termFactor = 1.00;
-            else if (payTerm === '25') termFactor = (anb <= 18 ? (21.12 / 24.70) : 0.865);
-            else if (payTerm === '30') termFactor = (anb <= 18 ? (19.26 / 24.70) : 0.775);
-
-            var genderFactor = 1.0;
-            if (gender === 'female') {
-                genderFactor = (anb <= 18 ? (22.83 / 24.70) : (anb <= 40 ? 0.96 : 0.93));
-            }
-
-            var proFactor = 1.0;
-            if (isPro) {
-                proFactor = (anb <= 18 ? (26.52 / 24.70) : 1.07);
-            }
-
-            var familyFactor = 1.0;
-            if (riderType === 'family') {
-                familyFactor = (anb <= 18 ? (28.37 / 24.70) : 1.13);
-            }
-
-            var rateTypeFactor = 1.0;
-            if (rateType === 'standard') {
-                if (anb >= 19) rateTypeFactor = (payTerm === '10' ? 1.15 : (payTerm === '15' ? 1.12 : 1.10));
-            }
-
-            var baseUnitRate = rBase * termFactor * genderFactor * proFactor * familyFactor * rateTypeFactor;
-
-            if (curr === 'USD') {
-                baseUnitRate = baseUnitRate * 0.95;
-            }
-
-            var sizeDiscount = 0;
-            if (curr === 'USD') {
-                if (sumInsured >= 60000) sizeDiscount = (payTerm === '10' ? 10.0 : (payTerm === '15' ? 7.0 : (payTerm === '20' ? 5.0 : (payTerm === '25' ? 4.5 : 4.0))));
-                else if (sumInsured >= 30000) sizeDiscount = (payTerm === '10' ? 6.0 : (payTerm === '15' ? 4.5 : 3.0));
-                else if (sumInsured >= 22500) sizeDiscount = (payTerm === '10' ? 4.0 : (payTerm === '15' ? 3.0 : 2.0));
-            } else {
-                if (sumInsured >= 480000) sizeDiscount = (payTerm === '10' ? 10.0 : (payTerm === '15' ? 7.0 : (payTerm === '20' ? 5.0 : (payTerm === '25' ? 4.5 : 4.0))));
-                else if (sumInsured >= 240000) sizeDiscount = (payTerm === '10' ? 6.0 : (payTerm === '15' ? 4.5 : 3.0));
-                else if (sumInsured >= 180000) sizeDiscount = (payTerm === '10' ? 4.0 : (payTerm === '15' ? 3.0 : 2.0));
-            }
-
-            var finalAnnualRate = Math.max(0, baseUnitRate - sizeDiscount);
-            return (finalAnnualRate * sumInsured) / 1000;
-        }
-
-        var vFamilyMaleSchedule = {
-            0: 5524, 1: 5524, 2: 5524, 3: 5524, 4: 4728, 5: 4728, 6: 4728, 7: 4728, 8: 4728, 9: 4728,
-            10: 4728, 11: 4728, 12: 4728, 13: 4728, 14: 4728, 15: 4728, 16: 4728, 17: 4728, 18: 4647, 19: 3718,
-            20: 3754, 21: 3696, 22: 3611, 23: 3644, 24: 3682, 25: 3853, 26: 4082, 27: 4304, 28: 4538, 29: 4751,
-            30: 4917, 31: 5054, 32: 5210, 33: 5337, 34: 5491, 35: 5568, 36: 5603, 37: 5605, 38: 5607, 39: 5609,
-            40: 5689, 41: 5920, 42: 6171, 43: 6379, 44: 6667, 45: 6995, 46: 7332, 47: 7846, 48: 8258, 49: 8686,
-            50: 8802, 51: 8882, 52: 9447, 53: 9922, 54: 10408, 55: 11090, 56: 11793, 57: 12677, 58: 13377, 59: 14062,
-            60: 15246, 61: 16263, 62: 17411, 63: 18734, 64: 19942, 65: 21449, 66: 22953, 67: 24758, 68: 26322, 69: 27888,
-            70: 30737, 71: 32747, 72: 34980, 73: 36340, 74: 37297, 75: 38607, 76: 40023, 77: 42216, 78: 43676, 79: 45121, 80: 49893
-        };
-        var vFamilyFemaleSchedule = {
-            0: 3841, 1: 3841, 2: 3841, 3: 3841, 4: 4394, 5: 4394, 6: 4394, 7: 4394, 8: 4394, 9: 4394,
-            10: 4394, 11: 4394, 12: 4394, 13: 4394, 14: 4394, 15: 4394, 16: 4394, 17: 4394, 18: 4420, 19: 4446,
-            20: 4473, 21: 4500, 22: 4520, 23: 4659, 24: 4855, 25: 5184, 26: 5459, 27: 5751, 28: 6015, 29: 6302,
-            30: 6464, 31: 6655, 32: 6868, 33: 7068, 34: 7243, 35: 7283, 36: 7338, 37: 7377, 38: 7431, 39: 7487,
-            40: 7542, 41: 7598, 42: 7939, 43: 8174, 44: 8480, 45: 8805, 46: 9120, 47: 9505, 48: 9755, 49: 9986,
-            50: 10232, 51: 10479, 52: 10857, 53: 11195, 54: 11528, 55: 12078, 56: 12613, 57: 13349, 58: 13903, 59: 14476,
-            60: 15345, 61: 16412, 62: 17547, 63: 18498, 64: 19585, 65: 20747, 66: 21963, 67: 23164, 68: 24386, 69: 25599,
-            70: 26759, 71: 28327, 72: 29332, 73: 30286, 74: 31058, 75: 32413, 76: 33679, 77: 34656, 78: 35932, 79: 37243, 80: 41188
-        };
-
-        var vFamilyChildRiderSchedule = {
-            18: 751, 19: 765, 20: 771, 21: 767, 22: 759, 23: 774, 24: 836, 25: 884, 26: 933, 27: 984, 28: 1033, 29: 1082,
-            30: 1115, 31: 1147, 32: 1183, 33: 1215, 34: 1247, 35: 1259, 36: 1268, 37: 1272, 38: 1276, 39: 1281, 40: 1295,
-            41: 1327, 42: 1384, 43: 1428, 44: 1454, 45: 1518, 46: 1556, 47: 1595, 48: 1633, 49: 1672, 50: 1710,
-            51: 1749, 52: 1788, 53: 1826, 54: 1865, 55: 1797, 56: 1728, 57: 1660, 58: 1592, 59: 1524, 60: 1456,
-            61: 1388, 62: 1320, 63: 1252, 64: 1184, 65: 1116, 66: 1048, 67: 980, 68: 970, 69: 960, 70: 950,
-            71: 940, 72: 930, 73: 920, 74: 900, 75: 880, 76: 860, 77: 840, 78: 820, 79: 800, 80: 780
-        };
-
-        function calcVFamilyFullPremium(age, gender) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            return (gender === 'female' ? vFamilyFemaleSchedule[age] : vFamilyMaleSchedule[age]) || 5500;
-        }
-
-        function calcVFamilyChildOptionPremium(age) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            if (age < 18) return 0;
-            return vFamilyChildRiderSchedule[age] || 1281;
-        }
-
-        function calcVPrimeFullPremium(age, gender, ded) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            ded = String(ded || '50000');
-            var baseMale50k = { 0: 3121, 5: 2643, 6: 2643, 18: 2671, 20: 2810, 25: 3215, 30: 3563, 35: 3709, 40: 4170, 45: 5445, 50: 7142, 55: 8958, 60: 11044, 65: 14657, 70: 20455, 75: 26955, 80: 33485 };
-            var dedMult = { '0': (8625/3121), '16000': (4492/3121), '25000': (3955/3121), '50000': 1.0, '100000': (2492/3121), '250000': (1977/3121) };
-            var base = 2671;
-            var keys = [0, 5, 6, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
-            for (var i = 0; i < keys.length; i++) {
-                if (age <= keys[i]) {
-                    base = baseMale50k[keys[i]];
-                    break;
-                }
-            }
-            var dFactor = dedMult[ded] || 1.0;
-            var gFactor = (gender === 'female' ? 1.05 : 1.0);
-            return base * dFactor * gFactor;
-        }
-
-        function calcVCansuranceFullPremium(age, gender) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            var baseStdMale = { 0: 6646, 4: 5349, 18: 5257, 19: 4206, 25: 4454, 30: 5745, 35: 6649, 40: 6822, 45: 8417, 50: 10592, 55: 13345, 60: 18293, 65: 25369, 70: 35827, 75: 44440, 80: 57439 };
-            var baseStdFemale = { 0: 4622, 4: 4971, 18: 5001, 19: 5030, 25: 5992, 30: 7552, 35: 8697, 40: 9045, 45: 10594, 50: 12313, 55: 14534, 60: 18412, 65: 24538, 70: 31190, 75: 37311, 80: 47417 };
-            var table = (gender === 'female' ? baseStdFemale : baseStdMale);
-            var keys = [0, 4, 18, 19, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
-            for (var i = 0; i < keys.length; i++) {
-                if (age <= keys[i]) return table[keys[i]];
-            }
-            return table[80];
-        }
-
-        function calcHospitalCashPremium(age, gender, level) {
-            var baseMale = { economy: 474.08, standard: 948.16, superior: 1422.24, premier: 1896.32 };
-            var baseFemale = { economy: 532.00, standard: 1064.00, superior: 1596.00, premier: 2128.00 };
-            var table = (gender === 'male') ? baseMale : baseFemale; 
-            var base = table[level] || table.standard;
-            var mult = (age >= 40 && age < 50) ? 1.17 : ((age >= 50) ? 1.91 : 0.85); 
-            return base * mult;
-        }
-
-        function toggleHospitalCashSelect() { 
-            var chk = document.getElementById('riderHospitalCash'); 
-            var div = document.getElementById('hospitalCashLevelDiv'); 
-            if (chk && chk.checked) div.classList.remove('hidden'); 
-            else if (div) div.classList.add('hidden'); 
-            runPremiumQuery(); 
-        }
-
-        function setDisplayMode(mode) {
-            currentDisplayMode = mode; 
-            var bBoth = document.getElementById('btnModeBoth'); 
-            var bAnn = document.getElementById('btnModeAnnual'); 
-            var bMon = document.getElementById('btnModeMonthly');
-            bBoth.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-[#E87722] transition-all cursor-pointer"; 
-            bAnn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-[#E87722] transition-all cursor-pointer"; 
-            bMon.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-[#E87722] transition-all cursor-pointer";
-            var bAnnualDisp = document.getElementById('blockAnnualDisplay'); 
-            var bMonthlyDisp = document.getElementById('blockMonthlyDisplay');
-            if (mode === 'both') { 
-                bBoth.className = "px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer"; 
-                bAnnualDisp.classList.remove('hidden'); 
-                bMonthlyDisp.classList.remove('hidden'); 
-            } else if (mode === 'annual') { 
-                bAnn.className = "px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer"; 
-                bAnnualDisp.classList.remove('hidden'); 
-                bMonthlyDisp.classList.add('hidden'); 
-            } else if (mode === 'monthly') { 
-                bMon.className = "px-3 py-1.5 rounded-lg bg-[#E87722] text-white shadow-sm transition-all cursor-pointer"; 
-                bAnnualDisp.classList.add('hidden'); 
-                bMonthlyDisp.classList.remove('hidden'); 
-            }
-        }
-
-        function updateCalcOptions() {
-            var p = document.getElementById('calcProduct').value; 
-            var crisisRidersBlock = document.getElementById('crisisRidersBlock'); 
-            var vfamilyRiderBlock = document.getElementById('vfamilyRiderBlock'); 
-            var hospitalCashBlock = document.getElementById('hospitalCashRiderBlock'); 
-            var deductBlock = document.getElementById('deductibleBlock'); 
-            var crisisBlock = document.getElementById('crisisSumBlock'); 
-            var payTermBlock = document.getElementById('payTermBlock'); 
-            var rateTypeBlock = document.getElementById('rateTypeBlock'); 
-            var payTermSec = document.getElementById('payTermCompSection'); 
-            var rateTypeSec = document.getElementById('rateTypeCompSection');
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') { 
-                crisisRidersBlock.classList.remove('hidden'); 
-                vfamilyRiderBlock.classList.add('hidden'); 
-                hospitalCashBlock.classList.add('hidden'); 
-                deductBlock.classList.add('hidden'); 
-                crisisBlock.classList.remove('hidden'); 
-                payTermBlock.classList.remove('hidden'); 
-                rateTypeBlock.classList.remove('hidden'); 
-                if (payTermSec) payTermSec.classList.remove('hidden'); 
-                if (rateTypeSec) rateTypeSec.classList.remove('hidden'); 
-            } else { 
-                crisisRidersBlock.classList.add('hidden'); 
-                crisisBlock.classList.add('hidden'); 
-                payTermBlock.classList.add('hidden'); 
-                rateTypeBlock.classList.add('hidden'); 
-                hospitalCashBlock.classList.remove('hidden'); 
-                if (payTermSec) payTermSec.classList.add('hidden'); 
-                if (rateTypeSec) rateTypeSec.classList.add('hidden'); 
-                if (p === 'vfamily') { 
-                    vfamilyRiderBlock.classList.remove('hidden'); 
-                    deductBlock.classList.add('hidden'); 
-                } else if (p === 'vprime') { 
-                    vfamilyRiderBlock.classList.add('hidden'); 
-                    deductBlock.classList.remove('hidden'); 
-                } else if (p === 'vcansurance') { 
-                    vfamilyRiderBlock.classList.add('hidden'); 
-                    deductBlock.classList.add('hidden'); 
-                } 
-            }
-            runPremiumQuery();
-        }
-
-        function runPremiumQuery() {
-            var p = document.getElementById('calcProduct').value; 
-            var age = parseInt(document.getElementById('calcAge').value);
-            if (isNaN(age) || age < 0) age = 0;
-            var gender = document.getElementById('calcGender').value; 
-            var curr = document.getElementById('calcCurrency').value; 
-            var sumInsured = parseCleanNumber(document.getElementById('calcSumInsured').value) || 500000; 
-            var rateType = document.getElementById('calcRateType').value; 
-            var payTerm = document.getElementById('calcPayTerm').value; 
-            var ded = document.getElementById('calcDeductible').value;
-            var currSymbol = (curr === 'USD') ? '$' : 'HKD '; 
-            var currUnit = (curr === 'USD') ? 'USD' : 'HKD'; 
-            document.getElementById('currLabel').innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
-            
-            var annual = 0;
-            var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
-            var riderVal = selectedCrisisRider ? selectedCrisisRider.value : 'none';
-
-            var vfBase = 0;
-            var vfRider = 0;
-
-            if (p === 'crisis_supporter') { 
-                annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, false, riderVal, curr);
-            } else if (p === 'crisis_supporter_pro') { 
-                annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, true, riderVal, curr);
-            } else if (p === 'vprime') { 
-                annual = calcVPrimeFullPremium(age, gender, ded); 
-                if (curr === 'USD') annual = annual / 7.8;
-            } else if (p === 'vfamily') { 
-                vfBase = calcVFamilyFullPremium(age, gender); 
-                var childChk = document.getElementById('riderChildOption'); 
-                if (childChk && childChk.checked) {
-                    vfRider = calcVFamilyChildOptionPremium(age);
-                }
-                annual = vfBase + vfRider;
-                if (curr === 'USD') annual = annual / 7.8;
-            } else if (p === 'vcansurance') { 
-                annual = calcVCansuranceFullPremium(age, gender); 
-                if (curr === 'USD') annual = annual / 7.8;
-            }
-
-            if (p !== 'crisis_supporter' && p !== 'crisis_supporter_pro') { 
-                var hcChk = document.getElementById('riderHospitalCash'); 
-                if (hcChk && hcChk.checked) { 
-                    var hcLvl = document.getElementById('hospitalCashLevel').value; 
-                    var hcPrem = calcHospitalCashPremium(age, gender, hcLvl);
-                    if (curr === 'USD') hcPrem = hcPrem / 7.8;
-                    annual += hcPrem;
-                } 
-            }
-
-            var monthly = annual * 0.09; 
-            currentCalcResult.annual = annual; 
-            currentCalcResult.monthly = monthly; 
-            currentCalcResult.currSymbol = currSymbol;
-
-            var pNameText = document.getElementById('calcProduct').options[document.getElementById('calcProduct').selectedIndex].text; 
-            var gText = (gender === 'male') ? '男性' : '女性'; 
-            var rateTypeText = (rateType === 'preferred') ? '優惠費率(非吸煙)' : '標準費率';
-            var cardTitleText = age + ' 歲 · ' + pNameText;
-
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') { 
-                cardTitleText += ' (' + payTerm + '年繳 · ' + gText + ' · ' + rateTypeText + ' · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ')'; 
-            } else if (p === 'vprime') { 
-                cardTitleText += ' (自付費 $' + parseInt(ded).toLocaleString('en-US') + ' · ' + gText + ' · ' + currUnit + ')'; 
-            } else { 
-                cardTitleText += ' (' + gText + ' · ' + currUnit + ')'; 
-            }
-
-            document.getElementById('cardMainTitle').innerText = cardTitleText; 
-            document.getElementById('valAnnualText').innerHTML = currSymbol + formatMoney(annual) + ' <span class="text-xs font-normal text-slate-500">' + currUnit + '/年</span>'; 
-            document.getElementById('valMonthlyText').innerHTML = currSymbol + formatMoney(monthly) + ' <span class="text-xs font-normal text-slate-500">' + currUnit + '/月</span>';
-            
-            // 官方最新客戶折扣展示邏輯
-            var promoBadgeText = ""; 
-            var promoHtml = "";
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                promoBadgeText = "🎁 雙18客戶優惠 · 第2及第3個保單年度享 18% 保費折扣 (82折)"; 
-                var y2Val = annual * 0.82; 
-                var y2Mon = y2Val * 0.09;
-                promoHtml = '<p class="font-bold text-orange-900 mb-2">優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年 (原價)</span><b>' + currSymbol + formatMoney(annual) + ' /年 (月供 ' + currSymbol + formatMoney(monthly) + ')</b></div><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 2 年 (82折)</span><b>' + currSymbol + formatMoney(y2Val) + ' /年 (月供 ' + currSymbol + formatMoney(y2Mon) + ')</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 3 年 (82折)</span><b>' + currSymbol + formatMoney(y2Val) + ' /年 (月供 ' + currSymbol + formatMoney(y2Mon) + ')</b></div>';
-            } else if (p === 'vprime') {
-                var dedInt = parseInt(ded);
-                if (dedInt === 0) { 
-                    promoBadgeText = "🎁 尊衛您客戶優惠 · 首個保單年度享 3 個月保費折扣"; 
-                    var vp0Y1 = annual * (9/12); 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">自付費 $0 港元折扣一覽 (' + currUnit + ')：</p>' +
-                        '<div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年原價</span><b>' + currSymbol + formatMoney(annual) + ' /年</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 1 年折後價 (扣減 3 個月保費)</span><b>' + currSymbol + formatMoney(vp0Y1) + ' /年 (月供 ' + currSymbol + formatMoney(vp0Y1 * 0.09) + ')</b></div>' +
-                        '<p class="text-[11px] text-slate-500 pt-1 font-normal">• 與家人同時投保，可於首個保單年度各享額外 1 個月保費折扣</p>'; 
-                } else if (dedInt < 100000) { 
-                    promoBadgeText = "🎁 尊衛您客戶優惠 · 享 5+3+2 個月跨年保費折扣"; 
-                    var vpMidY1 = annual * (7/12); 
-                    var vpMidY2 = annual * (9/12); 
-                    var vpMidY3 = annual * (10/12); 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">自付費少於 100,000 港元跨年折扣一覽 (' + currUnit + ')：</p>' +
-                        '<div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (扣減 5 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY1 * 0.09) + ')</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/30 px-2 rounded"><span>第 2 年 (扣減 3 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY2 * 0.09) + ')</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 bg-orange-100/20 px-2 rounded"><span>第 3 年 (扣減 2 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY3 * 0.09) + ')</b></div>' +
-                        '<p class="text-[11px] text-slate-500 pt-1 font-normal">• 與家人同時投保，可於首個保單年度各享額外 1 個月保費折扣</p>'; 
-                } else { 
-                    promoBadgeText = "🎁 尊衛您大額優惠 · 享 5+4+3 個月跨年保費折扣"; 
-                    var vpHighY1 = annual * (7/12); 
-                    var vpHighY2 = annual * (8/12); 
-                    var vpHighY3 = annual * (9/12); 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">自付費 100,000 港元或以上跨年折扣一覽 (' + currUnit + ')：</p>' +
-                        '<div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (扣減 5 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY1 * 0.09) + ')</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/30 px-2 rounded"><span>第 2 年 (扣減 4 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY2 * 0.09) + ')</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 bg-orange-100/20 px-2 rounded"><span>第 3 年 (扣減 3 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY3 * 0.09) + ')</b></div>' +
-                        '<p class="text-[11px] text-slate-500 pt-1 font-normal">• 與家人同時投保，可於首個保單年度各享額外 1 個月保費折扣</p>'; 
-                }
-            } else if (p === 'vfamily') {
-                var childOpt = document.getElementById('riderChildOption');
-                if (childOpt && childOpt.checked) { 
-                    promoBadgeText = "🎁 醫家保「9+9」客戶優惠 · 主險+子女選項跨年折扣"; 
-                    var y1vf = (vfBase * (9/12)) + (vfRider * (6/12));
-                    var y2vf = (vfBase * (9/12)) + (vfRider * (6/12));
-                    if (curr === 'USD') { y1vf = y1vf / 7.8; y2vf = y2vf / 7.8; }
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">「9+9」連子女選項折算保費一覽 (' + currUnit + ')：</p>' +
-                        '<div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (醫家保扣3個月 + 子女扣6個月 = 9個月折扣)</span><b>' + currSymbol + formatMoney(y1vf) + ' /年 (月供 ' + currSymbol + formatMoney(y1vf * 0.09) + ')</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 bg-orange-100/30 px-2 rounded"><span>第 2 年 (醫家保扣3個月 + 子女扣6個月 = 9個月折扣)</span><b>' + currSymbol + formatMoney(y2vf) + ' /年 (月供 ' + currSymbol + formatMoney(y2vf * 0.09) + ')</b></div>' +
-                        '<p class="text-[11px] text-slate-500 pt-1 font-normal">• 與家人同時投保，每份醫家保保單可於首個保單年度享額外 1 個月保費折扣 (不適用於子女選項)</p>'; 
-                } else { 
-                    promoBadgeText = "🎁 醫家保客戶優惠 · 首個保單年度享 3 個月保費折扣"; 
-                    var vfY1 = annual * (9/12); 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">投保醫家保 (沒有添加子女選項) 保費折扣一覽 (' + currUnit + ')：</p>' +
-                        '<div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年原價</span><b>' + currSymbol + formatMoney(annual) + ' /年</b></div>' +
-                        '<div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>首個保單年度 (3 個月保費折扣)</span><b>' + currSymbol + formatMoney(vfY1) + ' /年 (月供 ' + currSymbol + formatMoney(vfY1 * 0.09) + ')</b></div>' +
-                        '<p class="text-[11px] text-slate-500 pt-1 font-normal">• 與家人同時投保，每份醫家保保單可於首個保單年度享額外 1 個月保費折扣</p>'; 
-                }
-            }
-
-            var promoBadgeEl = document.getElementById('purplePromoBadge'); 
-            var promoDetailsEl = document.getElementById('promoDetailsList');
-            if (promoBadgeText !== "") { 
-                if (promoBadgeEl) promoBadgeEl.classList.remove('hidden'); 
-                if (promoDetailsEl) promoDetailsEl.classList.remove('hidden'); 
-                document.getElementById('promoBadgeText').innerText = promoBadgeText; 
-                document.getElementById('promoDetailsList').innerHTML = promoHtml; 
-            } else { 
-                if (promoBadgeEl) promoBadgeEl.classList.add('hidden'); 
-                if (promoDetailsEl) promoDetailsEl.classList.add('hidden'); 
-            }
-
-            // 繳款年期比較
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                document.getElementById('payTermCompTitle').innerText = age + ' 歲 · ' + pNameText + ' · 各繳款年期比較 (' + gText + ' · ' + rateTypeText + ' · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ')'; 
-                var payTermsList = [{ term: '10', maxAge: 70, label: '10年繳' }, { term: '15', maxAge: 60, label: '15年繳' }, { term: '20', maxAge: 55, label: '20年繳' }, { term: '25', maxAge: 50, label: '25年繳' }, { term: '30', maxAge: 50, label: '30年繳' }]; 
-                var termHtml = "";
-                payTermsList.forEach(function(item) { 
-                    var tAnn = calcCrisisFullPremium(age, gender, item.term, rateType, sumInsured, (p==='crisis_supporter_pro'), riderVal, curr); 
-                    var tMon = tAnn * 0.09; 
-                    var isSelected = (item.term === payTerm); 
-                    var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
-                    var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                    termHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-900 text-sm">' + item.label + '</b> <span class="text-xs text-slate-400 font-normal ml-1.5">(最高' + item.maxAge + '歲)</span></div><div class="text-right"><div class="font-black text-[#E87722] text-sm">' + currSymbol + formatMoney(tAnn) + ' / 年</div><div class="text-[11px] text-slate-600 font-semibold">月供 ' + currSymbol + formatMoney(tMon) + '</div></div></div>'; 
-                }); 
-                document.getElementById('payTermBreakdownList').innerHTML = termHtml;
-                
-                document.getElementById('rateTypeCompTitle').innerText = age + ' 歲 · ' + pNameText + ' · ' + payTerm + '年繳 · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ' · 費率比較'; 
-                var rateTypeMatrix = [{ g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' }, { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' }, { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' }, { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }]; 
-                var rateTypeHtml = "";
-                rateTypeMatrix.forEach(function(item) { 
-                    var rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, sumInsured, (p==='crisis_supporter_pro'), riderVal, curr); 
-                    var rMon = rAnn * 0.09; 
-                    var isSelected = (item.g === gender && item.r === rateType); 
-                    var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
-                    var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                    rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="font-black text-[#E87722] text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-[11px] text-slate-600 font-semibold">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>'; 
-                }); 
-                document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
-            }
-
-            // 全產品各年齡保費比較
-            document.getElementById('compSectionTitleText').innerText = age + ' 歲 · ' + pNameText + ' · 保費比較 (' + gText + ' · ' + currUnit + ')'; 
-            var ageList = [0, 6, 18, 25, 30, 35, 40, 45, 50, 55]; 
-            if (!ageList.includes(age)) { ageList.push(age); ageList.sort(function(a, b){ return a - b; }); } 
-            var ageHtml = "";
-            ageList.forEach(function(a) { 
-                var aAnn = 0;
-                if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                    aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, sumInsured, (p==='crisis_supporter_pro'), riderVal, curr);
-                } else if (p === 'vprime') {
-                    aAnn = calcVPrimeFullPremium(a, gender, ded);
-                    if (curr === 'USD') aAnn = aAnn / 7.8;
-                } else if (p === 'vfamily') {
-                    aAnn = calcVFamilyFullPremium(a, gender);
-                    var childChkComp = document.getElementById('riderChildOption');
-                    if (childChkComp && childChkComp.checked) {
-                        aAnn += calcVFamilyChildOptionPremium(a);
-                    }
-                    if (curr === 'USD') aAnn = aAnn / 7.8;
-                } else if (p === 'vcansurance') {
-                    aAnn = calcVCansuranceFullPremium(a, gender);
-                    if (curr === 'USD') aAnn = aAnn / 7.8;
-                }
-                var aMon = aAnn * 0.09; 
-                var isCurrentAge = (a === age); 
-                var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
-                var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; 
-            }); 
-            document.getElementById('ageBreakdownList').innerHTML = ageHtml;
-        }
-
-        // 9 大官方車險 Google Drive 檔案 ID
-        var googleDriveFileIds = {
-            'taiping_plate': '1ZfZ-meKCul0nhzuZmXFFfLdNzuJNLRe5',
-            'taiping_transfer_old': '17pIYA8_i8JlrCe808p1CNsu62o0o7DIB',
-            'asia_endorsement': '14QaBnVha-ExwkTN_86YOsUmL5ARm_mBp',
-            'asia_transfer': '1bu2E_TmOmuXlQ02bOeZNNFK-H5hSC_3Q',
-            'macau_delegate': '19ZprQQuHsIYKgyxxiB_ubsFgg55Hu---',
-            'macau_instruction': '1WX-T5DZ-wyEdPq6gxQNrRvmf0FJdDgu5',
-            'luen_endorsement': '1qj1kbe_WfJjb0woEZQ2OBu-A1fB0vuOM',
-            'luen_proposal': '1LE5IoXbwkDdswqeV0s9K8GinG3wKzTHq',
-            'luen_transfer': '1VPkJzlPOvKNqxc0JAuMp8wXDF4RSjI_t'
-        };
-
-        var GOOGLE_SHEET_ID = '19yRTnvHotiDqflpeJ51XIiI6sSTKJ6o7Sl3BUvOYolA';
-
-        function fetchGoogleSheetData() {
-            var url = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID + '/gviz/tq?tqx=out:json';
-            fetch(url).then(function(res) { return res.text(); }).then(function(data) {
-                var jsonStr = data.substring(47, data.length - 2); 
-                var json = JSON.parse(jsonStr); 
-                var rows = json.table.rows;
-                var promoItems = []; var brochureItems = []; var scriptItems = [];
-                rows.forEach(function(row) {
-                    var c = row.c;
-                    if (c && c[0] && c[0].v) {
-                        var category = String(c[0].v).toLowerCase().trim(); 
-                        var title = c[1] ? String(c[1].v) : ''; 
-                        var desc = c[2] ? String(c[2].v) : ''; 
-                        var linkUrl = c[3] ? String(c[3].v) : ''; 
-                        var badge = c[4] ? String(c[4].v) : '官方正本';
-                        if (category === 'promo') promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                        else if (category === 'brochure') brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                        else if (category === 'script') scriptItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                    }
-                });
-                if (promoItems.length > 0) renderDynamicPromo(promoItems);
-                if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
-                if (scriptItems.length > 0) renderDynamicScripts(scriptItems);
-            }).catch(function(err) { console.log('使用預設數據載入中。', err); });
-        }
-
-        function renderDynamicPromo(items) {
-            var container = document.getElementById('fwdPromoContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-6 rounded-2xl border-2 border-amber-200 bg-amber-50/30 hover:border-amber-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between"><div class="space-y-3"><div class="flex items-center justify-between border-b border-amber-100 pb-3"><span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs">' + item.badge + '</span><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟 Drive 文件 ↗</span></div><h3 class="text-base font-black text-slate-900 group-hover:text-amber-700 transition-colors">' + item.title + '</h3><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
-        }
-
-        function renderDynamicBrochures(items) {
-            var container = document.getElementById('fwdBrochuresContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
-        }
-
-        function renderDynamicScripts(items) {
-            var container = document.getElementById('fwdScriptsContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
-        }
-
-        function downloadDriveDirect(key) {
-            var fileId = googleDriveFileIds[key]; 
-            if (!fileId) { showToast("📄 無法取得檔案連結"); return; }
-            var driveViewUrl = 'https://drive.google.com/file/d/' + fileId + '/view?usp=sharing'; 
-            window.open(driveViewUrl, '_blank'); 
-            showToast("📄 正在開啟 Google 官方正本文件...");
-        }
-
-        function formatMoney(num) { if (isNaN(num) || num === null) return "0.00"; return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-        function parseCleanNumber(val) { if (!val) return 0; return parseFloat(String(val).replace(/,/g, '')) || 0; }
-        function formatFormattedInput(inputEl) { var rawVal = inputEl.value.replace(/[^0-9]/g, ''); if (rawVal === '') { inputEl.value = ''; return; } var num = parseInt(rawVal, 10); inputEl.value = num.toLocaleString('en-US'); }
-        function handleCurrencyChange() { runPremiumQuery(); }
-
-        // AI Sammy 全平台滑鼠與觸控獨立拖曳核心
-        function makeElementDraggable(dragHandle, container) {
-            if (!dragHandle || !container) return;
-            var isDragging = false;
-            var startX = 0, startY = 0;
-            var initialLeft = 0, initialTop = 0;
-
-            function startDrag(clientX, clientY) {
-                isDragging = true;
-                startX = clientX;
-                startY = clientY;
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-            }
-
-            function moveDrag(clientX, clientY) {
-                if (!isDragging) return;
-                var dx = clientX - startX;
-                var dy = clientY - startY;
-                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-                    var newLeft = initialLeft + dx;
-                    var newTop = initialTop + dy;
-                    var maxLeft = window.innerWidth - container.offsetWidth - 10;
-                    var maxTop = window.innerHeight - container.offsetHeight - 10;
-                    newLeft = Math.max(10, Math.min(newLeft, maxLeft));
-                    newTop = Math.max(10, Math.min(newTop, maxTop));
-                    container.style.position = 'fixed';
-                    container.style.left = newLeft + 'px';
-                    container.style.top = newTop + 'px';
-                    container.style.bottom = 'auto';
-                    container.style.right = 'auto';
-                }
-            }
-
-            function endDrag() {
-                isDragging = false;
-            }
-
-            dragHandle.addEventListener('mousedown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
-                startDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mousemove', function(e) {
-                moveDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mouseup', endDrag);
-
-            dragHandle.addEventListener('touchstart', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    startDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    moveDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchend', endDrag);
-        }
-
         function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
         function sendQuickAiQuery(text) { 
             var user = getCurrentUser();
@@ -1784,6 +826,102 @@
                 container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
                 container.scrollTop = container.scrollHeight;
             }, 400);
+        }
+
+        // 易衛您 2026.02.25 官方最新全量費率表 (0-80歲)
+        var vcansuranceSchedule2026 = {
+            male: {
+                0: 6646, 1: 6646, 2: 6646, 3: 6646, 4: 5349, 5: 5349, 6: 5349, 7: 5349, 8: 5349, 9: 5349,
+                10: 5349, 11: 5349, 12: 5349, 13: 5349, 14: 5349, 15: 5349, 16: 5349, 17: 5349, 18: 5257, 19: 4206,
+                20: 4247, 21: 4219, 22: 4160, 23: 4198, 24: 4249, 25: 4454, 26: 4727, 27: 4993, 28: 5274, 29: 5522,
+                30: 5745, 31: 5936, 32: 6151, 33: 6334, 34: 6551, 35: 6649, 36: 6695, 37: 6705, 38: 6713, 39: 6721,
+                40: 6822, 41: 7105, 42: 7413, 43: 7670, 44: 8023, 45: 8417, 46: 8823, 47: 9442, 48: 9937, 49: 10452,
+                50: 10592, 51: 10688, 52: 11368, 53: 11939, 54: 12524, 55: 13345, 56: 14190, 57: 15254, 58: 16097, 59: 16922,
+                60: 18293, 61: 19458, 62: 20935, 63: 22285, 64: 23654, 65: 25369, 66: 27068, 67: 29113, 68: 30862, 69: 32602,
+                70: 35827, 71: 38058, 72: 40533, 73: 41983, 74: 42933, 75: 44440, 76: 46070, 77: 48596, 78: 50277, 79: 51940, 80: 57439
+            },
+            female: {
+                0: 4622, 1: 4622, 2: 4622, 3: 4622, 4: 4971, 5: 4971, 6: 4971, 7: 4971, 8: 4971, 9: 4971,
+                10: 4971, 11: 4971, 12: 4971, 13: 4971, 14: 4971, 15: 4971, 16: 4971, 17: 4971, 18: 5001, 19: 5030,
+                20: 5060, 21: 5137, 22: 5207, 23: 5366, 24: 5602, 25: 5992, 26: 6322, 27: 6672, 28: 6990, 29: 7324,
+                30: 7552, 31: 7816, 32: 8109, 33: 8388, 34: 8641, 35: 8697, 36: 8770, 37: 8824, 38: 8896, 39: 8971,
+                40: 9045, 41: 9119, 42: 9537, 43: 9828, 44: 10204, 45: 10594, 46: 10975, 47: 11437, 48: 11739, 49: 12016,
+                50: 12313, 51: 12610, 52: 13064, 53: 13471, 54: 13872, 55: 14534, 56: 15177, 57: 16063, 58: 16730, 59: 17419,
+                60: 18412, 61: 19637, 62: 20772, 63: 22004, 64: 23230, 65: 24538, 66: 25901, 67: 27239, 68: 28591, 69: 29926,
+                70: 31190, 71: 32920, 72: 33988, 73: 34990, 74: 35750, 75: 37311, 76: 38768, 77: 39893, 78: 41362, 79: 42870, 80: 47417
+            }
+        };
+
+        function calcVCansuranceFullPremium(age, gender) {
+            age = Math.min(80, Math.max(0, parseInt(age) || 0));
+            var table = (gender === 'female' ? vcansuranceSchedule2026.female : vcansuranceSchedule2026.male);
+            return table[age] || table[80];
+        }
+
+        // AI Sammy 全平台滑鼠與觸控獨立拖曳核心
+        function makeElementDraggable(dragHandle, container) {
+            if (!dragHandle || !container) return;
+            var isDragging = false;
+            var hasMoved = false;
+            var startX = 0, startY = 0;
+            var initialLeft = 0, initialTop = 0;
+
+            function startDrag(clientX, clientY) {
+                isDragging = true;
+                hasMoved = false;
+                startX = clientX;
+                startY = clientY;
+                var rect = container.getBoundingClientRect();
+                initialLeft = rect.left;
+                initialTop = rect.top;
+            }
+
+            function moveDrag(clientX, clientY) {
+                if (!isDragging) return;
+                var dx = clientX - startX;
+                var dy = clientY - startY;
+                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+                    hasMoved = true;
+                    var newLeft = initialLeft + dx;
+                    var newTop = initialTop + dy;
+                    var maxLeft = window.innerWidth - container.offsetWidth - 10;
+                    var maxTop = window.innerHeight - container.offsetHeight - 10;
+                    newLeft = Math.max(10, Math.min(newLeft, maxLeft));
+                    newTop = Math.max(10, Math.min(newTop, maxTop));
+                    container.style.position = 'fixed';
+                    container.style.left = newLeft + 'px';
+                    container.style.top = newTop + 'px';
+                    container.style.bottom = 'auto';
+                    container.style.right = 'auto';
+                }
+            }
+
+            function endDrag() {
+                isDragging = false;
+            }
+
+            dragHandle.addEventListener('mousedown', function(e) {
+                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
+                startDrag(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', function(e) {
+                moveDrag(e.clientX, e.clientY);
+            });
+            window.addEventListener('mouseup', endDrag);
+
+            dragHandle.addEventListener('touchstart', function(e) {
+                if (e.touches.length > 0) {
+                    var touch = e.touches[0];
+                    startDrag(touch.clientX, touch.clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 0) {
+                    var touch = e.touches[0];
+                    moveDrag(touch.clientX, touch.clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', endDrag);
         }
 
         // 全域掛載
