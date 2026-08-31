@@ -16,7 +16,6 @@
         input[type="radio"], input[type="checkbox"] { accent-color: #E87722; cursor: pointer; }
         button, a, [onclick] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
-        /* 知識遊戲選項按鈕樣式 */
         .quiz-opt-btn {
             border: 1px solid #e2e8f0 !important;
             background-color: #ffffff !important;
@@ -30,195 +29,309 @@
             background-color: #eef2ff !important;
         }
 
-        /* AI 浮窗動畫 */
         .ai-window-enter { display: none !important; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .ai-window-active { display: block !important; opacity: 1 !important; transform: translateY(0) scale(1) !important; pointer-events: auto !important; }
         .drag-handle { cursor: grab; user-select: none; -webkit-user-select: none; }
         .drag-handle:active { cursor: grabbing; }
     </style>
 
-    <!-- Firebase 雲端資料庫核心邏輯 -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    <!-- 優先定義全域核心函數，杜絕任何按鈕未定義崩潰 -->
+    <script>
+        var currentDisplayMode = 'both'; 
+        var currentCategoryKey = 'whole_life'; 
+        var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDxoV4QF6JiLcOLz2_WVRyKro-XZd5g7EM",
-            authDomain: "ogorwiki.firebaseapp.com",
-            projectId: "ogorwiki",
-            storageBucket: "ogorwiki.firebasestorage.app",
-            messagingSenderId: "356544573195",
-            appId: "1:356544573195:web:811bc196c634a22dc53c0e",
-            measurementId: "G-5WVSXDZLLD"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        localStorage.removeItem('ogor_team_users');
-
-        async function ensureAdminExists() {
+        function getCurrentUser() {
             try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let adminExists = false;
-                querySnapshot.forEach((d) => {
-                    if (d.data().code === '80937') adminExists = true;
-                });
-                if (!adminExists) {
-                    await addDoc(collection(db, "users"), {
-                        code: '80937', pass: 'taikl819', name: '最高管理員 Sammy', manager: 'System', role: 'admin', status: 'approved'
-                    });
-                }
-            } catch(e) { console.log("Init Error", e); }
+                var u = sessionStorage.getItem('ogor_current_user'); 
+                return u ? JSON.parse(u) : null;
+            } catch(e) { return null; }
         }
-        ensureAdminExists();
 
-        window.submitRegister = async function() {
-            var name = document.getElementById('regFullName').value.trim();
-            var code = document.getElementById('regAgentCode').value.trim();
-            var manager = document.getElementById('regManagerName').value.trim();
-            var pass = document.getElementById('regPassword').value.trim();
-
-            if (!name || !code || !manager || !pass) { alert('請完整填寫所有註冊欄位！'); return; }
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let existUser = null;
-                querySnapshot.forEach((d) => {
-                    if (d.data().code === code) existUser = { id: d.id, ...d.data() };
-                });
-
-                if (existUser) {
-                    if (existUser.status === 'pending') alert('⏳ 您的註冊申請已在審批中，請等待管理員批準！');
-                    else if (existUser.status === 'suspended') alert('❌ 此 Agent Code 目前已被停權，請聯絡管理員為您恢復權限！');
-                    else alert('此 Agent Code 已經註冊過，請直接登入！');
-                    return;
-                }
-
-                await addDoc(collection(db, "users"), {
-                    name, code, manager, pass, status: 'pending', role: 'user', createdAt: new Date().toISOString()
-                });
-                alert('✅ 註冊申請已成功提交至雲端！請通知 Sammy 管理員進行審批。');
-                closeAuthModal();
-            } catch(e) {
-                alert('雲端連線失敗，請確保 Firebase Rules 已發佈 allow read, write: if true;');
-            }
-        };
-
-        window.submitLogin = async function() {
-            var code = document.getElementById('loginAgentCode').value.trim();
-            var pass = document.getElementById('loginPassword').value.trim();
-
-            if (!code || !pass) { alert('請完整填寫 Agent Code 與密碼！'); return; }
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let found = null;
-                querySnapshot.forEach((d) => {
-                    const u = d.data();
-                    if (u.code === code && u.pass === pass) found = { id: d.id, ...u };
-                });
-
-                if (found) {
-                    if (found.status === 'pending') { alert('⏳ 您的帳號正在等待管理員審批，請稍候！'); return; }
-                    if (found.status === 'suspended') { alert('❌ 您的帳號已被停權，請聯絡管理員為您恢復權限！'); return; }
-                    sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
-                    closeAuthModal(); updateAuthUI();
-                    showToast('🎉 歡迎回來，' + found.name + '！');
-                    if (found.role === 'admin') openAdminPanel();
-                } else {
-                    alert('登入失敗：Agent Code 或密碼錯誤！');
-                }
-            } catch(e) {
-                alert('登入連線失敗，請檢查網路。');
-            }
-        };
-
-        window.renderPendingUsers = async function() {
-            const listEl = document.getElementById('pendingUsersList');
-            if (!listEl) return;
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let pending = [];
-                querySnapshot.forEach((d) => {
-                    if (d.data().status === 'pending') pending.push({ id: d.id, ...d.data() });
-                });
-
-                if (pending.length === 0) {
-                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無待審批的新用戶</p>';
-                    return;
-                }
-
-                let html = '';
-                pending.forEach(function(u) {
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
-                        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span><br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
-                        '<div class="flex gap-2">' +
-                            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">批準</button>' +
-                            '<button type="button" onclick="window.deleteUserDoc(\'' + u.id + '\')" class="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">拒絕</button>' +
-                        '</div>' +
-                    '</div>';
-                });
-                listEl.innerHTML = html;
-            } catch(e) {
-                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗，請檢查 Firebase 規則設定</p>';
-            }
-        };
-
-        window.renderApprovedUsers = async function() {
-            const listEl = document.getElementById('approvedUsersList');
-            if (!listEl) return;
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let userList = [];
-                querySnapshot.forEach((d) => {
-                    const u = d.data();
-                    if (u.role !== 'admin' && (u.status === 'approved' || u.status === 'suspended')) {
-                        userList.push({ id: d.id, ...u });
+        function updateAuthUI() {
+            var user = getCurrentUser(); 
+            var badge = document.getElementById('currentUserBadge'); 
+            var btn = document.getElementById('authBtnAction');
+            if (badge && btn) {
+                if (user) {
+                    badge.innerText = user.name + ' (' + user.code + ')'; 
+                    badge.classList.remove('hidden');
+                    if (user.role === 'admin') { 
+                        btn.innerText = '👑 管理後台'; 
+                        btn.setAttribute('onclick', 'openAdminPanel()'); 
+                    } else { 
+                        btn.innerText = '登出系統'; 
+                        btn.setAttribute('onclick', 'logoutAccount()'); 
                     }
-                });
-
-                if (userList.length === 0) {
-                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無任何成員紀錄</p>';
-                    return;
+                } else { 
+                    badge.classList.add('hidden'); 
+                    btn.innerText = '🔒 登入 / 註冊'; 
+                    btn.setAttribute('onclick', 'openAuthModal("login")'); 
                 }
-
-                let html = '';
-                userList.forEach(function(u) {
-                    var isSuspended = (u.status === 'suspended');
-                    var statusBadge = isSuspended ? '<span class="text-rose-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
-                    var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
-                    var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
-                    var btnClass = isSuspended ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-rose-500 hover:bg-rose-600';
-
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
-                        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span> ' + statusBadge + '<br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
-                        '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3.5 py-1.5 ' + btnClass + ' text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer shrink-0">' + btnText + '</button>' +
-                    '</div>';
-                });
-                listEl.innerHTML = html;
-            } catch(e) {
-                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗，請檢查 Firebase 規則設定</p>';
             }
+        }
+
+        function switchPage(pageId, scrollToId) {
+            var views = document.querySelectorAll('.page-view'); 
+            for (var i = 0; i < views.length; i++) { 
+                views[i].classList.add('hidden'); 
+            }
+            var targetPage = document.getElementById(pageId); 
+            if (targetPage) targetPage.classList.remove('hidden');
+            if (scrollToId) { 
+                setTimeout(function() { 
+                    var el = document.querySelector(scrollToId); 
+                    if (el) el.scrollIntoView({ behavior: 'smooth' }); 
+                }, 100); 
+            } else { 
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            }
+        }
+
+        function checkAndSwitchPage(pageId, pageName, scrollToId) { 
+            var user = getCurrentUser(); 
+            if (!user) { 
+                var desc = document.getElementById('lockModalDesc');
+                if (desc) desc.innerText = '登入後即可使用【' + pageName + '】功能'; 
+                openLockModal(); 
+                return; 
+            } 
+            switchPage(pageId, scrollToId); 
+        }
+
+        function openLockModal() { 
+            var modal = document.getElementById('lockModal');
+            if (modal) modal.style.setProperty('display', 'flex', 'important');
+        }
+
+        function closeLockModal() { 
+            var modal = document.getElementById('lockModal');
+            if (modal) modal.style.setProperty('display', 'none', 'important');
+        }
+
+        function goToLoginFromLock() { 
+            closeLockModal(); 
+            openAuthModal('login'); 
+        }
+
+        function openAuthModal(mode) { 
+            var user = getCurrentUser(); 
+            if (user && user.role === 'admin') { 
+                openAdminPanel(); 
+                return; 
+            } 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            switchAuthMode(mode); 
+        }
+
+        function closeAuthModal() { 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.style.setProperty('display', 'none', 'important');
+        }
+
+        function switchAuthMode(mode) {
+            var loginSec = document.getElementById('loginFormSection'); 
+            var regSec = document.getElementById('registerFormSection'); 
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (loginSec && regSec && adminSec) {
+                loginSec.classList.add('hidden'); 
+                regSec.classList.add('hidden'); 
+                adminSec.classList.add('hidden');
+                if (mode === 'login') { 
+                    loginSec.classList.remove('hidden'); 
+                    document.getElementById('authModalTitle').innerText = '團隊成員登入'; 
+                } else if (mode === 'register') { 
+                    regSec.classList.remove('hidden'); 
+                    document.getElementById('authModalTitle').innerText = '新成員註冊申請'; 
+                }
+            }
+        }
+
+        function openAdminPanel() { 
+            var user = getCurrentUser(); 
+            if (!user || user.role !== 'admin') { 
+                alert('權限不足！'); 
+                return; 
+            } 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            var loginSec = document.getElementById('loginFormSection');
+            var regSec = document.getElementById('registerFormSection');
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (loginSec) loginSec.classList.add('hidden'); 
+            if (regSec) regSec.classList.add('hidden'); 
+            if (adminSec) adminSec.classList.remove('hidden'); 
+            switchAdminTab('pending'); 
+        }
+
+        function switchAdminTab(tab) {
+            var pendingBtn = document.getElementById('tabPendingBtn'); 
+            var approvedBtn = document.getElementById('tabApprovedBtn'); 
+            var pendingSec = document.getElementById('pendingUsersList'); 
+            var approvedSec = document.getElementById('approvedUsersList');
+            if (pendingBtn && approvedBtn && pendingSec && approvedSec) {
+                if (tab === 'pending') { 
+                    pendingBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; 
+                    approvedBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; 
+                    pendingSec.classList.remove('hidden'); 
+                    approvedSec.classList.add('hidden'); 
+                    if(window.renderPendingUsers) window.renderPendingUsers(); 
+                } else { 
+                    approvedBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; 
+                    pendingBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; 
+                    approvedSec.classList.remove('hidden'); 
+                    pendingSec.classList.add('hidden'); 
+                    if(window.renderApprovedUsers) window.renderApprovedUsers(); 
+                }
+            }
+        }
+
+        function logoutAccount() { 
+            sessionStorage.removeItem('ogor_current_user'); 
+            updateAuthUI(); 
+            closeAuthModal(); 
+            showToast('已安全登出系統'); 
+            switchPage('page-home'); 
+        }
+
+        function showToast(msg) { 
+            var toast = document.getElementById('copyToast'); 
+            var txt = document.getElementById('toastMsgText'); 
+            if (txt && msg) txt.innerText = msg; 
+            if (toast) {
+                toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none'); 
+                setTimeout(function() { 
+                    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'); 
+                }, 2500); 
+            }
+        }
+
+        function performCopyText(text, successMsg) {
+            var copied = false;
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "0";
+            textArea.style.top = "0";
+            textArea.style.width = "2em";
+            textArea.style.height = "2em";
+            textArea.style.padding = "0";
+            textArea.style.border = "none";
+            textArea.style.outline = "none";
+            textArea.style.boxShadow = "none";
+            textArea.style.background = "transparent";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            textArea.setSelectionRange(0, textArea.value.length);
+            
+            try { copied = document.execCommand('copy'); } catch (err) { copied = false; }
+            document.body.removeChild(textArea);
+
+            if (!copied && navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showToast(successMsg || "已複製到剪貼簿！");
+                }).catch(function() {
+                    prompt("📋 請複製：", text);
+                });
+                return;
+            }
+
+            if (copied) showToast(successMsg || "已複製到剪貼簿！");
+            else prompt("📋 請複製：", text);
+        }
+
+        function copyVideoStyleResult() {
+            var pSelect = document.getElementById('calcProduct');
+            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
+            var cardTitleEl = document.getElementById('cardMainTitle');
+            var valAnnualEl = document.getElementById('valAnnualText');
+            var valMonthlyEl = document.getElementById('valMonthlyText');
+            
+            var title = cardTitleEl ? cardTitleEl.innerText.trim() : pNameText;
+            var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
+            var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
+            
+            var copyText = "🟢 FWD 保費快算試算\n" +
+                           "產品：" + pNameText + "\n" +
+                           "條件：" + title + "\n\n" +
+                           "💵 預估保費：\n" +
+                           "年供：" + annual + "\n" +
+                           "月供：" + monthly + "\n\n" +
+                           "數據來源：2026年富衛官方費率表，實際保費以最新報價單為準";
+            
+            performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
+        }
+
+        function copyCommissionResult() {
+            var planSelect = document.getElementById('planSelect'); 
+            var selectedPlanText = (planSelect && planSelect.options && planSelect.selectedIndex >= 0) ? planSelect.options[planSelect.selectedIndex].text : "佣金試算";
+            var ageSelect = document.getElementById('commAgeSelect'); 
+            var ageText = (ageSelect && ageSelect.options && ageSelect.selectedIndex >= 0) ? ageSelect.options[ageSelect.selectedIndex].text : '';
+            var premInput = document.getElementById('premiumInput'); 
+            var premium = parseCleanNumber(premInput ? premInput.value : "0");
+            var rateEl = document.getElementById('commRate'); 
+            var rate = rateEl ? rateEl.innerText : "--%";
+            var resEl = document.getElementById('commResult'); 
+            var result = resEl ? resEl.innerText : "HK$ 0";
+            var copyText = "【OGOR 佣金試算結果】\n計劃： " + selectedPlanText + " (" + ageText + ")\n首年保費： HK$ " + premium.toLocaleString('en-US') + "\n首年佣金率： " + rate + "\n預計首年佣金收入： " + result;
+            performCopyText(copyText, "已複製佣金試算結果！");
+        }
+
+        function toggleAiWindow() {
+            var user = getCurrentUser();
+            if (!user) {
+                var desc = document.getElementById('lockModalDesc');
+                if (desc) desc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                openLockModal();
+                return;
+            }
+            var win = document.getElementById('aiFloatingWindow');
+            if (win) {
+                if (win.classList.contains('ai-window-active')) {
+                    win.classList.remove('ai-window-active');
+                } else {
+                    win.classList.add('ai-window-active');
+                }
+            }
+        }
+
+        var googleDriveFileIds = {
+            'taiping_plate': '1ZfZ-meKCul0nhzuZmXFFfLdNzuJNLRe5',
+            'taiping_transfer_old': '17pIYA8_i8JlrCe808p1CNsu62o0o7DIB',
+            'asia_endorsement': '14QaBnVha-ExwkTN_86YOsUmL5ARm_mBp',
+            'asia_transfer': '1bu2E_TmOmuXlQ02bOeZNNFK-H5hSC_3Q',
+            'macau_delegate': '19ZprQQuHsIYKgyxxiB_ubsFgg55Hu---',
+            'macau_instruction': '1WX-T5DZ-wyEdPq6gxQNrRvmf0FJdDgu5',
+            'luen_endorsement': '1qj1kbe_WfJjb0woEZQ2OBu-A1fB0vuOM',
+            'luen_proposal': '1LE5IoXbwkDdswqeV0s9K8GinG3wKzTHq',
+            'luen_transfer': '1VPkJzlPOvKNqxc0JAuMp8wXDF4RSjI_t'
         };
 
-        window.updateUserStatus = async function(id, newStatus) {
-            try {
-                await updateDoc(doc(db, "users", id), { status: newStatus });
-                showToast(newStatus === 'approved' ? '✓ 已批準/恢復權限！' : '✓ 已停止該權限！');
-                window.renderPendingUsers(); window.renderApprovedUsers();
-            } catch(e) { alert('操作失敗，請檢查網路！'); }
-        };
+        function downloadDriveDirect(key) {
+            var fileId = googleDriveFileIds[key]; 
+            if (!fileId) { showToast("📄 無法取得檔案連結"); return; }
+            var driveViewUrl = 'https://drive.google.com/file/d/' + fileId + '/view?usp=sharing'; 
+            window.open(driveViewUrl, '_blank'); 
+            showToast("📄 正在開啟 Google 官方正本文件...");
+        }
 
-        window.deleteUserDoc = async function(id) {
-            try {
-                await deleteDoc(doc(db, "users", id));
-                showToast('✓ 已拒絕並刪除申請！');
-                window.renderPendingUsers();
-            } catch(e) { alert('刪除失敗！'); }
-        };
+        function formatMoney(num) { 
+            if (isNaN(num) || num === null) return "0.00"; 
+            return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
+        }
+        function parseCleanNumber(val) { 
+            if (!val) return 0; 
+            return parseFloat(String(val).replace(/,/g, '')) || 0; 
+        }
+        function formatFormattedInput(inputEl) { 
+            var rawVal = inputEl.value.replace(/[^0-9]/g, ''); 
+            if (rawVal === '') { inputEl.value = ''; return; } 
+            var num = parseInt(rawVal, 10); 
+            inputEl.value = num.toLocaleString('en-US'); 
+        }
+        function handleCurrencyChange() { runPremiumQuery(); }
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative min-h-screen">
@@ -591,46 +704,54 @@
     </div>
 
     <!-- PAGE: 一般保險專區 -->
-    <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <div class="flex items-center justify-between">
-            <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button>
-            <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">🚗 General Insurance Hub</span>
+    <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
+        <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
+            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p></div>
+            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
+            <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
+    </div>
+
+    <!-- PAGE: 車險專頁 -->
+    <div id="page-motor" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-gi')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回一般保險</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">🚗 車險下載專區 (Google Drive 官方庫)</span></div>
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
-            <div class="text-center max-w-xl mx-auto space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">一般保險 & 汽車保險文件庫</h2>
-                <p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁開啟或下載官方車險過戶及授權表格</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div onclick="downloadDriveDirect('taiping_plate')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">1. 太平車牌更換授權書</b>
-                    <p class="text-slate-500">車牌更換、轉移專用申報表格。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+            <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold">🚘 Motor Insurance Documents</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">車險服務與表格下載庫</h2><p class="text-xs sm:text-sm text-slate-500">匯聚澳門主要保險公司之私家車、商用車及電單車投保、批單及轉代理表格</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">1. 澳門保險 - 客戶指示 Client Instruction</b><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">澳門保險</span></div><p class="text-slate-600 leading-relaxed">更新車輛資料 (改車牌/車型 $30)、更新持有人/僱員資料、補發保單/保卡 ($30)、取消保單。</p><p class="text-[11px] text-amber-700 font-semibold">附帶文件：車契、車輛登記摺影印本。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('macau_instruction')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
-                <div onclick="downloadDriveDirect('taiping_transfer_old')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">2. 太平舊車過戶申報書</b>
-                    <p class="text-slate-500">二手車主產權變更手續專用。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">2. 聯豐亨 - 私家車/商用車/電單車投保書</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div><p class="text-slate-600 leading-relaxed">新車投保三保/全保/火險盜竊險、集體運輸乘客險及指定駕駛者登記（責任限額 MOP 75萬-3,000萬）。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('luen_proposal')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
-                <div onclick="downloadDriveDirect('asia_transfer')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">3. 亞洲保險過戶委託書</b>
-                    <p class="text-slate-500">車輛保單更名與轉移權益申請。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">3. 聯豐亨 - 批單申請書 (Endorsement)</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div><p class="text-slate-600 leading-relaxed">更改被保人/車牌/車輛、增減保額、取消按揭條款、退保或保卡遺失聲明。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('luen_endorsement')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
-                <div onclick="downloadDriveDirect('macau_instruction')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">4. 澳門保險投保批改指示</b>
-                    <p class="text-slate-500">車輛保單基本資料與保障內容批改。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">4. 聯豐亨 - 車險轉代理聲明書</b><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">聯豐亨保險</span></div><p class="text-slate-600 leading-relaxed">車險到期續保時，要求更改代理人辦理續保事宜。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('luen_transfer')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
-                <div onclick="downloadDriveDirect('luen_proposal')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">5. 聯豐亨汽車保險投保書</b>
-                    <p class="text-slate-500">各類車輛新投保專用正本表格。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">5. 中國太平 - 汽車保險套牌批單申請</b><span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px]">中國太平</span></div><p class="text-slate-600 leading-relaxed">車輛套牌更新保險資料。</p><p class="text-[11px] text-amber-700 font-semibold">附帶文件：轉車後最新登記摺 + 車契，退回舊保卡。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('taiping_plate')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
-                <div onclick="downloadDriveDirect('luen_transfer')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:border-purple-400 hover:shadow-md transition-all cursor-pointer space-y-2">
-                    <b class="text-slate-900 text-sm block">6. 聯豐亨過戶表格</b>
-                    <p class="text-slate-500">車輛過戶保單轉讓授權書。</p>
-                    <div class="text-purple-600 font-bold pt-2">📥 下載表格 ↗</div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">6. 中國太平 - 轉車及套回舊車牌申請</b><span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px]">中國太平</span></div><p class="text-slate-600 leading-relaxed">轉車及套回舊車牌，更新保險資料。</p><p class="text-[11px] text-amber-700 font-semibold">附帶文件：轉車後最新登記摺 + 車契。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('taiping_transfer_old')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
+                </div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">7. 亞洲保險 - 批單申請書 (Endorsement)</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">亞洲保險</span></div><p class="text-slate-600 leading-relaxed">更換車輛/車牌、更改投保人/地址、增減保額、保單或保卡遺失正本註銷。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('asia_endorsement')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
+                </div>
+                <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">8. 亞洲保險 - 車險到期轉代理授權</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">亞洲保險</span></div><p class="text-slate-600 leading-relaxed">指示到期後轉代理跟進並續保一年。</p></div>
+                    <button type="button" onclick="downloadDriveDirect('asia_transfer')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer">📥 開啟 / 下載官方 PDF 檔</button>
                 </div>
             </div>
         </div>
@@ -718,7 +839,7 @@
         </div>
     </div>
 
-    <!-- 彈窗: 登入 / 註冊 / 後台 (加強 style display:none 防止透明遮擋) -->
+    <!-- 彈窗: 登入 / 註冊 / 後台 -->
     <div id="authModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 border border-slate-100">
             <div class="flex items-center justify-between border-b pb-3">
@@ -756,7 +877,7 @@
         </div>
     </div>
 
-    <!-- 彈窗: 權限攔截 (加強 style display:none 防止透明遮擋) -->
+    <!-- 彈窗: 權限攔截 -->
     <div id="lockModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-slate-100 shadow-2xl">
             <div class="text-4xl">🔒</div>
@@ -1197,7 +1318,6 @@
                 var childOpt = document.getElementById('riderChildOption');
                 if (childOpt && childOpt.checked) { 
                     promoBadgeText = "🎁 醫家保「9+9」客戶優惠 · 連同子女選項享 9+9 個月保費折扣"; 
-                    // 醫家保主險扣3個月(9/12) + 子女選項扣6個月(6/12) = 9個月折扣
                     var y1vf = (vfBase * (9/12)) + (vfRider * (6/12));
                     var y2vf = (vfBase * (9/12)) + (vfRider * (6/12));
                     if (curr === 'USD') { y1vf = y1vf / 7.8; y2vf = y2vf / 7.8; }
@@ -1298,36 +1418,11 @@
             document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
 
-        // 9 大官方車險 Google Drive 檔案 ID
-        var googleDriveFileIds = {
-            'taiping_plate': '1ZfZ-meKCul0nhzuZmXFFfLdNzuJNLRe5',
-            'taiping_transfer_old': '17pIYA8_i8JlrCe808p1CNsu62o0o7DIB',
-            'asia_endorsement': '14QaBnVha-ExwkTN_86YOsUmL5ARm_mBp',
-            'asia_transfer': '1bu2E_TmOmuXlQ02bOeZNNFK-H5hSC_3Q',
-            'macau_delegate': '19ZprQQuHsIYKgyxxiB_ubsFgg55Hu---',
-            'macau_instruction': '1WX-T5DZ-wyEdPq6gxQNrRvmf0FJdDgu5',
-            'luen_endorsement': '1qj1kbe_WfJjb0woEZQ2OBu-A1fB0vuOM',
-            'luen_proposal': '1LE5IoXbwkDdswqeV0s9K8GinG3wKzTHq',
-            'luen_transfer': '1VPkJzlPOvKNqxc0JAuMp8wXDF4RSjI_t'
-        };
-
-        function downloadDriveDirect(key) {
-            var fileId = googleDriveFileIds[key]; 
-            if (!fileId) { showToast("📄 無法取得檔案連結"); return; }
-            var driveViewUrl = 'https://drive.google.com/file/d/' + fileId + '/view?usp=sharing'; 
-            window.open(driveViewUrl, '_blank'); 
-            showToast("📄 正在開啟 Google 官方正本文件...");
-        }
-
-        function formatMoney(num) { if (isNaN(num) || num === null) return "0.00"; return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-        function parseCleanNumber(val) { if (!val) return 0; return parseFloat(String(val).replace(/,/g, '')) || 0; }
-        function formatFormattedInput(inputEl) { var rawVal = inputEl.value.replace(/[^0-9]/g, ''); if (rawVal === '') { inputEl.value = ''; return; } var num = parseInt(rawVal, 10); inputEl.value = num.toLocaleString('en-US'); }
-        function handleCurrencyChange() { runPremiumQuery(); }
-
         // AI Sammy 全平台滑鼠與觸控獨立拖曳核心
         function makeElementDraggable(dragHandle, container) {
             if (!dragHandle || !container) return;
             var isDragging = false;
+            var hasMoved = false;
             var startX = 0, startY = 0;
             var initialLeft = 0, initialTop = 0;
 
@@ -1345,6 +1440,7 @@
                 var dx = clientX - startX;
                 var dy = clientY - startY;
                 if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+                    hasMoved = true;
                     var newLeft = initialLeft + dx;
                     var newTop = initialTop + dy;
                     var maxLeft = window.innerWidth - container.offsetWidth - 10;
@@ -1387,62 +1483,7 @@
             window.addEventListener('touchend', endDrag);
         }
 
-        // 安全 Modal 打開/關閉函數（徹底根除透明遮罩點擊攔截）
-        function openAuthModal(mode) {
-            var user = getCurrentUser();
-            if (user && user.role === 'admin') { openAdminPanel(); return; }
-            var modal = document.getElementById('authModal');
-            if (modal) modal.style.setProperty('display', 'flex', 'important');
-            switchAuthMode(mode);
-        }
-        function closeAuthModal() {
-            var modal = document.getElementById('authModal');
-            if (modal) modal.style.setProperty('display', 'none', 'important');
-        }
-        function openLockModal() {
-            var modal = document.getElementById('lockModal');
-            if (modal) modal.style.setProperty('display', 'flex', 'important');
-        }
-        function closeLockModal() {
-            var modal = document.getElementById('lockModal');
-            if (modal) modal.style.setProperty('display', 'none', 'important');
-        }
-
-        // 全域掛載
-        window.switchPage = switchPage;
-        window.checkAndSwitchPage = checkAndSwitchPage;
-        window.openAuthModal = openAuthModal;
-        window.closeAuthModal = closeAuthModal;
-        window.switchAuthMode = switchAuthMode;
-        window.openAdminPanel = openAdminPanel;
-        window.switchAdminTab = switchAdminTab;
-        window.logoutAccount = logoutAccount;
-        window.openLockModal = openLockModal;
-        window.closeLockModal = closeLockModal;
-        window.goToLoginFromLock = goToLoginFromLock;
-        window.showToast = showToast;
-        window.formatFormattedInput = formatFormattedInput;
-        window.parseCleanNumber = parseCleanNumber;
-        window.formatMoney = formatMoney;
-        window.updateCalcOptions = updateCalcOptions;
-        window.runPremiumQuery = runPremiumQuery;
-        window.handleCurrencyChange = handleCurrencyChange;
-        window.setDisplayMode = setDisplayMode;
-        window.setCommCategory = setCommCategory;
-        window.updateCommAgeOptions = updateCommAgeOptions;
-        window.calculateCommission = calculateCommission;
-        window.toggleHospitalCashSelect = toggleHospitalCashSelect;
-        window.startQuizGame = startQuizGame;
-        window.restartQuizGame = restartQuizGame;
-        window.handleQuizAnswer = handleQuizAnswer;
-        window.nextQuizStep = nextQuizStep;
-        window.downloadDriveDirect = downloadDriveDirect;
-        window.toggleAiWindow = toggleAiWindow;
-        window.toggleAiPin = toggleAiPin;
-        window.sendQuickAiQuery = sendQuickAiQuery;
-        window.submitAiQuery = submitAiQuery;
-        window.handleAiKeyPress = handleAiKeyPress;
-
+        // 頁面載入安全執行入口
         window.onload = function() {
             try {
                 switchPage('page-home');
@@ -1457,8 +1498,8 @@
                 var aiHeader = document.getElementById('aiWindowHeader');
                 var aiTriggerBtn = document.getElementById('aiTriggerBtn');
 
-                makeElementDraggable(aiHeader, aiContainer);
-                makeElementDraggable(aiTriggerBtn, aiContainer);
+                if (aiHeader && aiContainer) makeElementDraggable(aiHeader, aiContainer);
+                if (aiTriggerBtn && aiContainer) makeElementDraggable(aiTriggerBtn, aiContainer);
             } catch(e) {
                 console.error("Initialization Error:", e);
             }
