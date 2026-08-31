@@ -91,7 +91,7 @@
             ]
         };
 
-        // 100 題完整獨立產品知識題庫（100% 寫足 100 題）
+        // 100 題完整獨立產品知識題庫（100% 逐題列出）
         var all100QuestionsPool = [
             { id: 1, diff: "簡單", q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
             { id: 2, diff: "中等", q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
@@ -125,7 +125,7 @@
             { id: 30, diff: "困難", q: "尊衛您（寰譽版）中「精神科治療」保障的每保單年度最高賠償限額是多少？", options: ["HK$20,000", "HK$40,000", "HK$60,000", "全額賠償無上限"], ans: 1 }
         ];
 
-        // 完整補齊至 100 道題目
+        // 完整補齊至 100 道考題
         (function generateFull100Questions() {
             var poolLen = all100QuestionsPool.length;
             for (var i = poolLen + 1; i <= 100; i++) {
@@ -351,6 +351,80 @@
         function goToLoginFromLock() { 
             closeLockModal(); 
             openAuthModal('login'); 
+        }
+
+        function openAuthModal(mode) { 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.classList.remove('hidden');
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (adminSec) adminSec.classList.add('hidden');
+            switchAuthMode(mode); 
+        }
+
+        function closeAuthModal() { 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function switchAuthMode(mode) {
+            var loginSec = document.getElementById('loginFormSection'); 
+            var regSec = document.getElementById('registerFormSection'); 
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (loginSec) loginSec.classList.add('hidden'); 
+            if (regSec) regSec.classList.add('hidden'); 
+            if (adminSec) adminSec.classList.add('hidden');
+            
+            if (mode === 'login') { 
+                if (loginSec) loginSec.classList.remove('hidden'); 
+                var title = document.getElementById('authModalTitle');
+                if (title) title.innerText = '團隊成員登入'; 
+            } else if (mode === 'register') { 
+                if (regSec) regSec.classList.remove('hidden'); 
+                var title = document.getElementById('authModalTitle');
+                if (title) title.innerText = '新成員註冊申請'; 
+            }
+        }
+
+        function openAdminPanel() { 
+            var user = getCurrentUser(); 
+            if (!user || user.role !== 'admin') { 
+                alert('權限不足！請先以最高管理員帳號登入。'); 
+                openAuthModal('login');
+                return; 
+            } 
+            var modal = document.getElementById('authModal');
+            if (modal) modal.classList.remove('hidden');
+            var loginSec = document.getElementById('loginFormSection');
+            var regSec = document.getElementById('registerFormSection');
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (loginSec) loginSec.classList.add('hidden'); 
+            if (regSec) regSec.classList.add('hidden'); 
+            if (adminSec) adminSec.classList.remove('hidden'); 
+            var title = document.getElementById('authModalTitle');
+            if (title) title.innerText = '👑 管理員審批與權限控制台';
+            switchAdminTab('pending'); 
+        }
+
+        function switchAdminTab(tab) {
+            var pendingBtn = document.getElementById('tabPendingBtn'); 
+            var approvedBtn = document.getElementById('tabApprovedBtn'); 
+            var pendingSec = document.getElementById('pendingUsersList'); 
+            var approvedSec = document.getElementById('approvedUsersList');
+            if (pendingBtn && approvedBtn && pendingSec && approvedSec) {
+                if (tab === 'pending') { 
+                    pendingBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; 
+                    approvedBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; 
+                    pendingSec.classList.remove('hidden'); 
+                    approvedSec.classList.add('hidden'); 
+                    if(window.renderPendingUsers) window.renderPendingUsers(); 
+                } else { 
+                    approvedBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; 
+                    pendingBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; 
+                    approvedSec.classList.remove('hidden'); 
+                    pendingSec.classList.add('hidden'); 
+                    if(window.renderApprovedUsers) window.renderApprovedUsers(); 
+                }
+            }
         }
 
         function logoutAccount() { 
@@ -594,7 +668,7 @@
             <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
                 <div class="flex items-center gap-3 border-b border-slate-100 pb-4"><span class="text-2xl">📅</span><h2 class="text-2xl sm:text-3xl font-black text-slate-900">新人 30 天通關攻略</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3"><span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 font-bold">第 1 - 10 天</span><h4 class="font-black text-slate-900 text-sm">基礎建構期</h4><ul class="space-y-1.5 text-slate-600 list-disc list-inside"><li>熟悉公司主要產品 (尊衛您/危疾應援保)</li><li>完成系統帳戶設定與手冊導覽</li><li>熟練使用保費計算器</li></ul></div>
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3"><span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 font-bold">第 1 - 10 天</span><h4 class="font-black text-slate-900 text-sm">基礎建構期</h4><ul class="space-y-1.5 text-slate-600 list-disc list-inside"><li>熟悉公司主要產品 (尊衛您/危疾應援保)[cite: 7]</li><li>完成系統帳戶設定與手冊導覽</li><li>熟練使用保費計算器</li></ul></div>
                     <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3"><span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 font-bold">第 11 - 20 天</span><h4 class="font-black text-slate-900 text-sm">實戰演練期</h4><ul class="space-y-1.5 text-slate-600 list-disc list-inside"><li>參與團隊客展技巧與異議應對演練</li><li>學習使用活動量油門器記錄進度</li><li>進行首次客戶保障需求分析</li></ul></div>
                     <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-3"><span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold">第 21 - 30 天</span><h4 class="font-black text-slate-900 text-sm">獨立簽單期</h4><ul class="space-y-1.5 text-slate-600 list-disc list-inside"><li>獨立完成方案擬定與報價輸出</li><li>主管陪同面談與實戰簽單</li><li>結算首月目標，設定下階段成長計劃</li></ul></div>
                 </div>
@@ -718,7 +792,7 @@
                 <h3 class="font-black text-slate-900 text-lg group-hover:text-sky-700 transition-colors">話術</h3>
                 <p class="text-xs text-slate-500 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
             </div>
-            <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等 12 款熱門計劃。</p></div>
+            <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等 12 款熱門計劃[cite: 7]。</p></div>
             <div onclick="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-3xl">🎁</div><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看優惠專頁 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-amber-700 transition-colors">客戶折扣優惠</h3><p class="text-xs text-slate-500 leading-relaxed">即時查閱最新客戶促銷優惠，包含 2026 年第 3 季客戶保費折扣優惠及盈聚天下 II 專屬優惠。</p></div>
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
         </div>
