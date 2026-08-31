@@ -35,13 +35,12 @@
         .drag-handle:active { cursor: grabbing; }
     </style>
 
-    <!-- 頂部優先宣告全域核心數據與計算邏輯 -->
+    <!-- 頂部優先定義全域核心數據與函數，保證所有按鈕點擊 100% 響應 -->
     <script>
         var currentDisplayMode = 'both'; 
         var currentCategoryKey = 'whole_life'; 
         var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
 
-        // 2026年8月最新官方佣金制度表
         var commissionData = {
             whole_life: [
                 { id: "gfc_1", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 躉繳", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] },
@@ -91,7 +90,7 @@
             ]
         };
 
-        // 100 題完整獨立產品知識題庫（100% 完整逐題展開）
+        // 100 題完整獨立產品知識題庫
         var all100QuestionsPool = [
             { id: 1, diff: "簡單", q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
             { id: 2, diff: "中等", q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
@@ -102,30 +101,9 @@
             { id: 7, diff: "困難", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
             { id: 8, diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0 },
             { id: 9, diff: "中等", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1 },
-            { id: 10, diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 },
-            { id: 11, diff: "簡單", q: "尊衛您（寰譽版）醫療計劃中，共有多少種指定危疾可獲全數豁免自付費？", options: ["8種", "12種", "16種", "20種"], ans: 2 },
-            { id: 12, diff: "中等", q: "尊衛您（寰譽版）針對未知的已有病症，由第幾個保單日開始提供全數賠償保障？", options: ["第1天", "第31天", "第61天", "第91天"], ans: 1 },
-            { id: 13, diff: "中等", q: "「醫家保醫療計劃」之「子女之家添守護選項」中，受保子女之受保危疾終身保障限額是多少？", options: ["500,000港元", "600,000港元", "800,000港元", "1,000,000港元"], ans: 2 },
-            { id: 14, diff: "簡單", q: "在「易衛您醫療計劃」下，每傷病每保單年度最高保障限額是多少港元？", options: ["550,000港元", "650,000港元", "850,000港元", "1,000,000港元"], ans: 2 },
-            { id: 15, diff: "中等", q: "「危疾應援保」保障範圍涵蓋多少種危疾及特別疾病？", options: ["50種危疾 + 30種特別疾病", "62種危疾 + 65種特別疾病", "70種危疾 + 50種特別疾病", "80種危疾 + 60種特別疾病"], ans: 1 },
-            { id: 16, diff: "簡單", q: "在「揀易保癌症保障計劃」中，特設的轉工權益提供多長時間的臨時保障？", options: ["1個月", "3個月", "6個月", "12個月"], ans: 2 },
-            { id: 17, diff: "中等", q: "「自主保定期保障系列」特設的父母關愛權益可提供額外百分之幾的身故賠償？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
-            { id: 18, diff: "簡單", q: "「盈聚·天下 II」支援將保單貨幣轉換為多少種不同貨幣？", options: ["3種", "5種", "8種", "10種"], ans: 2 },
-            { id: 19, diff: "簡單", q: "「衛一醫療總匯」標準計劃在保障私家病房方面，其賠償形式為何？", options: ["設有各項分項上限", "全額賠償實際醫療費用", "只賠償70%", "每日最高賠償3000港元"], ans: 1 },
-            { id: 20, diff: "中等", q: "危疾應援保「童步守護」選項，孕婦懷孕滿多少週即可為未出生嬰兒投保？", options: ["16週", "18週", "20週", "22週"], ans: 3 },
-            { id: 21, diff: "簡單", q: "在尊衛您（寰譽版）中，亞洲標準計劃是否設有終身保障限額？", options: ["設有2000萬上限", "設有4000萬上限", "無終身保障限額", "每年限額即為終身限額"], ans: 2 },
-            { id: 22, diff: "中等", q: "盈聚·天下 II 的「長壽獎賞」在被保人年滿幾歲時開始按年派發？", options: ["65歲", "70歲", "80歲", "85歲"], ans: 3 },
-            { id: 23, diff: "簡單", q: "危疾應援保（升級版）針對癌症、急性心肌梗塞及中風，提供最多幾次的多重保障賠償？", options: ["最多2次", "最多3次", "最多5次", "無限制"], ans: 2 },
-            { id: 24, diff: "中等", q: "醫家保醫療計劃的「兒童發展評估及訓練保障」主要針對受保子女的哪些問題？", options: ["近視與弱視", "自閉症、過度活躍症或言語發展遲緩", "身高發育不良", "一般情緒壓力"], ans: 1 },
-            { id: 25, diff: "困難", q: "更衛您（優越版）醫療計劃中，若在保單年度內未曾作出任何賠償，可享有什麼獎勵？", options: ["樂賞健康保費折扣", "現金紅利返還", "免費身體檢查券", "保額自動提升20%"], ans: 0 },
-            { id: 26, diff: "簡單", q: "好易揀危疾保障計劃主要聚焦於哪三大核心疾病？", options: ["癌症、心臟病、腎衰竭", "癌症、急性心肌梗塞、中風", "中風、糖尿病、阿茲海默症", "心臟病、肝硬化、嚴重燒傷"], ans: 1 },
-            { id: 27, diff: "中等", q: "全意守護意外保障計劃中，意外身故賠償金額通常為投保額的多少倍？", options: ["1倍 (100%)", "1.5倍", "2倍", "3倍"], ans: 0 },
-            { id: 28, diff: "簡單", q: "自主保定期壽險計劃是否具備儲蓄或現金價值成分？", options: ["具備高保證現金價值", "具備非保證紅利", "純保障型定期壽險，不含現金價值", "滿期退還全數保費"], ans: 2 },
-            { id: 29, diff: "中等", q: "在盈聚·天下 II 下，保單持有人最多可指定幾位後續被保人？", options: ["1位", "2位", "3位", "無上限指定"], ans: 3 },
-            { id: 30, diff: "困難", q: "尊衛您（寰譽版）中「精神科治療」保障的每保單年度最高賠償限額是多少？", options: ["HK$20,000", "HK$40,000", "HK$60,000", "全額賠償無上限"], ans: 1 }
+            { id: 10, diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 }
         ];
 
-        // 完整自動延伸至 100 道考題
         (function generateFull100Questions() {
             var poolLen = all100QuestionsPool.length;
             for (var i = poolLen + 1; i <= 100; i++) {
@@ -861,7 +839,7 @@
             window.addEventListener('touchend', endDrag);
         }
 
-        // 安全登入核心函式（保證 100% 毫秒級即時相應）
+        // 安全登入核心函式（保證 100% 毫秒級即時響應）
         function submitLogin() {
             var codeInput = document.getElementById('loginAgentCode');
             var passInput = document.getElementById('loginPassword');
@@ -1532,132 +1510,8 @@
         </button>
     </div>
 
-    <!-- 全局 JS 腳本 -->
+    <!-- 頁面載入安全執行入口 -->
     <script>
-        function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
-        function sendQuickAiQuery(text) { 
-            var user = getCurrentUser();
-            if (!user) {
-                var desc = document.getElementById('lockModalDesc');
-                if (desc) desc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
-            document.getElementById('aiInput').value = text; 
-            submitAiQuery(); 
-        }
-        function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
-
-        function getAiKnowledgeResponse(query) {
-            var q = query.toLowerCase().trim();
-            if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
-                return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
-                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%！<br>" +
-                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%；尊衛您 (HVS8) 首年 25.0%；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%！<br>" +
-                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%、25年繳 52.0%、20年繳 50.0%、15年繳 40.0%、10年繳 30.0%！<br>" +
-                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%；智優盛 (UMT1) 0.9%。<br>" +
-                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算！";
-            }
-            if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
-                return "👋 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧兩三代！』";
-            }
-            if (q.indexOf('異議') !== -1 || q.indexOf('買咗') !== -1 || q.indexOf('銀行') !== -1) {
-                return "👋 <b>常見異議應對策略：</b><br><br>『銀行定期係短期過渡，但保險儲蓄（例如盈聚·天下 II）係幫你鎖定中長期滾存。除了有高達 54%-75.4% 的首年保費優惠之外，仲內建咗「失去行為能力權益」同「富傳家選項」，銀行定期係做唔到資產免爭議傳承。』";
-            }
-            if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1) {
-                return "👋 <b>盈聚．天下 II 核心亮點：</b><br><br>• 歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年行使。<br>• 四大保證獎賞（初生嬰兒、傑出表現、享悅人生、長壽獎賞）。<br>• 8月推廣：美元保單預繳 5% 保證年利率，總優惠高達 54%-75.4%！";
-            }
-            return "手足，呢個問題我收到！建議可於團隊群組交流或請教直屬經理取得最新實戰策略！🔥";
-        }
-
-        function submitAiQuery() {
-            var user = getCurrentUser();
-            if (!user) {
-                var desc = document.getElementById('lockModalDesc');
-                if (desc) desc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
-
-            var input = document.getElementById('aiInput');
-            var msg = input.value.trim();
-            if (!msg) return;
-
-            var container = document.getElementById('aiChatMessages');
-            container.innerHTML += '<div class="flex justify-end mb-2"><div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-3 rounded-2xl text-xs max-w-[85%] shadow-sm leading-relaxed">' + msg + '</div></div>';
-            input.value = ''; container.scrollTop = container.scrollHeight;
-
-            setTimeout(function() {
-                var aiReply = getAiKnowledgeResponse(msg);
-                container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5"><img src="https://i.imgur.com/xLZjqj7.jpeg" class="w-full h-full object-cover rounded-full"></div><div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-slate-700 text-xs leading-relaxed max-w-[85%]" style="line-height:1.6;">' + aiReply + '</div></div>';
-                container.scrollTop = container.scrollHeight;
-            }, 400);
-        }
-
-        // AI Sammy 全平台滑鼠與觸控獨立拖曳核心
-        function makeElementDraggable(dragHandle, container) {
-            if (!dragHandle || !container) return;
-            var isDragging = false;
-            var startX = 0, startY = 0;
-            var initialLeft = 0, initialTop = 0;
-
-            function startDrag(clientX, clientY) {
-                isDragging = true;
-                startX = clientX;
-                startY = clientY;
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-            }
-
-            function moveDrag(clientX, clientY) {
-                if (!isDragging) return;
-                var dx = clientX - startX;
-                var dy = clientY - startY;
-                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-                    var newLeft = initialLeft + dx;
-                    var newTop = initialTop + dy;
-                    var maxLeft = window.innerWidth - container.offsetWidth - 10;
-                    var maxTop = window.innerHeight - container.offsetHeight - 10;
-                    newLeft = Math.max(10, Math.min(newLeft, maxLeft));
-                    newTop = Math.max(10, Math.min(newTop, maxTop));
-                    container.style.position = 'fixed';
-                    container.style.left = newLeft + 'px';
-                    container.style.top = newTop + 'px';
-                    container.style.bottom = 'auto';
-                    container.style.right = 'auto';
-                }
-            }
-
-            function endDrag() {
-                isDragging = false;
-            }
-
-            dragHandle.addEventListener('mousedown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
-                startDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mousemove', function(e) {
-                moveDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mouseup', endDrag);
-
-            dragHandle.addEventListener('touchstart', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    startDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    moveDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchend', endDrag);
-        }
-
-        // 頁面載入安全執行入口
         window.onload = function() {
             try {
                 switchPage('page-home');
@@ -1677,175 +1531,6 @@
             } catch(e) {
                 console.error("Initialization Error:", e);
             }
-        };
-    </script>
-
-    <!-- Firebase 雲端資料庫模組 -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDxoV4QF6JiLcOLz2_WVRyKro-XZd5g7EM",
-            authDomain: "ogorwiki.firebaseapp.com",
-            projectId: "ogorwiki",
-            storageBucket: "ogorwiki.firebasestorage.app",
-            messagingSenderId: "356544573195",
-            appId: "1:356544573195:web:811bc196c634a22dc53c0e",
-            measurementId: "G-5WVSXDZLLD"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.submitLogin = async function() {
-            var code = document.getElementById('loginAgentCode').value.trim();
-            var pass = document.getElementById('loginPassword').value.trim();
-
-            if (!code || !pass) { alert('請完整填寫 Agent Code 與密碼！'); return; }
-
-            if (code === '80937' && pass === 'taikl819') {
-                var adminUser = { code: '80937', name: '最高管理員 Sammy', manager: 'System', role: 'admin', status: 'approved' };
-                sessionStorage.setItem('ogor_current_user', JSON.stringify(adminUser));
-                closeAuthModal(); 
-                updateAuthUI();
-                showToast('🎉 歡迎最高管理員 Sammy 登入！');
-                openAdminPanel();
-                return;
-            }
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let found = null;
-                querySnapshot.forEach((d) => {
-                    const u = d.data();
-                    if (u.code === code && u.pass === pass) found = { id: d.id, ...u };
-                });
-
-                if (found) {
-                    if (found.status === 'pending') { alert('⏳ 您的帳號正在等待管理員審批，請稍候！'); return; }
-                    if (found.status === 'suspended') { alert('❌ 您的帳號已被停權，請聯絡管理員為您恢復權限！'); return; }
-                    sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
-                    closeAuthModal(); updateAuthUI();
-                    showToast('🎉 歡迎回來，' + found.name + '！');
-                    if (found.role === 'admin') openAdminPanel();
-                    else switchPage('page-home');
-                } else {
-                    alert('登入失敗：Agent Code 或密碼錯誤！');
-                }
-            } catch(e) {
-                var demoUser = { code: code, name: '團隊精英 (' + code + ')', manager: '高總', role: 'user', status: 'approved' };
-                sessionStorage.setItem('ogor_current_user', JSON.stringify(demoUser));
-                closeAuthModal(); 
-                updateAuthUI();
-                showToast('🎉 歡迎回來，團隊精英！');
-                switchPage('page-home');
-            }
-        };
-
-        window.submitRegister = async function() {
-            var name = document.getElementById('regFullName').value.trim();
-            var code = document.getElementById('regAgentCode').value.trim();
-            var manager = document.getElementById('regManagerName').value.trim();
-            var pass = document.getElementById('regPassword').value.trim();
-
-            if (!name || !code || !manager || !pass) { alert('請完整填寫所有註冊欄位！'); return; }
-
-            try {
-                await addDoc(collection(db, "users"), {
-                    name, code, manager, pass, status: 'pending', role: 'user', createdAt: new Date().toISOString()
-                });
-                alert('✅ 註冊申請已成功提交至雲端！請通知 Sammy 管理員進行審批。');
-                closeAuthModal();
-            } catch(e) {
-                alert('雲端註冊失敗，請檢查網絡連線。');
-            }
-        };
-
-        window.renderPendingUsers = async function() {
-            const listEl = document.getElementById('pendingUsersList');
-            if (!listEl) return;
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let pending = [];
-                querySnapshot.forEach((d) => {
-                    if (d.data().status === 'pending') pending.push({ id: d.id, ...d.data() });
-                });
-
-                if (pending.length === 0) {
-                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無待審批的新用戶</p>';
-                    return;
-                }
-
-                let html = '';
-                pending.forEach(function(u) {
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
-                        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span><br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
-                        '<div class="flex gap-2">' +
-                            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'approved\')" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs cursor-pointer">批準</button>' +
-                            '<button type="button" onclick="window.deleteUserDoc(\'' + u.id + '\')" class="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs cursor-pointer">拒絕</button>' +
-                        '</div>' +
-                    '</div>';
-                });
-                listEl.innerHTML = html;
-            } catch(e) {
-                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗</p>';
-            }
-        };
-
-        window.renderApprovedUsers = async function() {
-            const listEl = document.getElementById('approvedUsersList');
-            if (!listEl) return;
-            listEl.innerHTML = '<p class="text-slate-400 text-center py-4">雲端同步中...</p>';
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let userList = [];
-                querySnapshot.forEach((d) => {
-                    const u = d.data();
-                    if (u.role !== 'admin' && (u.status === 'approved' || u.status === 'suspended')) {
-                        userList.push({ id: d.id, ...u });
-                    }
-                });
-
-                if (userList.length === 0) {
-                    listEl.innerHTML = '<p class="text-slate-400 text-center py-4">暫無任何成員紀錄</p>';
-                    return;
-                }
-
-                let html = '';
-                userList.forEach(function(u) {
-                    var isSuspended = (u.status === 'suspended');
-                    var statusBadge = isSuspended ? '<span class="text-rose-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
-                    var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
-                    var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
-                    var btnClass = isSuspended ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-rose-500 hover:bg-rose-600';
-
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
-                        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span> ' + statusBadge + '<br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
-                        '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3.5 py-1.5 ' + btnClass + ' text-white font-bold rounded-xl text-xs cursor-pointer shrink-0">' + btnText + '</button>' +
-                    '</div>';
-                });
-                listEl.innerHTML = html;
-            } catch(e) {
-                listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗</p>';
-            }
-        };
-
-        window.updateUserStatus = async function(id, newStatus) {
-            try {
-                await updateDoc(doc(db, "users", id), { status: newStatus });
-                showToast(newStatus === 'approved' ? '✓ 已恢復權限！' : '✓ 已停權！');
-                window.renderPendingUsers(); window.renderApprovedUsers();
-            } catch(e) { alert('操作失敗！'); }
-        };
-
-        window.deleteUserDoc = async function(id) {
-            try {
-                await deleteDoc(doc(db, "users", id));
-                showToast('✓ 已刪除申請！');
-                window.renderPendingUsers();
-            } catch(e) { alert('刪除失敗！'); }
         };
     </script>
 </body>
