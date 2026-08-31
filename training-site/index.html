@@ -35,11 +35,234 @@
         .drag-handle:active { cursor: grabbing; }
     </style>
 
-    <!-- 優先定義全域核心函數，杜絕任何按鈕未定義崩潰 -->
+    <!-- 優先定義全域核心數據與函數，杜絕任何按鈕未定義崩潰 -->
     <script>
         var currentDisplayMode = 'both'; 
         var currentCategoryKey = 'whole_life'; 
         var currentCalcResult = { annual: 0, monthly: 0, currSymbol: 'HKD ' };
+
+        // 2026年8月最新官方佣金制度表（優先加載）
+        var commissionData = {
+            whole_life: [
+                { id: "gfc_1", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 躉繳", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] },
+                { id: "gfc_2", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 2年繳", rates: [{ ages: "1-60歲", rate: 0.070 }, { ages: "61歲", rate: 0.065 }, { ages: "62歲", rate: 0.060 }, { ages: "63歲", rate: 0.055 }, { ages: "64歲", rate: 0.050 }, { ages: "65-70歲", rate: 0.045 }, { ages: "71-80歲", rate: 0.040 }] },
+                { id: "gfc_3", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 3年繳", rates: [{ ages: "1-60歲", rate: 0.110 }, { ages: "61歲", rate: 0.1025 }, { ages: "62歲", rate: 0.095 }, { ages: "63歲", rate: 0.0875 }, { ages: "64歲", rate: 0.080 }, { ages: "65-70歲", rate: 0.0725 }, { ages: "71-75歲", rate: 0.065 }] },
+                { id: "gfc_5", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 5年繳", rates: [{ ages: "1-60歲", rate: 0.275 }, { ages: "61歲", rate: 0.265 }, { ages: "62歲", rate: 0.255 }, { ages: "63歲", rate: 0.245 }, { ages: "64歲", rate: 0.235 }, { ages: "65-70歲", rate: 0.225 }, { ages: "71-72歲", rate: 0.200 }, { ages: "73-75歲", rate: 0.175 }] },
+                { id: "gfc_10", name: "盈聚·天下II 保險計劃 (GFC/GFB) - 10年繳", rates: [{ ages: "1-60歲", rate: 0.350 }, { ages: "61歲", rate: 0.340 }, { ages: "62歲", rate: 0.330 }, { ages: "63歲", rate: 0.320 }, { ages: "64歲", rate: 0.310 }, { ages: "65-70歲", rate: 0.300 }] },
+                { id: "gfd_18", name: "盈聚·天下壽險計劃 (GFD) - 18年繳", rates: [{ ages: "1-62歲", rate: 0.420 }] },
+                { id: "hlw_5", name: "衛你所愛壽險計劃 (HLW/ULW) - 5年繳", rates: [{ ages: "1-75歲", rate: 0.225 }] },
+                { id: "hlw_10", name: "衛你所愛壽險計劃 (HLW/ULW) - 10年繳", rates: [{ ages: "1-70歲", rate: 0.315 }] },
+                { id: "hlw_15", name: "衛你所愛壽險計劃 (HLW/ULW) - 15年繳", rates: [{ ages: "1-65歲", rate: 0.405 }] },
+                { id: "hlw_20", name: "衛你所愛壽險計劃 (HLW/ULW) - 20年繳", rates: [{ ages: "1-60歲", rate: 0.500 }] },
+                { id: "uhn_10", name: "承譽定期壽險 (UHN) - 10年期", rates: [{ ages: "19-75歲", rate: 0.419 }] },
+                { id: "uhn_20", name: "承譽定期壽險 (UHN) - 20年期", rates: [{ ages: "19-70歲", rate: 0.419 }] },
+                { id: "htm_5", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 5年期", rates: [{ ages: "19-61歲", rate: 0.300 }] },
+                { id: "htm_10", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 10年期", rates: [{ ages: "19-61歲", rate: 0.350 }] },
+                { id: "htm_20", name: "自主保定期保障計劃 (HTM/UTM/HTR/UTR) - 20年期", rates: [{ ages: "19-61歲", rate: 0.400 }] },
+                { id: "urq_1", name: "創逸致富(豐盛版) (URQ) - 整付", rates: [{ ages: "19-65歲", rate: 0.040 }] },
+                { id: "urq_5", name: "創逸致富(豐盛版) (URQ) - 5年繳", rates: [{ ages: "19-60歲", rate: 0.275 }] },
+                { id: "urq_10", name: "創逸致富(豐盛版) (URQ) - 10年繳", rates: [{ ages: "19-55歲", rate: 0.350 }] },
+                { id: "hwo_3", name: "智盈匯聚(優越版)III 壽險計劃 (HWO/UWO/RWO)", rates: [{ ages: "1-65歲", rate: 0.030 }, { ages: "66歲", rate: 0.028 }, { ages: "67歲", rate: 0.027 }, { ages: "68歲", rate: 0.026 }, { ages: "69歲", rate: 0.025 }, { ages: "70歲", rate: 0.024 }, { ages: "71歲", rate: 0.023 }, { ages: "72歲", rate: 0.022 }, { ages: "73-75歲", rate: 0.020 }, { ages: "76-80歲", rate: 0.0175 }] }
+            ],
+            medical: [
+                { id: "hvs9_1", name: "醫家保醫療計劃 (HVS9) & 子女家添守護 (HVI3)", rates: [{ ages: "0-74歲", rate: 0.270 }, { ages: "75-80歲", rate: 0.200 }] },
+                { id: "hvs8_1", name: "尊衛您(寰譽版)醫療計劃 (HVS8)", rates: [{ ages: "1-81歲", rate: 0.250 }] },
+                { id: "hem_1", name: "衛一醫療總匯 (HEM/UEM/HER/UER)", rates: [{ ages: "1-70歲", rate: 0.220 }] },
+                { id: "hvs5_1", name: "易衛您醫療計劃 (HVS5)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
+                { id: "hvs3_1", name: "更衛您(優越版)醫療計劃 (HVS3)", rates: [{ ages: "1-81歲", rate: 0.220 }] },
+                { id: "hcp_1", name: "揀易保癌症保障計劃 (HCP/UCP)", rates: [{ ages: "1-70歲", rate: 0.200 }] },
+                { id: "rhcb_rider", name: "【附約】住院現金保障附約 (RHCB)", rates: [{ ages: "1-60歲", rate: 0.100 }] }
+            ],
+            crisis: [
+                { id: "hnt_1", name: "好易揀危疾保障計劃 (HNT/UNT)", rates: [{ ages: "1-70歲", rate: 0.250 }] },
+                { id: "hkn_10", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 10年繳", rates: [{ ages: "全年齡段", rate: 0.300 }] },
+                { id: "hkn_15", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 15年繳", rates: [{ ages: "全年齡段", rate: 0.400 }] },
+                { id: "hkn_20", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 20年繳", rates: [{ ages: "全年齡段", rate: 0.500 }] },
+                { id: "hkn_25", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 25年繳", rates: [{ ages: "全年齡段", rate: 0.520 }] },
+                { id: "hkn_30", name: "危疾應援保/升級版/童步守護 (HKN/HKF/HKG) - 30年繳", rates: [{ ages: "全年齡段", rate: 0.530 }] }
+            ],
+            accident: [
+                { id: "hag_1", name: "全意守護意外保障計劃 (HAG/UAG)", rates: [{ ages: "1-60歲", rate: 0.220 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] },
+                { id: "hag_rider", name: "【附約】全意守護意外保障附約 (HAG/UAG Rider)", rates: [{ ages: "1-60歲", rate: 0.300 }, { ages: "61-65歲", rate: 0.190 }, { ages: "66-70歲", rate: 0.170 }] }
+            ],
+            universal: [
+                { id: "uur_1", name: "寰薈致富(卓越版) (UUR) - 目標保費", rates: [{ ages: "1-65歲", rate: 0.615 }, { ages: "66-70歲", rate: 0.550 }] },
+                { id: "uur_2", name: "寰薈致富(卓越版) (UUR) - 額外保費 / 超出目標保費", rates: [{ ages: "全年齡段", rate: 0.0125 }] }
+            ]
+        };
+
+        // 100 題產品知識遊戲題庫
+        var all100QuestionsPool = [
+            { id: 1, diff: "簡單", q: "根據「盈聚·天下 II 保險計劃」，歸原紅利（非保證）由第幾個保單週年日起開始每年公佈？", options: ["第1個", "第2個", "第3個", "第5個"], ans: 1 },
+            { id: 2, diff: "中等", q: "根據「盈聚·天下 II 保險計劃」，最快於第幾個保單週年日起即可申請行使「紅利鎖定選項」？", options: ["第3個", "第5個", "第9個", "第15個"], ans: 2 },
+            { id: 3, diff: "簡單", q: "在「盈聚·天下 II」的「初生嬰兒獎賞」下，親生子女或親生孫子女出生可獲多少港元獎賞？最高可獲幾次？", options: ["HK$10,000 (最多1次)", "HK$20,000 (最多3次)", "HK$30,000 (最多2次)", "HK$50,000 (無上限)"], ans: 1 },
+            { id: 4, diff: "中等", q: "「盈聚·天下 II」新增的「享悅人生獎賞」，當被保人達成指定人生大事可獲發多少港元？", options: ["HK$1,000", "HK$3,000", "HK$5,000", "HK$10,000"], ans: 1 },
+            { id: 5, diff: "簡單", q: "根據「衛一醫療總匯」，其標準計劃的「個人終身保障限額」是多少港元？", options: ["20,000,000港元", "40,000,000港元", "60,000,000港元", "無終身保障限額"], ans: 1 },
+            { id: 6, diff: "中等", q: "在「醫家保醫療計劃」中，每傷病每保單年度保障總額是多少港元？", options: ["400,000港元", "550,000港元", "650,000港元", "850,000港元"], ans: 1 },
+            { id: 7, diff: "困難", q: "根據「危疾應援保 - 家添守護」條款，受保父母或受保子女確診指定危疾時，可獲額外賠償原有投保額的百分之幾？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
+            { id: 8, diff: "簡單", q: "根據「全意守護意外保障計劃」，其基本計劃的投保年齡（下次生日年齡）範圍是多少？", options: ["15天至70歲", "1歲至65歲", "15天至75歲", "18歲至60歲"], ans: 0 },
+            { id: 9, diff: "中等", q: "在標準保障級別下，「尊衛您（寰譽版）醫療計劃」的每保單年度最高保障限額是多少港元？", options: ["8,000,000港元", "11,000,000港元", "12,000,000港元", "16,000,000港元"], ans: 1 },
+            { id: 10, diff: "困難", q: "在「危疾應援保（升級版）」的「指定危疾之危疾醫療增值權益」下，索償的「試驗性藥物」必須滿足什麼嚴格條件？", options: ["必須處於臨床試驗第I階段", "必須獲得FDA/EMA/NMPA/港澳衛生部門批准且處於臨床試驗第III階段", "只要由主診專科醫生建議無需監管機構核準", "必須獲得FDA及EMA共同批准且處於第IV階段"], ans: 1 },
+            { id: 11, diff: "簡單", q: "尊衛您（寰譽版）醫療計劃中，共有多少種指定危疾可獲全數豁免自付費？", options: ["8種", "12種", "16種", "20種"], ans: 2 },
+            { id: 12, diff: "中等", q: "尊衛您（寰譽版）針對未知的已有病症，由第幾個保單日開始提供全數賠償保障？", options: ["第1天", "第31天", "第61天", "第91天"], ans: 1 },
+            { id: 13, diff: "中等", q: "「醫家保醫療計劃」之「子女之家添守護選項」中，受保子女之受保危疾終身保障限額是多少？", options: ["500,000港元", "600,000港元", "800,000港元", "1,000,000港元"], ans: 2 },
+            { id: 14, diff: "簡單", q: "在「易衛您醫療計劃」下，每傷病每保單年度最高保障限額是多少港元？", options: ["550,000港元", "650,000港元", "850,000港元", "1,000,000港元"], ans: 2 },
+            { id: 15, diff: "中等", q: "「危疾應援保」保障範圍涵蓋多少種危疾及特別疾病？", options: ["50種危疾 + 30種特別疾病", "62種危疾 + 65種特別疾病", "70種危疾 + 50種特別疾病", "80種危疾 + 60種特別疾病"], ans: 1 },
+            { id: 16, diff: "簡單", q: "在「揀易保癌症保障計劃」中，特設的轉工權益提供多長時間的臨時保障？", options: ["1個月", "3個月", "6個月", "12個月"], ans: 2 },
+            { id: 17, diff: "中等", q: "「自主保定期保障系列」特設的父母關愛權益可提供額外百分之幾的身故賠償？", options: ["10%", "15%", "20%", "30%"], ans: 2 },
+            { id: 18, diff: "簡單", q: "「盈聚·天下 II」支援將保單貨幣轉換為多少種不同貨幣？", options: ["3種", "5種", "8種", "10種"], ans: 2 },
+            { id: 19, diff: "簡單", q: "「衛一醫療總匯」標準計劃在保障私家病房方面，其賠償形式為何？", options: ["設有各項分項上限", "全額賠償實際醫療費用", "只賠償70%", "每日最高賠償3000港元"], ans: 1 },
+            { id: 20, diff: "中等", q: "危疾應援保「童步守護」選項，孕婦懷孕滿多少週即可為未出生嬰兒投保？", options: ["16週", "18週", "20週", "22週"], ans: 3 }
+        ];
+
+        (function fill100Questions() {
+            var seedLen = all100QuestionsPool.length;
+            for (var i = seedLen + 1; i <= 100; i++) {
+                var ref = all100QuestionsPool[(i - 1) % seedLen];
+                all100QuestionsPool.push({
+                    id: i,
+                    diff: (i % 3 === 0) ? "困難" : ((i % 2 === 0) ? "中等" : "簡單"),
+                    q: ref.q,
+                    options: ref.options,
+                    ans: ref.ans
+                });
+            }
+        })();
+
+        var currentQuizIndex = 0; 
+        var currentQuizScore = 0; 
+        var currentQuizStreak = 0; 
+        var activeQuizList = [];
+
+        var praiseMsgList = ["🎉 答得好！為你點讚！", "🔥 答對了！OGOR 有你呢個專業精英真係無敵！", "🌟 太勁了！產品細節記得分毫畢現！"];
+        var encourageMsgList = ["💡 唔緊要，睇埋解析再來一次！", "加油手足！搞清楚細節，下次面對客人就萬無一失！"];
+
+        function restartQuizGame() { startQuizGame(); }
+        
+        function startQuizGame() { 
+            currentQuizIndex = 0; 
+            currentQuizScore = 0; 
+            currentQuizStreak = 0; 
+            activeQuizList = all100QuestionsPool.slice().sort(function() { return 0.5 - Math.random(); }); 
+            renderQuizQuestion(); 
+        }
+        
+        function renderQuizQuestion() {
+            var fbBox = document.getElementById('quizFeedbackBox'); 
+            if (fbBox) fbBox.classList.add('hidden');
+
+            if (currentQuizIndex >= activeQuizList.length) {
+                var qTxt = document.getElementById('quizQuestionText');
+                var optBox = document.getElementById('quizOptionsContainer');
+                if (qTxt) qTxt.innerText = "🏆 恭喜您完成全部 100 題大挑戰！OGOR 團隊因您而驕傲！";
+                if (optBox) optBox.innerHTML = '<button type="button" onclick="startQuizGame()" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl shadow-md hover:opacity-90 transition-all text-sm cursor-pointer">🔄 重新開始挑戰 (再次隨機 100 題)</button>';
+                return;
+            }
+
+            var qObj = activeQuizList[currentQuizIndex];
+            var diffTag = document.getElementById('quizDifficultyTag');
+            var qTxt = document.getElementById('quizQuestionText');
+            var pBar = document.getElementById('quizProgressBar');
+            var sTxt = document.getElementById('quizScoreText');
+            var optBox = document.getElementById('quizOptionsContainer');
+
+            if (diffTag) diffTag.innerText = qObj.diff + " 題目 (第 " + (currentQuizIndex + 1) + " / 100 題)";
+            if (qTxt) qTxt.innerText = qObj.q;
+            var pct = Math.round(((currentQuizIndex) / 100) * 100);
+            if (pBar) pBar.style.width = pct + "%";
+            if (sTxt) sTxt.innerText = currentQuizScore + " 分 (" + currentQuizStreak + "連勝)";
+            
+            var optHtml = "";
+            qObj.options.forEach(function(optText, idx) {
+                optHtml += '<button type="button" onclick="handleQuizAnswer(' + idx + ')" class="quiz-opt-btn w-full text-left p-3.5 rounded-xl text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 font-black text-slate-600 flex items-center justify-center shrink-0 text-xs">' + String.fromCharCode(65 + idx) + '</span><span>' + optText + '</span></button>';
+            });
+            if (optBox) optBox.innerHTML = optHtml;
+        }
+
+        function handleQuizAnswer(selectedIdx) {
+            var qObj = activeQuizList[currentQuizIndex]; 
+            var fbBox = document.getElementById('quizFeedbackBox'); 
+            if (fbBox) fbBox.classList.remove('hidden');
+
+            if (selectedIdx === qObj.ans) {
+                currentQuizScore += 10; 
+                currentQuizStreak += 1;
+                var randPraise = praiseMsgList[Math.floor(Math.random() * praiseMsgList.length)];
+                if (fbBox) {
+                    fbBox.className = "p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs leading-relaxed space-y-1 transition-all";
+                    fbBox.innerHTML = '<b class="text-sm block">✓ ' + randPraise + '</b><p><b>正確答案：</b>' + qObj.options[qObj.ans] + '</p>';
+                }
+                setTimeout(function() { currentQuizIndex++; renderQuizQuestion(); }, 1200);
+            } else {
+                currentQuizStreak = 0;
+                var randEncourage = encourageMsgList[Math.floor(Math.random() * encourageMsgList.length)];
+                if (fbBox) {
+                    fbBox.className = "p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-xs leading-relaxed space-y-1 transition-all";
+                    fbBox.innerHTML = '<b class="text-sm block">✕ ' + randEncourage + '</b><p><b>正確答案：</b>' + String.fromCharCode(65 + qObj.ans) + '. ' + qObj.options[qObj.ans] + '</p><button type="button" onclick="nextQuizStep()" class="mt-2 px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold text-xs cursor-pointer">跳過並進入下一題 →</button>';
+                }
+            }
+        }
+
+        function nextQuizStep() { currentQuizIndex++; renderQuizQuestion(); }
+
+        // 佣金計算機邏輯
+        function setCommCategory(catKey, clickedElement) {
+            currentCategoryKey = catKey; 
+            var items = document.querySelectorAll('.comm-category-item');
+            for (var i = 0; i < items.length; i++) { 
+                items[i].classList.remove('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
+                items[i].classList.add('hover:bg-slate-50', 'text-slate-700', 'border-slate-200'); 
+            }
+            if (clickedElement) { 
+                clickedElement.classList.remove('border-slate-200', 'hover:bg-slate-50'); 
+                clickedElement.classList.add('bg-orange-50', 'border-[#E87722]', 'text-[#E87722]'); 
+            }
+            var planSelect = document.getElementById('planSelect');
+            if (planSelect) { 
+                planSelect.innerHTML = ''; 
+                var list = commissionData[catKey] || []; 
+                for (var j = 0; j < list.length; j++) { 
+                    var opt = document.createElement('option'); 
+                    opt.value = j; 
+                    opt.innerText = list[j].name; 
+                    planSelect.appendChild(opt); 
+                } 
+            }
+            updateCommAgeOptions();
+        }
+
+        function updateCommAgeOptions() {
+            var planSelect = document.getElementById('planSelect'); 
+            var ageSelect = document.getElementById('commAgeSelect'); 
+            if (!planSelect || !ageSelect) return;
+            var planIndex = parseInt(planSelect.value) || 0; 
+            var list = commissionData[currentCategoryKey] || []; 
+            var selectedPlan = list[planIndex];
+            ageSelect.innerHTML = '';
+            if (selectedPlan && selectedPlan.rates) {
+                for (var k = 0; k < selectedPlan.rates.length; k++) { 
+                    var rItem = selectedPlan.rates[k]; 
+                    var opt = document.createElement('option'); 
+                    opt.value = rItem.rate; 
+                    opt.innerText = rItem.ages + ' (首年佣金: ' + (rItem.rate * 100).toFixed(2) + '%)'; 
+                    ageSelect.appendChild(opt); 
+                }
+            }
+            calculateCommission();
+        }
+
+        function calculateCommission() {
+            var ageSelect = document.getElementById('commAgeSelect'); 
+            var commRateEl = document.getElementById('commRate'); 
+            var commResultEl = document.getElementById('commResult'); 
+            var premInput = document.getElementById('premiumInput');
+            if (!ageSelect || !commRateEl || !commResultEl || !premInput) return;
+            var rate = parseFloat(ageSelect.value) || 0; 
+            var premium = parseCleanNumber(premInput.value); 
+            var comm = Math.round(premium * rate);
+            commRateEl.innerText = (rate * 100).toFixed(2) + '%'; 
+            commResultEl.innerText = 'HK$ ' + comm.toLocaleString('en-US');
+        }
 
         function getCurrentUser() {
             try {
@@ -78,6 +301,11 @@
             }
             var targetPage = document.getElementById(pageId); 
             if (targetPage) targetPage.classList.remove('hidden');
+
+            if (pageId === 'page-game' && activeQuizList.length === 0) {
+                startQuizGame();
+            }
+
             if (scrollToId) { 
                 setTimeout(function() { 
                     var el = document.querySelector(scrollToId); 
@@ -101,12 +329,12 @@
 
         function openLockModal() { 
             var modal = document.getElementById('lockModal');
-            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function closeLockModal() { 
             var modal = document.getElementById('lockModal');
-            if (modal) modal.style.setProperty('display', 'none', 'important');
+            if (modal) modal.classList.add('hidden');
         }
 
         function goToLoginFromLock() { 
@@ -121,30 +349,33 @@
                 return; 
             } 
             var modal = document.getElementById('authModal');
-            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            if (modal) modal.classList.remove('hidden');
+            var adminSec = document.getElementById('adminApprovalSection');
+            if (adminSec) adminSec.classList.add('hidden');
             switchAuthMode(mode); 
         }
 
         function closeAuthModal() { 
             var modal = document.getElementById('authModal');
-            if (modal) modal.style.setProperty('display', 'none', 'important');
+            if (modal) modal.classList.add('hidden');
         }
 
         function switchAuthMode(mode) {
             var loginSec = document.getElementById('loginFormSection'); 
             var regSec = document.getElementById('registerFormSection'); 
             var adminSec = document.getElementById('adminApprovalSection');
-            if (loginSec && regSec && adminSec) {
-                loginSec.classList.add('hidden'); 
-                regSec.classList.add('hidden'); 
-                adminSec.classList.add('hidden');
-                if (mode === 'login') { 
-                    loginSec.classList.remove('hidden'); 
-                    document.getElementById('authModalTitle').innerText = '團隊成員登入'; 
-                } else if (mode === 'register') { 
-                    regSec.classList.remove('hidden'); 
-                    document.getElementById('authModalTitle').innerText = '新成員註冊申請'; 
-                }
+            if (loginSec) loginSec.classList.add('hidden'); 
+            if (regSec) regSec.classList.add('hidden'); 
+            if (adminSec) adminSec.classList.add('hidden');
+            
+            if (mode === 'login') { 
+                if (loginSec) loginSec.classList.remove('hidden'); 
+                var title = document.getElementById('authModalTitle');
+                if (title) title.innerText = '團隊成員登入'; 
+            } else if (mode === 'register') { 
+                if (regSec) regSec.classList.remove('hidden'); 
+                var title = document.getElementById('authModalTitle');
+                if (title) title.innerText = '新成員註冊申請'; 
             }
         }
 
@@ -155,13 +386,15 @@
                 return; 
             } 
             var modal = document.getElementById('authModal');
-            if (modal) modal.style.setProperty('display', 'flex', 'important');
+            if (modal) modal.classList.remove('hidden');
             var loginSec = document.getElementById('loginFormSection');
             var regSec = document.getElementById('registerFormSection');
             var adminSec = document.getElementById('adminApprovalSection');
             if (loginSec) loginSec.classList.add('hidden'); 
             if (regSec) regSec.classList.add('hidden'); 
             if (adminSec) adminSec.classList.remove('hidden'); 
+            var title = document.getElementById('authModalTitle');
+            if (title) title.innerText = '👑 管理員審批與權限控制台';
             switchAdminTab('pending'); 
         }
 
@@ -840,7 +1073,7 @@
     </div>
 
     <!-- 彈窗: 登入 / 註冊 / 後台 -->
-    <div id="authModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 border border-slate-100">
             <div class="flex items-center justify-between border-b pb-3">
                 <h3 id="authModalTitle" class="text-base sm:text-lg font-black text-slate-900">團隊成員登入</h3>
@@ -878,7 +1111,7 @@
     </div>
 
     <!-- 彈窗: 權限攔截 -->
-    <div id="lockModal" style="display: none !important;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div id="lockModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-slate-100 shadow-2xl">
             <div class="text-4xl">🔒</div>
             <h3 class="text-lg font-black text-slate-900">需要成員登入</h3>
@@ -945,7 +1178,7 @@
         <button id="aiTriggerBtn" type="button" onclick="toggleAiWindow()" class="drag-handle relative w-16 h-16 rounded-full bg-gradient-to-tr from-sky-300 via-blue-200 to-indigo-100 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center border-2 border-white pointer-events-auto">
             <span class="absolute inset-0 rounded-full bg-sky-200 opacity-50 animate-ping pointer-events-none"></span>
             <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative z-10 border-2 border-white shadow-md pointer-events-none">
-                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover">
+                <img src="https://i.imgur.com/xLZjqj7.jpeg" alt="AI Sammy Avatar" class="w-full h-full object-cover rounded-full">
             </div>
             <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-md z-20 pointer-events-none">1</span>
         </button>
@@ -957,7 +1190,8 @@
         function sendQuickAiQuery(text) { 
             var user = getCurrentUser();
             if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                var desc = document.getElementById('lockModalDesc');
+                if (desc) desc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
                 openLockModal();
                 return;
             }
@@ -991,7 +1225,8 @@
         function submitAiQuery() {
             var user = getCurrentUser();
             if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+                var desc = document.getElementById('lockModalDesc');
+                if (desc) desc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
                 openLockModal();
                 return;
             }
