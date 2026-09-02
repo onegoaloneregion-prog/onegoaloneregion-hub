@@ -459,16 +459,17 @@
         <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-sky-50 text-sky-600 text-xs font-bold">🗣️ Sales Scripts & Training Hub</div><h2 class="text-2xl sm:text-3xl font-black text-slate-900">銷售話術與培訓手冊庫</h2><p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 話術與培訓 PDF 文件</p></div>
             <div id="fwdScriptsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div onclick="window.open('https://drive.google.com/', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">1. 儲蓄傳承理念與話術攻略</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">實戰話術</span></div>
-                        <p class="text-slate-600 leading-relaxed">提供儲蓄傳承理念切入、美金資產配置開場白，以及常見客戶異議處理實戰技巧。</p>
-                    </div>
-                    <div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
-                </div>
+    <div onclick="window.open('https://drive.google.com/file/d/1cZ116CjSDE1g_IZx4K_cubtp51x2EMET/view?usp=sharing', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group">
+        <div class="space-y-2">
+            <div class="flex items-center justify-between border-b pb-2">
+                <b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">1. 實戰攻略手冊</b>
+                <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">實戰手冊</span>
             </div>
+            <p class="text-slate-600 leading-relaxed">常見客戶抗拒應對、產品概念拆解。</p>
         </div>
+        <div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
     </div>
+</div>
 
     <!-- PAGE: 客戶折扣優惠專頁 -->
     <div id="page-fwd-promo" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
@@ -1760,16 +1761,16 @@
                         var category = String(c[0].v).toLowerCase().trim(); 
                         var title = c[1] ? String(c[1].v) : ''; 
                         var desc = c[2] ? String(c[2].v) : ''; 
-                        var linkUrl = c[3] ? String(c[3].v) : ''; 
+                        var linkUrl = c[3] ? String(c[3].f || c[3].v || '').replace(/^[\[\s]+/, '').trim() : '';
                         var badge = c[4] ? String(c[4].v) : '官方正本';
-                        if (category === 'promo') promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                        else if (category === 'brochure') brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                        else if (category === 'script') scriptItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+                       if (category.indexOf('promo') !== -1) promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+else if (category.indexOf('brochure') !== -1) brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+else if (category.indexOf('script') !== -1) scriptItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
                     }
                 });
                 if (promoItems.length > 0) renderDynamicPromo(promoItems);
                 if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
-                if (scriptItems.length > 0) renderDynamicScripts(scriptItems);
+                //if (scriptItems.length > 0) renderDynamicScripts(scriptItems);
             }).catch(function(err) { console.log('使用預設數據載入中。', err); });
         }
 
