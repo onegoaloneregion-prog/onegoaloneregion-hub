@@ -1,1 +1,856 @@
 
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>富衛【醫家保醫療計劃】客戶專屬家庭保障指南 & 全歲數試算</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fwd: {
+                            orange: '#f37021',
+                            navy: '#0f4c81',
+                            darknavy: '#0a2540',
+                            teal: '#00a896',
+                            lightbg: '#f8fafc',
+                            cardbg: '#ffffff',
+                            accent: '#ff9f1c',
+                            rose: '#e11d48',
+                            emerald: '#059669'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 360px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 340px;
+            }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-fwd-lightbg text-slate-800 font-sans antialiased pb-16">
+
+    <!-- Sticky Header for Client Browsing -->
+    <header class="sticky top-0 z-50 bg-fwd-darknavy text-white shadow-lg border-b border-fwd-orange/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="bg-fwd-orange text-white font-black text-xs px-2.5 py-1 rounded-md tracking-wider">FWD 富衛保險</span>
+                <h1 class="font-bold text-base sm:text-xl tracking-tight text-white">醫家保醫療計劃 • 客戶家庭保障指南</h1>
+            </div>
+            <nav class="hidden md:flex space-x-1 text-xs lg:text-sm font-medium">
+                <a href="#highlights" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">六大賣點</a>
+                <a href="#familybooster" class="px-2.5 py-1.5 rounded-md text-amber-300 font-bold hover:bg-fwd-navy transition">👶 子女家添守護</a>
+                <a href="#percondition" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">每傷病重設機制</a>
+                <a href="#calculator" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">0-80歲保費試算</a>
+                <a href="#pregnancy" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">懷孕雙重保障</a>
+                <a href="#comparison" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">富衛醫保梯隊</a>
+                <a href="#faq" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">常見疑問</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-10">
+
+        <!-- Banner / Welcome Hero -->
+        <div class="bg-gradient-to-r from-fwd-darknavy via-fwd-navy to-fwd-teal rounded-3xl p-6 md:p-8 text-white shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div class="space-y-3 max-w-2xl">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <span class="bg-fwd-orange text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">全數保障 • 創新家庭醫療概念</span>
+                    <span class="bg-amber-400 text-slate-900 text-xs px-2.5 py-0.5 rounded-full font-extrabold">👨‍👩‍👧‍👦 一份醫保 兩代都保</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight">為您及家人創建健康未來的重要基石</h2>
+                <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+                    以「避繁就簡」理念，全數保障一系列合資格住院及手術開支，不設細項上限！獨創<strong class="text-fwd-accent">「每保單年度每傷病」重新計算機制</strong>（每傷病高達 HK$55萬 + 指定大病額外加碼 HK$55萬），更可自選附加「子女之家添守護」，<strong>毋須健康核保、不限子女數目</strong>，全面守護兩代健康！
+                </p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 text-center space-y-3 w-full lg:w-auto min-w-[270px]">
+                <div class="text-xs text-slate-200">每保單年度每傷病保障額</div>
+                <div class="text-3xl font-black text-fwd-accent">HK$ 55萬 + 55萬</div>
+                <div class="text-xs text-slate-300">每傷病獨立計算 • 不設終身限額</div>
+                <div class="pt-1 flex flex-col gap-2">
+                    <a href="#familybooster" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-black py-2.5 px-4 rounded-xl transition text-xs sm:text-sm shadow-md flex items-center justify-center space-x-1">
+                        <span>⭐ 解鎖子女免核保保障</span>
+                    </a>
+                    <a href="#calculator" class="w-full bg-fwd-orange hover:bg-fwd-accent text-white font-bold py-2 px-4 rounded-xl transition text-xs shadow">
+                        即時試算男女 0-80 歲保費 ➔
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: 核心保障六大賣點 -->
+        <section id="highlights" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8">
+                <div class="text-center max-w-2xl mx-auto mb-8 space-y-2">
+                    <h3 class="text-2xl font-bold text-fwd-darknavy">為什麼選擇【醫家保醫療計劃】？</h3>
+                    <p class="text-slate-500 text-sm">親民保費享有全數賠償，突破傳統「每年度共用限額」的限制</p>
+                </div>
+
+                <!-- 6 Metric Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-fwd-navy/5 p-5 rounded-2xl border border-fwd-navy/10 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-fwd-navy text-white flex items-center justify-center font-bold text-lg">🌍</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">環球全數賠償保障</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">全數保障一系列住院、手術、深切治療及非手術癌症治療，不設細項限制，享有標準普通病房待遇。</p>
+                    </div>
+
+                    <div class="bg-fwd-orange/5 p-5 rounded-2xl border border-fwd-orange/10 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-fwd-orange text-white flex items-center justify-center font-bold text-lg">🔄</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">每保單年度每傷病機制</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">每個傷病每年度尊享 HK$550,000 限額。若不幸患不同疾病或同病復發（相隔超過90天），限額自動刷新重新計算！</p>
+                    </div>
+
+                    <div class="bg-fwd-teal/5 p-5 rounded-2xl border border-fwd-teal/10 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-fwd-teal text-white flex items-center justify-center font-bold text-lg">🛡️</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">第31日起100%保未知疾病</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">投保時未知的已有病症及先天性疾病（不限年齡確診），於首個保單年度第31日起即可獲 100% 全數賠償。</p>
+                    </div>
+
+                    <div class="bg-rose-50 p-5 rounded-2xl border border-rose-100 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg">🤰</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">懷孕及妊娠併發症全數保</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">涵蓋產前分娩 12 種妊娠併發症全數保障，額外尊享雙倍身故賠償及雙倍深切治療部 (ICU) 現金津貼。</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg">🎁</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">家庭及個人 NCD 高達 30%</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">個人連續無索償最高享 15% 續保折扣；若全家同時投保達 5 份保單，額外再享 15% 折扣，累計最高可慳 30% 保費！</p>
+                    </div>
+
+                    <div class="bg-purple-50 p-5 rounded-2xl border border-purple-100 hover:shadow-md transition space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-lg">🏥</div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">5重創新現金保障</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">包括日間手術雙倍現金津貼（最高 $1,000）、其他醫保賠償後額外每日 $500 現金津貼、大型/複雜手術津貼及 ICU 現金。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: 焦點自選保障 - 子女之家添守護選項 -->
+        <section id="familybooster" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border-2 border-amber-400/50 p-6 md:p-8 space-y-8">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white font-black flex items-center justify-center text-2xl shadow">👶</div>
+                        <div>
+                            <div class="inline-block bg-amber-100 text-amber-900 text-xs px-2.5 py-0.5 rounded font-extrabold uppercase">自選升級保障 • 全市場極具突破性</div>
+                            <h3 class="text-xl sm:text-2xl font-black text-fwd-darknavy">子女之家添守護選項（Family Booster）</h3>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-500 md:text-right">
+                        <span>受保父母年齡：19-56 歲 | 子女保障至 19 歲</span>
+                    </div>
+                </div>
+
+                <!-- Pain point highlight banner -->
+                <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 flex items-start space-x-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <span class="text-xl flex-shrink-0">💡</span>
+                    <div>
+                        <strong class="text-fwd-darknavy">父母最常憂慮：</strong>「想幫仔女買保險，但驚早產、黃疸、家族病史或者幼兒過敏導致核保困難加 loading 甚至被拒保？」<br>
+                        富衛「子女之家添守護」只需父母投保醫家保時一同附加，<strong class="text-fwd-orange">受保子女完全毋須進行健康申報與驗身</strong>，而且<strong>受保子女數目不設上限</strong>！
+                    </div>
+                </div>
+
+                <!-- 3 Key Child Surprises -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Surprise 1 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-amber-400 transition space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-500 text-white text-xs px-2.5 py-1 rounded-md font-bold">三重保障 1</span>
+                            <span class="text-xs font-bold text-fwd-navy">免核保 • 每位獨立</span>
+                        </div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">子女守護保障 (每名 HK$80萬)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            生效 2 年後，若子女首次確診涵蓋的 <strong>62種重大危疾</strong> 或 <strong>13種兒童特疾</strong>（如川崎病、成骨不全症、一型糖尿病、嚴重哮喘等），提供全數住院及手術賠償，每名子女享有獨立 HK$800,000 終身額度！
+                        </p>
+                    </div>
+
+                    <!-- Surprise 2 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-amber-400 transition space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-500 text-white text-xs px-2.5 py-1 rounded-md font-bold">三重保障 2</span>
+                            <span class="text-xs font-bold text-fwd-teal">每5年實報實銷</span>
+                        </div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">兒童發展保障 (每名 HK$1,000)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            守護身心成長！每連續 5 個保單年度，資助每名子女參與<strong>兒童發展評估、訓練治療（言語/物理治療）或健康體檢</strong>開支，每次實報實銷高達 HK$1,000。
+                        </p>
+                    </div>
+
+                    <!-- Surprise 3 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-amber-400 transition space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-500 text-white text-xs px-2.5 py-1 rounded-md font-bold">三重保障 3</span>
+                            <span class="text-xs font-bold text-fwd-orange">免體檢保證轉保</span>
+                        </div>
+                        <h4 class="font-bold text-fwd-darknavy text-base">指定年齡免體檢投保獨立醫保</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            生效滿 2 年後，子女於 <strong>5歲、10歲、15歲或18歲</strong> 時，享有 1 次免重新健康核保轉投獨立醫療計劃（如醫家保）的寶貴權利，即使過往曾索償亦能鎖定終身保障！
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Diagram for Child Booster -->
+                <div class="bg-fwd-navy/5 p-6 rounded-2xl border border-fwd-navy/10 space-y-4">
+                    <div class="font-bold text-fwd-darknavy text-sm">🗓️ 實例解構：子女家添守護如何運作？</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
+                            <span class="bg-fwd-navy text-white text-[10px] px-2 py-0.5 rounded font-bold">第 1 階段：投保申報</span>
+                            <p class="font-bold text-slate-800">父母投保基本計劃 + 附加此選項</p>
+                            <p class="text-slate-500">現有子女於生效180天內申報；未來新生子女於出生後180天內申報，子女完全毋須體檢。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
+                            <span class="bg-fwd-orange text-white text-[10px] px-2 py-0.5 rounded font-bold">第 2 階段：2年等候期屆滿</span>
+                            <p class="font-bold text-slate-800">解鎖 HK$80萬 獨立重疾醫療額</p>
+                            <p class="text-slate-500">滿2年後確診62種重疾或13種兒童病全數受保。即使多胞胎，每位子女各自獨享 $80萬 額度，互不影響。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
+                            <span class="bg-fwd-teal text-white text-[10px] px-2 py-0.5 rounded font-bold">第 3 階段：指定年齡自立</span>
+                            <p class="font-bold text-slate-800">5 / 10 / 15 / 18歲 免驗身轉獨立保單</p>
+                            <p class="text-slate-500">無縫銜接至個人全方位醫保，徹底避免日後因子女健康狀況變化而失去受保資格。</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: 創新機制：每保單年度每傷病 (Per Condition Per Policy Year) -->
+        <section id="percondition" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-fwd-orange/10 text-fwd-orange font-black flex items-center justify-center text-xl">🔄</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-fwd-darknavy">「每保單年度每傷病」重新計算：為什麼更有底氣？</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm">打破傳統醫保每年固定總額限制，大病長期治療與多重疾病無懼額度耗盡</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        <p>
+                            傳統醫保通常設定「每年最高保障額」（例如一年限額 50 萬），若受保人在同一年內遭遇嚴重手術並需要化療，額度很容易一年內被耗盡，導致其他疾病無法索償。
+                        </p>
+                        <p>
+                            <strong>醫家保的突破性設計：</strong>
+                        </p>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li><strong class="text-fwd-darknavy">不同傷病獨立額度：</strong>同一年內若同時因「前十字韌帶斷裂」住院及因「結腸癌」治療，兩者<strong>各自享有 HK$550,000 保障限額</strong>，互不擠佔！</li>
+                            <li><strong class="text-fwd-darknavy">復發自動重設：</strong>若同一傷病在出院超過 90 天後復發，或跨越到下一個保單年度，HK$550,000 限額<strong>重新歸零刷新</strong>！</li>
+                            <li><strong class="text-fwd-darknavy">指定大病專項加碼：</strong>針對非手術癌症（標靶/化療/電療）、洗腎及器官移植，每年度每傷病額外再加碼 <strong>HK$550,000</strong>，最高單一年度單一大病賠償可達 <strong>HK$1,100,000</strong>！</li>
+                        </ul>
+                    </div>
+
+                    <!-- Comparison Visual Table -->
+                    <div class="lg:col-span-5 bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="font-bold text-xs text-fwd-darknavy uppercase">實例對比：陳先生罹患癌症與十字韌帶受傷</div>
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                <div class="text-slate-500">傳統固定年度限額計劃</div>
+                                <div class="text-slate-800 font-bold text-sm">最高僅賠 HK$ 2,200,000</div>
+                                <div class="text-[11px] text-rose-600 mt-0.5">所有疾病共用同一年度額度，超出需自費</div>
+                            </div>
+                            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                                <div class="text-emerald-800 font-bold text-xs">富衛【醫家保】每傷病重設機制</div>
+                                <div class="text-emerald-700 font-black text-base">累計總賠償高達 HK$ 3,850,000</div>
+                                <div class="text-[11px] text-emerald-800 mt-0.5">多重傷病各享 $55萬 + 癌症專項加碼 $55萬</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="pt-4 border-t border-slate-200">
+                    <div class="w-full text-center text-xs font-bold text-fwd-darknavy mb-2">每傷病保障額結構與癌症專項加碼 (HKD)</div>
+                    <div class="chart-container" style="height:260px; max-height:280px;">
+                        <canvas id="perConditionChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: 全歲數 (0-80歲) 精確保費試算工具 -->
+        <section id="calculator" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-fwd-teal/10 text-fwd-teal font-black flex items-center justify-center text-xl">💰</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-fwd-darknavy">全歲數保費試算器：支持 0 至 80 歲男女性任何年齡自選</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm">靈活選配「子女之家添守護選項」，即時計算年繳與月繳實付預算</p>
+                    </div>
+                </div>
+
+                <!-- Calculator Card -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+                        
+                        <!-- Gender Selection -->
+                        <div class="sm:col-span-3 space-y-2">
+                            <label class="text-xs font-semibold text-slate-700 block">受保人性別：</label>
+                            <div class="flex bg-white p-1 rounded-xl border border-slate-300">
+                                <button type="button" onclick="setGender('male')" id="genderBtn-male" class="w-1/2 py-2 rounded-lg text-xs font-bold bg-fwd-darknavy text-white transition">男性 (Male)</button>
+                                <button type="button" onclick="setGender('female')" id="genderBtn-female" class="w-1/2 py-2 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition">女性 (Female)</button>
+                            </div>
+                        </div>
+
+                        <!-- Age Slider & Input -->
+                        <div class="sm:col-span-5 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-semibold text-slate-700">受保人年齡 (0 至 80 歲)：</label>
+                                <span class="bg-fwd-navy text-white text-xs px-2.5 py-0.5 rounded-full font-bold">
+                                    <span id="displayAgeVal">35</span> 歲
+                                </span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <input type="range" id="ageSlider" min="0" max="80" value="35" oninput="syncAgeFromSlider(this.value)" class="w-full accent-fwd-orange cursor-pointer">
+                                <input type="number" id="calcAgeInput" min="0" max="80" value="35" oninput="syncAgeFromInput(this.value)" class="w-20 p-2 text-center bg-white border border-slate-300 rounded-xl text-sm font-bold text-fwd-darknavy focus:ring-2 focus:ring-fwd-orange outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Add-on Option Checkbox (Child Booster) -->
+                        <div class="sm:col-span-4 bg-amber-50/80 p-3.5 rounded-xl border border-amber-200 flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">附加「子女之家添守護」</div>
+                                <div class="text-[11px] text-slate-500" id="childBoosterStatus">受保人年齡需為 18-55 歲</div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="childBoosterCheckbox" onchange="updateCalc()" class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fwd-orange"></div>
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <!-- Result Box -->
+                    <div class="bg-gradient-to-r from-fwd-darknavy to-fwd-navy text-white p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-md">
+                        <div class="text-center sm:text-left space-y-1">
+                            <span class="text-xs text-slate-300 block">計劃配置明細：</span>
+                            <span id="planConfigDesc" class="text-sm font-bold text-amber-300">醫家保基本計劃 (35歲男性)</span>
+                            <div class="text-[11px] text-slate-400" id="breakdownNote">基本計劃保費：HK$ 5,568 / 年</div>
+                        </div>
+                        <div class="text-center sm:text-right">
+                            <div class="text-xs text-slate-300">總計年繳保費 / 月繳參考</div>
+                            <div id="calcResultAnnual" class="text-2xl sm:text-3xl font-black text-fwd-orange my-0.5">HK$ 5,568 / 年</div>
+                            <div id="calcResultMonthly" class="text-xs text-slate-300">約 HK$ 501.12 / 月</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Chart Comparison -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+                    <div class="lg:col-span-7">
+                        <div class="chart-container">
+                            <canvas id="premiumGenderTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-fwd-orange/10 p-4 rounded-xl border border-fwd-orange/20">
+                            <div class="font-bold text-fwd-darknavy text-sm mb-1">💡 終身平穩負擔</div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                醫家保屬於大眾化全數保障醫療計劃，在年輕及黃金奮鬥期保費非常具競爭力（20-40歲男性年費約 $3,600 - $5,600，即每月只需約 $300-$500），以極低成本為全家築起無憂醫療護城河！
+                            </p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                            <div class="font-bold text-fwd-darknavy text-sm mb-1">🎯 NCD 折扣再慳達 30%</div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                個人保持無索償最高享 15% 續保折扣；若全家共有 5 份或以上醫家保保單，額外再享 15% 家族折扣，實付保費再打 7 折！
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5: 懷孕及妊娠併發症雙倍守護 -->
+        <section id="pregnancy" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 font-black flex items-center justify-center text-xl">🤰</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-fwd-darknavy">懷孕期間全方位保障：準媽媽的安心後盾</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm">市場上少有將妊娠併發症納入全數賠償及加碼現金保障的醫療計劃</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                        <span class="bg-rose-600 text-white text-xs px-2.5 py-1 rounded-md font-bold">全數賠償</span>
+                        <h4 class="font-bold text-fwd-darknavy text-base">12 種妊娠併發症手術開支</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">保單生效滿 12 個月後確診的妊娠併發症（包括異位妊娠、子癇、羊水栓塞、葡萄胎、產後出血切除子宮等），住院及手術費全數賠償。</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                        <span class="bg-rose-600 text-white text-xs px-2.5 py-1 rounded-md font-bold">雙倍 ICU 現金</span>
+                        <h4 class="font-bold text-fwd-darknavy text-base">額外 HK$ 6,000 ICU 津貼</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">若因懷孕相關併發症於澳門或香港連續入住深切治療部 3 天或以上，於原有的 ICU 現金外額外再賠 HK$6,000，合共達 HK$12,000。</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                        <span class="bg-rose-600 text-white text-xs px-2.5 py-1 rounded-md font-bold">雙倍身故保障</span>
+                        <h4 class="font-bold text-fwd-darknavy text-base">額外 HK$ 20,000 慰問津貼</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">若受保人不幸因受保妊娠併發症身故，除基本 $20,000 身故保障外，額外賠償 $20,000，給予家人關鍵時刻的經濟援助。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: 富衛醫療保障梯隊清晰對比 -->
+        <section id="comparison" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-fwd-navy/10 text-fwd-navy font-black flex items-center justify-center text-xl">⚖️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-fwd-darknavy">富衛醫療產品全景對照：哪一款最契合您？</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm">從入門大眾醫保至殿堂級高端醫療，按預算與病房需求精準定位</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs sm:text-sm text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-white">
+                                <th class="p-3.5 rounded-tl-xl font-bold">比較項目</th>
+                                <th class="p-3.5 text-slate-200">更衛您 (優越版)</th>
+                                <th class="p-3.5 bg-fwd-orange text-white font-black text-center ring-2 ring-fwd-orange">⭐ 醫家保 (本計劃)</th>
+                                <th class="p-3.5 text-slate-200">易衛您醫療計劃</th>
+                                <th class="p-3.5 rounded-tr-xl text-slate-200">尊衛您（寰譽版）</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3.5 font-bold text-fwd-darknavy">定位客群</td>
+                                <td class="p-3.5">入門大眾客戶</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">著重家庭保障的大眾客戶</td>
+                                <td class="p-3.5">中產及具預算人士</td>
+                                <td class="p-3.5">富裕家庭 / 追求極致醫療品質</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-fwd-darknavy">受保病房級別</td>
+                                <td class="p-3.5">標準普通病房 (細項限額)</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">標準普通病房 (全數保障)</td>
+                                <td class="p-3.5">標準普通房 / 半私家房</td>
+                                <td class="p-3.5 font-bold text-fwd-navy">標準半私家房 / 私家房</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3.5 font-bold text-fwd-darknavy">每年/每傷病保障額</td>
+                                <td class="p-3.5">每年最高 HK$ 52萬</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">每傷病每年 HK$ 55萬 (+55萬大病加碼)</td>
+                                <td class="p-3.5">每傷病每年 HK$ 65萬 - 85萬</td>
+                                <td class="p-3.5 font-bold text-fwd-navy">每年 HK$ 1,100萬 - 1,600萬</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-fwd-darknavy">終身保障限額</td>
+                                <td class="p-3.5">無終身限額</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">無終身限額</td>
+                                <td class="p-3.5">無終身限額</td>
+                                <td class="p-3.5 font-bold text-fwd-navy">無終身限額</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3.5 font-bold text-fwd-darknavy">自付費 (墊底費)</td>
+                                <td class="p-3.5">$0</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">$0 (全面零自付費)</td>
+                                <td class="p-3.5">$0</td>
+                                <td class="p-3.5">6 個自選選項 ($0 - $25萬)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-fwd-darknavy">獨家家庭特色</td>
+                                <td class="p-3.5">送 1 年嬰兒醫保</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">
+                                    ⭐ <strong>可加選「子女之家添守護」</strong><br>
+                                    <span class="text-[11px] text-slate-600 font-normal">免核保、子女不限人數、每名$80萬重疾保障</span>
+                                </td>
+                                <td class="p-3.5">送 1 年嬰兒醫保</td>
+                                <td class="p-3.5">送 2 年免費獨立醫保 + 16種危疾免墊底</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3.5 font-bold text-fwd-darknavy">無索償保費折扣 (NCD)</td>
+                                <td class="p-3.5">最高 25%</td>
+                                <td class="p-3.5 font-black text-fwd-orange bg-fwd-orange/5 text-center">最高達 30% (個人15% + 家庭15%)</td>
+                                <td class="p-3.5">最高 25%</td>
+                                <td class="p-3.5">最高 25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: 透明解惑常見疑問 (FAQ) -->
+        <section id="faq" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-fwd-orange/10 text-fwd-orange font-black flex items-center justify-center text-xl">🔍</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-fwd-darknavy">常見疑問解答：全面透徹了解醫家保</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm">輸入關鍵字快速檢索（如：子女、等候期、癌症、日間手術、自付額...）</p>
+                    </div>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative">
+                    <input type="text" id="faqSearch" onkeyup="filterFAQ()" placeholder="🔍 輸入關鍵字搜尋相關問題..." class="w-full p-3.5 pl-4 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-fwd-orange outline-none bg-slate-50">
+                </div>
+
+                <!-- Accordion List -->
+                <div id="faqList" class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <div class="font-bold text-fwd-darknavy text-base flex items-start space-x-2">
+                            <span class="text-fwd-orange">Q1：</span>
+                            <span>「每保單年度每傷病」跟一般醫保的「每年保障額」有何本質分別？</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <p>一般醫保每年的所有理賠共享一個固定限額。如果受保人患上一種大病用光限額，該年度內發生意外或其他疾病就無法再獲賠償。<strong>醫家保是針對「每個獨立傷病」分別給予 HK$550,000 的獨立限額</strong>，且同一疾病在出院相隔超過 90 天後復發或跨年度，限額重新刷新，讓治療更有可持續性。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <div class="font-bold text-fwd-darknavy text-base flex items-start space-x-2">
+                            <span class="text-fwd-orange">Q2：</span>
+                            <span>附加「子女之家添守護選項」之後，新出生的嬰兒需要重新申報健康狀況嗎？</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <p><strong>完全毋須健康申報或體檢！</strong> 只要在保單生效首 180 天內（現有子女）或子女出生後 180 天內（新生子女）提交出生證明申報提名即可。而且受保子女數目不設上限，每位受保子女均享有獨立 HK$800,000 終身重疾醫療額度。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <div class="font-bold text-fwd-darknavy text-base flex items-start space-x-2">
+                            <span class="text-fwd-orange">Q3：</span>
+                            <span>如果子女在 2 年等候期內出現病徵，會影響之後的保障嗎？</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <p>只要該指定重大疾病是在 2 年等候期後<strong>首次確認確診</strong>，即使病徵在等候期內曾出現，亦不會影響受保子女獲得該傷病賠償的資格（因意外導致的傷病更不受 2 年等候期限制）。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="faq-item bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <div class="font-bold text-fwd-darknavy text-base flex items-start space-x-2">
+                            <span class="text-fwd-orange">Q4：</span>
+                            <span>什麼是「日間手術雙倍現金保障」？</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <p>如果受保人於富衛的指定醫療服務提供者接受指定日間手術（例如腸鏡、胃鏡切除息肉等），除全數賠償手術費外，日間手術現金津貼由每宗 HK$500 <strong>加倍至 HK$1,000</strong>，補貼交通及護理開支。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="faq-item bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <div class="font-bold text-fwd-darknavy text-base flex items-start space-x-2">
+                            <span class="text-fwd-orange">Q5：</span>
+                            <span>投保前未知的已有病症何時開始獲得保障？</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <p>在保單首個保單年度首 30 天為等候期，<strong>由第 31 天開始即可獲 100% 全數賠償</strong>。此外，保障更無年齡限制涵蓋任何年齡出現或確診的先天性疾病。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: 尊屬諮詢與輕鬆 3 步投保 -->
+        <section id="contact" class="scroll-mt-20">
+            <div class="bg-gradient-to-br from-fwd-navy to-fwd-darknavy text-white rounded-2xl shadow-xl p-6 md:p-8 space-y-6">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="bg-fwd-orange text-white text-xs px-3 py-1 rounded-full font-bold uppercase">守護摯愛家園</span>
+                    <h3 class="text-2xl sm:text-3xl font-bold">簡單 3 步，為全家鎖定安心醫療基石</h3>
+                    <p class="text-slate-300 text-xs sm:text-sm">富衛專業理財顧問將全程為您度身規劃最切合預算與家庭成員結構的保障組合</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-xl border border-white/10 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-fwd-orange text-white rounded-full font-black flex items-center justify-center">1</div>
+                        <h4 class="font-bold text-base text-fwd-accent">家庭需求分析</h4>
+                        <p class="text-xs text-slate-300">評估夫婦與子女的現有醫療防護缺口，決定是否附加「子女之家添守護」自選保障。</p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-xl border border-white/10 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-fwd-orange text-white rounded-full font-black flex items-center justify-center">2</div>
+                        <h4 class="font-bold text-base text-fwd-accent">簡易健康申報</h4>
+                        <p class="text-xs text-slate-300">只需受保父母申報健康問卷，申報之子女完全毋須體檢。享有 21 天審閱冷靜期保障。</p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-xl border border-white/10 text-center space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-fwd-orange text-white rounded-full font-black flex items-center justify-center">3</div>
+                        <h4 class="font-bold text-base text-fwd-accent">啟用全方位支援</h4>
+                        <p class="text-xs text-slate-300">保單生效即可享用揀易保癌症尊線、第二醫療意見及國際 SOS 24 小時海外緊急支援卡。</p>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                    <p class="text-xs text-slate-300">如欲了解家庭投保保費組合折扣或預約為家人定制保障方案，請隨時聯絡您的富衛專屬理財顧問。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400">
+        <p>富衛【醫家保醫療計劃】客戶家庭保障資訊指南 (2025-2026 旗艦版)</p>
+        <p class="mt-1">本網頁內容僅供參考，不構成任何保險合約或要約。詳細保障項目、條款及不受保事項請參閱富衛正式保單文件及產品小冊子。</p>
+    </footer>
+
+    <script>
+        // Official Standard Premium Tables (Male & Female) for vFamily Medical Plan (HVS9) Ages 0 to 80
+        // Data extracted directly from official FWD Premium Schedule
+        const vFamilyMale = {
+            0: 5524, 1: 5524, 2: 5524, 3: 5524, 4: 4728, 5: 4728, 6: 4728, 7: 4728, 8: 4728, 9: 4728,
+            10: 4728, 11: 4728, 12: 4728, 13: 4728, 14: 4728, 15: 4728, 16: 4728, 17: 4728, 18: 4647, 19: 3718,
+            20: 3754, 21: 3696, 22: 3611, 23: 3644, 24: 3682, 25: 3853, 26: 4082, 27: 4304, 28: 4538, 29: 4751,
+            30: 4917, 31: 5054, 32: 5210, 33: 5337, 34: 5491, 35: 5568, 36: 5603, 37: 5605, 38: 5607, 39: 5609,
+            40: 5689, 41: 5920, 42: 6171, 43: 6379, 44: 6667, 45: 6995, 46: 7332, 47: 7846, 48: 8258, 49: 8686,
+            50: 8802, 51: 8882, 52: 9447, 53: 9922, 54: 10408, 55: 11090, 56: 11793, 57: 12677, 58: 13377, 59: 14062,
+            60: 15246, 61: 16263, 62: 17547, 63: 18734, 64: 19942, 65: 21449, 66: 22953, 67: 24758, 68: 26322, 69: 27888,
+            70: 30737, 71: 32747, 72: 34980, 73: 36340, 74: 37297, 75: 38607, 76: 40023, 77: 42216, 78: 43676, 79: 45121,
+            80: 49893
+        };
+
+        const vFamilyFemale = {
+            0: 3841, 1: 3841, 2: 3841, 3: 3841, 4: 4394, 5: 4394, 6: 4394, 7: 4394, 8: 4394, 9: 4394,
+            10: 4394, 11: 4394, 12: 4394, 13: 4394, 14: 4394, 15: 4394, 16: 4394, 17: 4394, 18: 4420, 19: 4446,
+            20: 4473, 21: 4500, 22: 4520, 23: 4659, 24: 4855, 25: 5184, 26: 5459, 27: 5751, 28: 6015, 29: 6302,
+            30: 6464, 31: 6655, 32: 6868, 33: 7068, 34: 7243, 35: 7283, 36: 7338, 37: 7377, 38: 7431, 39: 7487,
+            40: 7542, 41: 7598, 42: 7939, 43: 8174, 44: 8480, 45: 8805, 46: 9120, 47: 9505, 48: 9755, 49: 9986,
+            50: 10232, 51: 10479, 52: 10857, 53: 11195, 54: 11528, 55: 12078, 56: 12613, 57: 13349, 58: 13903, 59: 14476,
+            60: 15345, 61: 16412, 62: 17411, 63: 18498, 64: 19585, 65: 20747, 66: 21963, 67: 23164, 68: 24386, 69: 25599,
+            70: 26759, 71: 28327, 72: 29332, 73: 30286, 74: 31058, 75: 32413, 76: 33679, 77: 34656, 78: 35932, 79: 37243,
+            80: 41188
+        };
+
+        // Family Booster for Child Option (HVI3) Standard Premium Table for Insured Person (Age 18-55)
+        const childBoosterRates = {
+            18: 751, 19: 765, 20: 771, 21: 767, 22: 759, 23: 774, 24: 836, 25: 884, 26: 933, 27: 984,
+            28: 1033, 29: 1082, 30: 1115, 31: 1147, 32: 1183, 33: 1215, 34: 1247, 35: 1259, 36: 1268, 37: 1272,
+            38: 1276, 39: 1281, 40: 1295, 41: 1327, 42: 1384, 43: 1428, 44: 1454, 45: 1518, 46: 1556, 47: 1595,
+            48: 1633, 49: 1672, 50: 1710, 51: 1749, 52: 1788, 53: 1826, 54: 1865, 55: 1797
+        };
+
+        let currentGender = 'male';
+
+        function setGender(gender) {
+            currentGender = gender;
+            const maleBtn = document.getElementById('genderBtn-male');
+            const femaleBtn = document.getElementById('genderBtn-female');
+            if (gender === 'male') {
+                maleBtn.className = 'w-1/2 py-2 rounded-lg text-xs font-bold bg-fwd-darknavy text-white transition';
+                femaleBtn.className = 'w-1/2 py-2 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition';
+            } else {
+                femaleBtn.className = 'w-1/2 py-2 rounded-lg text-xs font-bold bg-fwd-darknavy text-white transition';
+                maleBtn.className = 'w-1/2 py-2 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition';
+            }
+            updateCalc();
+        }
+
+        function syncAgeFromSlider(val) {
+            document.getElementById('calcAgeInput').value = val;
+            document.getElementById('displayAgeVal').innerText = val;
+            updateCalc();
+        }
+
+        function syncAgeFromInput(val) {
+            let age = parseInt(val);
+            if (isNaN(age)) age = 0;
+            if (age < 0) age = 0;
+            if (age > 80) age = 80;
+            document.getElementById('ageSlider').value = age;
+            document.getElementById('calcAgeInput').value = age;
+            document.getElementById('displayAgeVal').innerText = age;
+            updateCalc();
+        }
+
+        function updateCalc() {
+            const age = parseInt(document.getElementById('calcAgeInput').value) || 0;
+            const safeAge = Math.min(Math.max(age, 0), 80);
+            const isChildBoosterChecked = document.getElementById('childBoosterCheckbox').checked;
+
+            // Check eligibility for Child Booster (18-55)
+            const boosterCheckbox = document.getElementById('childBoosterCheckbox');
+            const boosterStatus = document.getElementById('childBoosterStatus');
+            let boosterEligible = (safeAge >= 18 && safeAge <= 55);
+
+            if (!boosterEligible) {
+                boosterCheckbox.disabled = true;
+                boosterCheckbox.checked = false;
+                boosterStatus.innerText = '僅適用於 18-55 歲受保家長';
+                boosterStatus.className = 'text-[11px] text-rose-500 font-semibold';
+            } else {
+                boosterCheckbox.disabled = false;
+                boosterStatus.innerText = '已符合受保年齡資格';
+                boosterStatus.className = 'text-[11px] text-emerald-600 font-semibold';
+            }
+
+            // Base premium calculation
+            const baseRates = (currentGender === 'male') ? vFamilyMale : vFamilyFemale;
+            const baseAnnual = baseRates[safeAge] || 5568;
+
+            // Add-on calculation
+            let boosterAnnual = 0;
+            if (boosterEligible && document.getElementById('childBoosterCheckbox').checked) {
+                boosterAnnual = childBoosterRates[safeAge] || 0;
+            }
+
+            const totalAnnual = baseAnnual + boosterAnnual;
+            const totalMonthly = (totalAnnual * 0.09).toFixed(2);
+
+            // Update UI
+            const genderText = (currentGender === 'male') ? '男性' : '女性';
+            let planDesc = `醫家保基本計劃 (${safeAge}歲${genderText})`;
+            let breakdown = `基本計劃保費：HK$ ${baseAnnual.toLocaleString()} / 年`;
+
+            if (boosterAnnual > 0) {
+                planDesc += ` + 子女之家添守護選項`;
+                breakdown += ` | 子女守護附加費：HK$ ${boosterAnnual.toLocaleString()} / 年`;
+            }
+
+            document.getElementById('planConfigDesc').innerText = planDesc;
+            document.getElementById('breakdownNote').innerText = breakdown;
+            document.getElementById('calcResultAnnual').innerText = `HK$ ${totalAnnual.toLocaleString()} / 年`;
+            document.getElementById('calcResultMonthly').innerText = `約 HK$ ${totalMonthly} / 月`;
+        }
+
+        // FAQ Filter
+        function filterFAQ() {
+            const query = document.getElementById('faqSearch').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateCalc();
+
+            // CHART 1: Per Condition Limit & Extra Coverage
+            const ctx1 = document.getElementById('perConditionChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['一般傷病住院手術', '癌症/洗腎/器官移植專項'],
+                    datasets: [
+                        {
+                            label: '每傷病每年度基本保障額 (HKD)',
+                            data: [550000, 550000],
+                            backgroundColor: '#0f4c81',
+                            borderRadius: 6
+                        },
+                        {
+                            label: '指定大病額外加碼額度 (HKD)',
+                            data: [0, 550000],
+                            backgroundColor: '#f37021',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // CHART 2: Premium Trend by Gender (Ages 0 to 80)
+            const ctx2 = document.getElementById('premiumGenderTrendChart').getContext('2d');
+            const sampleAges = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+            const maleData = sampleAges.map(a => vFamilyMale[a]);
+            const femaleData = sampleAges.map(a => vFamilyFemale[a]);
+
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: sampleAges.map(a => `${a}歲`),
+                    datasets: [
+                        {
+                            label: '男性基本年保費 (HKD)',
+                            data: maleData,
+                            borderColor: '#0f4c81',
+                            backgroundColor: '#0f4c81',
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: '女性基本年保費 (HKD)',
+                            data: femaleData,
+                            borderColor: '#f37021',
+                            backgroundColor: '#f37021',
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
