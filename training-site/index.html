@@ -500,6 +500,19 @@
                 </div>
                 <p class="text-xs text-slate-500 leading-relaxed">高達 1,467% 終身防衛、7次指定危疾多重保障、醫療開支透視與利益說明表。</p>
             </div>
+
+            <!-- 盈聚天下 II 入口卡片（SPA 內頁切換） -->
+            <div onclick="switchPage('page-fwd-maxwealth')" class="p-6 rounded-3xl border-2 border-amber-300 bg-amber-50/40 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-3 relative group">
+                <div class="flex items-center justify-between">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow">💎</div>
+                    <span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看檔案 ↗</span>
+                </div>
+                <div>
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] mb-1">旗艦儲蓄專區</span>
+                    <h3 class="font-black text-slate-900 text-base group-hover:text-amber-700 transition-colors">盈聚天下 II • 專屬試算表與資源庫</h3>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed">官方建議書試算表、多元貨幣轉換對照與傳承方案配置檔。</p>
+            </div>
     </div>
 </div>
 
@@ -567,6 +580,71 @@
         </div>
     </div>
 
+    <!-- PAGE: 盈聚天下 II 專屬資源專區 -->
+    <div id="page-fwd-maxwealth" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
+        
+        <!-- 頂部返回與狀態欄 -->
+        <div class="flex items-center justify-between">
+            <button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-amber-600 font-bold text-xs sm:text-sm shadow-sm transition">
+                ← 返回 FWD 專區
+            </button>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                雲端動態同步中
+            </span>
+        </div>
+
+        <!-- 主內容白色大卡片（與客戶優惠完全同款排版） -->
+        <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl space-y-8">
+            
+            <!-- 標題區塊 -->
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200">
+                    💎 MaxWealth II Resources
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">盈聚天下 II 資源專區</h2>
+                <p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 試算表及配置文件</p>
+            </div>
+
+            <!-- 兩個 Google Drive 卡片網格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- 檔案 1 卡片 -->
+                <div class="p-6 rounded-2xl border-2 border-amber-200 bg-white hover:border-amber-400 transition-all flex flex-col justify-between space-y-4 shadow-sm">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[11px] font-bold">試算表 1</span>
+                            <span class="text-xs text-amber-600 font-bold">開啟 Drive 文件 ↗</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">盈聚天下 II 利益試算表 (檔案 1)</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">包含保單年度價值推算、分紅演算以及提領方案對照表。</p>
+                    </div>
+                    <a href="https://docs.google.com/spreadsheets/d/1kCxGlS_u2JBo-9C2MP0Bw0KVBuvlGscl/edit?usp=drive_link" target="_blank" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs text-center transition flex items-center justify-center gap-2 shadow-sm">
+                        <span>📊 開啟官方試算表</span>
+                    </a>
+                </div>
+
+                <!-- 檔案 2 卡片 -->
+                <div class="p-6 rounded-2xl border-2 border-orange-200 bg-white hover:border-orange-400 transition-all flex flex-col justify-between space-y-4 shadow-sm">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-orange-100 text-orange-800 text-[11px] font-bold">試算表 2</span>
+                            <span class="text-xs text-orange-600 font-bold">開啟 Drive 文件 ↗</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">盈聚天下 II 案例對比與架構 (檔案 2)</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">涵蓋多元貨幣轉換選項、傳承方案配置以及現金流規劃參考。</p>
+                    </div>
+                    <a href="https://docs.google.com/spreadsheets/d/1ShFUtIYOocAAgIxrMoGmn76xNjGX25yG/edit?usp=drive_link" target="_blank" class="w-full py-3 rounded-xl bg-fwd-orange hover:bg-fwd-darkorange text-white font-bold text-xs text-center transition flex items-center justify-center gap-2 shadow-sm">
+                        <span>📑 開啟官方試算表</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
     <!-- PAGE: FWD 產品小冊子專頁 -->
     <div id="page-fwd-brochures" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回 FWD 專區</button><span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端動態同步中</span></div>
