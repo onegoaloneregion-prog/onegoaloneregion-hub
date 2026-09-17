@@ -1,1 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>車保計算器 | 澳門汽車第三者責任保險試算</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              orange: '#f0821e',
+              orangeHover: '#d96e0e',
+              green: '#00875a',
+              slate: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .custom-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25em 1.25em;
+      padding-right: 2.5rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-amber-50/20 to-slate-100 min-h-screen text-slate-800 font-sans antialiased flex flex-col justify-between">
 
+  <!-- Top Navigation Bar -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-sm font-bold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            車保計算器
+            <span class="text-[11px] bg-amber-50 text-amber-800 font-semibold px-2 py-0.5 rounded-md border border-amber-200">澳門專版</span>
+          </h1>
+          <p class="text-[11px] text-slate-500">澳門汽車/摩托車第三者責任法定保險費率（含 2.5% 法定基金）</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+          含 2.5% 保費基金
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-3xl mx-auto w-full px-4 py-8 flex-1 flex flex-col justify-center">
+
+    <!-- Card Container -->
+    <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 overflow-hidden transition-all">
+      
+      <!-- Card Header -->
+      <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-4 sm:py-5 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span class="text-base sm:text-lg font-bold tracking-wide">車保計算器</span>
+        </div>
+        <button onclick="resetDefaults()" class="text-xs text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg transition">
+          重置預設
+        </button>
+      </div>
+
+      <div class="divide-y divide-slate-100">
+
+        <!-- 1. 分類 -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="vehicle_category" class="text-sm font-semibold text-slate-700 sm:w-1/3 flex items-center gap-1.5">
+            分類：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="vehicle_category" onchange="onCategoryChange()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <option value="car">私人輕型車</option>
+              <option value="heavy_moto" selected>重型摩托車</option>
+              <option value="light_moto">輕型摩托車</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 2. 汽缸容量(CC) -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="engine_cc" class="text-sm font-semibold text-slate-700 sm:w-1/3">
+            汽缸容量(CC)：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="engine_cc" onchange="calcPremium()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. 車齡(首次登記日期) -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="car_age" class="text-sm font-semibold text-slate-700 sm:w-1/3">
+            車齡(首次登記日期)：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="car_age" onchange="calcPremium()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <option value="under_8" selected>8年以下</option>
+              <option value="8_to_9">8年 – 9年</option>
+              <option value="10_plus">10年或以上</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 亞洲車保 10年或以上車齡專屬提示條 (加幅僅 50%) -->
+        <div id="asia-insurance-tip" class="hidden px-4 py-3 sm:px-6 bg-gradient-to-r from-amber-50 via-amber-50/80 to-emerald-50/50 border-y border-amber-200 transition-all duration-300">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-500 text-white font-bold text-xs shrink-0 shadow-xs">💡</span>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-bold text-amber-950 text-sm">亞洲車保高車齡專屬優惠</span>
+                <span class="bg-amber-100 text-amber-800 text-[11px] font-semibold px-2 py-0.5 rounded-full border border-amber-300/60">加幅僅 50%</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
+              <div class="text-xs text-slate-600 font-medium">
+                優惠保費：<span class="text-base font-extrabold text-[#00875a]">MOP <span id="asia-promo-amount">0.00</span></span>
+              </div>
+              <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md shadow-2xs">
+                節省 MOP <span id="asia-saved-amount">0.00</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 駕駛人年齡 -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="driver_age" class="text-sm font-semibold text-slate-700 sm:w-1/3">
+            駕駛人年齡：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="driver_age" onchange="calcPremium()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <option value="25_plus" selected>25歲或以上</option>
+              <option value="under_25">25歲以下</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 5. 駕駛經驗 -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="driver_exp" class="text-sm font-semibold text-slate-700 sm:w-1/3">
+            駕駛經驗：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="driver_exp" onchange="calcPremium()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <option value="2_plus" selected>2年或以上</option>
+              <option value="under_2">2年以下</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 6. 無索償年限(NCB) -->
+        <div class="p-4 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/70 transition">
+          <label for="ncb_years" class="text-sm font-semibold text-slate-700 sm:w-1/3">
+            無索償年限(NCB)：
+          </label>
+          <div class="sm:w-2/3">
+            <select id="ncb_years" onchange="calcPremium()" class="custom-select w-full bg-slate-50 hover:bg-white border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-slate-800 text-sm font-medium rounded-xl py-2.5 px-3.5 outline-none transition shadow-2xs">
+              <option value="0" selected>無 (0%)</option>
+              <option value="1">1年 (10%)</option>
+              <option value="2">2年 (20%)</option>
+              <option value="3">3年 (30%)</option>
+              <option value="4">4年 (40%)</option>
+              <option value="5">5年 (50%)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 7. 參考保費 -->
+        <div class="p-5 sm:px-6 sm:py-5 bg-gradient-to-r from-emerald-50/60 to-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t-2 border-slate-200">
+          <div class="sm:w-1/3">
+            <span class="text-base font-bold text-slate-800">參考保費：</span>
+            <p class="text-[11px] text-slate-500 mt-0.5">已含 2.5% 汽車及航海保障基金</p>
+          </div>
+          <div class="sm:w-2/3 flex items-baseline gap-2">
+            <span class="text-2xl sm:text-3xl font-extrabold text-[#00875a] tracking-tight flex items-baseline gap-1.5" id="premium-display-wrap">
+              <span class="text-lg sm:text-xl font-bold">MOP</span>
+              <span id="premium-amount">540.17</span>
+            </span>
+            <button onclick="toggleDetails()" type="button" class="text-xs text-slate-500 hover:text-slate-800 underline decoration-dotted ml-auto">
+              查看明細
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Collapsible Detailed Breakdown -->
+      <div id="details-drawer" class="hidden bg-slate-50 px-6 py-4 border-t border-slate-200 text-xs text-slate-600 space-y-2">
+        <div class="flex justify-between">
+          <span class="text-slate-500">基本淨保費 (Net)：</span>
+          <span class="font-medium text-slate-800">MOP <span id="detail-base">527.00</span></span>
+        </div>
+        <div id="detail-loading-row" class="flex justify-between text-amber-700 hidden">
+          <span>年齡/車齡/經驗加成：</span>
+          <span class="font-medium">+ MOP <span id="detail-loading">0.00</span></span>
+        </div>
+        <div id="detail-ncb-row" class="flex justify-between text-emerald-700 hidden">
+          <span>NCB 折扣減免：</span>
+          <span class="font-medium">- MOP <span id="detail-ncb">0.00</span></span>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>折後淨保費：</span>
+          <span class="font-medium text-slate-700">MOP <span id="detail-net">527.00</span></span>
+        </div>
+        <div class="flex justify-between text-indigo-700 font-medium pt-1 border-t border-slate-200">
+          <span>汽車及航海保障基金 (2.5%)：</span>
+          <span>+ MOP <span id="detail-fund">13.17</span></span>
+        </div>
+      </div>
+
+      <!-- Bottom Action Button -->
+      <div class="p-6 bg-white border-t border-slate-100 flex items-center justify-center">
+        <button type="button" onclick="triggerCalculateAnimation()" class="w-full sm:w-52 bg-[#f0821e] hover:bg-[#d96e0e] active:scale-[0.98] text-white text-base font-bold py-3 px-6 rounded-xl transition duration-150 shadow-md shadow-amber-500/20 flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span>立即試算</span>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="mt-6 flex items-center justify-center text-xs text-slate-500 gap-2 px-2 text-center">
+      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>費率參考澳門第三者責任收費表與亞洲保險優惠核算（已計入 2.5% 法定基金）</span>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl border border-slate-700 transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <span id="toast-message">已即時計算最新參考保費！</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-5 text-center text-xs text-slate-400">
+    <div class="max-w-4xl mx-auto px-4 space-y-1">
+      <p>© 2026 車保計算器. 依據澳門最新市場費率表核算</p>
+      <p>免責聲明：本計算器所提供之保費僅供參考，最終保費將由正式核保文件確認為準。</p>
+    </div>
+  </footer>
+
+  <script>
+    const rateMatrix = {
+      car: {
+        '1650_below': 1180.00,
+        '1651_3500': 1378.00,
+        '3501_above': 1893.00
+      },
+      heavy_moto: {
+        '250_below': 527.00,
+        '250_above': 637.00
+      },
+      light_moto: {
+        '50_below': 354.00
+      }
+    };
+
+    const engineOptionsByCategory = {
+      car: [
+        { value: '1650_below', text: '1,650cc 或以下' },
+        { value: '1651_3500', text: '1,651cc 至 3,500cc' },
+        { value: '3501_above', text: '3,501cc 或以上' }
+      ],
+      heavy_moto: [
+        { value: '250_below', text: '250CC 或以下' },
+        { value: '250_above', text: '250CC 以上' }
+      ],
+      light_moto: [
+        { value: '50_below', text: '50CC 或以下' }
+      ]
+    };
+
+    const ncbPercentages = {
+      '0': 0.0,
+      '1': 0.10,
+      '2': 0.20,
+      '3': 0.30,
+      '4': 0.40,
+      '5': 0.50
+    };
+
+    const FUND_RATE = 0.025; // 2.5% 汽車及航海保障基金
+
+    function onCategoryChange() {
+      const category = document.getElementById('vehicle_category').value;
+      const engineSelect = document.getElementById('engine_cc');
+      
+      engineSelect.innerHTML = '';
+      const options = engineOptionsByCategory[category] || [];
+      options.forEach(opt => {
+        const el = document.createElement('option');
+        el.value = opt.value;
+        el.textContent = opt.text;
+        engineSelect.appendChild(el);
+      });
+
+      calcPremium();
+    }
+
+    function calcPremium() {
+      const category = document.getElementById('vehicle_category').value;
+      const engineCc = document.getElementById('engine_cc').value;
+      const carAge = document.getElementById('car_age').value;
+      const driverAge = document.getElementById('driver_age').value;
+      const driverExp = document.getElementById('driver_exp').value;
+      const ncb = document.getElementById('ncb_years').value;
+
+      let baseRate = 527.00;
+      if (rateMatrix[category] && rateMatrix[category][engineCc]) {
+        baseRate = rateMatrix[category][engineCc];
+      }
+
+      let loadingRate = 0;
+      if (carAge === '8_to_9') {
+        loadingRate += 0.30;
+      } else if (carAge === '10_plus') {
+        loadingRate += 1.00;
+      }
+
+      let driverLoading = 0;
+      if (driverAge === 'under_25') {
+        driverLoading += 0.20;
+      }
+      if (driverExp === 'under_2') {
+        driverLoading += 0.20;
+      }
+
+      loadingRate += driverLoading;
+
+      const loadingAmount = baseRate * loadingRate;
+      const grossPremium = baseRate + loadingAmount;
+
+      const discountPct = ncbPercentages[ncb] || 0;
+      const ncbDiscount = grossPremium * discountPct;
+      const finalNetPremium = Math.max(0, grossPremium - ncbDiscount);
+
+      const fundAmount = finalNetPremium * FUND_RATE;
+      const finalGrossWithFund = finalNetPremium + fundAmount;
+      const formattedAmount = finalGrossWithFund.toFixed(2);
+
+      const asiaTipElement = document.getElementById('asia-insurance-tip');
+      if (carAge === '10_plus') {
+        const asiaLoadingRate = 0.50 + driverLoading;
+        const asiaGross = baseRate * (1 + asiaLoadingRate);
+        const asiaNet = Math.max(0, asiaGross * (1 - discountPct));
+        const asiaFinal = asiaNet * (1 + FUND_RATE);
+        const savedAmount = Math.max(0, finalGrossWithFund - asiaFinal);
+
+        document.getElementById('asia-promo-amount').textContent = asiaFinal.toFixed(2);
+        document.getElementById('asia-saved-amount').textContent = savedAmount.toFixed(2);
+
+        asiaTipElement.classList.remove('hidden');
+      } else {
+        asiaTipElement.classList.add('hidden');
+      }
+
+      document.getElementById('premium-amount').textContent = formattedAmount;
+      
+      document.getElementById('detail-base').textContent = baseRate.toFixed(2);
+      document.getElementById('detail-loading').textContent = loadingAmount.toFixed(2);
+      document.getElementById('detail-ncb').textContent = ncbDiscount.toFixed(2);
+      document.getElementById('detail-net').textContent = finalNetPremium.toFixed(2);
+      document.getElementById('detail-fund').textContent = fundAmount.toFixed(2);
+
+      const loadingRow = document.getElementById('detail-loading-row');
+      if (loadingAmount > 0) {
+        loadingRow.classList.remove('hidden');
+      } else {
+        loadingRow.classList.add('hidden');
+      }
+
+      const ncbRow = document.getElementById('detail-ncb-row');
+      if (ncbDiscount > 0) {
+        ncbRow.classList.remove('hidden');
+      } else {
+        ncbRow.classList.add('hidden');
+      }
+    }
+
+    function triggerCalculateAnimation() {
+      calcPremium();
+      const wrap = document.getElementById('premium-display-wrap');
+      wrap.classList.add('scale-105', 'transition-transform');
+      setTimeout(() => {
+        wrap.classList.remove('scale-105');
+      }, 200);
+      showToast('已即時計算最新參考保費！');
+    }
+
+    function toggleDetails() {
+      const drawer = document.getElementById('details-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function resetDefaults() {
+      document.getElementById('vehicle_category').value = 'heavy_moto';
+      onCategoryChange();
+      document.getElementById('car_age').value = 'under_8';
+      document.getElementById('driver_age').value = '25_plus';
+      document.getElementById('driver_exp').value = '2_plus';
+      document.getElementById('ncb_years').value = '0';
+      calcPremium();
+      showToast('已重置為預設試算條件');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      onCategoryChange();
+    });
+  </script>
+</body>
+</html>
