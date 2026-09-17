@@ -269,7 +269,7 @@
       </div>
     </div>
 
-    <!-- NEW SECTION: 危疾保障重要性與常見重大疾病治療開支透視 (Critical Illness Burden & Cost Analysis) -->
+    <!-- NEW SECTION: 危疾保障重要性與常見重大疾病治療開支透視 -->
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-7">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-slate-100">
         <div>
@@ -695,55 +695,60 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Service & Value Added Privileges -->
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3.5 text-xs leading-relaxed text-slate-600">
-        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-fwd-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          尊貴增值醫療服務精選
+    <!-- Service & Value Added Privileges (全寬優化排版，無縫填滿不留白) -->
+    <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h4 class="font-bold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-fwd-orange"></span>
+          尊貴增值醫療服務精選 (Value-Added Privileges)
         </h4>
-        <div class="space-y-2">
-          <p><strong class="text-slate-800">1. 臻一尊貴優才醫護管理團隊 (泛亞醫療網絡)：</strong>一站式禮賓服務。覆蓋中國內地 664 間三甲醫院（90間特設國際貴賓通道並提供免找數服務）、香港 13 間私家醫院、澳門鏡湖及科大醫院、日本 41 間網絡醫院（4間提供質子治療）及新加坡百滙醫療集團，專人安排跨國就醫機票住宿及綠色通道。</p>
-          <p><strong class="text-slate-800">2. 美國頂尖醫療專家第二醫療意見：</strong>經國際 SOS 連線哈佛醫學院、約翰·霍普金斯醫院、麻省總醫院等 15,000 名專科專家，對病症診斷及治療方案進行權威審閱，3-5 個工作天出具完整報告。</p>
-          <p><strong class="text-slate-800">3. 5次免費身體檢查券：</strong>所有保單於第 2、4、6、8 及 10 個保單週年日派發免費體檢券，助受保人定期掌握健康狀況，防患於未然。</p>
+        <span class="text-xs bg-orange-50 text-fwd-darkorange px-3 py-1 rounded-full font-bold">
+          富衛專屬禮賓支援
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- 服務 1 -->
+        <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 space-y-2.5 hover:border-orange-300 transition">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-orange-100 text-fwd-darkorange font-black flex items-center justify-center text-xs">1</span>
+            <h5 class="font-bold text-slate-900 text-xs sm:text-sm">臻一尊貴優才醫護管理團隊</h5>
+          </div>
+          <span class="inline-block text-[10px] font-semibold text-orange-700 bg-orange-50 px-2 py-0.5 rounded">泛亞醫療網絡 · 免找數</span>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            覆蓋內地 664 間三甲醫院（90 間設國際貴賓免找數通道）、香港 13 間私家醫院、澳門鏡湖及科大醫院、日本 41 間網絡醫院（4 間提供質子治療）及新加坡百滙醫療集團，專人安排跨國就醫機票住宿及綠色通道。
+          </p>
+        </div>
+
+        <!-- 服務 2 -->
+        <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 space-y-2.5 hover:border-orange-300 transition">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-orange-100 text-fwd-darkorange font-black flex items-center justify-center text-xs">2</span>
+            <h5 class="font-bold text-slate-900 text-xs sm:text-sm">美國頂尖專家第二醫療意見</h5>
+          </div>
+          <span class="inline-block text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">國際權威審閱 · 3-5天出具</span>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            經國際 SOS 連線哈佛醫學院、約翰·霍普金斯醫院、麻省總醫院等 15,000 名專科專家，對重大病症診斷及治療方案進行權威審閱，3-5 個工作天出具完整書面報告。
+          </p>
+        </div>
+
+        <!-- 服務 3 -->
+        <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 space-y-2.5 hover:border-orange-300 transition">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-orange-100 text-fwd-darkorange font-black flex items-center justify-center text-xs">3</span>
+            <h5 class="font-bold text-slate-900 text-xs sm:text-sm">5 次免費身體檢查券</h5>
+          </div>
+          <span class="inline-block text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">定期掌握健康 · 防患未然</span>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            所有保單於第 2、4、6、8 及 10 個保單週年日派發免費體檢券，守護受保人長期健康狀態，確保在關鍵時刻及早察覺潛在病患。
+          </p>
         </div>
       </div>
 
-      <!-- Proposal Advisor Memo & Signatures -->
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-slate-900 text-sm">理財規劃備註 & 客戶確認</h4>
-            <span class="text-xs text-fwd-darkorange font-semibold bg-orange-50 px-2 py-0.5 rounded">專屬方案</span>
-          </div>
-          <p class="text-xs text-slate-500 mb-3">本策劃書依據富衛人壽澳門 2026 最新官方危疾應援保費率及條款編制。</p>
-
-          <div class="space-y-2 text-xs">
-            <div class="flex justify-between py-1 border-b border-slate-100">
-              <span class="text-slate-500">建議受保人：</span>
-              <span class="font-bold text-slate-800" id="memoClientName">尊貴客戶 (Mr. Client)</span>
-            </div>
-            <div class="flex justify-between py-1 border-b border-slate-100">
-              <span class="text-slate-500">專業理財顧問：</span>
-              <span class="font-bold text-slate-800">高智良 (KOU CHI LEONG) - 富衛菁英財富管理</span>
-            </div>
-            <div class="flex justify-between py-1 border-b border-slate-100">
-              <span class="text-slate-500">編印日期：</span>
-              <span class="font-bold text-slate-800" id="memoCurrentDate">2026年9月15日</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6 pt-4 border-t border-dashed border-slate-200 flex items-center justify-between">
-          <div class="text-center w-5/12">
-            <div class="h-10 border-b border-slate-300"></div>
-            <span class="text-[11px] text-slate-400 block mt-1">顧問簽署 (Advisor Signature)</span>
-          </div>
-          <div class="text-center w-5/12">
-            <div class="h-10 border-b border-slate-300"></div>
-            <span class="text-[11px] text-slate-400 block mt-1">客戶確認 (Client Acceptance)</span>
-          </div>
-        </div>
+      <!-- 保留後台腳本繫結標籤（隱藏避免報錯） -->
+      <div class="hidden" aria-hidden="true">
+        <span id="memoClientName"></span>
+        <span id="memoCurrentDate"></span>
       </div>
     </div>
 
@@ -844,7 +849,6 @@
 
     /*
      * 官方利益說明書精確基準表 (以 500,000 原有投保額為基準換算比例)
-     * 完美對齊您上傳的 60萬、80萬官方建議書數據
      */
     const OFFICIAL_ILLUSTRATION_DATA = {
       20: {
@@ -1173,8 +1177,6 @@
       document.getElementById('badgeMaxRatio').innerText = `${(maxGrandRatio * 100).toFixed(0)}%`;
       document.getElementById('statMaxGrandTotal').innerText = `${currency} ${fmt(sumInsured * maxGrandRatio)}`;
 
-      document.getElementById('memoClientName').innerText = `${age} 歲${currentGender === 'Male' ? '先生' : '女士'} (${smoking === 'Preferred' ? '優越非吸煙' : '標準費率'})`;
-
       updateGapAnalysis();
       renderClaimEventSelector(sumInsured, currency, productTier, bonusRatio, annualPrem);
       renderScheduleTable();
@@ -1188,7 +1190,6 @@
       const recoveryYears = parseInt(document.getElementById('calcRecoveryYears')?.value) || 3;
       const drugBudget = parseFloat(document.getElementById('calcAdvancedDrugBudget')?.value) || 500000;
 
-      // 若貨幣為 USD，將輸入預設依匯率換算
       let incomeFactor = currency === 'USD' ? 1 / 7.8 : 1;
       let effectiveMonthly = monthlyIncome * incomeFactor;
       let effectiveDrug = drugBudget * incomeFactor;
@@ -1473,8 +1474,6 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      document.getElementById('memoCurrentDate').innerText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
       calculatePlan();
     });
   </script>
