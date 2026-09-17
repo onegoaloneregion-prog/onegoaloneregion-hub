@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>富衛 FWD 危疾應援保 / 升級版 專屬客戶保障策劃書</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN for interactive visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fwd: {
+              orange: '#E87722',
+              darkorange: '#C95E0D',
+              navy: '#1A2B49',
+              lightnavy: '#22385D',
+              pearl: '#F8FAFC',
+              slate: '#475569',
+              gold: '#C5A059'
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', '"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; font-size: 11px; }
+      .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow: none !important; }
+      .page-break { page-break-after: always; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-orange-100 selection:text-orange-900">
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-fwd-orange text-white font-extrabold text-xl px-3 py-1 rounded-xl tracking-wider shadow-sm">
+          FWD
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 text-base sm:text-lg leading-tight">危疾應援保 (Crisis USupporter) 專屬策劃系統</h1>
+          <p class="text-xs text-slate-500 font-medium">高達 1,467% 終身全面防衛 · 7 次指定危疾多重保障 · 家添守護跨代兼顧</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2.5">
+        <button type="button" onclick="window.print()" class="text-xs px-4 py-1.5 rounded-xl bg-fwd-orange hover:bg-fwd-darkorange text-white font-bold transition shadow-sm flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          列印 / 匯出專屬建議書
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7">
+    <div class="relative bg-gradient-to-r from-fwd-navy via-slate-900 to-fwd-lightnavy rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden">
+      <div class="relative z-10 max-w-3xl space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-bold tracking-wide uppercase">
+          🛡️ 富衛澳門旗艦危疾旗艦方案 · 敢至係人生
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          全方位應援人生重要戰役 · 最高原有投保額 <span class="text-orange-400 font-mono">1,467%</span> 頂級防護
+        </h2>
+        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+          首創不孕症治療、家庭成員「家添守護」免核保保障、深切治療部生活守護、試驗性藥物實報實銷及 3 大疾病持續生活現金。結合保證現金價值與非保證特別紅利，既保健康，亦固資產！
+        </p>
+      </div>
+      <div class="absolute -right-8 -bottom-10 w-72 h-72 rounded-full bg-fwd-orange/15 blur-3xl pointer-events-none"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 no-print">
+      <!-- Client Profile & Product Variant -->
+      <div class="lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-fwd-orange"></span>
+            1. 客戶背景及方案規格
+          </h3>
+          <span class="text-xs bg-orange-50 text-fwd-darkorange px-2.5 py-0.5 rounded-full font-bold">自訂規劃</span>
+        </div>
+
+        <div class="space-y-4 text-xs sm:text-sm">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">受保人性別與吸煙習慣</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="btnGenderMale" onclick="setGender('Male')" class="py-2 px-3 text-center rounded-xl border border-fwd-orange bg-orange-50 font-bold text-fwd-orange transition flex items-center justify-center gap-1">
+                <span>👨 男性 (Male)</span>
+              </button>
+              <button type="button" id="btnGenderFemale" onclick="setGender('Female')" class="py-2 px-3 text-center rounded-xl border border-slate-200 bg-white font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-center gap-1">
+                <span>👩 女性 (Female)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="clientAge" class="block font-medium text-slate-700 mb-1">投保年齡 (下次生日)</label>
+              <input type="number" id="clientAge" min="1" max="70" value="30" oninput="calculatePlan()" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-900 font-mono text-center">
+            </div>
+            <div>
+              <label for="smokingClass" class="block font-medium text-slate-700 mb-1">費率等級</label>
+              <select id="smokingClass" onchange="calculatePlan()" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-semibold text-slate-800 bg-white">
+                <option value="Preferred" selected>非吸煙優惠保費 (Preferred)</option>
+                <option value="Standard">標準費率 (Standard)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="productTier" class="block font-medium text-slate-700 mb-1">計劃版本 (Plan Variant)</label>
+            <select id="productTier" onchange="calculatePlan()" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-900 bg-white">
+              <option value="Basic" selected>危疾應援保（常規版）- 經典高性價比保障 (對標官方建議書)</option>
+              <option value="Pro">危疾應援保（升級版）- 包含延伸 ICU 50% + 試驗性藥物 20%</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-medium text-slate-700 mb-1.5 flex justify-between items-center">
+              <span>家添守護 (Family Booster 自選保障)</span>
+              <span class="text-[11px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">免體檢 · 父母子女共享</span>
+            </label>
+            <label class="relative flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+              <input type="checkbox" id="chkFamilyBooster" onchange="calculatePlan()" class="w-4 h-4 accent-fwd-orange rounded cursor-pointer">
+              <span class="text-xs text-slate-700 font-medium">附加家添守護 (父母癌症/心臟/中風 + 子女62種危疾各 20%)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial & Sum Insured Configuration -->
+      <div class="lg:col-span-8 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              2. 保額、供款期與保費結構
+            </h3>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded font-mono">核保費率表已自動對齊</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm mt-4">
+            <div>
+              <label for="currency" class="block font-medium text-slate-700 mb-1">保單貨幣</label>
+              <select id="currency" onchange="calculatePlan()" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-semibold text-slate-800 bg-white">
+                <option value="HKD" selected>港元 (HKD)</option>
+                <option value="USD">美元 (USD)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="payTerm" class="block font-medium text-slate-700 mb-1">保費供款年期</label>
+              <select id="payTerm" onchange="calculatePlan()" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-900 bg-white">
+                <option value="10">10 年供款 (1-70歲)</option>
+                <option value="15">15 年供款 (1-60歲)</option>
+                <option value="20" selected>20 年供款 (1-55歲 · 最受歡迎)</option>
+                <option value="25">25 年供款 (1-50歲 · 輕鬆低負擔)</option>
+                <option value="30">30 年供款 (1-50歲 · 槓桿最大化)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="sumInsured" class="block font-medium text-slate-700 mb-1 flex justify-between items-center">
+                <span>原有投保額 (Sum Insured)</span>
+                <span id="discountBadge" class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold font-mono">大額折扣</span>
+              </label>
+              <div class="relative">
+                <input type="text" id="sumInsured" value="800,000" oninput="handleSumInsuredInput(this)" class="w-full pl-3 pr-12 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-900 font-mono">
+                <span id="currTag" class="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">HKD</span>
+              </div>
+              <div class="flex flex-wrap gap-1 mt-1.5 text-[11px]">
+                <button type="button" onclick="setQuickSumInsured(500000)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition">50萬</button>
+                <button type="button" onclick="setQuickSumInsured(600000)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition">60萬</button>
+                <button type="button" onclick="setQuickSumInsured(800000)" class="px-2 py-0.5 rounded bg-orange-100 hover:bg-orange-200 text-fwd-orange font-bold transition">80萬</button>
+                <button type="button" onclick="setQuickSumInsured(1000000)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition">100萬</button>
+                <button type="button" onclick="setQuickSumInsured(1200000)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition">120萬</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Premium Result Card -->
+        <div class="bg-gradient-to-r from-orange-50/80 to-amber-50/80 border border-orange-200 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div>
+            <span class="block text-xs text-slate-500 mb-0.5">每千保額費率 (折後)</span>
+            <span id="displayRatePerMille" class="text-sm sm:text-base font-bold text-slate-800 font-mono">34.99</span>
+          </div>
+          <div>
+            <span class="block text-xs text-slate-500 mb-0.5">首年 / 每年應繳保費</span>
+            <span id="displayAnnualPrem" class="text-sm sm:text-lg font-extrabold text-fwd-darkorange font-mono">HKD 17,495</span>
+          </div>
+          <div>
+            <span class="block text-xs text-slate-500 mb-0.5">總供款期累計保費</span>
+            <span id="displayTotalPrem" class="text-sm sm:text-base font-bold text-slate-900 font-mono">HKD 349,900</span>
+          </div>
+          <div>
+            <span class="block text-xs text-slate-500 mb-0.5">首15年重疾/身故總保額</span>
+            <span id="displayEarlyCoverage" class="text-sm sm:text-lg font-extrabold text-rose-600 font-mono">HKD 875,000</span>
+          </div>
+        </div>
+
+        <div class="text-xs text-slate-500 flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200/60">
+          <span class="flex items-center gap-1 text-slate-700 font-medium">
+            💡 供款安全網提示：
+          </span>
+          <span id="displayWaiverRuleText" class="text-slate-600">
+            當任何危疾、特別疾病或重大醫療賠償累計達 100% 原有投保額，<strong>即時豁免後續所有未繳保費</strong>，多重危疾及現金權益照常生效！
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <!-- Metric Card 1 -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-orange-300 transition">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 tracking-wide uppercase">首15年額外保障權益</span>
+          <span id="badgeBonusRatio" class="text-xs font-bold font-mono px-2 py-0.5 rounded-md bg-rose-100 text-rose-700">+75% 加碼</span>
+        </div>
+        <h4 id="statEarlyBonusAmount" class="text-2xl font-extrabold text-rose-600 mt-2 font-mono">HKD 375,000</h4>
+        <p class="text-xs text-slate-500 mt-1">黃金奮鬥期患病或身故，提供高達 175% 原有投保額賠償！</p>
+      </div>
+
+      <!-- Metric Card 2 -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-emerald-300 transition">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 tracking-wide uppercase">7次多重危疾保障總池</span>
+          <span class="text-xs font-bold font-mono px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700">高達 990%</span>
+        </div>
+        <h4 id="statMultipleBenefitTotal" class="text-2xl font-extrabold text-emerald-600 mt-2 font-mono">HKD 4,950,000</h4>
+        <p class="text-xs text-slate-500 mt-1">涵蓋癌/心/中風及首次確診認知障礙、腎衰竭、柏金遜症</p>
+      </div>
+
+      <!-- Metric Card 3 -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-blue-300 transition">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 tracking-wide uppercase">3大疾病持續現金支援</span>
+          <span id="badgeCashRate" class="text-xs font-bold font-mono px-2 py-0.5 rounded-md bg-blue-100 text-blue-700">高達 62%</span>
+        </div>
+        <h4 id="statContinuousCashTotal" class="text-2xl font-extrabold text-blue-600 mt-2 font-mono">HKD 310,000</h4>
+        <p class="text-xs text-slate-500 mt-1">癌症 5 年生活年金 (每年10%) + 心肌梗塞/中風 12 個月月津貼</p>
+      </div>
+
+      <!-- Metric Card 4 -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-purple-300 transition">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 tracking-wide uppercase">本案最高潛在總理賠槓桿</span>
+          <span id="badgeMaxRatio" class="text-xs font-bold font-mono px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">1,467%</span>
+        </div>
+        <h4 id="statMaxGrandTotal" class="text-2xl font-extrabold text-purple-700 mt-2 font-mono">HKD 7,335,000</h4>
+        <p class="text-xs text-slate-500 mt-1">包含所有危疾、ICU生活守護、試驗性藥物、家添守護</p>
+      </div>
+    </div>
+
+    <!-- NEW SECTION: 危疾保障重要性與常見重大疾病治療開支透視 (Critical Illness Burden & Cost Analysis) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-7">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-slate-100">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-xs font-extrabold uppercase mb-1.5">
+            <span>⚠️</span> 為什麼「醫保不等於危疾保」？
+          </div>
+          <h3 class="font-extrabold text-slate-900 text-lg sm:text-xl">
+            重大疾病真實財務衝擊 · 昂貴自費藥物與停工生活開銷透視
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            住院醫保（如易衛您）僅實報實銷醫院床位及手術費；唯有<strong>危疾一筆過現金賠償</strong>，才能填補 2~5 年黃金休養期的家庭收入中斷、海外頂級標靶藥物及長期護理沉重負擔。
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-xs bg-slate-100 text-slate-700 font-semibold px-3 py-1.5 rounded-xl border border-slate-200">
+            港澳私家醫療大數據
+          </span>
+        </div>
+      </div>
+
+      <!-- 1. 常見癌症及重大疾病治療費用卡片網格 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Card 1: 肺癌 -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span> 肺癌 (Lung Cancer)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">頭號致命癌王</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            早期無明顯病徵，確診多為中晚期。主要依賴精準標靶治療或免疫療法，療程往往持續數年。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>微創肺葉切除手術：</span>
+              <span class="font-bold text-slate-900">HKD 18萬 - 30萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>第三代標靶藥 (每年)：</span>
+              <span class="font-bold text-rose-600">HKD 40萬 - 60萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>免疫治療 PD-1 (每年)：</span>
+              <span class="font-bold text-rose-600">HKD 35萬 - 50萬</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>首2年預計醫療花費：</span>
+              <span class="text-rose-700 text-sm">HKD 90萬 - 150萬+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: 乳癌 -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-pink-500"></span> 乳癌 (Breast Cancer)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">女性發病率最高</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            年輕化趨勢明顯。HER2陽性患者需採用「雙標靶治療」，並常伴隨乳房重建及生育力保存（凍卵）需求。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>腫瘤切除及重建手術：</span>
+              <span class="font-bold text-slate-900">HKD 15萬 - 28萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>HER2 標靶藥物 (全療程)：</span>
+              <span class="font-bold text-rose-600">HKD 35萬 - 55萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>不孕症/生育保存治療：</span>
+              <span class="font-bold text-fwd-darkorange">HKD 10萬 - 18萬</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>首2年預計醫療花費：</span>
+              <span class="text-rose-700 text-sm">HKD 60萬 - 100萬+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: 大腸癌 -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> 大腸癌 (Colorectal Cancer)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">港澳第二大常見癌</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            現代人飲食高脂少纖維所致。微創機械人手術普及，術後常需輔助化療及血管內皮抑制標靶藥物。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>達芬奇機械人微創手術：</span>
+              <span class="font-bold text-slate-900">HKD 20萬 - 35萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>標靶藥 (如愛必妥/貝伐單抗)：</span>
+              <span class="font-bold text-rose-600">HKD 30萬 - 45萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>造口護理及營養補充：</span>
+              <span class="font-bold text-slate-900">HKD 5萬 - 10萬</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>首2年預計醫療花費：</span>
+              <span class="text-rose-700 text-sm">HKD 55萬 - 90萬+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: 急性心肌梗塞 -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-600"></span> 心肌梗塞 (Heart Attack)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">黃金搶救每分每秒</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            急性血管阻塞引發猝死危機。私立醫院緊急通波仔及冠狀動脈搭橋，術後需長期心臟復康監測。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>緊急通波仔 (每條支架計)：</span>
+              <span class="font-bold text-slate-900">HKD 12萬 - 25萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>若進行開心搭橋手術：</span>
+              <span class="font-bold text-rose-600">HKD 30萬 - 50萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>心血管專業復康計劃 (優活)：</span>
+              <span class="font-bold text-emerald-600">保單豁免免費享有</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>急診及手術預算：</span>
+              <span class="text-rose-700 text-sm">HKD 20萬 - 50萬</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: 中風 -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span> 中風 (Stroke)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">漫長復康最大支出</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            急性動脈取栓手術後，最沉重的往往不是手術費，而是長達 2~5 年甚至終身的物理治療、言語治療與私家護理開銷。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>急性微創導管取栓術：</span>
+              <span class="font-bold text-slate-900">HKD 20萬 - 35萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>全職私家護工 (每年)：</span>
+              <span class="font-bold text-rose-600">HKD 24萬 - 36萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>每月持續生活現金補貼：</span>
+              <span class="font-bold text-blue-600">保單每月派 1%</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>首3年急救及護理花費：</span>
+              <span class="text-rose-700 text-sm">HKD 80萬 - 130萬+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: 深切治療部 (ICU) -->
+        <div class="p-5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/50 to-white hover:border-orange-300 transition space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-purple-600"></span> 深切治療 (ICU 重症/未知疾病)
+            </span>
+            <span class="text-[11px] font-mono font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">未定義疾病防護</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            嚴重意外創傷、暴發性感染或新型未知病毒引致器官衰竭。私立醫院 ICU 每日費用驚人，常超出傳統保單定義。
+          </p>
+          <div class="space-y-1.5 text-xs font-mono pt-2 border-t border-slate-100">
+            <div class="flex justify-between text-slate-600">
+              <span>私家醫院 ICU 每日住院費：</span>
+              <span class="font-bold text-slate-900">HKD 2.5萬 - 4.5萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>人工肺 ECMO / 侵入性呼吸機：</span>
+              <span class="font-bold text-rose-600">每日 HKD 1萬 - 2萬</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>危疾應援保生活守護額外賠：</span>
+              <span class="font-bold text-purple-600">高達 100% 原有保額</span>
+            </div>
+            <div class="flex justify-between text-slate-700 pt-1 border-t border-dashed border-slate-200 font-bold">
+              <span>住院10天潛在花費：</span>
+              <span class="text-rose-700 text-sm">HKD 35萬 - 60萬+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 互動式「收入中斷與醫療缺口智能評估計算機」 -->
+      <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-rose-500/10 border border-orange-200 rounded-3xl p-6 sm:p-7 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-orange-200/60">
+          <div>
+            <h4 class="font-bold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+              <span>🧮</span> 專屬危疾保障缺口試算器 (Income Replacement & Treatment Gap)
+            </h4>
+            <p class="text-xs text-slate-600">
+              根據國際理財規劃標準：危疾保額應至少儲備<strong>「2~3年全額家庭開支 + 自費標靶藥物專項儲備」</strong>。
+            </p>
+          </div>
+          <span class="text-xs font-bold text-fwd-darkorange bg-white px-3 py-1 rounded-xl shadow-xs border border-orange-200 self-start sm:self-auto">
+            動態即時計算
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div>
+            <label for="calcMonthlyIncome" class="block font-semibold text-slate-700 mb-1">家庭每月維持開支 / 月收入</label>
+            <div class="relative">
+              <input type="number" id="calcMonthlyIncome" value="35000" step="5000" oninput="updateGapAnalysis()" class="w-full pl-3 pr-12 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 font-bold font-mono text-slate-900">
+              <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">HKD</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="calcRecoveryYears" class="block font-semibold text-slate-700 mb-1">預計治療及全面康復休養年期</label>
+            <select id="calcRecoveryYears" onchange="updateGapAnalysis()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 font-bold text-slate-900">
+              <option value="2">2 年 (常規早期復元期)</option>
+              <option value="3" selected>3 年 (黃金抗癌及心腦復康標準)</option>
+              <option value="5">5 年 (中晚期癌症積極治療期)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="calcAdvancedDrugBudget" class="block font-semibold text-slate-700 mb-1">預計自費標靶 / 臨床試驗藥物儲備</label>
+            <select id="calcAdvancedDrugBudget" onchange="updateGapAnalysis()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 font-bold text-slate-900">
+              <option value="300000">HKD 30萬 (基礎新藥儲備)</option>
+              <option value="500000" selected>HKD 50萬 (標準先進標靶儲備)</option>
+              <option value="800000">HKD 80萬 (海外就醫與高端免疫治療)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Result Evaluation Banner -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-orange-200/80 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="space-y-1 text-center md:text-left">
+            <span class="text-xs text-slate-500 block font-medium">建議黃金安全防衛保額需求：</span>
+            <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-mono">
+              <span id="displaySuggestedSumInsured" class="text-fwd-darkorange">HKD 1,760,000</span>
+            </div>
+            <span class="text-[11px] text-slate-500 block" id="displayGapBreakdownText">
+              含 3 年家庭收入補償 HKD 1,260,000 + 標靶專項預算 HKD 500,000
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3 shrink-0">
+            <div class="text-right">
+              <span class="text-xs text-slate-500 block font-medium">當前規劃原有保額：</span>
+              <span id="displayCurrentConfiguredSI" class="text-base sm:text-lg font-bold font-mono text-slate-800">HKD 800,000</span>
+            </div>
+            <div id="gapComparisonBadge" class="px-3.5 py-2 rounded-xl text-xs font-bold font-mono bg-rose-100 text-rose-700 border border-rose-200">
+              缺口 HKD 960,000
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+            <span>🩺</span> 客戶全生命週期多重理賠情境模擬器 (Claim Journey Simulation)
+          </h3>
+          <p class="text-xs text-slate-500">點擊不同人生階段的病症索償事件，動態檢視保單如何化解浩劫、豁免保費並提供高達百萬級現金流</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="loadSimulationCase('sample1')" class="text-xs px-3 py-1.5 rounded-lg border border-orange-200 bg-orange-50 text-fwd-darkorange font-bold hover:bg-orange-100 transition">
+            載入典型案例 (陳小姐 4 重守護)
+          </button>
+          <button type="button" onclick="clearSimulation()" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+            清空重選
+          </button>
+        </div>
+      </div>
+
+      <!-- Timeline Interactive Event Checklist -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="claimEventContainer">
+        <!-- Dynamically rendered checklist cards -->
+      </div>
+
+      <!-- Live Journey Calculation Result Banner -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="space-y-1 text-center md:text-left">
+          <div class="text-xs text-slate-400 font-medium">當前情境模擬累計賠償總額 (Total Claim Payout)</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-orange-400 font-mono" id="simTotalPayoutDisplay">
+            HKD 0
+          </div>
+          <div class="text-xs text-slate-300" id="simWaiverStatusDisplay">
+            目前狀態：保單正常繳費中
+          </div>
+        </div>
+        <div class="flex items-center gap-4 text-center">
+          <div class="bg-white/10 px-4 py-2.5 rounded-xl">
+            <span class="text-[11px] text-slate-400 block">對比已繳保費槓桿</span>
+            <span class="text-base sm:text-lg font-bold text-emerald-400 font-mono" id="simLeverageDisplay">0.0 倍</span>
+          </div>
+          <div class="bg-white/10 px-4 py-2.5 rounded-xl">
+            <span class="text-[11px] text-slate-400 block">剩餘多重賠償次數</span>
+            <span class="text-base sm:text-lg font-bold text-amber-300 font-mono" id="simRemainingClaimsDisplay">7 次</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Chart: Cash Value & Long Term Health Asset Growth -->
+      <div class="lg:col-span-8 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base sm:text-lg">無索償健康儲蓄資產走勢 (Wealth & Asset Protection)</h3>
+            <p class="text-xs text-slate-500">若客戶一生平平安安，保單內建之分紅紅利與保證現金價值將持續複利增長，兼享退休儲蓄與家族傳承</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs font-semibold">
+            <span class="inline-flex items-center gap-1 text-emerald-600">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 總退保價值 (非保證特別紅利)
+            </span>
+            <span class="inline-flex items-center gap-1 text-slate-400">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span> 累計已繳保費
+            </span>
+          </div>
+        </div>
+
+        <div class="relative h-72 sm:h-80 w-full">
+          <canvas id="cashValueChart"></canvas>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 bg-gradient-to-br from-slate-900 to-fwd-navy text-white rounded-3xl p-6 flex flex-col justify-between shadow-lg space-y-4">
+        <div>
+          <div class="inline-block bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs px-3 py-1 rounded-full font-bold mb-3">
+            為什麼選擇富衛《危疾應援保》？
+          </div>
+          <h4 class="text-lg font-bold text-white mb-3">市場罕見的 6 大獨家優勢</h4>
+
+          <ul class="space-y-3 text-xs text-slate-300 leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">多重保障覆蓋更多：</strong>多重危疾不僅保癌/心/中風，更擴展至首次確診亞爾茲默氏病、腎衰竭及柏金遜症。</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">心腦血管持續津貼：</strong>不僅癌症有現金流，急性心肌梗塞及中風亦提供連續 6~12 個月每月 1% 津貼。</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">家添守護免核保：</strong>父母（56-85歲）與子女（至18歲）直接享有 20% 專屬危疾保障，無需體檢回答核保問卷。</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">未知疾病深切治療生活守護：</strong>非定義不明疾病因住院住進 ICU 達 3 天並符狀況，額外賠償高達 100% 原有保額。</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">臨床試驗藥物實報實銷：</strong>升級版支援癌症、腦退化臨床第 III 期試驗藥物開銷高達 20% (上限40萬)。</div>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold shrink-0">✓</span>
+              <div><strong class="text-white">頂級增值醫療服務：</strong>5次免費身體檢查券、泛亞「臻一尊貴優才」就醫綠色通道、美國頂級專家第二醫療意見。</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
+          <span>富衛人壽保險 (澳門) 官方核准</span>
+          <span class="text-orange-400 font-semibold">尊尚專屬提案</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base sm:text-lg">保單年度價值與保障利益說明表 (Policy Value Schedule)</h3>
+          <p class="text-xs text-slate-500">依據官方分紅利益說明文件之精確年度現金價值、特別紅利及身故保障</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-500">顯示篩選：</span>
+          <select id="scheduleFilter" onchange="renderScheduleTable()" class="text-xs border border-slate-200 rounded-xl px-3 py-1.5 bg-white font-medium">
+            <option value="key">重點代表年度 (每5年及保本/關鍵期)</option>
+            <option value="all">逐年完整清單 (第1至100歲)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-slate-100/90 text-slate-700 font-bold border-b border-slate-200">
+              <th class="py-3.5 px-4">保單年度</th>
+              <th class="py-3.5 px-3">受保年齡</th>
+              <th class="py-3.5 px-4 text-right">累計已繳保費</th>
+              <th class="py-3.5 px-4 text-right text-emerald-700">保證現金價值</th>
+              <th class="py-3.5 px-4 text-right text-amber-700">非保證特別紅利</th>
+              <th class="py-3.5 px-4 text-right bg-emerald-50/60 font-bold text-emerald-900">總退保價值</th>
+              <th class="py-3.5 px-4 text-right bg-rose-50/60 font-bold text-rose-700">身故/危疾總權益</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleTableBody" class="divide-y divide-slate-100 font-mono">
+            <!-- Populated via Javascript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Service & Value Added Privileges -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3.5 text-xs leading-relaxed text-slate-600">
+        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-fwd-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          尊貴增值醫療服務精選
+        </h4>
+        <div class="space-y-2">
+          <p><strong class="text-slate-800">1. 臻一尊貴優才醫護管理團隊 (泛亞醫療網絡)：</strong>一站式禮賓服務。覆蓋中國內地 664 間三甲醫院（90間特設國際貴賓通道並提供免找數服務）、香港 13 間私家醫院、澳門鏡湖及科大醫院、日本 41 間網絡醫院（4間提供質子治療）及新加坡百滙醫療集團，專人安排跨國就醫機票住宿及綠色通道。</p>
+          <p><strong class="text-slate-800">2. 美國頂尖醫療專家第二醫療意見：</strong>經國際 SOS 連線哈佛醫學院、約翰·霍普金斯醫院、麻省總醫院等 15,000 名專科專家，對病症診斷及治療方案進行權威審閱，3-5 個工作天出具完整報告。</p>
+          <p><strong class="text-slate-800">3. 5次免費身體檢查券：</strong>所有保單於第 2、4、6、8 及 10 個保單週年日派發免費體檢券，助受保人定期掌握健康狀況，防患於未然。</p>
+        </div>
+      </div>
+
+      <!-- Proposal Advisor Memo & Signatures -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-bold text-slate-900 text-sm">理財規劃備註 & 客戶確認</h4>
+            <span class="text-xs text-fwd-darkorange font-semibold bg-orange-50 px-2 py-0.5 rounded">專屬方案</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">本策劃書依據富衛人壽澳門 2026 最新官方危疾應援保費率及條款編制。</p>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">建議受保人：</span>
+              <span class="font-bold text-slate-800" id="memoClientName">尊貴客戶 (Mr. Client)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">專業理財顧問：</span>
+              <span class="font-bold text-slate-800">高智良 (KOU CHI LEONG) - 富衛菁英財富管理</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">編印日期：</span>
+              <span class="font-bold text-slate-800" id="memoCurrentDate">2026年9月15日</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-dashed border-slate-200 flex items-center justify-between">
+          <div class="text-center w-5/12">
+            <div class="h-10 border-b border-slate-300"></div>
+            <span class="text-[11px] text-slate-400 block mt-1">顧問簽署 (Advisor Signature)</span>
+          </div>
+          <div class="text-center w-5/12">
+            <div class="h-10 border-b border-slate-300"></div>
+            <span class="text-[11px] text-slate-400 block mt-1">客戶確認 (Client Acceptance)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-[11px] text-slate-400 leading-normal space-y-1 pb-10">
+      <p>* 重要備註：本策劃書所載之《危疾應援保》/《危疾應援保（升級版）》資料乃參考富衛人壽保險（澳門）股份有限公司之產品小冊子、內部培訓手冊及利益說明文件（Policy Illustration）精確編製。</p>
+      <p>* 保費率並非保證，富衛保留不時檢討及調整保費之權利，但保費不會隨受保人年齡增長而按年遞增。分紅部分（特別紅利）為非保證，實際派發以富衛人壽之官方建議書為準。</p>
+      <p>* 本系統供理財顧問向客戶做產品結構說明與財務測算之用，所有賠償均受保單條款及相關疾病定義約束。</p>
+    </div>
+  </main>
+
+  <script>
+    /*
+     * 1. 官方費率基數表 (每 1,000 元投保額年繳費率)
+     * 採集自《危疾應援保保費率.pdf》及《產品指引》
+     */
+    const RATE_TABLES_BY_TERM = {
+      10: {
+        1: { mp: 41.34, ms: 41.34, fp: 38.45, fs: 38.45 },
+        5: { mp: 45.52, ms: 45.52, fp: 41.33, fs: 41.33 },
+        10: { mp: 48.74, ms: 48.74, fp: 44.79, fs: 44.79 },
+        15: { mp: 52.24, ms: 52.24, fp: 48.63, fs: 48.63 },
+        20: { mp: 56.26, ms: 59.76, fp: 52.45, fs: 55.93 },
+        25: { mp: 60.68, ms: 65.05, fp: 56.63, fs: 60.99 },
+        30: { mp: 66.56, ms: 72.11, fp: 63.35, fs: 68.73 },
+        35: { mp: 73.26, ms: 80.40, fp: 71.49, fs: 78.17 },
+        40: { mp: 82.71, ms: 91.56, fp: 79.01, fs: 86.95 },
+        45: { mp: 93.54, ms: 105.35, fp: 87.52, fs: 97.13 },
+        50: { mp: 105.94, ms: 122.35, fp: 95.47, fs: 107.63 },
+        55: { mp: 120.17, ms: 142.22, fp: 104.29, fs: 118.97 }
+      },
+      15: {
+        1: { mp: 28.65, ms: 28.65, fp: 26.69, fs: 26.69 },
+        5: { mp: 31.58, ms: 31.58, fp: 28.92, fs: 28.92 },
+        10: { mp: 33.88, ms: 33.88, fp: 31.18, fs: 31.18 },
+        15: { mp: 36.40, ms: 36.40, fp: 33.67, fs: 33.67 },
+        20: { mp: 39.30, ms: 41.91, fp: 36.76, fp_s: 39.34 },
+        25: { mp: 42.47, ms: 45.79, fp: 40.22, fs: 43.50 },
+        30: { mp: 46.84, ms: 51.11, fp: 44.84, fs: 48.94 },
+        35: { mp: 51.93, ms: 57.50, fp: 50.34, fs: 55.50 },
+        40: { mp: 60.16, ms: 67.07, fp: 56.88, fs: 63.13 },
+        45: { mp: 69.88, ms: 79.31, fp: 64.38, fs: 72.00 },
+        50: { mp: 78.79, ms: 92.38, fp: 72.32, fs: 82.10 },
+        55: { mp: 88.93, ms: 107.93, fp: 81.38, fs: 93.49 }
+      },
+      20: {
+        1: { mp: 22.55, ms: 22.55, fp: 21.15, fs: 21.15 },
+        5: { mp: 24.00, ms: 24.00, fp: 22.13, fs: 22.13 },
+        10: { mp: 25.81, ms: 25.81, fp: 23.91, fs: 23.91 },
+        15: { mp: 27.79, ms: 27.79, fp: 25.87, fs: 25.87 },
+        20: { mp: 30.33, ms: 32.55, fp: 28.91, fs: 31.06 },
+        25: { mp: 33.16, ms: 35.99, fp: 32.39, fs: 35.10 },
+        26: { mp: 33.75, ms: 36.74, fp: 33.06, fs: 35.90 },
+        27: { mp: 34.56, ms: 37.71, fp: 33.86, fs: 36.85 },
+        28: { mp: 35.40, ms: 38.71, fp: 34.66, fs: 37.82 },
+        29: { mp: 36.25, ms: 39.76, fp: 35.50, fs: 38.84 },
+        30: { mp: 37.14, ms: 40.82, fp: 36.37, fs: 39.88 },
+        31: { mp: 38.05, ms: 41.93, fp: 37.25, fs: 40.98 },
+        32: { mp: 38.98, ms: 43.08, fp: 38.15, fs: 42.12 },
+        33: { mp: 39.93, ms: 44.28, fp: 39.10, fs: 43.30 },
+        34: { mp: 40.93, ms: 45.53, fp: 40.05, fs: 44.50 },
+        35: { mp: 41.95, ms: 46.82, fp: 41.00, fs: 45.68 },
+        36: { mp: 43.33, ms: 48.32, fp: 42.25, fs: 47.01 },
+        37: { mp: 44.76, ms: 50.04, fp: 43.54, fs: 48.54 },
+        38: { mp: 46.24, ms: 51.84, fp: 44.88, fs: 50.15 },
+        39: { mp: 47.77, ms: 53.74, fp: 46.28, fs: 51.81 },
+        40: { mp: 49.35, ms: 55.73, fp: 47.72, fs: 53.55 },
+        45: { mp: 58.19, ms: 67.17, fp: 55.66, fs: 62.93 },
+        50: { mp: 65.17, ms: 78.77, fp: 61.16, fs: 70.60 },
+        55: { mp: 73.02, ms: 92.55, fp: 67.28, fs: 79.24 }
+      },
+      25: {
+        1: { mp: 18.76, ms: 18.76, fp: 17.57, fs: 17.57 },
+        5: { mp: 20.41, ms: 20.41, fp: 18.94, fs: 18.94 },
+        10: { mp: 22.22, ms: 22.22, fp: 20.56, fs: 20.56 },
+        15: { mp: 23.67, ms: 23.67, fp: 22.20, fs: 22.20 },
+        20: { mp: 25.76, ms: 27.88, fp: 24.81, fs: 26.66 },
+        25: { mp: 28.06, ms: 30.69, fp: 27.49, fs: 29.98 },
+        30: { mp: 31.37, ms: 34.89, fp: 30.72, fs: 34.09 },
+        35: { mp: 35.82, ms: 40.53, fp: 35.06, fs: 39.48 },
+        40: { mp: 43.00, ms: 49.41, fp: 41.53, fs: 47.25 },
+        45: { mp: 50.68, ms: 59.72, fp: 48.28, fs: 55.48 },
+        50: { mp: 58.02, ms: 71.13, fp: 54.08, fs: 63.14 }
+      },
+      30: {
+        1: { mp: 17.09, ms: 17.09, fp: 15.97, fs: 15.97 },
+        5: { mp: 18.61, ms: 18.61, fp: 17.23, fs: 17.23 },
+        10: { mp: 20.27, ms: 20.27, fp: 18.71, fs: 18.71 },
+        15: { mp: 21.60, ms: 21.60, fp: 20.21, fs: 20.21 },
+        20: { mp: 23.52, ms: 25.47, fp: 22.60, fs: 24.30 },
+        25: { mp: 25.63, ms: 28.05, fp: 25.06, fs: 27.34 },
+        30: { mp: 28.67, ms: 31.91, fp: 28.02, fs: 31.10 },
+        35: { mp: 32.76, ms: 37.08, fp: 31.99, fs: 36.05 },
+        40: { mp: 39.35, ms: 45.23, fp: 37.92, fs: 43.16 },
+        45: { mp: 46.40, ms: 54.70, fp: 44.11, fs: 50.70 },
+        50: { mp: 53.14, ms: 65.18, fp: 49.42, fs: 57.72 }
+      }
+    };
+
+    /*
+     * 官方利益說明書精確基準表 (以 500,000 原有投保額為基準換算比例)
+     * 完美對齊您上傳的 60萬、80萬官方建議書數據
+     */
+    const OFFICIAL_ILLUSTRATION_DATA = {
+      20: {
+        Male: [
+          [0, 0], [0, 0], [1085/500000, 0], [2495/500000, 0], [5485/500000, 1925/500000],
+          [9910/500000, 3975/500000], [15770/500000, 6090/500000], [22960/500000, 8375/500000], [31580/500000, 10820/500000], [46560/500000, 16845/500000],
+          [63925/500000, 19615/500000], [84770/500000, 22495/500000], [102285/500000, 25445/500000], [118215/500000, 27495/500000], [128425/500000, 29815/500000],
+          [151880/500000, 34375/500000], [166045/500000, 38175/500000], [205475/500000, 41520/500000], [223885/500000, 64195/500000], [231070/500000, 81060/500000],
+          [237355/500000, 100390/500000], [243640/500000, 123835/500000], [250415/500000, 152250/500000], [256705/500000, 187090/500000], [263595/500000, 231595/500000],
+          [270865/500000, 253815/500000], [277645/500000, 277435/500000], [284920/500000, 302315/500000], [292185/500000, 328715/500000], [302935/500000, 370160/500000],
+          [309615/500000, 397740/500000], [317095/500000, 428255/500000], [324755/500000, 466760/500000], [332610/500000, 508320/500000], [340650/500000, 553185/500000],
+          [348880/500000, 601610/500000], [357315/500000, 653870/500000], [365955/500000, 710295/500000], [374800/500000, 775280/500000], [383865/500000, 848690/500000],
+          [392175/500000, 912555/500000], [400665/500000, 984630/500000], [409345/500000, 1058820/500000], [418205/500000, 1150625/500000], [427260/500000, 1228530/500000],
+          [436150/500000, 1326035/500000], [445230/500000, 1431620/500000], [454500/500000, 1545980/500000], [463960/500000, 1669880/500000], [473615/500000, 1804140/500000],
+          [483475/500000, 1943480/500000], [500000/500000, 2081725/500000], [500000/500000, 2245430/500000], [500000/500000, 2417055/500000], [500000/500000, 2597495/500000],
+          [500000/500000, 2778160/500000], [500000/500000, 2970310/500000], [500000/500000, 3174740/500000], [500000/500000, 3392295/500000], [500000/500000, 3623890/500000],
+          [500000/500000, 3870500/500000], [500000/500000, 4133175/500000], [500000/500000, 4413040/500000], [500000/500000, 4711315/500000], [500000/500000, 5029290/500000],
+          [500000/500000, 5368380/500000], [500000/500000, 5730090/500000], [500000/500000, 6116035/500000], [500000/500000, 6527975/500000], [500000/500000, 6967765/500000]
+        ],
+        Female: [
+          [0, 0], [0, 0], [750/500000, 0], [2105/500000, 0], [5690/500000, 2985/500000],
+          [9400/500000, 3405/500000], [13290/500000, 3945/500000], [18655/500000, 4745/500000], [26670/500000, 5380/500000], [38495/500000, 6505/500000],
+          [53155/500000, 7210/500000], [71675/500000, 8585/500000], [89545/500000, 14455/500000], [102195/500000, 20480/500000], [111675/500000, 29335/500000],
+          [131770/500000, 39780/500000], [145620/500000, 49630/500000], [180990/500000, 61925/500000], [189920/500000, 86215/500000], [197630/500000, 103010/500000],
+          [203185/500000, 114085/500000], [208250/500000, 129715/500000], [215195/500000, 147870/500000], [222190/500000, 171350/500000], [226015/500000, 204690/500000],
+          [231595/500000, 226745/500000], [235575/500000, 254490/500000], [244620/500000, 281035/500000], [252140/500000, 314345/500000], [279855/500000, 330940/500000],
+          [286955/500000, 360060/500000], [294665/500000, 392000/500000], [303020/500000, 427080/500000], [312065/500000, 465670/500000], [321840/500000, 508170/500000],
+          [328775/500000, 558920/500000], [336065/500000, 620260/500000], [343725/500000, 688785/500000], [351780/500000, 765415/500000], [360240/500000, 851215/500000],
+          [368710/500000, 936465/500000], [377625/500000, 1003465/500000], [387000/500000, 1075230/500000], [396865/500000, 1152130/500000], [407235/500000, 1234570/500000],
+          [415770/500000, 1323925/500000], [424625/500000, 1436710/500000], [433810/500000, 1559565/500000], [443340/500000, 1693475/500000], [451710/500000, 1841220/500000],
+          [455295/500000, 1996770/500000], [458910/500000, 2155970/500000], [462555/500000, 2319890/500000], [466230/500000, 2489510/500000], [500000/500000, 2632340/500000],
+          [500000/500000, 2808390/500000], [500000/500000, 2994905/500000], [500000/500000, 3192540/500000], [500000/500000, 3402005/500000], [500000/500000, 3624045/500000],
+          [500000/500000, 3859475/500000], [500000/500000, 4109130/500000], [500000/500000, 4373935/500000], [500000/500000, 4654865/500000], [500000/500000, 4952950/500000],
+          [500000/500000, 5269315/500000], [500000/500000, 5605130/500000], [500000/500000, 5961670/500000], [500000/500000, 6340280/500000], [500000/500000, 6742410/500000]
+        ]
+      },
+      25: {
+        Male: [
+          [0, 0], [0, 0], [910/500000, 0], [2090/500000, 0], [4590/500000, 1610/500000],
+          [8290/500000, 3325/500000], [13185/500000, 5090/500000], [19200/500000, 7000/500000], [26405/500000, 9045/500000], [38930/500000, 14085/500000],
+          [53445/500000, 16400/500000], [70875/500000, 18805/500000], [85515/500000, 21275/500000], [98835/500000, 22990/500000], [107370/500000, 27730/500000],
+          [118945/500000, 30875/500000], [131765/500000, 34375/500000], [145965/500000, 38275/500000], [161700/500000, 42615/500000], [179130/500000, 47450/500000],
+          [198440/500000, 52830/500000], [203695/500000, 74950/500000], [209355/500000, 99650/500000], [214615/500000, 156415/500000], [220375/500000, 193620/500000],
+          [231925/500000, 212200/500000], [243475/500000, 231945/500000], [255025/500000, 252745/500000], [266575/500000, 274815/500000], [278125/500000, 309465/500000],
+          [289675/500000, 332525/500000], [301225/500000, 358035/500000], [312775/500000, 390225/500000], [324325/500000, 424970/500000], [335875/500000, 462480/500000],
+          [343340/500000, 502965/500000], [350800/500000, 546655/500000], [358260/500000, 593825/500000], [365720/500000, 648160/500000], [373180/500000, 709530/500000],
+          [380640/500000, 762925/500000], [388100/500000, 823180/500000], [395560/500000, 885205/500000], [403020/500000, 961960/500000], [410480/500000, 1027090/500000],
+          [417940/500000, 1108605/500000], [425400/500000, 1196875/500000], [432860/500000, 1292485/500000], [440320/500000, 1396070/500000], [447780/500000, 1508315/500000],
+          [455240/500000, 1624805/500000], [462700/500000, 1740385/500000], [470160/500000, 1877250/500000], [477620/500000, 2020730/500000], [485080/500000, 2171585/500000],
+          [492540/500000, 2322625/500000], [500000/500000, 2483270/500000], [500000/500000, 2654175/500000], [500000/500000, 2836060/500000], [500000/500000, 3029680/500000],
+          [500000/500000, 3235855/500000], [500000/500000, 3455455/500000], [500000/500000, 3689435/500000], [500000/500000, 3938800/500000], [500000/500000, 4204640/500000],
+          [500000/500000, 4488125/500000], [500000/500000, 4790525/500000], [500000/500000, 5113190/500000], [500000/500000, 5457580/500000], [500000/500000, 5825260/500000]
+        ],
+        Female: [
+          [0, 0], [0, 0], [630/500000, 0], [1760/500000, 0], [4760/500000, 2495/500000],
+          [7860/500000, 2895/500000], [11110/500000, 3405/500000], [15595/500000, 3965/500000], [22295/500000, 4495/500000], [32180/500000, 5435/500000],
+          [44430/500000, 6025/500000], [59910/500000, 7175/500000], [74845/500000, 12085/500000], [85420/500000, 17115/500000], [93345/500000, 22250/500000],
+          [103135/500000, 27175/500000], [113955/500000, 32950/500000], [125910/500000, 39700/500000], [139115/500000, 47580/500000], [153705/500000, 56760/500000],
+          [169830/500000, 67435/500000], [174065/500000, 93410/500000], [179870/500000, 121660/500000], [185715/500000, 143220/500000], [188915/500000, 171090/500000],
+          [200485/500000, 189520/500000], [212055/500000, 212710/500000], [223625/500000, 234895/500000], [235195/500000, 262740/500000], [246765/500000, 276610/500000],
+          [258335/500000, 300950/500000], [269905/500000, 327645/500000], [281475/500000, 356965/500000], [293045/500000, 389220/500000], [304615/500000, 424745/500000],
+          [316185/500000, 467165/500000], [327750/500000, 518435/500000], [336365/500000, 575710/500000], [344975/500000, 639760/500000], [353590/500000, 711470/500000],
+          [362200/500000, 782730/500000], [370815/500000, 838730/500000], [379425/500000, 898710/500000], [388040/500000, 962985/500000], [396650/500000, 1031890/500000],
+          [405265/500000, 1106575/500000], [413875/500000, 1200845/500000], [422490/500000, 1303535/500000], [431100/500000, 1415460/500000], [439715/500000, 1538950/500000],
+          [448325/500000, 1668960/500000], [456940/500000, 1802025/500000], [465550/500000, 1939035/500000], [474165/500000, 2080810/500000], [482775/500000, 2200190/500000],
+          [491390/500000, 2347335/500000], [500000/500000, 2503230/500000], [500000/500000, 2668425/500000], [500000/500000, 2843500/500000], [500000/500000, 3029090/500000],
+          [500000/500000, 3225865/500000], [500000/500000, 3434535/500000], [500000/500000, 3655870/500000], [500000/500000, 3890680/500000], [500000/500000, 4139830/500000],
+          [500000/500000, 4404255/500000], [500000/500000, 4684935/500000], [500000/500000, 4982945/500000], [500000/500000, 5299400/500000], [500000/500000, 5635515/500000]
+        ]
+      },
+      10: {
+        Male: [
+          [0, 0], [0, 0], [1955/500000, 0], [6665/500000, 0], [15785/500000, 860/500000],
+          [29560/500000, 2290/500000], [47005/500000, 4480/500000], [69110/500000, 7355/500000], [96060/500000, 10940/500000], [127765/500000, 15670/500000],
+          [140535/500000, 23290/500000], [153890/500000, 36300/500000], [167940/500000, 47555/500000], [182580/500000, 61175/500000], [188790/500000, 83125/500000],
+          [195110/500000, 102545/500000], [201425/500000, 117640/500000], [207635/500000, 134195/500000], [214435/500000, 149775/500000], [220750/500000, 166485/500000],
+          [226855/500000, 183315/500000], [233065/500000, 205220/500000], [239760/500000, 233320/500000], [245870/500000, 259795/500000], [252565/500000, 294665/500000],
+          [259745/500000, 328815/500000], [266440/500000, 368130/500000], [273620/500000, 399855/500000], [281290/500000, 432310/500000], [290890/500000, 463490/500000],
+          [298685/500000, 502260/500000], [306690/500000, 541815/500000], [314905/500000, 583980/500000], [323340/500000, 633735/500000], [332005/500000, 689030/500000],
+          [340900/500000, 749585/500000], [350030/500000, 815815/500000], [359410/500000, 885780/500000], [369040/500000, 960085/500000], [378925/500000, 1037790/500000],
+          [387755/500000, 1122530/500000], [396805/500000, 1213410/500000], [406055/500000, 1310940/500000], [415535/500000, 1416170/500000], [425235/500000, 1510175/500000],
+          [434295/500000, 1624500/500000], [443545/500000, 1747965/500000], [452995/500000, 1881345/500000], [462640/500000, 2025490/500000], [472490/500000, 2181335/500000],
+          [482555/500000, 2343105/500000], [492835/500000, 2511805/500000], [500000/500000, 2691915/500000], [500000/500000, 2888785/500000], [500000/500000, 3095235/500000],
+          [500000/500000, 3303880/500000], [500000/500000, 3525440/500000], [500000/500000, 3760785/500000], [500000/500000, 4010810/500000], [500000/500000, 4276505/500000],
+          [500000/500000, 4558905/500000], [500000/500000, 4859140/500000], [500000/500000, 5178395/500000], [500000/500000, 5517960/500000], [500000/500000, 5879205/500000],
+          [500000/500000, 6263605/500000], [500000/500000, 6672735/500000], [500000/500000, 7108280/500000], [500000/500000, 7572065/500000], [500000/500000, 8066020/500000]
+        ],
+        Female: [
+          [0, 0], [0, 0], [1465/500000, 0], [5730/500000, 0], [13785/500000, 5185/500000],
+          [25160/500000, 9645/500000], [40430/500000, 14500/500000], [59700/500000, 19300/500000], [83000/500000, 26190/500000], [110335/500000, 31870/500000],
+          [121415/500000, 38075/500000], [138355/500000, 50150/500000], [144150/500000, 65955/500000], [150155/500000, 82700/500000], [153705/500000, 109395/500000],
+          [157365/500000, 118765/500000], [161275/500000, 132270/500000], [165360/500000, 149245/500000], [176440/500000, 164420/500000], [180825/500000, 188590/500000],
+          [185165/500000, 199930/500000], [189560/500000, 212665/500000], [194010/500000, 226925/500000], [198610/500000, 242750/500000], [219205/500000, 249640/500000],
+          [224295/500000, 273570/500000], [229360/500000, 300700/500000], [234635/500000, 331160/500000], [239990/500000, 365495/500000], [259355/500000, 388665/500000],
+          [265580/500000, 425430/500000], [273105/500000, 465020/500000], [280845/500000, 509120/500000], [288810/500000, 558255/500000], [297005/500000, 613010/500000],
+          [305425/500000, 674070/500000], [314090/500000, 742175/500000], [322995/500000, 818195/500000], [332160/500000, 903085/500000], [341585/500000, 989015/500000],
+          [351515/500000, 1079410/500000], [361730/500000, 1172745/500000], [372245/500000, 1269905/500000], [383060/500000, 1371200/500000], [394190/500000, 1481385/500000],
+          [405145/500000, 1585480/500000], [416405/500000, 1696960/500000], [427975/500000, 1816455/500000], [439870/500000, 1944855/500000], [452090/500000, 2081710/500000],
+          [464655/500000, 2224800/500000], [477570/500000, 2375000/500000], [490840/500000, 2533140/500000], [500000/500000, 2704990/500000], [500000/500000, 2878375/500000],
+          [500000/500000, 3072330/500000], [500000/500000, 3278090/500000], [500000/500000, 3496420/500000], [500000/500000, 3728145/500000], [500000/500000, 3974120/500000],
+          [500000/500000, 4235285/500000], [500000/500000, 4512635/500000], [500000/500000, 4807240/500000], [500000/500000, 5120220/500000], [500000/500000, 5452810/500000],
+          [500000/500000, 5806305/500000], [500000/500000, 6182090/500000], [500000/500000, 6581655/500000], [500000/500000, 7006605/500000], [500000/500000, 7458630/500000]
+        ]
+      },
+      15: {
+        Male: [
+          [0, 0], [0, 0], [1375/500000, 0], [4515/500000, 0], [10500/500000, 990/500000],
+          [19495/500000, 2350/500000], [31010/500000, 4580/500000], [45485/500000, 6805/500000], [63070/500000, 9830/500000], [86100/500000, 13420/500000],
+          [100860/500000, 19890/500000], [117600/500000, 27975/500000], [133085/500000, 41340/500000], [149610/500000, 54330/500000], [162070/500000, 64845/500000],
+          [172585/500000, 84175/500000], [182780/500000, 105325/500000], [205485/500000, 115860/500000], [215195/500000, 126515/500000], [221820/500000, 137070/500000],
+          [227915/500000, 150685/500000], [234065/500000, 167100/500000], [240700/500000, 187470/500000], [246795/500000, 211345/500000], [253485/500000, 248810/500000],
+          [260595/500000, 275345/500000], [267235/500000, 302710/500000], [274350/500000, 332700/500000], [281420/500000, 367655/500000], [296575/500000, 402945/500000],
+          [303330/500000, 437990/500000], [311100/500000, 474360/500000], [319070/500000, 514015/500000], [327245/500000, 560925/500000], [335630/500000, 612600/500000],
+          [344235/500000, 665320/500000], [353055/500000, 727005/500000], [362100/500000, 790670/500000], [371375/500000, 860355/500000], [380895/500000, 936560/500000],
+          [389505/500000, 1011765/500000], [398320/500000, 1104390/500000], [407330/500000, 1192925/500000], [416550/500000, 1291790/500000], [425975/500000, 1389850/500000],
+          [434970/500000, 1496205/500000], [444160/500000, 1608990/500000], [453540/500000, 1729045/500000], [463120/500000, 1856715/500000], [472900/500000, 1990665/500000],
+          [482890/500000, 2130340/500000], [500000/500000, 2268625/500000], [500000/500000, 2434045/500000], [500000/500000, 2608245/500000], [500000/500000, 2791875/500000],
+          [500000/500000, 2981635/500000], [500000/500000, 3183140/500000], [500000/500000, 3397160/500000], [500000/500000, 3624530/500000], [500000/500000, 3866140/500000],
+          [500000/500000, 4122940/500000], [500000/500000, 4395960/500000], [500000/500000, 4686285/500000], [500000/500000, 4995090/500000], [500000/500000, 5323635/500000],
+          [500000/500000, 5673260/500000], [500000/500000, 6045405/500000], [500000/500000, 6441625/500000], [500000/500000, 6863570/500000], [500000/500000, 7313030/500000]
+        ],
+        Female: [
+          [0, 0], [0, 0], [1000/500000, 0], [3445/500000, 0], [8505/500000, 3545/500000],
+          [14850/500000, 6045/500000], [23725/500000, 9070/500000], [34930/500000, 11880/500000], [48570/500000, 16035/500000], [66175/500000, 19670/500000],
+          [77800/500000, 31080/500000], [93000/500000, 39145/500000], [111465/500000, 50900/500000], [125585/500000, 61270/500000], [136215/500000, 77150/500000],
+          [146135/500000, 93980/500000], [157250/500000, 114675/500000], [173105/500000, 125295/500000], [179585/500000, 136530/500000], [185325/500000, 150720/500000],
+          [190450/500000, 160645/500000], [195505/500000, 172475/500000], [200535/500000, 186690/500000], [206185/500000, 202060/500000], [214730/500000, 225930/500000],
+          [220290/500000, 248180/500000], [226315/500000, 273345/500000], [233055/500000, 301580/500000], [240545/500000, 333345/500000], [260855/500000, 355760/500000],
+          [267295/500000, 388080/500000], [275410/500000, 422340/500000], [283300/500000, 461045/500000], [294110/500000, 501165/500000], [303345/500000, 542935/500000],
+          [312155/500000, 596380/500000], [318680/500000, 658875/500000], [326055/500000, 727690/500000], [334395/500000, 803555/500000], [343150/500000, 884770/500000],
+          [352670/500000, 960945/500000], [360840/500000, 1035845/500000], [370135/500000, 1115930/500000], [377800/500000, 1204820/500000], [387010/500000, 1299590/500000],
+          [399940/500000, 1397740/500000], [413295/500000, 1504260/500000], [427100/500000, 1619910/500000], [441370/500000, 1745530/500000], [448170/500000, 1883140/500000],
+          [452590/500000, 2028065/500000], [457055/500000, 2178560/500000], [461570/500000, 2335440/500000], [466130/500000, 2502965/500000], [500000/500000, 2646945/500000],
+          [500000/500000, 2826235/500000], [500000/500000, 3016380/500000], [500000/500000, 3218085/500000], [500000/500000, 3432095/500000], [500000/500000, 3659215/500000],
+          [500000/500000, 3900290/500000], [500000/500000, 4156240/500000], [500000/500000, 4428040/500000], [500000/500000, 4716725/500000], [500000/500000, 5023415/500000],
+          [500000/500000, 5349310/500000], [500000/500000, 5695670/500000], [500000/500000, 6063875/500000], [500000/500000, 6455375/500000], [500000/500000, 6871740/500000]
+        ]
+      },
+      30: {
+        Male: [
+          [0, 0], [0, 0], [835/500000, 0], [1920/500000, 0], [4215/500000, 1480/500000],
+          [7610/500000, 3050/500000], [12105/500000, 4675/500000], [17625/500000, 6430/500000], [24245/500000, 8305/500000], [35740/500000, 12930/500000],
+          [49070/500000, 15055/500000], [65070/500000, 17265/500000], [78515/500000, 19535/500000], [90740/500000, 21105/500000], [98580/500000, 24070/500000],
+          [109205/500000, 25290/500000], [120975/500000, 26510/500000], [134015/500000, 27715/500000], [148460/500000, 28890/500000], [164465/500000, 30015/500000],
+          [182190/500000, 31075/500000], [187015/500000, 46845/500000], [192215/500000, 64235/500000], [197045/500000, 84170/500000], [202335/500000, 106040/500000],
+          [207915/500000, 194825/500000], [213115/500000, 212955/500000], [218700/500000, 232055/500000], [224280/500000, 252315/500000], [232530/500000, 284130/500000],
+          [252180/500000, 305300/500000], [271825/500000, 328720/500000], [291470/500000, 358275/500000], [311115/500000, 390175/500000], [330760/500000, 424615/500000],
+          [350405/500000, 461785/500000], [370050/500000, 501900/500000], [376550/500000, 545205/500000], [383045/500000, 595090/500000], [389545/500000, 651440/500000],
+          [396040/500000, 700460/500000], [402540/500000, 755780/500000], [409035/500000, 812725/500000], [415535/500000, 883200/500000], [422030/500000, 942995/500000],
+          [428530/500000, 1017835/500000], [435025/500000, 1098880/500000], [441525/500000, 1186665/500000], [448020/500000, 1281765/500000], [454520/500000, 1384820/500000],
+          [461015/500000, 1491775/500000], [467515/500000, 1597890/500000], [474010/500000, 1723545/500000], [480510/500000, 1855285/500000], [487005/500000, 1993785/500000],
+          [493505/500000, 2132460/500000], [500000/500000, 2279950/500000], [500000/500000, 2436865/500000], [500000/500000, 2603855/500000], [500000/500000, 2781625/500000],
+          [500000/500000, 2970920/500000], [500000/500000, 3172540/500000], [500000/500000, 3387360/500000], [500000/500000, 3616310/500000], [500000/500000, 3860380/500000],
+          [500000/500000, 4120660/500000], [500000/500000, 4398300/500000], [500000/500000, 4694545/500000], [500000/500000, 5010740/500000], [500000/500000, 5348315/500000]
+        ],
+        Female: [
+          [0, 0], [0, 0], [575/500000, 0], [1615/500000, 0], [4360/500000, 2285/500000],
+          [7200/500000, 2655/500000], [10180/500000, 3120/500000], [14285/500000, 3630/500000], [20425/500000, 4305/500000], [29480/500000, 4980/500000],
+          [40705/500000, 5520/500000], [54885/500000, 6575/500000], [68565/500000, 11070/500000], [78255/500000, 15680/500000], [85510/500000, 18890/500000],
+          [94480/500000, 21555/500000], [104390/500000, 24570/500000], [115340/500000, 27990/500000], [127440/500000, 31860/500000], [140810/500000, 36240/500000],
+          [155580/500000, 41195/500000], [159460/500000, 59240/500000], [164775/500000, 78295/500000], [170135/500000, 100015/500000], [173060/500000, 127190/500000],
+          [177335/500000, 173620/500000], [180380/500000, 194865/500000], [187310/500000, 215185/500000], [193065/500000, 240695/500000], [214285/500000, 253405/500000],
+          [230510/500000, 275695/500000], [246735/500000, 300155/500000], [262960/500000, 327015/500000], [279185/500000, 356565/500000], [295405/500000, 389105/500000],
+          [311630/500000, 427965/500000], [327855/500000, 474935/500000], [344080/500000, 527405/500000], [360300/500000, 586080/500000], [368065/500000, 651775/500000],
+          [375825/500000, 717055/500000], [383585/500000, 768355/500000], [391345/500000, 823300/500000], [399110/500000, 882185/500000], [406870/500000, 945310/500000],
+          [414630/500000, 1013730/500000], [422390/500000, 1100090/500000], [430150/500000, 1194160/500000], [437915/500000, 1296695/500000], [445675/500000, 1409825/500000],
+          [453435/500000, 1528925/500000], [461195/500000, 1650825/500000], [468960/500000, 1776340/500000], [476720/500000, 1906215/500000], [484480/500000, 2015585/500000],
+          [492240/500000, 2150385/500000], [500000/500000, 2293195/500000], [500000/500000, 2444530/500000], [500000/500000, 2604915/500000], [500000/500000, 2774930/500000],
+          [500000/500000, 2955200/500000], [500000/500000, 3146360/500000], [500000/500000, 3349120/500000], [500000/500000, 3564230/500000], [500000/500000, 3792475/500000],
+          [500000/500000, 4034715/500000], [500000/500000, 4291845/500000], [500000/500000, 4564850/500000], [500000/500000, 4854750/500000], [500000/500000, 5162665/500000]
+        ]
+      }
+    };
+
+    let currentGender = 'Male';
+    let cashValueChartInstance = null;
+
+    const SIM_EVENTS = [
+      { id: 'early_ci', title: '第 3 年：確診原位癌 (特別疾病)', desc: '預支 20% 原有投保額', percent: 20, isMajor: false },
+      { id: 'family_child', title: '第 5 年：幼女首次確診危疾', desc: '家添守護賠償 20% (保單免體檢)', percent: 20, isMajor: false, isFamily: true },
+      { id: 'family_parent', title: '第 7 年：70歲父親確診中風', desc: '家添守護賠償 20% (上限20萬)', percent: 20, isMajor: false, isFamily: true },
+      { id: 'major_ci', title: '第 10 年：確診重大危疾 (中風+ICU3天)', desc: '現有保額100% + 首15年加碼75% + 豁免後續保費', percent: 175, isMajor: true, triggersWaiver: true },
+      { id: 'extended_icu', title: '第 10.5 年：同一危疾延伸 ICU (升級版)', desc: '延伸重大醫療護理額外 50%', percent: 50, isMajor: false, proOnly: true },
+      { id: 'cash_stroke', title: '第 11 年：中風持續現金支援', desc: '升級版連續 12 個月每月 1% (共 12%)', percent: 12, isMajor: false },
+      { id: 'multiple_cancer', title: '第 14 年：不幸隨後確診癌症 (多重第1次)', desc: '指定危疾多重保障 120%', percent: 120, isMajor: false, isMulti: true },
+      { id: 'exp_drug', title: '第 15 年：癌症使用臨床第III期試驗藥 (升級版)', desc: '危疾醫療增值實報實銷 20% (上限40萬)', percent: 20, isMajor: false, proOnly: true },
+      { id: 'cash_cancer', title: '第 16-20 年：癌症持續積極治療年金', desc: '升級版每年 10% 連續 5 年 (共 50%)', percent: 50, isMajor: false },
+      { id: 'multiple_heart', title: '第 22 年：急性心肌梗塞 (多重第2次)', desc: '指定危疾多重保障 120%', percent: 120, isMajor: false, isMulti: true },
+      { id: 'life_icu', title: '第 26 年：嚴重意外/未知病 ICU 生活守護', desc: '符合 2 項指定狀況，額外 100%', percent: 100, isMajor: false }
+    ];
+
+    let selectedSimEvents = new Set(['early_ci', 'family_child', 'major_ci', 'cash_stroke', 'multiple_cancer']);
+
+    function fmt(n) {
+      return Math.round(n).toLocaleString('en-US');
+    }
+
+    function parseNum(val) {
+      if (!val) return 0;
+      return parseFloat(String(val).replace(/[^\d.]/g, '')) || 0;
+    }
+
+    function setGender(g) {
+      currentGender = g;
+      const mBtn = document.getElementById('btnGenderMale');
+      const fBtn = document.getElementById('btnGenderFemale');
+      if (g === 'Male') {
+        mBtn.className = 'py-2 px-3 text-center rounded-xl border border-fwd-orange bg-orange-50 font-bold text-fwd-orange transition flex items-center justify-center gap-1';
+        fBtn.className = 'py-2 px-3 text-center rounded-xl border border-slate-200 bg-white font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-center gap-1';
+      } else {
+        fBtn.className = 'py-2 px-3 text-center rounded-xl border border-fwd-orange bg-orange-50 font-bold text-fwd-orange transition flex items-center justify-center gap-1';
+        mBtn.className = 'py-2 px-3 text-center rounded-xl border border-slate-200 bg-white font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-center gap-1';
+      }
+      calculatePlan();
+    }
+
+    function handleSumInsuredInput(el) {
+      let val = parseNum(el.value);
+      if (val > 0) {
+        el.value = val.toLocaleString('en-US');
+      }
+      calculatePlan();
+    }
+
+    function setQuickSumInsured(amt) {
+      document.getElementById('sumInsured').value = amt.toLocaleString('en-US');
+      calculatePlan();
+    }
+
+    function getInterpolatedBaseRate(age, gender, smoking, term) {
+      const table = RATE_TABLES_BY_TERM[term] || RATE_TABLES_BY_TERM[20];
+      const keys = Object.keys(table).map(Number).sort((a,b) => a-b);
+      let targetAge = Math.min(Math.max(age, keys[0]), keys[keys.length - 1]);
+
+      if (table[targetAge]) {
+        let r = table[targetAge];
+        if (gender === 'Male') return smoking === 'Preferred' ? r.mp : r.ms;
+        else return smoking === 'Preferred' ? r.fp : (r.fs || r.fp_s || r.fp);
+      }
+
+      let lower = keys[0];
+      let upper = keys[keys.length - 1];
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (targetAge >= keys[i] && targetAge <= keys[i+1]) {
+          lower = keys[i];
+          upper = keys[i+1];
+          break;
+        }
+      }
+
+      let rLower = table[lower];
+      let rUpper = table[upper];
+      let valLower = gender === 'Male' ? (smoking === 'Preferred' ? rLower.mp : rLower.ms) : (smoking === 'Preferred' ? rLower.fp : (rLower.fs || rLower.fp_s || rLower.fp));
+      let valUpper = gender === 'Male' ? (smoking === 'Preferred' ? rUpper.mp : rUpper.ms) : (smoking === 'Preferred' ? rUpper.fp : (rUpper.fs || rUpper.fp_s || rUpper.fp));
+
+      let ratio = (targetAge - lower) / (upper - lower);
+      return valLower + ratio * (valUpper - valLower);
+    }
+
+    function getSizeDiscountPerMille(sumInsuredHKD, term) {
+      if (sumInsuredHKD < 180000) return 0;
+      if (sumInsuredHKD < 240000) {
+        if (term === 10) return 4.0;
+        if (term === 15) return 3.0;
+        return 2.0;
+      }
+      if (sumInsuredHKD < 480000) {
+        if (term === 10) return 6.0;
+        if (term === 15) return 4.5;
+        return 3.0;
+      }
+      if (term === 10) return 10.0;
+      if (term === 15) return 7.0;
+      if (term === 20) return 5.0;
+      if (term === 25) return 4.5;
+      return 4.0;
+    }
+
+    function calculatePlan() {
+      const age = parseInt(document.getElementById('clientAge').value) || 30;
+      const smoking = document.getElementById('smokingClass').value;
+      const productTier = document.getElementById('productTier').value;
+      const hasFamilyBooster = document.getElementById('chkFamilyBooster').checked;
+      const currency = document.getElementById('currency').value;
+      const term = parseInt(document.getElementById('payTerm').value) || 20;
+      const sumInsured = parseNum(document.getElementById('sumInsured').value) || 500000;
+
+      document.getElementById('currTag').innerText = currency;
+
+      let nominalRate = getInterpolatedBaseRate(age, currentGender, smoking, term);
+
+      if (productTier === 'Pro') {
+        nominalRate *= 1.077;
+      }
+      if (hasFamilyBooster) {
+        nominalRate *= 1.073;
+      }
+
+      let sumInsuredInHKD = currency === 'USD' ? sumInsured * 7.8 : sumInsured;
+      let sizeDiscount = getSizeDiscountPerMille(sumInsuredInHKD, term);
+      let finalRatePerMille = Math.max(nominalRate - sizeDiscount, 5.0);
+
+      let annualPrem = (finalRatePerMille * sumInsured) / 1000;
+      let totalPrem = annualPrem * term;
+
+      let bonusRatio = age <= 35 ? 0.75 : 0.60;
+      let earlyBonusAmt = sumInsured * bonusRatio;
+      let earlyTotalCoverage = sumInsured + earlyBonusAmt;
+
+      document.getElementById('displayRatePerMille').innerText = finalRatePerMille.toFixed(2);
+      document.getElementById('displayAnnualPrem').innerText = `${currency} ${fmt(annualPrem)}`;
+      document.getElementById('displayTotalPrem').innerText = `${currency} ${fmt(totalPrem)}`;
+      document.getElementById('displayEarlyCoverage').innerText = `${currency} ${fmt(earlyTotalCoverage)}`;
+
+      document.getElementById('badgeBonusRatio').innerText = `+${Math.round(bonusRatio * 100)}% 加碼`;
+      document.getElementById('statEarlyBonusAmount').innerText = `${currency} ${fmt(earlyBonusAmt)}`;
+
+      let multipleBenefitTotal = sumInsured * 9.9;
+      document.getElementById('statMultipleBenefitTotal').innerText = `${currency} ${fmt(multipleBenefitTotal)}`;
+
+      let continuousCashRatio = productTier === 'Pro' ? 0.62 : 0.31;
+      document.getElementById('badgeCashRate').innerText = `高達 ${Math.round(continuousCashRatio * 100)}%`;
+      document.getElementById('statContinuousCashTotal').innerText = `${currency} ${fmt(sumInsured * continuousCashRatio)}`;
+
+      let maxGrandRatio = productTier === 'Pro' ? (hasFamilyBooster ? 14.67 : 14.07) : (hasFamilyBooster ? 13.66 : 13.06);
+      document.getElementById('badgeMaxRatio').innerText = `${(maxGrandRatio * 100).toFixed(0)}%`;
+      document.getElementById('statMaxGrandTotal').innerText = `${currency} ${fmt(sumInsured * maxGrandRatio)}`;
+
+      document.getElementById('memoClientName').innerText = `${age} 歲${currentGender === 'Male' ? '先生' : '女士'} (${smoking === 'Preferred' ? '優越非吸煙' : '標準費率'})`;
+
+      updateGapAnalysis();
+      renderClaimEventSelector(sumInsured, currency, productTier, bonusRatio, annualPrem);
+      renderScheduleTable();
+      renderCashValueChart(currency, totalPrem, sumInsured);
+    }
+
+    function updateGapAnalysis() {
+      const currency = document.getElementById('currency').value;
+      const sumInsured = parseNum(document.getElementById('sumInsured').value) || 800000;
+      const monthlyIncome = parseFloat(document.getElementById('calcMonthlyIncome')?.value) || 35000;
+      const recoveryYears = parseInt(document.getElementById('calcRecoveryYears')?.value) || 3;
+      const drugBudget = parseFloat(document.getElementById('calcAdvancedDrugBudget')?.value) || 500000;
+
+      // 若貨幣為 USD，將輸入預設依匯率換算
+      let incomeFactor = currency === 'USD' ? 1 / 7.8 : 1;
+      let effectiveMonthly = monthlyIncome * incomeFactor;
+      let effectiveDrug = drugBudget * incomeFactor;
+
+      let incomeReplacement = effectiveMonthly * 12 * recoveryYears;
+      let totalSuggested = incomeReplacement + effectiveDrug;
+
+      const suggestedEl = document.getElementById('displaySuggestedSumInsured');
+      const breakdownEl = document.getElementById('displayGapBreakdownText');
+      const configuredEl = document.getElementById('displayCurrentConfiguredSI');
+      const badgeEl = document.getElementById('gapComparisonBadge');
+
+      if (suggestedEl) {
+        suggestedEl.innerText = `${currency} ${fmt(totalSuggested)}`;
+      }
+      if (breakdownEl) {
+        breakdownEl.innerText = `含 ${recoveryYears} 年家庭支出補償 ${currency} ${fmt(incomeReplacement)} + 專項標靶儲備 ${currency} ${fmt(effectiveDrug)}`;
+      }
+      if (configuredEl) {
+        configuredEl.innerText = `${currency} ${fmt(sumInsured)}`;
+      }
+
+      if (badgeEl) {
+        let diff = totalSuggested - sumInsured;
+        if (diff > 0) {
+          badgeEl.className = 'px-3.5 py-2 rounded-xl text-xs font-bold font-mono bg-rose-100 text-rose-700 border border-rose-200';
+          badgeEl.innerText = `尚有缺口 ${currency} ${fmt(diff)}`;
+        } else {
+          badgeEl.className = 'px-3.5 py-2 rounded-xl text-xs font-bold font-mono bg-emerald-100 text-emerald-800 border border-emerald-200';
+          badgeEl.innerText = `防衛充足 (覆蓋率 ${Math.round((sumInsured / totalSuggested) * 100)}%)`;
+        }
+      }
+    }
+
+    function renderClaimEventSelector(sumInsured, currency, productTier, bonusRatio, annualPrem) {
+      const container = document.getElementById('claimEventContainer');
+      container.innerHTML = '';
+
+      let currentTotalPayout = 0;
+      let waiverTriggered = false;
+      let multiClaimsUsed = 0;
+
+      SIM_EVENTS.forEach((evt) => {
+        const isSelected = selectedSimEvents.has(evt.id);
+        const isProEx = evt.proOnly && productTier !== 'Pro';
+
+        let eventAmt = (sumInsured * evt.percent) / 100;
+        if (evt.id === 'family_child' || evt.id === 'family_parent') {
+          let cap = currency === 'USD' ? 25000 : 200000;
+          eventAmt = Math.min(eventAmt, cap);
+        }
+        if (evt.id === 'exp_drug') {
+          let cap = currency === 'USD' ? 50000 : 400000;
+          eventAmt = Math.min(eventAmt, cap);
+        }
+
+        if (isSelected && !isProEx) {
+          currentTotalPayout += eventAmt;
+          if (evt.triggersWaiver) waiverTriggered = true;
+          if (evt.isMulti) multiClaimsUsed++;
+        }
+
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-2xl border transition-all cursor-pointer select-none flex flex-col justify-between ${
+          isProEx ? 'opacity-40 bg-slate-100 border-slate-200 cursor-not-allowed' :
+          (isSelected ? 'bg-orange-50/90 border-fwd-orange shadow-sm text-slate-900' : 'bg-white border-slate-200 hover:border-orange-200 text-slate-600')
+        }`;
+
+        card.onclick = () => {
+          if (isProEx) return;
+          if (selectedSimEvents.has(evt.id)) {
+            selectedSimEvents.delete(evt.id);
+          } else {
+            selectedSimEvents.add(evt.id);
+          }
+          calculatePlan();
+        };
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="font-bold text-xs ${isSelected ? 'text-fwd-darkorange' : 'text-slate-800'}">${evt.title}</span>
+              <input type="checkbox" ${isSelected ? 'checked' : ''} ${isProEx ? 'disabled' : ''} class="w-3.5 h-3.5 accent-fwd-orange rounded pointer-events-none">
+            </div>
+            <p class="text-[11px] text-slate-500 leading-snug">${evt.desc}</p>
+          </div>
+          <div class="mt-2.5 pt-1.5 border-t ${isSelected ? 'border-orange-200' : 'border-slate-100'} flex items-center justify-between text-xs font-mono font-bold">
+            <span class="text-slate-400">獲賠：</span>
+            <span class="${isSelected ? 'text-rose-600 font-extrabold' : 'text-slate-700'}">${currency} ${fmt(eventAmt)}</span>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      document.getElementById('simTotalPayoutDisplay').innerText = `${currency} ${fmt(currentTotalPayout)}`;
+      let paidTotalEstimate = waiverTriggered ? annualPrem * 10 : annualPrem * 20;
+      let leverage = paidTotalEstimate > 0 ? (currentTotalPayout / paidTotalEstimate).toFixed(1) : '0.0';
+      document.getElementById('simLeverageDisplay').innerText = `${leverage} 倍`;
+      document.getElementById('simRemainingClaimsDisplay').innerText = `${Math.max(7 - multiClaimsUsed, 0)} 次`;
+
+      const waiverStatusEl = document.getElementById('simWaiverStatusDisplay');
+      if (waiverTriggered) {
+        waiverStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ 第 10 年已觸發「保費全數豁免」</span>，免付後續所有未繳保費，其餘多重保障終身繼續享有！`;
+      } else {
+        waiverStatusEl.innerText = `目前狀態：保單正常繳費中`;
+      }
+    }
+
+    function loadSimulationCase(c) {
+      if (c === 'sample1') {
+        selectedSimEvents = new Set(['early_ci', 'family_child', 'family_parent', 'major_ci', 'extended_icu', 'cash_stroke', 'multiple_cancer', 'exp_drug', 'multiple_heart']);
+        calculatePlan();
+      }
+    }
+
+    function clearSimulation() {
+      selectedSimEvents.clear();
+      calculatePlan();
+    }
+
+    function renderScheduleTable() {
+      const age = parseInt(document.getElementById('clientAge').value) || 30;
+      const term = parseInt(document.getElementById('payTerm').value) || 20;
+      const currency = document.getElementById('currency').value;
+      const sumInsured = parseNum(document.getElementById('sumInsured').value) || 500000;
+      const annualPrem = parseNum(document.getElementById('displayAnnualPrem').innerText.replace(/[^\d.]/g, '')) || 17495;
+      const filter = document.getElementById('scheduleFilter').value;
+
+      const tbody = document.getElementById('scheduleTableBody');
+      tbody.innerHTML = '';
+
+      const years = [];
+      for (let y = 1; y <= 70; y++) {
+        let attainedAge = age + y;
+        if (attainedAge > 100) break;
+        years.push({ year: y, attainedAge: attainedAge });
+      }
+
+      const keyYears = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 36, 41, 46, 51, 56, 61, 66, 70];
+
+      const termTable = OFFICIAL_ILLUSTRATION_DATA[term] || OFFICIAL_ILLUSTRATION_DATA[20];
+      const genderList = termTable[currentGender] || termTable['Male'];
+
+      years.forEach(({ year, attainedAge }) => {
+        let isKey = keyYears.includes(year) || attainedAge === 65 || attainedAge === 85 || attainedAge === 100;
+        if (filter === 'key' && !isKey) return;
+
+        let cumPrem = year <= term ? annualPrem * year : annualPrem * term;
+
+        let rowData = genderList[year - 1];
+        let gCV = 0;
+        let bonus = 0;
+
+        if (rowData) {
+          gCV = Math.round(sumInsured * rowData[0]);
+          bonus = Math.round(sumInsured * rowData[1]);
+        } else {
+          gCV = year <= 2 ? 0 : Math.min(sumInsured, sumInsured * (0.01 * year));
+          bonus = year >= 5 ? Math.round(sumInsured * 0.005 * Math.pow(1.08, year - 4)) : 0;
+        }
+
+        let totalSurrenderVal = gCV + bonus;
+
+        let bonusRatio = age <= 35 ? 0.75 : 0.60;
+        let deathOrCIPayout = (year <= 15) ? (Math.round(sumInsured * (1 + bonusRatio)) + bonus) : (sumInsured + bonus);
+
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-slate-50 transition border-b border-slate-100 ${year === 15 ? 'bg-orange-50/30' : ''} ${year === term ? 'bg-emerald-50/30' : ''}`;
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-semibold text-slate-800">
+            第 ${year} 年
+            ${year <= 15 ? '<span class="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-rose-100 text-rose-700 font-bold">' + Math.round((1+bonusRatio)*100) + '%期</span>' : ''}
+            ${year === term ? '<span class="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">供完</span>' : ''}
+          </td>
+          <td class="py-3 px-3 text-slate-600">${attainedAge} 歲</td>
+          <td class="py-3 px-4 text-right font-medium text-slate-500">${fmt(cumPrem)}</td>
+          <td class="py-3 px-4 text-right font-medium text-emerald-700">${fmt(gCV)}</td>
+          <td class="py-3 px-4 text-right font-medium text-amber-600">${fmt(bonus)}</td>
+          <td class="py-3 px-4 text-right font-bold text-emerald-900 bg-emerald-50/40">${fmt(totalSurrenderVal)}</td>
+          <td class="py-3 px-4 text-right font-bold text-rose-700 bg-rose-50/40">${fmt(deathOrCIPayout)}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCashValueChart(currency, totalPrem, sumInsured) {
+      const ctx = document.getElementById('cashValueChart').getContext('2d');
+      const age = parseInt(document.getElementById('clientAge').value) || 30;
+      const term = parseInt(document.getElementById('payTerm').value) || 20;
+
+      const labels = ['第1年', '第5年', '第10年', '第15年', '第20年', '第25年', '第30年', '40年(70歲)', '50年(80歲)', '60年(90歲)', '70年(100歲)'];
+      const sampleYears = [1, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70];
+
+      const cumPremData = [];
+      const totalCvData = [];
+
+      const termTable = OFFICIAL_ILLUSTRATION_DATA[term] || OFFICIAL_ILLUSTRATION_DATA[20];
+      const genderList = termTable[currentGender] || termTable['Male'];
+
+      sampleYears.forEach((y) => {
+        let prem = Math.min(y, term) * (totalPrem / term);
+        cumPremData.push(Math.round(prem));
+
+        let rowData = genderList[y - 1];
+        let gCV = rowData ? Math.round(sumInsured * rowData[0]) : 0;
+        let bonus = rowData ? Math.round(sumInsured * rowData[1]) : 0;
+
+        totalCvData.push(Math.round(gCV + bonus));
+      });
+
+      if (cashValueChartInstance) {
+        cashValueChartInstance.destroy();
+      }
+
+      cashValueChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: `預期總退保/傳承價值 (${currency})`,
+              data: totalCvData,
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.08)',
+              borderWidth: 2.5,
+              fill: true,
+              tension: 0.35,
+              pointRadius: 3,
+              pointHoverRadius: 6
+            },
+            {
+              label: `已繳保費本金 (${currency})`,
+              data: cumPremData,
+              borderColor: '#94A3B8',
+              borderDash: [4, 4],
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.1,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                boxWidth: 12,
+                font: { family: '"Noto Sans TC", sans-serif', size: 11, weight: 'bold' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return `${ctx.dataset.label}: ${currency} ${fmt(ctx.raw)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: function(v) {
+                  return (v / 10000).toFixed(0) + '萬';
+                },
+                font: { size: 10 }
+              },
+              grid: { color: '#f1f5f9' }
+            },
+            x: {
+              ticks: { font: { size: 10 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      document.getElementById('memoCurrentDate').innerText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+      calculatePlan();
+    });
+  </script>
+</body>
+</html>
