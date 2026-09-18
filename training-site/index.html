@@ -779,7 +779,19 @@
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl">✈️</div><h3 class="font-black text-slate-900 text-lg">旅遊及出行保障</h3><p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李營失及緊急救援服務。</p></div>
+<!-- 旅遊及出行保障卡片（點擊開啟旅遊保險比較系統） -->
+            <div onclick="window.open('travel-calc.html', '_blank')" class="p-6 rounded-3xl border border-slate-200 bg-white hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer space-y-3 relative group">
+                <div class="flex items-center justify-between">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl shadow-xs group-hover:scale-110 transition-transform">
+                        ✈️
+                    </div>
+                    <span class="text-xs font-black text-sky-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟報價系統 ↗</span>
+                </div>
+                <div>
+                    <h3 class="font-black text-slate-900 text-base group-hover:text-sky-600 transition-colors">旅遊及出行保障</h3>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p>
+            </div>
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
