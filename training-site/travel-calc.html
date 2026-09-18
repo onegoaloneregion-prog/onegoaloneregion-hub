@@ -1,1 +1,1444 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>澳門各大保險公司旅遊保險專業報價與比較系統 | Macau Travel Insurance Multi-Quote System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            },
+            aig: '#002663',
+            msig: '#004b87',
+            mic: '#00875a',
+            taiping: '#d9251c',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-sky-600 selection:text-white">
 
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center shadow-md shadow-sky-600/20 text-white">
+          <i class="fa-solid fa-plane-departure text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-black tracking-tight bg-gradient-to-r from-sky-800 via-indigo-800 to-slate-900 bg-clip-text text-transparent">
+              澳門旅遊保險智慧報價與對比系統
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-200">2026/2027 尊貴版</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            整合 MIC 澳門保險 / AIG 美亞 / MSIG 三井住友 / 中國太平 官方數據
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5 no-print">
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-print text-slate-500"></i>
+          列印／導出提案
+        </button>
+        <button onclick="resetCalculator()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-rotate-right text-sky-600"></i>
+          重置條件
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Top Configuration Panel Card -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-sky-600"></i>
+            旅程與投保資格設定 (Trip & Insured Configuration)
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">
+            系統會自動套用澳門出發規定、年齡劃分（17歲以下兒童/70歲/80歲以上長者）與家庭同行折算演算法。
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Plan Level Global Switcher -->
+          <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <button id="btn-tier-premier" onclick="setGlobalTier('premier')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700">
+              <i class="fa-solid fa-crown mr-1 text-amber-500"></i> 至尊/頂級
+            </button>
+            <button id="btn-tier-standard" onclick="setGlobalTier('standard')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+              <i class="fa-solid fa-shield-halved mr-1 text-slate-500"></i> 經濟/標準
+            </button>
+          </div>
+
+          <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <button id="btn-type-single" onclick="setPlanType('single')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700">
+              <i class="fa-solid fa-suitcase mr-1"></i> 單次旅程 (Single Trip)
+            </button>
+            <button id="btn-type-annual" onclick="setPlanType('annual')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+              <i class="fa-solid fa-calendar-check mr-1"></i> 全年多次計劃 (Annual Multi-Trip)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Form Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+        
+        <!-- Field 1: Destination Region -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            目的地所屬地區
+          </label>
+          <select id="input-destination" onchange="recalculateQuotes()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="asia">亞洲地區 (包括日/韓/泰/台/星馬等)</option>
+            <option value="global" selected>全球地區 (歐洲/美加/澳洲/世界各地)</option>
+            <option value="china_hk">中國內地及香港專案 (只限全年)</option>
+          </select>
+          <span class="text-[11px] text-slate-400 mt-1 block">受保人須由澳門出發並返抵澳門</span>
+        </div>
+
+        <!-- Field 2: Trip Duration (For Single Trip) -->
+        <div id="wrapper-trip-days">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            旅程天數 (日)
+          </label>
+          <div class="flex items-center gap-2">
+            <input type="number" id="input-days" value="5" min="1" max="182" oninput="recalculateQuotes()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <span class="text-xs text-slate-500 shrink-0 font-medium">天</span>
+          </div>
+          <span class="text-[11px] text-slate-400 mt-1 block">單次旅程最長可承保至 182 天</span>
+        </div>
+
+        <!-- Field 3: Plan Category (Party) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            投保人員架構
+          </label>
+          <select id="input-party" onchange="onPartyChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="individual" selected>個人計劃 (Individual)</option>
+            <option value="couple">合法夫婦同行 (Couple Plan)</option>
+            <option value="parent_child">親子計劃 (1位家長 + 未成年子女)</option>
+            <option value="family">家庭計劃 (夫婦 + 未成年子女人數不限)</option>
+          </select>
+          <span class="text-[11px] text-slate-400 mt-1 block" id="party-hint">適用於一名成年人或獨立小童出遊</span>
+        </div>
+
+        <!-- Field 4: Insured Age Profile -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            受保人最高年齡層
+          </label>
+          <select id="input-age-tier" onchange="recalculateQuotes()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="standard" selected>一般年齡 (18 歲 至 69 歲)</option>
+            <option value="child">幼童 / 青少年 (0 歲 至 17 歲)</option>
+            <option value="senior70">長者 (70 歲 至 79 歲)</option>
+            <option value="senior80">高齡長者 (80 歲 至 85 歲)</option>
+          </select>
+          <span class="text-[11px] text-amber-600 mt-1 block" id="age-hint">70+長者保險額或保費可能依合約設有特約調整</span>
+        </div>
+
+      </div>
+
+      <div id="optional-addons-box" class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-4 text-xs">
+        <span class="font-bold text-slate-600 flex items-center gap-1.5">
+          <i class="fa-solid fa-plus-circle text-sky-600"></i> MSIG 單次自選額外附加保障 (適用2-10天)：
+        </span>
+        <label class="inline-flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="addon-sports" onchange="recalculateQuotes()" class="rounded text-sky-600 focus:ring-sky-500">
+          <span>額外運動器材保障 (+MOP 30 / 家庭+75)</span>
+        </label>
+        <label class="inline-flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="addon-car" onchange="recalculateQuotes()" class="rounded text-sky-600 focus:ring-sky-500">
+          <span>升級租車自負額至 MOP10,000 (+MOP 60 / 家庭+120)</span>
+        </label>
+        <label class="inline-flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="addon-pet" onchange="recalculateQuotes()" class="rounded text-sky-600 focus:ring-sky-500">
+          <span>寵物延期寄養住宿保障 (+MOP 30)</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- Card 1: Lowest Quote -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+          <span>超值經濟之選</span>
+          <span class="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg">
+            <i class="fa-solid fa-tag"></i>
+          </span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="text-2xl font-black text-slate-900" id="kpi-lowest-price">MOP 164</span>
+          <span class="text-xs font-bold text-emerald-600" id="kpi-lowest-company">MIC 澳門保險</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2" id="kpi-lowest-desc">
+          符合當前設定的最低保費推薦方案
+        </p>
+      </div>
+
+      <!-- Card 2: Highest Medical Coverage -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+          <span>最高醫療與運送保障</span>
+          <span class="p-1.5 bg-sky-50 text-sky-600 rounded-lg">
+            <i class="fa-solid fa-hospital-user"></i>
+          </span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="text-2xl font-black text-slate-900">MOP 3,500萬</span>
+          <span class="text-xs font-bold text-sky-600">AIG 全球計劃</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          醫療運送高達 3,500 萬，遺體運返 700 萬
+        </p>
+      </div>
+
+      <!-- Card 3: Dangerous Sports Coverage -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+          <span>熱門業餘活動保障</span>
+          <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
+            <i class="fa-solid fa-person-skiing"></i>
+          </span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="text-2xl font-black text-slate-900">免費承保</span>
+          <span class="text-xs font-bold text-indigo-600">全部公司皆承保</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          包含滑雪、潛水、笨豬跳、熱氣球、急流水上活動
+        </p>
+      </div>
+
+      <!-- Card 4: Currency & Eligibility Guarantee -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+          <span>澳門專屬合規保障</span>
+          <span class="p-1.5 bg-amber-50 text-amber-600 rounded-lg">
+            <i class="fa-solid fa-shield-halved"></i>
+          </span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="text-2xl font-black text-slate-900">MOP / HKD</span>
+          <span class="text-xs font-bold text-amber-600">100% 澳門幣</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          持有澳門居民身份證或合法工作證即可受保
+        </p>
+      </div>
+
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-sky-600"></i>
+            各保險公司即時報價列表 (Real-Time Premium Comparison)
+          </h3>
+          <p class="text-xs text-slate-500">點擊卡片可深入檢視各家保單的條款細則、子限額與索償指引</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="quotes-card-container">
+        <!-- Javascript dynamically renders 4 company quote cards here -->
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm overflow-hidden print-shadow-none">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-table-columns text-sky-600"></i>
+            四大保險公司保障範圍橫向對比矩陣 (Comprehensive Benefits Comparison)
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">
+            數據來源於各大保險公司官方計劃書（MIC 澳門保險、AIG 美亞、MSIG 三井住友、中國太平），幣別均為澳門元 MOP。
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-2 py-1 rounded bg-slate-100 text-slate-700 font-medium">
+            <i class="fa-solid fa-circle-info text-sky-600 mr-1"></i> 單位：澳門元 (MOP)
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider">
+              <th class="p-3.5 w-1/5 min-w-[180px]">保障項目 (Coverage Item)</th>
+              <th class="p-3.5 w-1/5 min-w-[200px] bg-emerald-50/70 text-emerald-950 border-r border-slate-200">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                  MIC 澳門保險 (休悠樂)
+                </div>
+              </th>
+              <th class="p-3.5 w-1/5 min-w-[200px] bg-blue-50/70 text-blue-950 border-r border-slate-200">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-700"></span>
+                  AIG 美亞 (新伴您遨遊)
+                </div>
+              </th>
+              <th class="p-3.5 w-1/5 min-w-[200px] bg-sky-50/70 text-sky-950 border-r border-slate-200">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span>
+                  MSIG 三井住友 (iTravel Plus)
+                </div>
+              </th>
+              <th class="p-3.5 w-1/5 min-w-[200px] bg-red-50/70 text-red-950">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
+                  中國太平 (旅途愉快保險)
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+            <!-- Row 1: Medical -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-stethoscope text-sky-600 mr-1.5"></i>
+                醫療費用保障 (海外)
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold text-slate-900">MOP 1,000,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">標準計劃 MOP 500,000</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold text-slate-900">MOP 1,000,000</span><br>
+                <span class="text-slate-500 text-[11px]">海外住院津貼每日 $500</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold text-slate-900">HKD/MOP 1,000,000</span> (計劃A)<br>
+                <span class="text-slate-500 text-[11px]">計劃B MOP 500,000</span>
+              </td>
+              <td class="p-3.5">
+                <span class="font-bold text-slate-900">MOP 1,000,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">基本 60萬 / 超級 75萬</span>
+              </td>
+            </tr>
+
+            <!-- Row 2: Macau Follow-up -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-notes-medical text-indigo-600 mr-1.5"></i>
+                回澳後覆診費用
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 50,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">中醫跌打 $150/次 (上限$1,500)</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">意外 $1,000,000 / 疾病 $100,000</span><br>
+                <span class="text-slate-500 text-[11px]">返澳180天內；中醫上限$1,800</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 50,000 - 100,000</span><br>
+                <span class="text-slate-500 text-[11px]">返澳90天內；中醫跌打上限$1,500</span>
+              </td>
+              <td class="p-3.5">
+                <span class="font-bold">MOP 75,000</span><br>
+                <span class="text-slate-500 text-[11px]">返澳3個月內 (包括中醫跌打)</span>
+              </td>
+            </tr>
+
+            <!-- Row 3: Emergency Evacuation -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-truck-medical text-rose-600 mr-1.5"></i>
+                緊急醫療運送及送返
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-emerald-700 font-bold"><i class="fa-solid fa-check"></i> 全數承保</span><br>
+                <span class="text-slate-500 text-[11px]">24小時全球緊急支援</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-blue-800 font-bold">MOP 35,000,000</span><br>
+                <span class="text-slate-500 text-[11px]">業界頂規 (遺體運返 700萬)</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-sky-700 font-bold">MOP 2,000,000</span><br>
+                <span class="text-slate-500 text-[11px]">入院保證金 MOP 40,000</span>
+              </td>
+              <td class="p-3.5">
+                <span class="text-red-700 font-bold"><i class="fa-solid fa-check"></i> 無限額</span><br>
+                <span class="text-slate-500 text-[11px]">撤離送返/遺體無限額</span>
+              </td>
+            </tr>
+
+            <!-- Row 4: Personal Accident -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-user-shield text-amber-600 mr-1.5"></i>
+                人身意外保障 (意外身故/殘廢)
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 1,200,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">標準計劃 MOP 600,000</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">公共交通 $1,200,000</span><br>
+                <span class="text-slate-500 text-[11px]">其他意外 MOP 600,000</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 1,000,000</span><br>
+                <span class="text-slate-500 text-[11px]">雙倍賠償高達 MOP 2,000,000</span>
+              </td>
+              <td class="p-3.5">
+                <span class="font-bold">MOP 2,000,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">公共交通增至 MOP 3,000,000</span>
+              </td>
+            </tr>
+
+            <!-- Row 5: Baggage & Personal Effects -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-suitcase-rolling text-teal-600 mr-1.5"></i>
+                行李及個人財物保障
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 30,000</span> (至尊)<br>
+                <span class="text-slate-500 text-[11px]">單件限額 $2,500；不包手機</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 20,000</span><br>
+                <span class="text-slate-500 text-[11px]">筆記型電腦上限 $10,000</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">MOP 20,000</span> (計劃A)<br>
+                <span class="text-emerald-700 font-bold text-[11px]">含手提電話保障 $2,000</span>
+              </td>
+              <td class="p-3.5">
+                <span class="font-bold">MOP 10,000</span><br>
+                <span class="text-slate-500 text-[11px]">每件/每套上限 $2,500</span>
+              </td>
+            </tr>
+
+            <!-- Row 6: Trip Delay & Cancellation -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-clock-rotate-left text-purple-600 mr-1.5"></i>
+                行程延誤 / 取消及縮短
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">取消/縮短：MOP 50,000</span><br>
+                <span class="text-slate-500 text-[11px]">延誤最高 $5,000 (首6小時$300)</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">取消 $30,000 / 阻礙 $50,000</span><br>
+                <span class="text-slate-500 text-[11px]">延誤滿5小時賠 $250</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="font-bold">取消/縮短：MOP 50,000</span><br>
+                <span class="text-slate-500 text-[11px]">支援澳門二/三級旅遊警示賠償</span>
+              </td>
+              <td class="p-3.5">
+                <span class="font-bold">取消/縮短：MOP 30,000</span><br>
+                <span class="text-slate-500 text-[11px]">延誤滿6小時賠 $200 (上限1,000)</span>
+              </td>
+            </tr>
+
+            <!-- Row 7: Dangerous Activities -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-person-snowboarding text-orange-600 mr-1.5"></i>
+                業餘休閒運動 (滑雪/潛水/高空跳)
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-emerald-700 font-bold"><i class="fa-solid fa-check"></i> 承保非職業活動</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-blue-800 font-bold"><i class="fa-solid fa-check"></i> 免費全數承保</span><br>
+                <span class="text-slate-500 text-[11px]">水上/空中/冬季滑雪無須加費</span>
+              </td>
+              <td class="p-3.5 border-r border-slate-200">
+                <span class="text-sky-700 font-bold"><i class="fa-solid fa-check"></i> 免費承保 (70歲以下)</span><br>
+                <span class="text-slate-500 text-[11px]">滑雪/深潛30米/熱氣球等</span>
+              </td>
+              <td class="p-3.5">
+                <span class="text-red-700 font-bold"><i class="fa-solid fa-check"></i> 承保休閒體育</span><br>
+                <span class="text-slate-500 text-[11px]">水肺潛水限深30米內</span>
+              </td>
+            </tr>
+
+            <!-- Row 8: Policy Deductibles -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="p-3.5 font-bold text-slate-900 bg-slate-50/50">
+                <i class="fa-solid fa-scale-balanced text-slate-600 mr-1.5"></i>
+                自負額 (Excess / Deductible)
+              </td>
+              <td class="p-3.5 border-r border-slate-200 text-emerald-700 font-bold">
+                無自負額 (MOP 0)
+              </td>
+              <td class="p-3.5 border-r border-slate-200 text-blue-800 font-bold">
+                所有保障均無自負額 (MOP 0)
+              </td>
+              <td class="p-3.5 border-r border-slate-200 text-slate-700 font-medium">
+                行李/證件設自負額 HK$200
+              </td>
+              <td class="p-3.5 text-red-700 font-bold">
+                無自負額 (MOP 0)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 text-xs text-slate-500 space-y-2.5 print-shadow-none">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <span class="font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-circle-exclamation text-amber-500"></i>
+          澳門旅遊保險重要投保聲明與貼心提示
+        </span>
+        <span class="text-slate-400">系統即時生成日期：<span id="label-current-date"></span></span>
+      </div>
+      <p class="leading-relaxed">
+        1. <strong>澳門居民資格及出發地</strong>：本報價系統所有產品均承保常規假期旅遊及文職商務旅遊。投保人須為澳門公民、永久居民或持合法澳門居留/工作許可人士，且旅程必須由澳門出發並於旅程結束後返回澳門。持中華人民共和國護照單純往返內地的人士一般受特定除外條款約束。
+      </p>
+      <p class="leading-relaxed">
+        2. <strong>長者與小童保障額規定</strong>：受保人年齡若未滿 17/18 歲或年滿 70/75/80 歲以上，其「人身意外」及「海外醫療」之最高賠償額將按各保險公司條款進行比例調整或設有最高限額（如 AIG 80歲以上賠償額為各項之50%，人身意外上限 MOP 300,000；MSIG 70歲以上限投保額 25%）。
+      </p>
+      <p class="leading-relaxed">
+        3. <strong>實際承保依據</strong>：以上保費試算表及保障範圍摘要乃依據 MIC（澳門保險）、AIG（美亞保險）、MSIG（三井住友海上）及中國太平（澳門）現行之官方宣傳單張與條款編制，確切承保內容、不保事項與核保要求悉以各保險公司正式繕發之英文/中文保單為準。
+      </p>
+    </div>
+
+  </main>
+
+  <div id="modal-detail" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div id="modal-company-icon" class="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg font-bold">
+            <!-- Icon -->
+          </div>
+          <div>
+            <h4 id="modal-company-name" class="text-base font-extrabold text-slate-900">計劃詳情</h4>
+            <p id="modal-plan-sub" class="text-xs text-slate-500"></p>
+          </div>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4 text-xs" id="modal-content-body">
+        <!-- Dynamic detail rows -->
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // System state store
+    const state = {
+      planType: 'single', // 'single' or 'annual'
+      destination: 'global', // 'asia', 'global', 'china_hk'
+      days: 5,
+      party: 'individual', // 'individual', 'couple', 'parent_child', 'family'
+      ageTier: 'standard', // 'standard', 'child', 'senior70', 'senior80'
+      globalTier: 'premier', // 'premier', 'standard', 'custom'
+      companyTiers: {
+        mic: 'premier', // 'premier' or 'std'
+        msig: 'planA',   // 'planA' or 'planB'
+        taiping: 'premier' // 'premier', 'super', 'basic'
+      },
+      addons: {
+        sports: false,
+        car: false,
+        pet: false
+      }
+    };
+
+    // 1. MIC (澳門保險) Actuarial Table
+    const MIC_DB = {
+      single: {
+        // days: { asia: [std, premier], global: [std, premier] }
+        1:  { asia: [79, 119], global: [126, 171] },
+        2:  { asia: [108, 162], global: [172, 231] },
+        3:  { asia: [130, 196], global: [207, 280] },
+        4:  { asia: [149, 224], global: [238, 321] },
+        5:  { asia: [164, 248], global: [263, 354] },
+        6:  { asia: [177, 267], global: [283, 382] },
+        7:  { asia: [188, 285], global: [302, 407] },
+        8:  { asia: [199, 301], global: [319, 430] },
+        9:  { asia: [208, 315], global: [333, 450] },
+        10: { asia: [216, 327], global: [345, 466] },
+        11: { asia: [222, 336], global: [355, 480] },
+        12: { asia: [227, 345], global: [364, 492] },
+        13: { asia: [231, 351], global: [370, 500] },
+        14: { asia: [236, 357], global: [376, 509] },
+        15: { asia: [240, 364], global: [383, 517] },
+        16: { asia: [244, 370], global: [389, 525] },
+        17: { asia: [248, 376], global: [395, 534] },
+        18: { asia: [252, 383], global: [402, 542] },
+        19: { asia: [257, 389], global: [408, 551] },
+        20: { asia: [261, 395], global: [414, 559] },
+        21: { asia: [265, 402], global: [420, 567] },
+        22: { asia: [269, 408], global: [427, 576] },
+        23: { asia: [273, 414], global: [433, 584] },
+        24: { asia: [278, 420], global: [439, 593] },
+        25: { asia: [282, 427], global: [446, 601] },
+        26: { asia: [286, 433], global: [452, 609] },
+        27: { asia: [290, 439], global: [458, 618] },
+        28: { asia: [294, 446], global: [465, 626] },
+        29: { asia: [299, 452], global: [471, 635] },
+        30: { asia: [303, 458], global: [477, 643] },
+        31: { asia: [307, 465], global: [483, 651] },
+        extraDaily: { asia: [5, 7], global: [7, 9] }
+      },
+      annual: {
+        china_hk: 850,
+        global_std: 1520,
+        global_premier: 1850
+      },
+      partyMultiplier: {
+        single: { individual: 1.0, couple: 1.9, parent_child: 1.6, family: 2.5 },
+        annual: { individual: 1.0, couple: 2.0, parent_child: 1.6, family: 2.5 }
+      }
+    };
+
+    // 2. AIG 美亞保險 Actuarial Table
+    const AIG_DB = {
+      // Rates based on AIG Official Brochure page 12
+      // Days bracket: [0-17 Ind, 0-17 Fam, 18-69 Ind, 18-69 Fam, 70 Ind, 70 Fam, 70+ Ind, 70+ Fam]
+      table: [
+        { maxDay: 3,  rates: [82, 232, 119, 334, 172, 334, 172, 334] },
+        { maxDay: 4,  rates: [110, 310, 159, 447, 230, 447, 230, 447] },
+        { maxDay: 5,  rates: [131, 368, 189, 531, 273, 531, 273, 531] },
+        { maxDay: 6,  rates: [158, 446, 229, 643, 331, 643, 331, 643] },
+        { maxDay: 7,  rates: [172, 485, 250, 699, 360, 699, 360, 699] },
+        { maxDay: 8,  rates: [186, 524, 270, 755, 389, 755, 389, 755] },
+        { maxDay: 9,  rates: [200, 563, 290, 812, 417, 812, 417, 812] },
+        { maxDay: 10, rates: [214, 602, 310, 868, 446, 868, 446, 868] },
+        { maxDay: 11, rates: [234, 661, 340, 952, 490, 952, 490, 952] },
+        { maxDay: 12, rates: [262, 738, 380, 1064, 547, 1064, 547, 1064] },
+        { maxDay: 13, rates: [275, 775, 399, 1118, 575, 1118, 575, 1118] },
+        { maxDay: 14, rates: [294, 828, 426, 1194, 614, 1194, 614, 1194] },
+        { maxDay: 15, rates: [308, 867, 446, 1250, 643, 1250, 643, 1250] },
+        { maxDay: 18, rates: [335, 945, 486, 1362, 701, 1362, 701, 1362] },
+        { maxDay: 22, rates: [358, 1009, 519, 1455, 748, 1455, 748, 1455] },
+        { maxDay: 27, rates: [380, 1072, 551, 1545, 794, 1545, 794, 1545] },
+        { maxDay: 31, rates: [428, 1208, 621, 1741, 895, 1741, 895, 1741] }
+      ],
+      extraWeekly: [97, 273, 140, 393, 202, 393, 202, 393],
+      annual: [1256, 3541, 1821, 5105, 2625, 5105, null, null] // 70+ N/A
+    };
+
+    // 3. MSIG 三井住友 Actuarial Table
+    const MSIG_DB = {
+      // Single trip table from leaflet: Day 2 to 30
+      single: {
+        2:  { a_ind: 244, b_ind: 186, a_fam: 610, b_fam: 464 },
+        3:  { a_ind: 311, b_ind: 229, a_fam: 778, b_fam: 572 },
+        4:  { a_ind: 363, b_ind: 259, a_fam: 907, b_fam: 648 },
+        5:  { a_ind: 393, b_ind: 289, a_fam: 983, b_fam: 724 },
+        6:  { a_ind: 426, b_ind: 322, a_fam: 1064, b_fam: 805 },
+        7:  { a_ind: 456, b_ind: 342, a_fam: 1139, b_fam: 856 },
+        8:  { a_ind: 486, b_ind: 363, a_fam: 1215, b_fam: 907 },
+        9:  { a_ind: 518, b_ind: 382, a_fam: 1296, b_fam: 956 },
+        10: { a_ind: 549, b_ind: 393, a_fam: 1372, b_fam: 983 },
+        11: { a_ind: 579, b_ind: 404, a_fam: 1447, b_fam: 1010 },
+        12: { a_ind: 600, b_ind: 415, a_fam: 1501, b_fam: 1037 },
+        13: { a_ind: 622, b_ind: 426, a_fam: 1555, b_fam: 1064 },
+        14: { a_ind: 643, b_ind: 435, a_fam: 1607, b_fam: 1088 },
+        15: { a_ind: 662, b_ind: 441, a_fam: 1655, b_fam: 1102 },
+        16: { a_ind: 683, b_ind: 456, a_fam: 1706, b_fam: 1139 },
+        17: { a_ind: 704, b_ind: 467, a_fam: 1760, b_fam: 1166 },
+        18: { a_ind: 726, b_ind: 475, a_fam: 1814, b_fam: 1188 },
+        19: { a_ind: 746, b_ind: 486, a_fam: 1866, b_fam: 1215 },
+        20: { a_ind: 767, b_ind: 497, a_fam: 1917, b_fam: 1242 },
+        21: { a_ind: 786, b_ind: 508, a_fam: 1966, b_fam: 1269 },
+        22: { a_ind: 808, b_ind: 518, a_fam: 2020, b_fam: 1296 },
+        23: { a_ind: 829, b_ind: 529, a_fam: 2074, b_fam: 1323 },
+        24: { a_ind: 850, b_ind: 539, a_fam: 2125, b_fam: 1347 },
+        25: { a_ind: 870, b_ind: 550, a_fam: 2176, b_fam: 1374 },
+        26: { a_ind: 897, b_ind: 559, a_fam: 2244, b_fam: 1399 },
+        27: { a_ind: 923, b_ind: 570, a_fam: 2309, b_fam: 1426 },
+        28: { a_ind: 951, b_ind: 579, a_fam: 2379, b_fam: 1447 },
+        29: { a_ind: 977, b_ind: 590, a_fam: 2444, b_fam: 1474 },
+        30: { a_ind: 1004, b_ind: 600, a_fam: 2511, b_fam: 1501 },
+        extraDaily: { a_ind: 24, b_ind: 19, a_fam: 59, b_fam: 49 }
+      },
+      annual: {
+        a_ind: 2206,
+        b_ind: 1902,
+        a_fam: 5514,
+        b_fam: 4754
+      }
+    };
+
+    // 4. China Taiping (中國太平) Actuarial Table
+    const TAIPING_DB = {
+      // Single Trip
+      // Region 1: Asia, Region 2: Global (excl USA), Region 3: Global
+      single: {
+        basic: {
+          1: { d4: [115, 222, 170, 277], d6: [130, 251, 188, 311], d9: [145, 280, 210, 350], d17: [170, 328, 253, 418], d31: [206, 398, 305, 503], addWk: [40, 77, 65, 102] },
+          2: { d4: [180, 347, 275, 442], d6: [206, 398, 314, 508], d9: [230, 444, 345, 564], d17: [303, 585, 466, 752], d31: [365, 704, 556, 895], addWk: [90, 174, 138, 222] },
+          3: { d4: [250, 483, 380, 613], d6: [280, 540, 428, 688], d9: [312, 602, 473, 763], d17: [350, 676, 534, 860], d31: [418, 807, 632, 1021], addWk: [100, 193, 152, 245] }
+        },
+        super: {
+          1: { d4: [150, 290, 220, 360], d6: [170, 328, 255, 413], d9: [188, 363, 275, 448], d17: [220, 425, 335, 540], d31: [306, 591, 460, 745], addWk: [65, 125, 100, 160] },
+          2: { d4: [232, 448, 356, 572], d6: [268, 517, 415, 664], d9: [300, 579, 455, 734], d17: [398, 768, 600, 970], d31: [478, 923, 730, 1175], addWk: [112, 216, 180, 284] },
+          3: { d4: [323, 623, 495, 795], d6: [366, 706, 570, 910], d9: [410, 791, 620, 1001], d17: [463, 894, 695, 1126], d31: [545, 1052, 830, 1337], addWk: [130, 251, 205, 326] }
+        },
+        premier: {
+          1: { d4: [275, 531, 370, 718], d6: [328, 633, 435, 835], d9: [362, 699, 474, 925], d17: [452, 872, 610, 1155], d31: [610, 1377, 840, 1616], addWk: [130, 251, 175, 335] },
+          2: { d4: [385, 743, 520, 1008], d6: [455, 878, 620, 1185], d9: [510, 984, 686, 1328], d17: [680, 1312, 920, 1776], d31: [830, 1602, 1120, 2167], addWk: [195, 376, 265, 504] },
+          3: { d4: [480, 926, 668, 1279], d6: [572, 1104, 775, 1513], d9: [638, 1231, 864, 1688], d17: [760, 1457, 1030, 1971], d31: [912, 1760, 1230, 2386], addWk: [210, 405, 290, 545] }
+        }
+      },
+      annual: {
+        basic: { ind: 1580, fam: 3100 },
+        super: { ind: 1980, fam: 3900 }
+      }
+    };
+
+    function calculateQuotes() {
+      const type = state.planType;
+      const days = parseInt(state.days) || 1;
+      const dest = state.destination;
+      const party = state.party;
+      const ageTier = state.ageTier;
+
+      const quotes = [];
+
+      // --- 1. MIC 澳門保險 (休悠樂) ---
+      let micQuote = null;
+      const micTier = state.companyTiers.mic; // 'premier' or 'std'
+      const isMicPremier = (micTier === 'premier');
+
+      if (type === 'annual') {
+        let micBase = 0;
+        let planTitle = isMicPremier ? "休悠樂 全球至尊計劃" : "休悠樂 全球標準計劃";
+        if (dest === 'china_hk') {
+          micBase = MIC_DB.annual.china_hk;
+          planTitle = "休悠樂 中國內地及香港計劃";
+        } else {
+          micBase = isMicPremier ? MIC_DB.annual.global_premier : MIC_DB.annual.global_std;
+        }
+        const mult = MIC_DB.partyMultiplier.annual[party] || 1.0;
+        const total = Math.round(micBase * mult);
+        micQuote = {
+          company: "MIC 澳門保險",
+          code: "mic",
+          brandColor: "border-emerald-500",
+          badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+          planName: planTitle,
+          currentTier: micTier,
+          tierOptions: [
+            { id: 'premier', name: '至尊計劃 (醫療100萬)' },
+            { id: 'std', name: '標準計劃 (醫療50萬)' }
+          ],
+          premium: total,
+          currency: "MOP",
+          highlights: ["合家歡優惠加乘", "無自負額", "涵蓋中醫及跌打", isMicPremier ? "醫療保額高達100萬" : "實惠首選保額50萬"],
+          medicalMax: isMicPremier ? "MOP 1,000,000" : "MOP 500,000",
+          accidentMax: isMicPremier ? "MOP 1,200,000" : "MOP 600,000",
+          evacuation: "全數承保 (無上限)",
+          baggage: isMicPremier ? "MOP 30,000 (每件限2,500)" : "MOP 15,000 (每件限2,500)",
+          delay: isMicPremier ? "MOP 5,000 (首6小時$300)" : "MOP 3,000 (首6小時$200)",
+          cancellation: isMicPremier ? "MOP 50,000" : "MOP 30,000",
+          excess: "MOP 0 (全無自負額)",
+          covidCover: "全年計劃不包含COVID-19",
+          hotline: "2855 5078"
+        };
+      } else {
+        // Single Trip
+        const reg = (dest === 'asia') ? 'asia' : 'global';
+        const mult = MIC_DB.partyMultiplier.single[party] || 1.0;
+        const tierIdx = isMicPremier ? 1 : 0;
+        let basePrem = 0;
+        if (days <= 31) {
+          const row = MIC_DB.single[Math.max(1, days)];
+          basePrem = row[reg][tierIdx];
+        } else {
+          const row31 = MIC_DB.single[31][reg][tierIdx];
+          const extraDays = days - 31;
+          const rate = MIC_DB.single.extraDaily[reg][tierIdx];
+          basePrem = row31 + (extraDays * rate);
+        }
+        const total = Math.round(basePrem * mult);
+        micQuote = {
+          company: "MIC 澳門保險",
+          code: "mic",
+          brandColor: "border-emerald-500",
+          badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+          planName: `休悠樂 ${reg === 'asia' ? '亞洲' : '全球'}${isMicPremier ? '至尊' : '標準'}計劃`,
+          currentTier: micTier,
+          tierOptions: [
+            { id: 'premier', name: '至尊計劃 (醫療100萬)' },
+            { id: 'std', name: '標準計劃 (醫療50萬)' }
+          ],
+          premium: total,
+          currency: "MOP",
+          highlights: [
+            isMicPremier ? "回澳覆診達 $50,000" : "回澳覆診達 $30,000",
+            "單次受保含 COVID-19 隔離津貼",
+            "無自負額",
+            "業餘休閒運動受保"
+          ],
+          medicalMax: isMicPremier ? "MOP 1,000,000" : "MOP 500,000",
+          accidentMax: isMicPremier ? "MOP 1,200,000" : "MOP 600,000",
+          evacuation: "全數承保 (無上限)",
+          baggage: isMicPremier ? "MOP 30,000 (每件限2,500)" : "MOP 15,000 (每件限2,500)",
+          delay: isMicPremier ? "MOP 5,000 (首6小時$300)" : "MOP 3,000 (首6小時$200)",
+          cancellation: isMicPremier ? "MOP 50,000" : "MOP 30,000",
+          excess: "MOP 0 (全無自負額)",
+          covidCover: "單次計劃享住院/取消/提早結束等伸延",
+          hotline: "2855 5078"
+        };
+      }
+      quotes.push(micQuote);
+
+      // --- 2. AIG 美亞保險 (新伴您遨遊全球計劃) ---
+      let aigQuote = null;
+      let aigColIdx = 2; // Default 18-69 Ind
+      const isFam = (party === 'family' || party === 'couple' || party === 'parent_child');
+      
+      if (ageTier === 'child') {
+        aigColIdx = isFam ? 1 : 0;
+      } else if (ageTier === 'senior70') {
+        aigColIdx = isFam ? 5 : 4;
+      } else if (ageTier === 'senior80') {
+        aigColIdx = isFam ? 7 : 6;
+      } else {
+        aigColIdx = isFam ? 3 : 2;
+      }
+
+      if (type === 'annual') {
+        if (ageTier === 'senior70' || ageTier === 'senior80') {
+          // AIG annual is 17-70 only
+          aigQuote = {
+            company: "AIG 美亞保險",
+            code: "aig",
+            brandColor: "border-blue-700",
+            badgeBg: "bg-blue-50 text-blue-900 border-blue-200",
+            planName: "新伴您遨遊 全球全年計劃",
+            currentTier: 'premier',
+            tierOptions: [
+              { id: 'premier', name: '全球尊尚計劃 (唯一規格)' }
+            ],
+            premium: "不設承保",
+            currency: "MOP",
+            note: "全年計劃只限 17-70 歲人士投保",
+            highlights: ["全年計劃設年齡上限至70歲", "免費贈送中國支援卡"],
+            medicalMax: "MOP 1,000,000",
+            accidentMax: "MOP 1,200,000",
+            evacuation: "MOP 35,000,000",
+            baggage: "MOP 20,000 (手提電腦$10,000)",
+            delay: "MOP 3,000",
+            cancellation: "MOP 30,000",
+            excess: "MOP 0 (全項免自負額)",
+            covidCover: "含確診醫療/緊急運送及遺體送返",
+            hotline: "(853) 2835 5602"
+          };
+        } else {
+          const annRate = isFam ? AIG_DB.annual[3] : AIG_DB.annual[2];
+          aigQuote = {
+            company: "AIG 美亞保險",
+            code: "aig",
+            brandColor: "border-blue-700",
+            badgeBg: "bg-blue-50 text-blue-900 border-blue-200",
+            planName: "新伴您遨遊 全球全年計劃",
+            currentTier: 'premier',
+            tierOptions: [
+              { id: 'premier', name: '全球尊尚計劃 (唯一規格)' }
+            ],
+            premium: annRate,
+            currency: "MOP",
+            highlights: ["緊急運送高達 3,500 萬", "遺體運返 700 萬", "免費中國支援卡", "COVID-19 自動納入基本保障"],
+            medicalMax: "MOP 1,000,000",
+            accidentMax: "MOP 1,200,000",
+            evacuation: "MOP 35,000,000 (最高)",
+            baggage: "MOP 20,000 (手提電腦$10,000)",
+            delay: "MOP 3,000 (每滿5小時$250)",
+            cancellation: "MOP 30,000",
+            excess: "MOP 0 (所有項目不設自負額)",
+            covidCover: "包含醫療、隔離津貼 $2,800 ($200/日)",
+            hotline: "(853) 2835 5602"
+          };
+        }
+      } else {
+        // Single Trip
+        let prem = 0;
+        const exactRow = AIG_DB.table.find(t => days <= t.maxDay) || AIG_DB.table[AIG_DB.table.length - 1];
+        if (days <= 31) {
+          prem = exactRow.rates[aigColIdx];
+        } else {
+          const base31 = AIG_DB.table[AIG_DB.table.length - 1].rates[aigColIdx];
+          const extraWks = Math.ceil((days - 31) / 7);
+          const addRate = AIG_DB.extraWeekly[aigColIdx];
+          prem = base31 + (extraWks * addRate);
+        }
+        aigQuote = {
+          company: "AIG 美亞保險",
+          code: "aig",
+          brandColor: "border-blue-700",
+          badgeBg: "bg-blue-50 text-blue-900 border-blue-200",
+          planName: "新伴您遨遊 全球單次計劃",
+          currentTier: 'premier',
+          tierOptions: [
+            { id: 'premier', name: '全球尊尚計劃 (唯一規格)' }
+          ],
+          premium: prem,
+          currency: "MOP",
+          highlights: ["緊急醫療運送 3,500 萬", "遺體運返 700 萬", "全單無自負額", "手提電腦最高賠償 $10,000"],
+          medicalMax: "MOP 1,000,000",
+          accidentMax: (ageTier === 'child' || ageTier === 'senior80') ? "MOP 300,000" : "MOP 1,200,000",
+          evacuation: "MOP 35,000,000",
+          baggage: "MOP 20,000",
+          delay: "MOP 3,000",
+          cancellation: "MOP 30,000",
+          excess: "MOP 0 (全項免自負額)",
+          covidCover: "包含COVID-19 海外隔離津貼 $200/日",
+          hotline: "(853) 2835 5602"
+        };
+      }
+      quotes.push(aigQuote);
+
+      // --- 3. MSIG 三井住友 (iTravel Plus) ---
+      let msigQuote = null;
+      const msigTier = state.companyTiers.msig; // 'planA' or 'planB'
+      const isMsigA = (msigTier === 'planA');
+
+      if (type === 'annual') {
+        const msigBase = isMsigA 
+          ? (isFam ? MSIG_DB.annual.a_fam : MSIG_DB.annual.a_ind)
+          : (isFam ? MSIG_DB.annual.b_fam : MSIG_DB.annual.b_ind);
+        msigQuote = {
+          company: "MSIG 三井住友",
+          code: "msig",
+          brandColor: "border-sky-600",
+          badgeBg: "bg-sky-50 text-sky-900 border-sky-200",
+          planName: `iTravel Plus 全年計劃 (${isMsigA ? '計劃A' : '計劃B'})`,
+          currentTier: msigTier,
+          tierOptions: [
+            { id: 'planA', name: '計劃 A (醫療100萬/含手機)' },
+            { id: 'planB', name: '計劃 B (醫療50萬/經濟型)' }
+          ],
+          premium: msigBase,
+          currency: "MOP/HKD",
+          highlights: [
+            "澳門旅遊警示二/三級額外津貼",
+            isMsigA ? "含手提電話保障 $2,000" : "計劃B不設手機保障",
+            "租車自負額 $5,000",
+            "恐怖活動伸延 $3,000,000"
+          ],
+          medicalMax: isMsigA ? "HKD/MOP 1,000,000" : "HKD/MOP 500,000",
+          accidentMax: isMsigA ? "HKD/MOP 1,000,000 (雙倍至200萬)" : "HKD/MOP 500,000 (雙倍至100萬)",
+          evacuation: "HKD/MOP 2,000,000",
+          baggage: isMsigA ? "HKD/MOP 20,000 (含手機$2,000)" : "HKD/MOP 15,000",
+          delay: isMsigA ? "HKD/MOP 2,000 (首6小時$250)" : "HKD/MOP 1,000 (首6小時$250)",
+          cancellation: isMsigA ? "HKD/MOP 50,000" : "HKD/MOP 25,000",
+          excess: "行李/證件自負額 HK$200",
+          covidCover: "醫療及取消旅程受保單條款保障",
+          hotline: "+853 2892 3329"
+        };
+      } else {
+        // Single Trip
+        let baseMSIG = 0;
+        const d = Math.max(2, Math.min(days, 30));
+        const row = MSIG_DB.single[d] || MSIG_DB.single[30];
+        
+        if (isMsigA) {
+          baseMSIG = isFam ? row.a_fam : row.a_ind;
+        } else {
+          baseMSIG = isFam ? row.b_fam : row.b_ind;
+        }
+
+        if (days > 30) {
+          const extraD = days - 30;
+          const rate = isMsigA 
+            ? (isFam ? MSIG_DB.single.extraDaily.a_fam : MSIG_DB.single.extraDaily.a_ind)
+            : (isFam ? MSIG_DB.single.extraDaily.b_fam : MSIG_DB.single.extraDaily.b_ind);
+          baseMSIG += extraD * rate;
+        }
+
+        // Check optional riders (valid for 2-10 days single trip)
+        let riderCost = 0;
+        if (days >= 2 && days <= 10) {
+          if (state.addons.sports) riderCost += isFam ? 75 : 30;
+          if (state.addons.car) riderCost += isFam ? 120 : 60;
+          if (state.addons.pet) riderCost += 30;
+        }
+
+        msigQuote = {
+          company: "MSIG 三井住友",
+          code: "msig",
+          brandColor: "border-sky-600",
+          badgeBg: "bg-sky-50 text-sky-900 border-sky-200",
+          planName: `iTravel Plus 單次旅程 (${isMsigA ? '計劃A' : '計劃B'})`,
+          currentTier: msigTier,
+          tierOptions: [
+            { id: 'planA', name: '計劃 A (醫療100萬/含手機)' },
+            { id: 'planB', name: '計劃 B (醫療50萬/經濟型)' }
+          ],
+          premium: baseMSIG + riderCost,
+          currency: "MOP/HKD",
+          highlights: [
+            "澳門旅遊警示二/三級補償",
+            isMsigA ? "含手提電話遺失/損壞 $2,000" : "計劃B不包含手提電話",
+            "租車自負額 $5,000",
+            isMsigA ? "雙倍身故賠償達 200 萬" : "雙倍身故賠償達 100 萬"
+          ],
+          medicalMax: isMsigA ? "HKD/MOP 1,000,000" : "HKD/MOP 500,000",
+          accidentMax: (ageTier === 'child') ? "HKD 250,000" : (isMsigA ? "HKD 1,000,000" : "HKD 500,000"),
+          evacuation: "HKD/MOP 2,000,000",
+          baggage: isMsigA ? "HKD/MOP 20,000 (包手機)" : "HKD/MOP 15,000",
+          delay: isMsigA ? "HKD/MOP 2,000" : "HKD/MOP 1,000",
+          cancellation: isMsigA ? "HKD/MOP 50,000" : "HKD/MOP 25,000",
+          excess: "行李/證件自負額 HK$200",
+          covidCover: "住院現金及取消行程條款約束",
+          hotline: "+853 2892 3329"
+        };
+      }
+      quotes.push(msigQuote);
+
+      // --- 4. 中國太平 (旅途愉快保險) ---
+      let taipingQuote = null;
+      const tpTier = state.companyTiers.taiping; // 'premier', 'super', 'basic'
+
+      if (type === 'annual') {
+        const isSuper = (tpTier === 'premier' || tpTier === 'super'); // Taiping annual has basic & super
+        const tpRate = isSuper 
+          ? (isFam ? TAIPING_DB.annual.super.fam : TAIPING_DB.annual.super.ind)
+          : (isFam ? TAIPING_DB.annual.basic.fam : TAIPING_DB.annual.basic.ind);
+
+        taipingQuote = {
+          company: "中國太平 (澳門)",
+          code: "taiping",
+          brandColor: "border-red-600",
+          badgeBg: "bg-red-50 text-red-900 border-red-200",
+          planName: `旅途愉快保險 全年${isSuper ? '超級' : '基本'}計劃`,
+          currentTier: isSuper ? 'super' : 'basic',
+          tierOptions: [
+            { id: 'super', name: '超級計劃 (醫療75萬/意外100萬)' },
+            { id: 'basic', name: '基本計劃 (醫療60萬/意外50萬)' }
+          ],
+          premium: tpRate,
+          currency: "MOP",
+          highlights: ["醫療撤離與送返遺體【無限額】", "無自負額", "自動延長保障期10天", isSuper ? "公共交通身故加倍至150萬" : "交通身故加倍至75萬"],
+          medicalMax: isSuper ? "MOP 750,000" : "MOP 600,000",
+          accidentMax: isSuper ? "MOP 1,000,000 (交通150萬)" : "MOP 500,000 (交通75萬)",
+          evacuation: "無限額 (全數保證)",
+          baggage: "MOP 10,000 (每件限2,500)",
+          delay: "MOP 1,000 / 更改10,000",
+          cancellation: "MOP 30,000",
+          excess: "MOP 0 (無自負額)",
+          covidCover: "全球緊急救援服務熱線支援",
+          hotline: "(853) 2878 1666"
+        };
+      } else {
+        // Single Trip: Region selection (1: Asia, 2: Global ex USA, 3: Global)
+        let regIdx = 3;
+        if (dest === 'asia') regIdx = 1;
+        else regIdx = 3;
+
+        // Choose Party column index: [Adult, Adult+Child, Adult+Spouse, Family]
+        let col = 0;
+        if (party === 'parent_child') col = 1;
+        else if (party === 'couple') col = 2;
+        else if (party === 'family') col = 3;
+        else col = 0;
+
+        const pData = TAIPING_DB.single[tpTier][regIdx];
+        let tpPrem = 0;
+        if (days <= 4) tpPrem = pData.d4[col];
+        else if (days <= 6) tpPrem = pData.d6[col];
+        else if (days <= 9) tpPrem = pData.d9[col];
+        else if (days <= 17) tpPrem = pData.d17[col];
+        else if (days <= 31) tpPrem = pData.d31[col];
+        else {
+          const extraW = Math.ceil((days - 31) / 7);
+          tpPrem = pData.d31[col] + (extraW * pData.addWk[col]);
+        }
+
+        const tierNameMap = { premier: '至尊計劃', super: '超級計劃', basic: '基本計劃' };
+        const medMaxMap = { premier: 'MOP 1,000,000', super: 'MOP 750,000', basic: 'MOP 600,000' };
+        const accMaxMap = { premier: 'MOP 2,000,000 (交通300萬)', super: 'MOP 1,000,000 (交通150萬)', basic: 'MOP 500,000 (交通75萬)' };
+
+        taipingQuote = {
+          company: "中國太平 (澳門)",
+          code: "taiping",
+          brandColor: "border-red-600",
+          badgeBg: "bg-red-50 text-red-900 border-red-200",
+          planName: `旅途愉快保險 ${tierNameMap[tpTier]} (地區${regIdx})`,
+          currentTier: tpTier,
+          tierOptions: [
+            { id: 'premier', name: '至尊計劃 (醫療100萬/意外200萬)' },
+            { id: 'super', name: '超級計劃 (醫療75萬/意外100萬)' },
+            { id: 'basic', name: '基本計劃 (醫療60萬/意外50萬)' }
+          ],
+          premium: tpPrem,
+          currency: "MOP",
+          highlights: ["醫療撤離與送返遺體【無限額】", `公共交通意外最高賠償至 ${tpTier === 'premier' ? '300萬' : (tpTier === 'super' ? '150萬' : '75萬')}`, "無自負額", "水上電單車/滑雪/潛水免加費"],
+          medicalMax: medMaxMap[tpTier],
+          accidentMax: accMaxMap[tpTier],
+          evacuation: "無限額 (全額實報實銷)",
+          baggage: "MOP 10,000",
+          delay: "MOP 1,000 / 更改10,000",
+          cancellation: "MOP 30,000",
+          excess: "MOP 0 (全無自負額)",
+          covidCover: "含國際救援(IPA)24小時全球緊急支援",
+          hotline: "(853) 2878 1666"
+        };
+      }
+      quotes.push(taipingQuote);
+
+      return quotes;
+    }
+
+    function recalculateQuotes() {
+      state.destination = document.getElementById('input-destination').value;
+      state.days = parseInt(document.getElementById('input-days').value) || 1;
+      state.party = document.getElementById('input-party').value;
+      state.ageTier = document.getElementById('input-age-tier').value;
+      state.addons.sports = document.getElementById('addon-sports').checked;
+      state.addons.car = document.getElementById('addon-car').checked;
+      state.addons.pet = document.getElementById('addon-pet').checked;
+
+      const quotes = calculateQuotes();
+      const container = document.getElementById('quotes-card-container');
+      container.innerHTML = '';
+
+      // Find lowest valid quote
+      const validQuotes = quotes.filter(q => typeof q.premium === 'number');
+      let lowest = validQuotes.length > 0 ? validQuotes.reduce((min, p) => p.premium < min.premium ? p : min, validQuotes[0]) : null;
+
+      if (lowest) {
+        document.getElementById('kpi-lowest-price').textContent = `${lowest.currency} ${lowest.premium}`;
+        document.getElementById('kpi-lowest-company').textContent = lowest.company;
+        document.getElementById('kpi-lowest-desc').textContent = `${lowest.planName} · 最具性價比`;
+      }
+
+      quotes.forEach((q, idx) => {
+        const card = document.createElement('div');
+        const isBestVal = lowest && q.premium === lowest.premium;
+        card.className = `bg-white border-2 ${isBestVal ? 'border-sky-500 ring-2 ring-sky-500/20 shadow-md' : 'border-slate-200'} rounded-2xl p-5 hover:border-sky-400 hover:shadow-lg transition flex flex-col justify-between relative group`;
+
+        const bestBadge = isBestVal 
+          ? `<div class="absolute -top-3 right-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm">
+              <i class="fa-solid fa-crown mr-1"></i> 最優價首選
+             </div>` 
+          : '';
+
+        let priceDisplay = typeof q.premium === 'number' 
+          ? `<div class="mt-2 flex items-baseline gap-1">
+              <span class="text-xs font-bold text-slate-500">${q.currency}</span>
+              <span class="text-3xl font-black text-slate-900 tracking-tight">$${q.premium}</span>
+              <span class="text-[11px] text-slate-400 font-medium">/ 總保費</span>
+             </div>`
+          : `<div class="mt-2">
+              <span class="text-xl font-extrabold text-slate-400">${q.premium}</span>
+              <span class="text-[11px] text-amber-600 block">${q.note || ''}</span>
+             </div>`;
+
+        // Tier selector markup
+        let tierSelectorHtml = '';
+        if (q.tierOptions && q.tierOptions.length > 1) {
+          tierSelectorHtml = `
+            <div class="mt-2.5">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-layer-group text-sky-600 mr-1"></i> 選擇投保級別：
+              </label>
+              <select onchange="onCompanyTierChange('${q.code}', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                ${q.tierOptions.map(opt => `
+                  <option value="${opt.id}" ${q.currentTier === opt.id ? 'selected' : ''}>${opt.name}</option>
+                `).join('')}
+              </select>
+            </div>
+          `;
+        } else {
+          tierSelectorHtml = `
+            <div class="mt-2.5">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-layer-group text-sky-600 mr-1"></i> 投保級別：
+              </label>
+              <div class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-between border border-slate-200">
+                <span>${q.tierOptions ? q.tierOptions[0].name : '旗艦標準'}</span>
+                <span class="text-[10px] text-slate-400 font-medium">單一級別</span>
+              </div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          ${bestBadge}
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold px-2.5 py-1 rounded-lg ${q.badgeBg}">
+                ${q.company}
+              </span>
+              <span class="text-slate-400 text-xs hover:text-slate-600 cursor-pointer" onclick="showModal(${idx})" title="查看條款細節">
+                <i class="fa-solid fa-circle-question"></i>
+              </span>
+            </div>
+
+            <h4 class="text-sm font-black text-slate-900 mt-2 line-clamp-1">${q.planName}</h4>
+            ${priceDisplay}
+            ${tierSelectorHtml}
+
+            <div class="mt-3 pt-3 border-t border-slate-100 space-y-2 text-xs">
+              <div class="flex justify-between items-center text-slate-600">
+                <span class="text-slate-400">海外醫療費用：</span>
+                <span class="font-bold text-slate-800">${q.medicalMax}</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-600">
+                <span class="text-slate-400">緊急醫療運送：</span>
+                <span class="font-bold text-sky-700">${q.evacuation}</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-600">
+                <span class="text-slate-400">人身意外身故：</span>
+                <span class="font-bold text-slate-800">${q.accidentMax}</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-600">
+                <span class="text-slate-400">行李/個人財物：</span>
+                <span class="font-bold text-slate-800">${q.baggage}</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-600">
+                <span class="text-slate-400">保單自負額：</span>
+                <span class="font-extrabold ${q.excess.includes('MOP 0') ? 'text-emerald-600' : 'text-slate-700'}">${q.excess}</span>
+              </div>
+            </div>
+
+            <!-- Bullet Highlights -->
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1">
+              ${q.highlights.map(h => `
+                <div class="flex items-start gap-1.5 text-[11px] text-slate-600">
+                  <i class="fa-solid fa-check text-emerald-500 mt-0.5 shrink-0"></i>
+                  <span>${h}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3">
+            <button onclick="showModal(${idx})" class="w-full py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition flex items-center justify-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-file-invoice"></i> 檢視詳情與條款
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setGlobalTier(tier) {
+      state.globalTier = tier;
+      const btnPremier = document.getElementById('btn-tier-premier');
+      const btnStandard = document.getElementById('btn-tier-standard');
+
+      if (tier === 'premier') {
+        btnPremier.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700";
+        btnStandard.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        state.companyTiers.mic = 'premier';
+        state.companyTiers.msig = 'planA';
+        state.companyTiers.taiping = 'premier';
+      } else {
+        btnStandard.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700";
+        btnPremier.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        state.companyTiers.mic = 'std';
+        state.companyTiers.msig = 'planB';
+        state.companyTiers.taiping = 'basic';
+      }
+      recalculateQuotes();
+    }
+
+    function onCompanyTierChange(companyCode, newTier) {
+      state.companyTiers[companyCode] = newTier;
+      // When individually customized, update global tier button state
+      const btnPremier = document.getElementById('btn-tier-premier');
+      const btnStandard = document.getElementById('btn-tier-standard');
+      btnPremier.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+      btnStandard.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+      recalculateQuotes();
+    }
+
+    function setPlanType(type) {
+      state.planType = type;
+      const btnSingle = document.getElementById('btn-type-single');
+      const btnAnnual = document.getElementById('btn-type-annual');
+      const daysWrapper = document.getElementById('wrapper-trip-days');
+      const optChinaHK = document.querySelector('#input-destination option[value="china_hk"]');
+      const addonsBox = document.getElementById('optional-addons-box');
+
+      if (type === 'single') {
+        btnSingle.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700";
+        btnAnnual.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        daysWrapper.classList.remove('hidden');
+        addonsBox.classList.remove('hidden');
+        if (optChinaHK) optChinaHK.disabled = true;
+        if (state.destination === 'china_hk') {
+          document.getElementById('input-destination').value = 'global';
+          state.destination = 'global';
+        }
+      } else {
+        btnAnnual.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition shadow-sm bg-white text-sky-700";
+        btnSingle.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        daysWrapper.classList.add('hidden');
+        addonsBox.classList.add('hidden');
+        if (optChinaHK) optChinaHK.disabled = false;
+      }
+      recalculateQuotes();
+    }
+
+    function onPartyChange() {
+      const p = document.getElementById('input-party').value;
+      const hint = document.getElementById('party-hint');
+      if (p === 'individual') hint.textContent = "適用於 1 位成人或獨立小童出遊";
+      else if (p === 'couple') hint.textContent = "合法夫婦兩人同行享套裝優惠";
+      else if (p === 'parent_child') hint.textContent = "1 位家長及未滿 18 歲子女";
+      else hint.textContent = "合法夫婦及同行所有 17/18 歲以下未婚子女";
+      recalculateQuotes();
+    }
+
+    function showModal(index) {
+      const quotes = calculateQuotes();
+      const q = quotes[index];
+      if (!q) return;
+
+      const modal = document.getElementById('modal-detail');
+      const icon = document.getElementById('modal-company-icon');
+      const title = document.getElementById('modal-company-name');
+      const sub = document.getElementById('modal-plan-sub');
+      const body = document.getElementById('modal-content-body');
+
+      let iconBg = 'bg-sky-600';
+      if (q.code === 'mic') iconBg = 'bg-emerald-600';
+      if (q.code === 'aig') iconBg = 'bg-blue-800';
+      if (q.code === 'msig') iconBg = 'bg-sky-700';
+      if (q.code === 'taiping') iconBg = 'bg-red-600';
+
+      icon.className = `w-10 h-10 rounded-xl flex items-center justify-center text-white text-base font-bold ${iconBg}`;
+      icon.innerHTML = `<i class="fa-solid fa-shield"></i>`;
+      title.textContent = `${q.company} - ${q.planName}`;
+      sub.textContent = `精算報價：${q.currency} ${q.premium} · 澳門出發官方核保條款`;
+
+      body.innerHTML = `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div class="font-bold text-slate-900 text-xs mb-2">重點保障細目一覽：</div>
+          <div class="grid grid-cols-2 gap-2 text-slate-600 text-xs">
+            <div>• 海外緊急醫療：<span class="font-bold text-slate-900">${q.medicalMax}</span></div>
+            <div>• 緊急運送及送返：<span class="font-bold text-sky-700">${q.evacuation}</span></div>
+            <div>• 人身意外身故：<span class="font-bold text-slate-900">${q.accidentMax}</span></div>
+            <div>• 行李及個人財物：<span class="font-bold text-slate-900">${q.baggage}</span></div>
+            <div>• 取消/縮短旅程：<span class="font-bold text-slate-900">${q.cancellation}</span></div>
+            <div>• 行程延誤賠償：<span class="font-bold text-slate-900">${q.delay}</span></div>
+            <div>• 自負額規定：<span class="font-bold text-emerald-700">${q.excess}</span></div>
+            <div>• 傳染病/COVID保障：<span class="font-bold text-slate-900">${q.covidCover}</span></div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="font-bold text-slate-900 text-xs">條款摘要與核保重點：</div>
+          <ul class="list-disc pl-4 space-y-1 text-slate-600 text-xs leading-relaxed">
+            <li><strong>出發地限制：</strong>旅程必須在澳門安排及付款，且必須由澳門出發並於旅程結束後返回澳門。</li>
+            <li><strong>業餘休閒活動：</strong>熱氣球、水肺潛水（深度30米內）、滑雪、笨豬跳、無繩滑水、獨木舟等一般休閒體育活動已包括在保障範圍內（職業競賽除外）。</li>
+            <li><strong>長者受保細則：</strong>若受保人為 70 歲或 80 歲以上，人身意外或醫療保障賠償上限將按保單特定條款調整。</li>
+            <li><strong>索償與報案：</strong>行李或個人物品失竊必須於 24 小時內向當地警方報案並取得正式報告；航班延誤需取得航空公司發出之詳細延誤證明。</li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-[11px] flex items-center justify-between">
+          <span><i class="fa-solid fa-phone mr-1.5 text-amber-600"></i>理賠支援／投保查詢熱線：<strong>${q.hotline}</strong></span>
+          <span class="text-amber-700 font-semibold">24小時全球緊急支援服務</span>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-detail').classList.add('hidden');
+    }
+
+    function resetCalculator() {
+      document.getElementById('input-destination').value = 'global';
+      document.getElementById('input-days').value = '5';
+      document.getElementById('input-party').value = 'individual';
+      document.getElementById('input-age-tier').value = 'standard';
+      document.getElementById('addon-sports').checked = false;
+      document.getElementById('addon-car').checked = false;
+      document.getElementById('addon-pet').checked = false;
+      setGlobalTier('premier');
+      setPlanType('single');
+      onPartyChange();
+    }
+
+    // Initialize application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      document.getElementById('label-current-date').textContent = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+      setGlobalTier('premier');
+      recalculateQuotes();
+    });
+  </script>
+</body>
+</html>
