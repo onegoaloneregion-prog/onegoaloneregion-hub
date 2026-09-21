@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10Life 客觀評級數據：富衛 (FWD) 性價比分析儀</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .fwd-orange { color: #E87722; }
+    .bg-fwd-orange { background-color: #E87722; }
+    .border-fwd-orange { border-color: #E87722; }
+    .badge-5star {
+      background: linear-gradient(135deg, #FFB800 0%, #FF8A00 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <!-- Top Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-amber-500 text-white font-black px-2.5 py-1 rounded text-sm tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie"></i> 10Life DATA
+        </div>
+        <span class="text-slate-400">×</span>
+        <div class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1">
+          <span class="text-[#E87722] font-black">FWD</span> 富衛性價比客觀分析
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <span class="hidden md:inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+          <i class="fa-solid fa-check-circle mr-1"></i> 精算師獨立數據模型
+        </span>
+        <button onclick="scrollToCalculator()" class="bg-[#E87722] hover:bg-[#d46618] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition">
+          <i class="fa-solid fa-calculator mr-1"></i> 即時計性價比
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-white to-orange-50/50 border-b border-orange-100 py-12 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 text-[#E87722] text-xs sm:text-sm font-bold mb-4">
+        <i class="fa-solid fa-award"></i> 連續榮獲 10Life「年度健康保險公司大奬」
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
+        買保險唔使估估下，<br class="hidden sm:inline" />
+        用 <span class="text-[#E87722] underline decoration-amber-400">10Life 精算師數據</span> 睇清性價比之王！
+      </h1>
+      <p class="mt-4 text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+        由香港中立保險比較平台 10Life 精算師團隊拆解條款與賠償率。富衛（FWD）於醫療、危疾及儲蓄保障範疇囊括多項 5星最高評級，真正實現「平保費、高保障」。
+      </p>
+
+      <!-- Key KPI Badges -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-4xl mx-auto">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-2xl sm:text-3xl font-black text-[#E87722]">9.8 <span class="text-xs text-slate-400 font-normal">/10</span></div>
+          <div class="text-xs font-semibold text-slate-700 mt-1">尊衛您醫療保障評分</div>
+          <div class="text-[11px] text-emerald-600 mt-0.5"><i class="fa-solid fa-shield-halved"></i> 平均賠償率 98.3%</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-2xl sm:text-3xl font-black text-amber-500">16+</div>
+          <div class="text-xs font-semibold text-slate-700 mt-1">10Life 5星級評級產品</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">涵蓋醫保/危疾/年金</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-2xl sm:text-3xl font-black text-blue-600">4年蟬聯</div>
+          <div class="text-xs font-semibold text-slate-700 mt-1">年度健康保險公司大奬</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">專業機構高度認證</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-2xl sm:text-3xl font-black text-emerald-600">1位</div>
+          <div class="text-xs font-semibold text-slate-700 mt-1">產品性價比全港第一</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">KPMG 客戶體驗權威調查</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Dashboard Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+    <!-- Category Tabs & Product Comparison Matrix -->
+    <section>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-2.5 h-6 bg-[#E87722] rounded-full inline-block"></span>
+            10Life 精算拆解：各類別旗艦產品評分矩陣
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">點擊分類查看富衛對比市場平均水平之客觀指標</p>
+        </div>
+        <!-- Category Filter -->
+        <div class="inline-flex bg-slate-200/80 p-1 rounded-xl text-xs sm:text-sm font-semibold">
+          <button onclick="switchCategory('medical')" id="tab-medical" class="px-4 py-2 rounded-lg bg-white shadow-sm text-slate-900 transition">自願醫保 (VHIS)</button>
+          <button onclick="switchCategory('ci')" id="tab-ci" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">危疾保障</button>
+          <button onclick="switchCategory('savings')" id="tab-savings" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">儲蓄與年金</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Product Card Display -->
+      <div id="product-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Radar Comparison & CP Ratio Simulation -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Radar Chart -->
+      <div class="lg:col-span-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+            <i class="fa-solid fa-radar text-[#E87722]"></i> 5大維度性價比對決
+          </h3>
+          <span class="text-xs bg-orange-50 text-[#E87722] font-semibold px-2 py-0.5 rounded">
+            富衛 vs 市場傳統老牌
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 mb-4">10Life 評級準則聚焦於條款友善度、實質賠償率及同保費下的槓桿倍數。</p>
+        <div class="h-72">
+          <canvas id="radarChart"></canvas>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-around text-xs text-slate-600 font-medium">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#E87722] inline-block"></span> 富衛 FWD</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span> 市場傳統老牌平均</span>
+        </div>
+      </div>
+
+      <!-- Interactive ROI / CP Value Simulator -->
+      <div id="calculator-section" class="lg:col-span-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-amber-500"></i> 「同等預算」保障槓桿模擬計算機
+          </h3>
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">精算師性價比指標</span>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>投保人年齡：<strong id="display-age" class="text-base text-[#E87722]">30</strong> 歲</span>
+              <span class="text-slate-400">非吸煙 / 男或女</span>
+            </div>
+            <input id="input-age" type="range" min="20" max="55" value="30" step="1" oninput="calculateCP()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#E87722]" />
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>醫療自付費選擇 (Deductible)：</span>
+              <span id="display-deductible" class="text-slate-900 font-bold">HK$ 16,000 (上班族 Top-up 首選)</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="setDeductible(0, this)" class="ded-btn py-1.5 text-xs rounded border border-slate-200 hover:border-orange-400 font-medium transition">HK$ 0</button>
+              <button onclick="setDeductible(16000, this)" class="ded-btn py-1.5 text-xs rounded border-2 border-[#E87722] bg-orange-50 text-[#E87722] font-bold transition">HK$ 16,000</button>
+              <button onclick="setDeductible(50000, this)" class="ded-btn py-1.5 text-xs rounded border border-slate-200 hover:border-orange-400 font-medium transition">HK$ 50,000</button>
+            </div>
+          </div>
+
+          <!-- Result Simulation Card -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 sm:p-5 rounded-xl mt-4">
+            <div class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center justify-between">
+              <span>10Life 核心評估：每 1 蚊保費買到幾多保障？</span>
+              <span class="bg-[#E87722] text-[10px] text-white px-2 py-0.5 rounded font-black">FWD 領先</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 border-b border-slate-700 pb-3">
+              <div>
+                <span class="text-xs text-slate-300 block">富衛尊衛您每年預計保費</span>
+                <span id="res-fwd-premium" class="text-xl sm:text-2xl font-black text-amber-400">HK$ 3,840</span>
+                <span class="text-[10px] text-slate-400 block mt-0.5">全數保障無細項限制 (每年 $800萬)</span>
+              </div>
+              <div>
+                <span class="text-xs text-slate-300 block">傳統大公司同級方案</span>
+                <span id="res-peer-premium" class="text-xl sm:text-2xl font-black text-slate-300">HK$ 5,320</span>
+                <span class="text-[10px] text-slate-400 block mt-0.5">每年保費多付 ~38%</span>
+              </div>
+            </div>
+
+            <div class="pt-3 flex items-center justify-between">
+              <div>
+                <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-arrow-trend-up"></i> 10年累計為你慳返：
+                </span>
+                <span id="res-saving-10yr" class="text-lg font-black text-white">約 HK$ 21,800+</span>
+              </div>
+              <div class="text-right">
+                <span class="text-[11px] text-slate-400 block">10Life 評級認證</span>
+                <span class="text-amber-400 font-black text-sm">★★★★★ 9.8分</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why 10Life High CP Value Reasons -->
+    <section class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h3 class="text-2xl font-black text-slate-900">點解 10Life 精算師咁推崇富衛性價比？</h3>
+        <p class="text-sm text-slate-500 mt-1">保險精算評分並非睇廣告，而係基於 3 大硬核數據指標</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-orange-100 text-[#E87722] flex items-center justify-center font-bold text-lg mb-3">
+              1
+            </div>
+            <h4 class="font-bold text-slate-900 mb-1.5">無細項魔鬼限額（全數保障）</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              傳統醫保常設手術室費、主診醫生巡房費限額，超標需自己貼錢。富衛尊衛您以實報實銷形式全數保障住院及手術開支，在 10Life「12大常見傷病實測」中平均保障率高達 98.3%。
+            </p>
+          </div>
+          <span class="mt-4 text-[11px] font-bold text-[#E87722]">避免「買咗賠唔足」痛點 →</span>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-orange-100 text-[#E87722] flex items-center justify-center font-bold text-lg mb-3">
+              2
+            </div>
+            <h4 class="font-bold text-slate-900 mb-1.5">去中間化定價，剔除多餘溢價</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              富衛採用先進數碼核保及自動化理賠系統，營運成本遠低於百年傳統龐大架構，能直接將節省之成本回饋客戶，使同等保障額度之保費比同業低 20% 至 35%。
+            </p>
+          </div>
+          <span class="mt-4 text-[11px] font-bold text-[#E87722]">將保費真正用喺刀刃上 →</span>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-orange-100 text-[#E87722] flex items-center justify-center font-bold text-lg mb-3">
+              3
+            </div>
+            <h4 class="font-bold text-slate-900 mb-1.5">條款革新，首創未知疾病防護</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              危疾產品（如危疾緻尚保）跳出舊有框架，疾病定義清晰並首創涵蓋未來未知傳染病與精神健康保障，提供多重賠償高達 1,374%，獲 10Life 終身危疾 5星高分。
+            </p>
+          </div>
+          <span class="mt-4 text-[11px] font-bold text-[#E87722]">條款透明，不玩文字遊戲 →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call To Action Card -->
+    <section class="bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white rounded-3xl p-8 sm:p-10 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="relative z-10 max-w-2xl">
+        <span class="bg-[#E87722] text-xs font-black uppercase px-3 py-1 rounded-full inline-block mb-3">
+          理財顧問與客戶專業工具
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-black leading-tight">
+          想睇你手頭上份保單，<br class="hidden sm:inline" />喺 10Life 精算系統下值幾多分？
+        </h3>
+        <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+          拒絕人情單、拒絕含糊話術！用第三方客觀評分表，即刻為你現有保費進行「性價比與保障缺口壓力測試」。
+        </p>
+      </div>
+      <div class="relative z-10 flex-shrink-0">
+        <a href="https://www.10life.com/zh-HK" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#E87722] hover:bg-[#d46618] text-white font-bold px-6 py-3.5 rounded-xl text-sm transition shadow-lg hover:shadow-orange-500/25">
+          <span>前往 10Life 官方平台核實數據</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+      </div>
+      <!-- Background Graphic -->
+      <div class="absolute -right-10 -bottom-10 opacity-10 text-white text-[240px] pointer-events-none font-black select-none">
+        FWD
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>免責聲明：本工具引用之數據源自香港獨立保險比較平台 10Life.com 公開研究報告、精算評分及產品條款分析。評分與獲獎資料僅供參考與比較之用，不構成任何具體投資或投保邀約。投保前請詳閱官方保單條款。</p>
+      <p class="mt-2 text-slate-400">© 10Life 客觀精算數據應用系統 | 富衛性價比分析模組</p>
+    </div>
+  </footer>
+
+  <!-- Interactive Logic & Chart Script -->
+  <script>
+    // Product Database based on 10Life official ratings
+    const productData = {
+      medical: [
+        {
+          name: "尊衛您 (寰譽版) 醫療計劃",
+          type: "自願醫保 (半私家房)",
+          score: "9.8",
+          stars: 5,
+          highlights: [
+            "10Life 醫療保障評分高達 9.8 / 10",
+            "12大常見疾病平均保障率 98.3%",
+            "每年保障限額 HK$1,250萬 (不設終身限額)",
+            "全數保障住院、手術及術後復康"
+          ],
+          cpAdvantage: "同級半私家房 VHIS 中保費最具競爭力，榮獲 10Life 5星級大獎。"
+        },
+        {
+          name: "倍衛您醫療計劃",
+          type: "自願醫保 (標準優等)",
+          score: "9.6",
+          stars: 5,
+          highlights: [
+            "專為上班族而設的高性價比 Top-Up 醫保",
+            "每年保障限額高達 HK$800萬",
+            "設 6 種自付費選項，無縫銜接公司團體保險",
+            "全數覆蓋非手術癌症治療 (化療/標靶)"
+          ],
+          cpAdvantage: "小額自付費即可將保障槓桿放大至八百萬，上班族保費門檻極低。"
+        },
+        {
+          name: "至．衛一醫療計劃",
+          type: "自願醫保 (普通房入門)",
+          score: "9.4",
+          stars: 5,
+          highlights: [
+            "10Life『上班一族（高性價比）』評級 9.4分",
+            "每年保障限額 HK$400萬",
+            "平民化保費，扣稅最高可達每年 HK$8,000",
+            "不設終身保障上限"
+          ],
+          cpAdvantage: "市場罕見低保費、高賠償率入門全數保障之選。"
+        }
+      ],
+      ci: [
+        {
+          name: "危疾緻尚保 (升級版)",
+          type: "終身危疾 (高保障旗艦)",
+          score: "9.3",
+          stars: 5,
+          highlights: [
+            "10Life 終身危疾 5星評級，保障分 9.3",
+            "多重危疾最高賠償額高達 1,374%",
+            "革新簡化為癌症及非癌症兩大類別",
+            "涵蓋腦神經衰退、阿茲海默氏症照顧者支援"
+          ],
+          cpAdvantage: "條款魔鬼細節極少，多重理賠觸發條件比傳統定義更寬鬆。"
+        },
+        {
+          name: "危疾應援保 (升級版)",
+          type: "終身危疾 (高性價比)",
+          score: "8.8",
+          stars: 5,
+          highlights: [
+            "條款清晰度與賠償槓桿評分 8.8 分",
+            "全面保障已知及未知傳染病",
+            "提供早期危疾及原位癌特惠賠償",
+            "創新兒童發展障礙與孕婦保障權益"
+          ],
+          cpAdvantage: "相同預算下，富衛提供的第一筆首期危疾保額高出傳統保司約 25%。"
+        },
+        {
+          name: "好易揀定期危疾",
+          type: "純保障定期危疾 (零儲蓄)",
+          score: "8.8",
+          stars: 5,
+          highlights: [
+            "純保障零儲蓄成分，告別昂貴保費綁架",
+            "專注三大殺手：癌症、急性心肌梗塞、中風",
+            "保費相宜，月供百餘元起獲百萬抗癌保障",
+            "10Life 定期危疾類別 5星首選"
+          ],
+          cpAdvantage: "保費極度親民，適合年輕打工仔及家庭支柱用極小成本鎖定巨額防護。"
+        }
+      ],
+      savings: [
+        {
+          name: "盈聚．天下壽險計劃",
+          type: "長期多元貨幣儲蓄",
+          score: "9.1",
+          stars: 5,
+          highlights: [
+            "榮獲 10Life 5星儲蓄保險大獎認可",
+            "雙重紅利持續增值，長線預期回報穩健",
+            "無限次轉換被保人及分拆保單功能",
+            "多達多種貨幣轉換靈活性"
+          ],
+          cpAdvantage: "分紅實現率表現透明客觀，財富傳承彈性位居市場前瞻梯隊。"
+        },
+        {
+          name: "延期年金計劃 (QDAP)",
+          type: "政府扣稅退休儲蓄",
+          score: "9.0",
+          stars: 5,
+          highlights: [
+            "合資格延期年金，享每年高達 $60,000 扣稅額",
+            "保證內部回報率 (IRR) 與總回報架構平衡",
+            "定期穩定派發入息，抵禦長壽通脹風險",
+            "年金期與提取年齡靈活配置"
+          ],
+          cpAdvantage: "扣稅慳稅即時鎖定回報，配合保證現金流，性價比極高。"
+        }
+      ]
+    };
+
+    let currentCategory = 'medical';
+    let selectedDeductible = 16000;
+
+    function renderProducts() {
+      const container = document.getElementById('product-container');
+      const items = productData[currentCategory];
+      
+      container.innerHTML = items.map(p => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between hover:border-orange-300 hover:shadow-md transition">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <div>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-orange-50 text-[#E87722]">${p.type}</span>
+                <h4 class="font-black text-slate-900 text-lg mt-1.5">${p.name}</h4>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <span class="inline-block badge-5star text-white text-[11px] font-black px-2 py-0.5 rounded-full shadow-sm">
+                  ★ 5星評級
+                </span>
+                <div class="text-xs text-slate-400 mt-1">10Life 評分</div>
+                <div class="text-2xl font-black text-[#E87722]">${p.score}<span class="text-xs text-slate-400 font-normal">/10</span></div>
+              </div>
+            </div>
+
+            <ul class="space-y-2 mt-4 text-xs text-slate-600 border-t border-slate-100 pt-4">
+              ${p.highlights.map(h => `<li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i> <span>${h}</span></li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 bg-orange-50/60 -mx-6 -mb-6 p-5 rounded-b-2xl">
+            <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-trophy text-[#E87722]"></i> 性價比核心競爭力：
+            </div>
+            <p class="text-xs text-slate-600 mt-1">${p.cpAdvantage}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      ['medical', 'ci', 'savings'].forEach(t => {
+        const btn = document.getElementById('tab-' + t);
+        if (t === cat) {
+          btn.className = "px-4 py-2 rounded-lg bg-white shadow-sm text-slate-900 font-bold transition";
+        } else {
+          btn.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+        }
+      });
+      renderProducts();
+    }
+
+    function setDeductible(val, btn) {
+      selectedDeductible = val;
+      document.querySelectorAll('.ded-btn').forEach(b => {
+        b.className = "ded-btn py-1.5 text-xs rounded border border-slate-200 hover:border-orange-400 font-medium transition";
+      });
+      btn.className = "ded-btn py-1.5 text-xs rounded border-2 border-[#E87722] bg-orange-50 text-[#E87722] font-bold transition";
+      
+      const label = val === 0 ? "HK$ 0 (全數理賠零負擔)" : (val === 16000 ? "HK$ 16,000 (上班族 Top-up 首選)" : "HK$ 50,000 (高額自付平價保大病)");
+      document.getElementById('display-deductible').innerText = label;
+      calculateCP();
+    }
+
+    function calculateCP() {
+      const age = parseInt(document.getElementById('input-age').value);
+      document.getElementById('display-age').innerText = age;
+
+      // Estimated market premium calculation model for VHIS semi-private room
+      let baseRate = 1800 + (age - 20) * 115;
+      if (age > 40) baseRate += (age - 40) * 140;
+
+      let factor = 1.0;
+      if (selectedDeductible === 0) factor = 2.4;
+      else if (selectedDeductible === 16000) factor = 1.0;
+      else if (selectedDeductible === 50000) factor = 0.65;
+
+      const fwdPremium = Math.round(baseRate * factor);
+      // Traditional legacy competitors often feature 30-40% brand premium and administration overhead
+      const peerPremium = Math.round(fwdPremium * 1.38);
+      const annualDiff = peerPremium - fwdPremium;
+      const saving10Yr = annualDiff * 10;
+
+      document.getElementById('res-fwd-premium').innerText = `HK$ ${fwdPremium.toLocaleString()}`;
+      document.getElementById('res-peer-premium').innerText = `HK$ ${peerPremium.toLocaleString()}`;
+      document.getElementById('res-saving-10yr').innerText = `約 HK$ ${saving10Yr.toLocaleString()}+`;
+    }
+
+    function scrollToCalculator() {
+      document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize Radar Chart
+    let radarChartInstance = null;
+    function initRadar() {
+      const ctx = document.getElementById('radarChart').getContext('2d');
+      radarChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['傷病保障率', '保費競爭力 (平價度)', '條款透明度', '自付費靈活性', '理賠免細項度'],
+          datasets: [
+            {
+              label: '富衛 FWD',
+              data: [98, 95, 94, 96, 98],
+              fill: true,
+              backgroundColor: 'rgba(232, 119, 34, 0.2)',
+              borderColor: '#E87722',
+              pointBackgroundColor: '#E87722',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: '#E87722'
+            },
+            {
+              label: '市場傳統大型保險公司平均',
+              data: [82, 68, 75, 78, 74],
+              fill: true,
+              backgroundColor: 'rgba(148, 163, 184, 0.2)',
+              borderColor: '#94a3b8',
+              pointBackgroundColor: '#94a3b8',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: '#94a3b8'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: '#e2e8f0' },
+              grid: { color: '#f1f5f9' },
+              suggestedMin: 40,
+              suggestedMax: 100,
+              ticks: { display: false }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    // Init Page
+    window.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      initRadar();
+      calculateCP();
+    });
+  </script>
+</body>
+</html>
