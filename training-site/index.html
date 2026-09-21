@@ -1964,22 +1964,24 @@
         if (document.getElementById('ageBreakdownList')) {
             document.getElementById('ageBreakdownList').innerHTML = ageHtml;
       
-                document.getElementById('payTermBreakdownList').innerHTML = termHtml;
-                
-                document.getElementById('rateTypeCompTitle').innerText = age + ' 歲 · ' + pNameText + ' · ' + payTerm + '年繳 · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ' · 費率比較'; 
-                var rateTypeMatrix = [{ g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' }, { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' }, { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' }, { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }]; 
-                var rateTypeHtml = "";
-                rateTypeMatrix.forEach(function(item) { 
-                    var rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, baseHkdSum, (p==='crisis_supporter_pro')); 
-                    if (curr === 'USD') rAnn = rAnn / 7.8; 
-                    var rMon = rAnn * 0.09; 
-                    var isSelected = (item.g === gender && item.r === rateType); 
-                    var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
-                    var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                    rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="font-black text-[#E87722] text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-[11px] text-slate-600 font-semibold">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>'; 
-                }); 
-                document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
-            }
+               // 只有危疾產品才需要渲染費率與年期比較，其餘產品清空或略過
+    if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+        var rateTypeMatrix = [{ g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' }, { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' }, { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' }, { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }];
+        var rateTypeHtml = "";
+        rateTypeMatrix.forEach(function(item) {
+            var rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, baseHkdSum, (p === 'crisis_supporter_pro'));
+            if (curr === 'USD') rAnn = rAnn / 7.8;
+            var rMon = rAnn * 0.09;
+            var isSelected = (item.g === gender && item.r === rateType);
+            var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
+            var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
+            rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>';
+        });
+        if (document.getElementById('rateTypeBreakdownList')) {
+            document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
+        }
+    }
+}
             document.getElementById('compSectionTitle').innerText = age + ' 歲 · ' + pNameText + ' · 保費比較 (' + gText + ' · ' + currUnit + ')'; 
             var ageList = [25, 30, 35, 36, 40, 45, 50, 55]; 
             if (!ageList.includes(age)) { ageList.push(age); ageList.sort(function(a, b){ return a - b; }); } 
