@@ -1464,16 +1464,17 @@
             gender = (gender === 'female') ? 'fem' : 'male';
             var proKey = isPro ? 'pro' : 'base';
             
-            // 檢查童步守護 (孕婦22週+，保費與年齡無關)[cite: 3]
+            // 檢查童步守護
             var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
             var isKid = (selectedCrisisRider && selectedCrisisRider.value === 'kid');
+            var kidExtraRate = 0;
             if (isKid) {
+                // 童步守護附加費率（每千元保額額外疊加）
                 var kidRatesHkd = {
-                    base: { '10': 39.90, '15': 27.67, '20': 21.85, '25': 18.17, '30': 16.53 },
-                    pro:  { '10': 42.63, '15': 29.56, '20': 23.40, '25': 19.42, '30': 17.68 }
+                    base: { '10': 3.99, '15': 2.77, '20': 2.18, '25': 1.82, '30': 1.65 },
+                    pro:  { '10': 4.26, '15': 2.96, '20': 2.34, '25': 1.94, '30': 1.77 }
                 };
-                var kRate = isPro ? kidRatesHkd.pro[payTerm] : kidRatesHkd.base[payTerm];
-                return (sumInsured / 1000) * (kRate || 21.85);
+                kidExtraRate = isPro ? (kidRatesHkd.pro[payTerm] || 2.34) : (kidRatesHkd.base[payTerm] || 2.18);
             }
 
             var termGroup = crisisCompleteRateBook[payTerm] || crisisCompleteRateBook['20'];
@@ -1511,14 +1512,27 @@
                 else if (payTerm === '20' || payTerm === '25' || payTerm === '30') sizeDiscount = 2.0;
             }
 
-            // 家添守護加成（如勾選）[cite: 3]
+            // 家添守護加成（如勾選）
             var isFamily = (selectedCrisisRider && selectedCrisisRider.value === 'family');
             if (isFamily) unitRate *= 1.08;
 
             var finalRate = Math.max(0, unitRate - sizeDiscount);
-            return (sumInsured / 1000) * finalRate;
-        }
+            var baseAnnualPrem = (sumInsured / 1000) * finalRate;
 
+            // 童步守護附加費（如勾選童步守護，在母親基礎保費上額外加收，不再覆蓋主約）
+            var isKid = (selectedCrisisRider && selectedCrisisRider.value === 'kid');
+            var kidAddonPrem = 0;
+            if (isKid) {
+                var kidAddonRates = {
+                    base: { '10': 3.99, '15': 2.77, '20': 2.18, '25': 1.82, '30': 1.65 },
+                    pro:  { '10': 4.26, '15': 2.96, '20': 2.34, '25': 1.94, '30': 1.77 }
+                };
+                var kAddRate = isPro ? (kidAddonRates.pro[payTerm] || 2.34) : (kidAddonRates.base[payTerm] || 2.18);
+                kidAddonPrem = (sumInsured / 1000) * kAddRate;
+            }
+
+            return baseAnnualPrem + kidAddonPrem;
+         }
         // =========================================================================
         // 2. 尊衛您 (寰譽版) - 標準保障級別 0-80 歲逐歲官方保費表 (港元 HKD)
         // 來源：FWD 官方 vPrime Signature Standard Schedule (2024.07.08 生效)
