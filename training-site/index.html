@@ -1934,18 +1934,36 @@
                 document.getElementById('promoDetailsList').innerHTML = promoHtml; 
             } else { 
                 if (promoBadgeEl) promoBadgeEl.classList.add('hidden'); 
-                if (promoDetailsEl) promoDetailsEl.classList.add('hidden'); 
-            }
+              var ageHtml = "";
+        ageList.forEach(function(a) {
+            var aAnn = 0;
             if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                document.getElementById('payTermCompTitle').innerText = age + ' 歲 · ' + pNameText + ' · 各繳款年期比較 (' + gText + ' · ' + rateTypeText + ' · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ')'; 
-                var payTermsList = [{ term: '10', maxAge: 70, label: '10年繳' }, { term: '15', maxAge: 60, label: '15年繳' }, { term: '20', maxAge: 55, label: '20年繳' }, { term: '25', maxAge: 50, label: '25年繳' }, { term: '30', maxAge: 50, label: '30年繳' }]; 
-                var termHtml = "";
-                payTermsList.forEach(function(item) { 
-                    var tAnn = calcCrisisFullPremium(age, gender, item.term, rateType, baseHkdSum, (p==='crisis_supporter_pro')); 
-                    if (curr === 'USD') tAnn = tAnn / 7.8; 
-                    var tMon = tAnn * 0.09; 
-                    var isSelected = (item.term === payTerm); 
-                    var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
+                aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
+                var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
+                if (selectedCrisisRider && selectedCrisisRider.value === 'family') aAnn = aAnn * 1.10;
+            } else if (p === 'vprime') {
+                aAnn = calcVPrimeFullPremium(a, gender, ded);
+            } else if (p === 'vfamily') {
+                aAnn = calcVFamilyFullPremium(a, gender);
+            } else if (p === 'myterm') {
+                var isSmoker = (rateType === 'standard');
+                var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
+                aAnn = calcMyTermPremium(a, gender, termKey, isSmoker, baseHkdSum);
+            } else if (p === 'lifepromise') {
+                var isSmoker = (rateType === 'standard');
+                aAnn = calcLifePromisePremium(a, gender, isSmoker, baseHkdSum);
+            }
+
+            if (curr === 'USD') aAnn = aAnn / 7.8;
+            var aMon = aAnn * 0.09;
+            var isCurrentAge = (a === age);
+            var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-200 bg-white hover:border-slate-300";
+            var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
+            ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div><div class="font-bold text-slate-800 text-sm flex items-center">' + starBadge + a + ' 歲</div><div class="text-[11px] text-slate-400 mt-0.5">年齡對比</div></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(aAnn) + ' <span class="text-[10px] text-slate-400 font-normal">/年</span></div><div class="text-slate-500 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>';
+        });
+        if (document.getElementById('ageBreakdownList')) {
+            document.getElementById('ageBreakdownList').innerHTML = ageHtml;
+        }
                     var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
                     termHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-900 text-sm">' + item.label + '</b> <span class="text-xs text-slate-400 font-normal ml-1.5">(最高' + item.maxAge + '歲)</span></div><div class="text-right"><div class="font-black text-[#E87722] text-sm">' + currSymbol + formatMoney(tAnn) + ' / 年</div><div class="text-[11px] text-slate-600 font-semibold">月供 ' + currSymbol + formatMoney(tMon) + '</div></div></div>'; 
                 }); 
