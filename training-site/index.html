@@ -256,20 +256,34 @@
                 </button>
 
                 <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
-                    <div class="relative dropdown-container py-2 shrink-0">
-                        <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽')" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
-                            <span>手冊導覽</span><span class="text-[10px] opacity-70">▼</span>
-                        </button>
-                        <div class="dropdown-menu absolute left-0 top-full w-48 bg-white border border-slate-100 rounded-2xl shadow-xl p-2 z-50 text-xs sm:text-sm">
-                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#welcome-msg')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👋 Welcome</button>
-                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#vision')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🚩 願景使命</button>
-                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#culture')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">👥 Team 精神</button>
-                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#onboarding')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">📅 30 天攻略</button>
-                            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-colors cursor-pointer">🔑 成功秘訣</button>
-                        </div>
-                    </div>
+                    <!-- 手冊導覽下拉選單（支援電腦懸浮 Hover / 手機點擊展開，不誤跳首頁） -->
+    <div class="relative group py-2 shrink-0">
+        <button type="button" class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1">
+            <span>手冊導覽</span><span class="text-[10px] opacity-70 group-hover:rotate-180 transition-transform">▼</span>
+        </button>
+        <div class="hidden group-hover:block group-focus-within:block absolute left-0 top-full w-48 bg-white border border-slate-100 rounded-2xl shadow-xl p-2 z-50 text-xs sm:text-sm">
+            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#welcome-msg')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                <span>👋</span> 歡迎辭
+            </button>
+            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#vision')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                <span>🎯</span> 團隊願景
+            </button>
+            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#culture')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                <span>🔥</span> 團隊文化
+            </button>
+            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#onboarding')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                <span>🚀</span> 新人指引
+            </button>
+            <button type="button" onclick="checkAndSwitchPage('page-home', '手冊導覽', '#training')" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                <span>📚</span> 培訓體系
+            </button>
+        </div>
+    </div>
 
-                    <button type="button" onclick="checkAndSwitchPage('page-home', '新人禮遇', '#onboarding')" class="text-amber-500 hover:opacity-80 cursor-pointer">新人禮遇</button>
+                    <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1">
+    <span>10Life</span>
+    <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-black">客觀數據</span>
+</button>
                     <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
                     <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
                     <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
@@ -364,7 +378,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-4 space-y-5 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm border-b pb-3 flex items-center gap-2"><span>⚙️</span> 選擇條件</h3>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcansurance">易衛您</option></select></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcansurance">易衛您</option></select></div><option value="myterm">自主保定期保障計劃 (MyTerm)</option><option value="lifepromise">衛你所愛壽險計劃 (Life Promise)</option>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">實際年齡 (0-80歲)</label><input id="calcAge" type="number" value="30" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">性別</label><select id="calcGender" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="female" selected>女性</option><option value="male">男性</option></select></div>
                     <div id="payTermBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">繳費年期</label><select id="calcPayTerm" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="10">10年繳 (最高70歲)</option><option value="15">15年繳 (最高60歲)</option><option value="20" selected>20年繳 (最高55歲)</option><option value="25">25年繳 (最高50歲)</option><option value="30">30年繳 (最高50歲)</option></select></div>
@@ -1799,7 +1813,24 @@
             document.getElementById('currLabel').innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
             var baseHkdSum = (curr === 'USD') ? (sumInsured * 7.8) : sumInsured; 
             var annual = 0;
-            if (p === 'crisis_supporter') { 
+            if (p === 'myterm') {
+        var isSmoker = (rateType === 'standard');
+        var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
+        annual = calcMyTermPremium(age, gender, termKey, isSmoker, baseHkdSum);
+        if (curr === 'USD') annual = annual / 7.8;
+                // 自主保 2026 Q3 客戶優惠折算 (首年 25% 折扣，第 2-5 年 20% 折扣)
+        window.mytermPromo = {
+            active: true,
+            y1Annual: annual * 0.75,
+            y1Monthly: (annual * 0.75) * 0.09,
+            y25Annual: annual * 0.80,
+            y25Monthly: (annual * 0.80) * 0.09
+        };
+                } else if (p === 'lifepromise') {
+        var isSmoker = (rateType === 'standard');
+        annual = calcLifePromisePremium(age, gender, isSmoker, baseHkdSum);
+        if (curr === 'USD') annual = annual / 7.8;
+    } else if (p === 'crisis_supporter') { 
                 annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, false); 
                 var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked'); 
                 if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10; 
@@ -1876,6 +1907,23 @@
                     var vfY1 = annual * 0.75; 
                     promoHtml = '<p class="font-bold text-orange-900 mb-2">首年優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年原價</span><b>' + currSymbol + formatMoney(annual) + ' /年</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 1 年折後價 (享 3 個月保費折扣)</span><b>' + currSymbol + formatMoney(vfY1) + ' /年 (月供 ' + currSymbol + formatMoney(vfY1 * 0.09) + ')</b></div>'; 
                 }
+                } else if (p === 'myterm') {
+        promoBadgeText = "🎁 自主保客戶優惠 · 首年 25% 折扣 (75折) · 第 2-5 年 20% 折扣 (8折)";
+        var mtY1 = annual * 0.75;
+        var mtY25 = annual * 0.80;
+        promoHtml = '<p class="font-bold text-orange-900 mb-2">自主保 2026 Q3 跨年優惠折算保費一覽 (' + currUnit + ')</p>' +
+            '<div class="grid grid-cols-2 gap-2 text-xs">' +
+            '<div class="p-2.5 rounded-xl bg-orange-100/70 border border-orange-200">' +
+            '<span class="text-slate-600 block text-[11px]">首個保單年度 (減 25%)</span>' +
+            '<span class="text-sm font-black text-orange-600">' + currSymbol + formatMoney(mtY1) + '</span>' +
+            '<span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY1 * 0.09) + '</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm">' +
+            '<span class="text-slate-600 block text-[11px]">第 2 至 5 個保單年度 (減 20%)</span>' +
+            '<span class="text-sm font-black text-slate-800">' + currSymbol + formatMoney(mtY25) + '</span>' +
+            '<span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY25 * 0.09) + '</span>' +
+            '</div>' +
+            '</div>';
             }
             var promoBadgeEl = document.getElementById('purplePromoBadge'); 
             var promoDetailsEl = document.getElementById('promoDetailsList');
@@ -1932,6 +1980,55 @@
             }); 
             document.getElementById('ageBreakdownList').innerHTML = ageHtml;
         }
+        // 富衛「自主保定期保障計劃 (MyTerm)」每千元投保額基本年繳保費率表 (HKD/USD 通用)
+const myTermRates = {
+    // 5 年續保期 (HTM1)
+    '5': {
+        male_pref: { 19:0.75,20:0.75,21:0.75,22:0.75,23:0.75,24:0.75,25:0.75,26:0.75,27:0.75,28:0.76,29:0.77,30:0.80,31:0.82,32:0.85,33:0.87,34:0.90,35:0.94,36:0.99,37:1.03,38:1.08,39:1.14,40:1.20,41:1.29,42:1.39,43:1.49,44:1.61,45:1.74,46:1.89,47:2.05,48:2.24,49:2.45,50:2.67,51:2.92,52:3.19,53:3.48,54:3.79,55:4.15,56:4.54,57:4.97,58:5.44,59:5.96,60:6.55,61:7.20 },
+        male_std:  { 19:1.54,20:1.54,21:1.54,22:1.54,23:1.54,24:1.54,25:1.55,26:1.57,27:1.57,28:1.58,29:1.61,30:1.63,31:1.67,32:1.72,33:1.79,34:1.88,35:1.99,36:2.08,37:2.21,38:2.28,39:2.42,40:2.54,41:2.73,42:2.91,43:3.15,44:3.43,45:3.71,46:4.01,47:4.35,48:4.74,49:5.20,50:5.66,51:6.19,52:6.77,53:7.39,54:8.07,55:8.81,56:9.63,57:10.56,58:11.55,59:12.65,60:13.89,61:15.29 },
+        fem_pref:  { 19:0.67,20:0.67,21:0.67,22:0.67,23:0.67,24:0.67,25:0.67,26:0.67,27:0.67,28:0.68,29:0.68,30:0.68,31:0.69,32:0.70,33:0.72,34:0.74,35:0.80,36:0.85,37:0.86,38:0.87,39:0.88,40:0.89,41:0.94,42:1.00,43:1.06,44:1.13,45:1.22,46:1.31,47:1.40,48:1.51,49:1.62,50:1.75,51:1.89,52:2.05,53:2.24,54:2.44,55:2.66,56:2.91,57:3.17,58:3.47,59:3.81,60:4.20,61:4.64 },
+        fem_std:   { 19:1.26,20:1.33,21:1.40,22:1.40,23:1.40,24:1.41,25:1.41,26:1.41,27:1.41,28:1.41,29:1.41,30:1.42,31:1.45,32:1.45,33:1.47,34:1.49,35:1.63,36:1.75,37:1.75,38:1.75,39:1.78,40:1.82,41:1.92,42:2.04,43:2.18,44:2.30,45:2.47,46:2.68,47:2.83,48:3.09,49:3.30,50:3.56,51:3.87,52:4.19,53:4.57,54:4.96,55:5.42,56:5.95,57:6.53,58:7.20,59:7.98,60:8.87,61:9.86 }
+    },
+    // 10 年續保期 (HTM2)
+    '10': {
+        male_pref: { 19:0.77,20:0.78,21:0.78,22:0.78,23:0.78,24:0.78,25:0.78,26:0.78,27:0.79,28:0.80,29:0.81,30:0.82,31:0.83,32:0.86,33:0.88,34:0.91,35:0.95,36:1.00,37:1.06,38:1.12,39:1.20,40:1.29,41:1.40,42:1.54,43:1.68,44:1.85,45:2.01,46:2.22,47:2.45,48:2.61,49:2.82,50:3.10,51:3.30,52:3.55,53:3.84,54:4.16,55:4.55,56:4.99,57:5.41,58:5.76,59:6.19,60:6.73,61:7.36 },
+        male_std:  { 19:1.55,20:1.55,21:1.55,22:1.55,23:1.55,24:1.55,25:1.56,26:1.58,27:1.58,28:1.59,29:1.62,30:1.64,31:1.68,32:1.73,33:1.80,34:1.89,35:2.00,36:2.16,37:2.35,38:2.53,39:2.73,40:2.98,41:3.27,42:3.63,43:4.02,44:4.43,45:4.87,46:5.37,47:5.87,48:6.19,49:6.60,50:7.12,51:7.59,52:8.18,53:8.92,54:9.80,55:10.85,56:12.07,57:13.18,58:14.20,59:15.24,60:16.40,61:17.77 },
+        fem_pref:  { 19:0.68,20:0.68,21:0.68,22:0.68,23:0.68,24:0.68,25:0.68,26:0.68,27:0.68,28:0.69,29:0.69,30:0.69,31:0.70,32:0.71,33:0.73,34:0.75,35:0.81,36:0.87,37:0.91,38:0.94,39:1.00,40:1.06,41:1.14,42:1.23,43:1.34,44:1.46,45:1.61,46:1.77,47:1.98,48:2.18,49:2.37,50:2.57,51:2.75,52:2.93,53:3.12,54:3.33,55:3.57,56:3.84,57:4.04,58:4.37,59:4.76,60:5.18,61:5.65 },
+        fem_std:   { 19:1.54,20:1.54,21:1.54,22:1.54,23:1.54,24:1.54,25:1.55,26:1.56,27:1.56,28:1.57,29:1.59,30:1.61,31:1.63,32:1.65,33:1.69,34:1.74,35:1.81,36:1.89,37:1.91,38:1.99,39:2.14,40:2.32,41:2.57,42:2.85,43:3.15,44:3.47,45:3.76,46:4.00,47:4.37,48:4.83,49:5.28,50:5.76,51:6.21,52:6.70,53:7.15,54:7.67,55:8.22,56:8.81,57:9.29,58:9.95,59:10.66,60:11.45,61:12.36 }
+    },
+    // 20 年續保期 (HTM3)
+    '20': {
+        male_pref: { 19:1.11,20:1.12,21:1.12,22:1.12,23:1.12,24:1.12,25:1.12,26:1.12,27:1.13,28:1.14,29:1.15,30:1.16,31:1.17,32:1.19,33:1.22,34:1.27,35:1.33,36:1.43,37:1.55,38:1.66,39:1.79,40:1.94,41:2.12,42:2.34,43:2.60,44:2.88,45:3.20,46:3.57,47:3.91,48:4.12,49:4.40,50:4.77,51:5.23,52:5.83,53:6.56,54:7.39,55:8.26,56:9.20,57:10.28,58:11.10,59:12.02,60:13.03,61:14.22 },
+        male_std:  { 19:3.36,20:3.36,21:3.36,22:3.36,23:3.36,24:3.38,25:3.41,26:3.44,27:3.44,28:3.45,29:3.46,30:3.50,31:3.54,32:3.59,33:3.67,34:3.73,35:3.82,36:3.96,37:4.15,38:4.36,39:4.62,40:4.92,41:5.32,42:5.80,43:6.34,44:6.98,45:7.73,46:8.59,47:9.20,48:9.80,49:10.68,50:11.89,51:13.34,52:15.08,53:17.17,54:19.09,55:21.21,56:23.46,57:25.68,58:27.56,59:29.85,60:32.61,61:35.97 },
+        fem_pref:  { 19:1.00,20:1.00,21:1.00,22:1.00,23:1.00,24:1.00,25:1.00,26:1.00,27:1.00,28:1.00,29:1.01,30:1.01,31:1.03,32:1.04,33:1.07,34:1.10,35:1.16,36:1.22,37:1.25,38:1.29,39:1.38,40:1.49,41:1.63,42:1.79,43:1.96,44:2.13,45:2.32,46:2.53,47:2.79,48:3.08,49:3.30,50:3.58,51:3.84,52:4.09,53:4.39,54:4.77,55:5.17,56:5.61,57:6.11,58:6.80,59:7.53,60:8.32,61:9.16 },
+        fem_std:   { 19:2.69,20:2.69,21:2.69,22:2.69,23:2.69,24:2.69,25:2.69,26:2.69,27:2.69,28:2.70,29:2.72,30:2.73,31:2.76,32:2.81,33:2.87,34:2.97,35:3.09,36:3.30,37:3.40,38:3.54,39:3.71,40:3.93,41:4.23,42:4.58,43:4.96,44:5.36,45:5.79,46:6.19,47:6.69,48:7.47,49:8.34,50:9.30,51:10.29,52:11.30,53:12.29,54:13.34,55:14.40,56:15.50,57:16.67,58:17.78,59:19.38,60:20.97,61:22.75 }
+    }
+};
+
+    // ==========================================
+// 衛你所愛壽險計劃 (Life Promise - 20年供款期) 官方保費率與計算
+// ==========================================
+var lifePromiseRates20 = {
+    male_pref: { 1:9.48,2:9.71,3:9.93,4:10.19,5:10.39,6:11.05,7:11.29,8:11.72,9:12.16,10:12.60,11:13.04,12:13.49,13:13.93,14:14.39,15:14.83,16:14.97,17:15.16,18:15.55,19:15.95,20:16.34,21:16.71,22:17.13,23:17.54,24:18.02,25:18.39,26:18.89,27:19.32,28:19.77,29:20.24,30:20.76,31:21.27,32:21.79,33:22.30,34:22.85,35:23.48,36:24.01,37:24.64,38:25.27,39:25.91,40:26.56,41:27.99,42:28.74,43:29.49,44:30.25,45:30.99,46:31.76,47:32.65,48:33.53,49:34.43,50:36.57,51:39.28,52:40.56,53:41.82,54:43.11,55:45.07,56:46.36,57:47.61,58:48.83,59:50.01,60:50.64 },
+    male_std:  { 1:9.48,2:9.71,3:9.93,4:10.19,5:10.39,6:11.05,7:11.29,8:11.72,9:12.16,10:12.60,11:13.04,12:13.49,13:13.93,14:14.39,15:14.83,16:15.51,17:15.89,18:16.33,19:16.75,20:17.20,21:17.61,22:18.09,23:18.55,24:19.07,25:19.50,26:20.07,27:20.58,28:21.10,29:21.65,30:22.26,31:22.84,32:23.45,33:24.07,34:24.72,35:25.47,36:26.13,37:26.88,38:27.65,39:28.42,40:29.21,41:30.86,42:31.80,43:32.75,44:33.72,45:34.70,46:35.74,47:36.91,48:38.07,49:39.25,50:41.70,51:44.66,52:46.36,53:47.97,54:49.58,55:51.60,56:53.25,57:54.78,58:56.36,59:57.76,60:58.56 },
+    fem_pref:  { 1:8.50,2:8.67,3:8.85,4:9.04,5:9.21,6:10.21,7:10.41,8:10.64,9:10.85,10:11.17,11:11.56,12:11.96,13:12.35,14:12.75,15:13.14,16:13.51,17:13.89,18:14.26,19:14.63,20:15.01,21:15.39,22:15.76,23:16.13,24:16.51,25:16.88,26:17.37,27:17.85,28:18.32,29:18.80,30:19.28,31:19.75,32:20.23,33:20.71,34:21.19,35:21.67,36:22.39,37:23.11,38:23.85,39:24.57,40:25.05,41:26.01,42:26.74,43:27.45,44:28.18,45:28.89,46:29.94,47:30.70,48:31.59,49:32.33,50:34.39,51:37.20,52:38.35,53:39.62,54:40.72,55:42.88,56:44.17,57:45.42,58:46.63,59:47.82,60:48.97 },
+    fem_std:   { 1:8.50,2:8.67,3:8.85,4:9.04,5:9.21,6:10.21,7:10.41,8:10.64,9:10.85,10:11.17,11:11.56,12:11.96,13:12.35,14:12.75,15:13.14,16:13.89,17:14.41,18:14.82,19:15.23,20:15.65,21:16.06,22:16.47,23:16.90,24:17.31,25:17.73,26:18.28,27:18.82,28:19.38,29:19.91,30:20.46,31:21.01,32:21.56,33:22.14,34:22.72,35:23.30,36:24.14,37:24.97,38:25.86,39:26.70,40:27.31,41:28.40,42:29.30,43:30.21,44:31.13,45:32.06,46:33.40,47:34.40,48:35.55,49:36.54,50:38.87,51:41.93,52:43.46,53:45.03,54:46.44,55:48.67,56:50.30,57:51.80,58:53.38,59:54.76,60:56.14 }
+};
+
+function calcLifePromisePremium(age, gender, isSmoker, sumInsured) {
+    if (age < 1 || age > 60) return 0;
+    var g = (gender === 'male' || gender === '男') ? 'male' : 'fem';
+    var s = isSmoker ? 'std' : 'pref';
+    var baseRate = lifePromiseRates20[g + '_' + s]?.[age] || 0;
+
+    // 大額保費調整 (Size Discount Adjustment)
+    var adj = 0;
+    if (sumInsured < 200000) adj = 4.80;
+    else if (sumInsured < 280000) adj = 2.80;
+    else if (sumInsured < 560000) adj = 1.00;
+
+    return (sumInsured / 1000) * (baseRate + adj);
+}
 
         // 9 大官方車險 Google Drive 檔案 ID
         var googleDriveFileIds = {
