@@ -1963,10 +1963,7 @@
         });
         if (document.getElementById('ageBreakdownList')) {
             document.getElementById('ageBreakdownList').innerHTML = ageHtml;
-        }
-                    var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                    termHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-900 text-sm">' + item.label + '</b> <span class="text-xs text-slate-400 font-normal ml-1.5">(最高' + item.maxAge + '歲)</span></div><div class="text-right"><div class="font-black text-[#E87722] text-sm">' + currSymbol + formatMoney(tAnn) + ' / 年</div><div class="text-[11px] text-slate-600 font-semibold">月供 ' + currSymbol + formatMoney(tMon) + '</div></div></div>'; 
-                }); 
+      
                 document.getElementById('payTermBreakdownList').innerHTML = termHtml;
                 
                 document.getElementById('rateTypeCompTitle').innerText = age + ' 歲 · ' + pNameText + ' · ' + payTerm + '年繳 · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ' · 費率比較'; 
