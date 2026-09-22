@@ -2022,6 +2022,16 @@ const myTermRates = {
     }
 };
 
+        function calcMyTermPremium(age, gender, termKey, isSmoker, sumInsured) {
+    if (age < 18 || age > 60) return 0;
+    var t = termKey || '20';
+    var termData = myTermRates[t] || myTermRates['20'];
+    var g = (gender === 'male' || gender === '男') ? 'male' : 'fem';
+    var s = isSmoker ? 'std' : 'pref';
+    var rate = termData[g + '_' + s]?.[age] || 0;
+    return (sumInsured / 1000) * rate;
+}
+
     // ==========================================
 // 衛你所愛壽險計劃 (Life Promise - 20年供款期) 官方保費率與計算
 // ==========================================
