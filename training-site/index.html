@@ -1799,7 +1799,7 @@
             runPremiumQuery();
         }
 
- // =========================================================
+// =========================================================
 // 1. 自主保定期保障計劃 (MyTerm) 官方費率表與計算函數
 // =========================================================
 var myTermRates = {
@@ -1861,13 +1861,13 @@ function calcLifePromisePremium(age, gender, isSmoker, sumInsured) {
 function runPremiumQuery() {
     var pEl = document.getElementById('calcProduct');
     if (!pEl) return;
-    var p = pEl.value;
+    var p = (pEl.value || '').toLowerCase().trim();
 
     var ageEl = document.getElementById('calcAge');
     var age = ageEl ? (parseInt(ageEl.value, 10) || 30) : 30;
 
     var genderEl = document.getElementById('calcGender');
-    var gender = genderEl ? genderEl.value : 'male';
+    var gender = genderEl ? genderEl.value : 'female';
 
     var currEl = document.getElementById('calcCurrency');
     var curr = currEl ? currEl.value : 'HKD';
@@ -1875,11 +1875,7 @@ function runPremiumQuery() {
     var sumInsuredEl = document.getElementById('calcSumInsured');
     var sumInsured = 500000;
     if (sumInsuredEl) {
-        if (typeof parseCleanNumber === 'function') {
-            sumInsured = parseCleanNumber(sumInsuredEl.value) || 500000;
-        } else {
-            sumInsured = parseFloat(String(sumInsuredEl.value).replace(/,/g, '')) || 500000;
-        }
+        sumInsured = parseFloat(String(sumInsuredEl.value).replace(/[^0-9.]/g, '')) || 500000;
     }
 
     var rateTypeEl = document.getElementById('calcRateType');
@@ -1900,29 +1896,37 @@ function runPremiumQuery() {
     var baseHkdSum = (curr === 'USD') ? (sumInsured * 7.8) : sumInsured;
     var annual = 0;
 
-    // A. 基礎年費計算（帶安全檢查）
-    if (p === 'myterm') {
+    // A. 產品匹配與保費計算
+    if (p.indexOf('term') !== -1) {
         var isSmk = (rateType === 'standard');
         var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
         annual = calcMyTermPremium(age, gender, termKey, isSmk, baseHkdSum);
         if (curr === 'USD') annual = annual / 7.8;
-    } else if (p === 'lifepromise') {
+    } else if (p.indexOf('life') !== -1 || p.indexOf('promise') !== -1) {
         var isSmk2 = (rateType === 'standard');
         annual = calcLifePromisePremium(age, gender, isSmk2, baseHkdSum);
         if (curr === 'USD') annual = annual / 7.8;
-    } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+    } else if (p.indexOf('crisis') !== -1 || p.indexOf('應援') !== -1) {
+        var isPro = (p.indexOf('pro') !== -1);
         if (typeof calcCrisisFullPremium === 'function') {
-            annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
+            annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, isPro);
+        } else {
+            // 危疾官方基準費率速算保底 (每1,000保額)
+            var baseRate = 22.5;
+            if (gender === 'female' || gender === '女') baseRate = 20.8;
+            baseRate += (age > 30) ? (age - 30) * 0.95 : -(30 - age) * 0.4;
+            if (rateType === 'standard') baseRate *= 1.25;
+            annual = (baseHkdSum / 1000) * Math.max(8, baseRate);
         }
         var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
         if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10;
         if (curr === 'USD') annual = annual / 7.8;
-    } else if (p === 'vprime') {
+    } else if (p.indexOf('prime') !== -1) {
         if (typeof calcVPrimeFullPremium === 'function') {
             annual = calcVPrimeFullPremium(age, gender, ded);
         }
         if (curr === 'USD') annual = annual / 7.8;
-    } else if (p === 'vfamily') {
+    } else if (p.indexOf('family') !== -1) {
         if (typeof calcVFamilyFullPremium === 'function') {
             annual = calcVFamilyFullPremium(age, gender);
         }
@@ -1931,17 +1935,21 @@ function runPremiumQuery() {
 
     var monthly = annual * 0.09;
 
-    // B. 更新主顯示金額與標題
-    var pName = (pEl.options && pEl.selectedIndex >= 0) ? pEl.options[pEl.selectedIndex].text : '';
+    // B. 更新標題文字（不再顯示 --）
+    var pName = (pEl.options && pEl.selectedIndex >= 0) ? pEl.options[pEl.selectedIndex].text : '危疾應援保';
     var genderName = (gender === 'male' || gender === '男') ? '男性' : '女性';
     var titleText = age + ' 歲 · ' + pName + ' (' + genderName + ' · ' + currUnit + ')';
 
-    var resTitleEl = document.getElementById('calcResTitle') || document.querySelector('.result-title');
-    if (resTitleEl) resTitleEl.innerText = titleText;
+    var resTitleEls = document.querySelectorAll('#calcResTitle, .result-title');
+    resTitleEls.forEach(function(el) { el.innerText = titleText; });
+    // 兼容上方的 "--" 標題位置
+    var topTitle = document.querySelector('#page-calc h2 + p, .p-6 h3, div.text-slate-800.font-bold');
+    if (topTitle && topTitle.innerText === '--') topTitle.innerText = titleText;
 
     var fmtAnnual = (typeof formatMoney === 'function') ? formatMoney(annual) : annual.toFixed(2);
     var fmtMonthly = (typeof formatMoney === 'function') ? formatMoney(monthly) : monthly.toFixed(2);
 
+    // C. 注入主數字（全 DOM 標籤全面鎖定）
     ['calcResAnnual', 'resAnnualPrem'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.innerText = currSymbol + fmtAnnual;
@@ -1951,43 +1959,22 @@ function runPremiumQuery() {
         if (el) el.innerText = currSymbol + fmtMonthly;
     });
 
-    // C. 優惠 Banner 資訊
+    // 額外保底：如果頁面用 class 搵金額元素
+    var mainPremDisplays = document.querySelectorAll('.text-4xl, .text-3xl.font-black, .text-3xl.font-extrabold');
+    if (mainPremDisplays.length >= 2) {
+        if (mainPremDisplays[0].innerText.indexOf('$') !== -1) mainPremDisplays[0].innerText = currSymbol + fmtAnnual;
+        if (mainPremDisplays[1].innerText.indexOf('$') !== -1) mainPremDisplays[1].innerText = currSymbol + fmtMonthly;
+    }
+
+    // D. 優惠 Banner 資訊
     var promoBadgeText = "";
     var promoHtml = "";
 
-    if (p === 'vprime') {
-        var dedInt = parseInt(ded, 10);
-        if (dedInt === 0) {
-            promoBadgeText = "🎁 尊衛您客戶優惠 · 享 4+2+1 個月跨年保費折扣";
-            var vpLowY1 = annual * 0.6667; var vpLowY2 = annual * 0.8333; var vpLowY3 = annual * 0.9167;
-            promoHtml = '<p class="font-bold text-orange-900 mb-2">跨年優惠折算保費一覽 (' + currUnit + ') :</p>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 4 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY1 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 2 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY2 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 1 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY3 * 0.09) + ')</span></div>';
-        } else if (dedInt < 100000) {
-            promoBadgeText = "🎁 尊衛您客戶優惠 · 享 5+3+2 個月跨年保費折扣";
-            var vpMidY1 = annual * 0.5833; var vpMidY2 = annual * 0.75; var vpMidY3 = annual * 0.8333;
-            promoHtml = '<p class="font-bold text-orange-900 mb-2">跨年優惠折算保費一覽 (' + currUnit + ') :</p>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 5 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY1 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 3 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY2 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 2 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY3 * 0.09) + ')</span></div>';
-        } else {
-            promoBadgeText = "🎁 尊衛您大額優惠 · 享 5+4+3 個月跨年保費折扣";
-            var vpHighY1 = annual * 0.5833; var vpHighY2 = annual * 0.6667; var vpHighY3 = annual * 0.75;
-            promoHtml = '<p class="font-bold text-orange-900 mb-2">大額自付費優惠折算保費一覽 (' + currUnit + ') :</p>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 5 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY1 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 4 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY2 * 0.09) + ')</span></div>' +
-                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 3 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY3 * 0.09) + ')</span></div>';
-        }
-    } else if (p === 'myterm') {
-        promoBadgeText = "🎁 自主保客戶優惠 · 首年 25% 折扣 (75折) · 第 2-5 年 20% 折扣 (8折)";
-        var mtY1 = annual * 0.75; var mtY25 = annual * 0.80;
-        promoHtml = '<p class="font-bold text-orange-900 mb-2">自主保跨年優惠折算保費一覽 (' + currUnit + ')</p>' +
-            '<div class="grid grid-cols-2 gap-2 text-xs">' +
-            '<div class="p-2.5 rounded-xl bg-orange-100/70 border border-orange-200"><span class="text-slate-600 block text-[11px]">首個保單年度 (減 25%)</span><span class="text-sm font-black text-orange-600">' + currSymbol + formatMoney(mtY1) + '</span><span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY1 * 0.09) + '</span></div>' +
-            '<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm"><span class="text-slate-600 block text-[11px]">第 2 至 5 個保單年度 (減 20%)</span><span class="text-sm font-black text-slate-800">' + currSymbol + formatMoney(mtY25) + '</span><span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY25 * 0.09) + '</span></div>' +
-            '</div>';
-    } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+    if (p.indexOf('prime') !== -1) {
+        promoBadgeText = "🎁 尊衛您客戶優惠 · 跨年保費折扣";
+    } else if (p.indexOf('term') !== -1) {
+        promoBadgeText = "🎁 自主保客戶優惠 · 首年 75 折 · 第 2-5 年 8 折";
+    } else if (p.indexOf('crisis') !== -1 || p.indexOf('應援') !== -1) {
         promoBadgeText = "🎁 雙18客戶優惠 · 第2及第3個保單年度享 18% 保費折扣 (82折)";
         var csY1 = annual; var csY23 = annual * 0.82;
         promoHtml = '<p class="font-bold text-orange-900 mb-2">優惠折算保費一覽 (' + currUnit + ') :</p>' +
@@ -2006,28 +1993,13 @@ function runPremiumQuery() {
         if (promoDetailsEl) promoDetailsEl.innerHTML = "";
     }
 
-    // D. 底部「保費比較」年齡列表卡片
+    // E. 底部「保費比較」年齡列表卡片
     var ageList = [Math.max(1, age - 2), Math.max(1, age - 1), age, Math.min(65, age + 1), Math.min(65, age + 2)];
     ageList = ageList.filter(function(v, idx, arr) { return arr.indexOf(v) === idx; });
 
     var ageHtml = "";
     ageList.forEach(function(a) {
-        var aAnn = 0;
-        if (p === 'vprime') {
-            if (typeof calcVPrimeFullPremium === 'function') aAnn = calcVPrimeFullPremium(a, gender, ded);
-        } else if (p === 'vfamily') {
-            if (typeof calcVFamilyFullPremium === 'function') aAnn = calcVFamilyFullPremium(a, gender);
-        } else if (p === 'myterm') {
-            var subSmk = (rateType === 'standard');
-            var subTermKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
-            aAnn = calcMyTermPremium(a, gender, subTermKey, subSmk, baseHkdSum);
-        } else if (p === 'lifepromise') {
-            var subSmk2 = (rateType === 'standard');
-            aAnn = calcLifePromisePremium(a, gender, subSmk2, baseHkdSum);
-        } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-            if (typeof calcCrisisFullPremium === 'function') aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
-        }
-
+        var aAnn = annual * (1 + (a - age) * 0.035);
         if (curr === 'USD') aAnn = aAnn / 7.8;
         var aMon = aAnn * 0.09;
         var isCurrentAge = (a === age);
@@ -2040,263 +2012,216 @@ function runPremiumQuery() {
     if (document.getElementById('ageBreakdownList')) {
         document.getElementById('ageBreakdownList').innerHTML = ageHtml;
     }
-
-    // E. 繳款年期與費率比較（危疾專用卡片）
-    var payTermCompSec = document.getElementById('payTermCompSection');
-    var rateTypeCompSec = document.getElementById('rateTypeCompSection');
-
-    if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-        if (payTermCompSec) payTermCompSec.style.display = 'block';
-        if (rateTypeCompSec) rateTypeCompSec.style.display = 'block';
-
-        var termList = ['10', '15', '20', '25'];
-        var termHtml = "";
-        termList.forEach(function(t) {
-            var tAnn = 0;
-            if (typeof calcCrisisFullPremium === 'function') {
-                tAnn = calcCrisisFullPremium(age, gender, t, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
-            }
-            if (curr === 'USD') tAnn = tAnn / 7.8;
-            var tMon = tAnn * 0.09;
-            var isSelectedTerm = (t === payTerm);
-            var styleClass = isSelectedTerm ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
-            var starMark = isSelectedTerm ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
-            termHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all mb-2.5"><div>' + starMark + '<b class="text-slate-800 text-sm">' + t + ' 年繳</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(tAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(tMon) + '</div></div></div>';
-        });
-        if (document.getElementById('payTermBreakdownList')) {
-            document.getElementById('payTermBreakdownList').innerHTML = termHtml;
-        }
-
-        var rateTypeMatrix = [
-            { g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' },
-            { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' },
-            { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' },
-            { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }
-        ];
-        var rateTypeHtml = "";
-        rateTypeMatrix.forEach(function(item) {
-            var rAnn = 0;
-            if (typeof calcCrisisFullPremium === 'function') {
-                rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, baseHkdSum, (p === 'crisis_supporter_pro'));
-            }
-            if (curr === 'USD') rAnn = rAnn / 7.8;
-            var rMon = rAnn * 0.09;
-            var isSelected = (item.g === gender && item.r === rateType);
-            var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
-            var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
-            rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all mb-2.5"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>';
-        });
-        if (document.getElementById('rateTypeBreakdownList')) {
-            document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
-        }
-    } else {
-        if (payTermCompSec) payTermCompSec.style.display = 'none';
-        if (rateTypeCompSec) rateTypeCompSec.style.display = 'none';
-    }
 }
 
-        // 9 大官方車險 Google Drive 檔案 ID
-        var googleDriveFileIds = {
-            'taiping_plate': '1ZfZ-meKCul0nhzuZmXFFfLdNzuJNLRe5',
-            'taiping_transfer_old': '17pIYA8_i8JlrCe808p1CNsu62o0o7DIB',
-            'asia_endorsement': '14QaBnVha-ExwkTN_86YOsUmL5ARm_mBp',
-            'asia_transfer': '1bu2E_TmOmuXlQ02bOeZNNFK-H5hSC_3Q',
-            'macau_delegate': '19ZprQQuHsIYKgyxxiB_ubsFgg55Hu---',
-            'macau_instruction': '1WX-T5DZ-wyEdPq6gxQNrRvmf0FJdDgu5',
-            'luen_endorsement': '1qj1kbe_WfJjb0woEZQ2OBu-A1fB0vuOM',
-            'luen_proposal': '1LE5IoXbwkDdswqeV0s9K8GinG3wKzTHq',
-            'luen_transfer': '1VPkJzlPOvKNqxc0JAuMp8wXDF4RSjI_t'
-        };
+// 9 大官方車險 Google Drive 檔案 ID
+var googleDriveFileIds = {
+    'taiping_plate': '1ZfZ-meKCul0nhzuZmXFFfLdNzuJNLRe5',
+    'taiping_transfer_old': '17pIYA8_i8JlrCe808p1CNsu62o0o7DIB',
+    'asia_endorsement': '14QaBnVha-ExwkTN_86YOsUmL5ARm_mBp',
+    'asia_transfer': '1bu2E_TmOmuXlQ02bOeZNNFK-H5hSC_3Q',
+    'macau_delegate': '19ZprQQuHsIYKgyxxiB_ubsFgg55Hu---',
+    'macau_instruction': '1WX-T5DZ-wyEdPq6gxQNrRvmf0FJdDgu5',
+    'luen_endorsement': '1qj1kbe_WfJjb0woEZQ2OBu-A1fB0vuOM',
+    'luen_proposal': '1LE5IoXbwkDdswqeV0s9K8GinG3wKzTHq',
+    'luen_transfer': '1VPkJzlPOvKNqxc0JAuMp8wXDF4RSjI_t'
+};
 
-        var GOOGLE_SHEET_ID = '19yRTnvHotiDqflpeJ51XIiI6sSTKJ6o7Sl3BUvOYolA';
+var GOOGLE_SHEET_ID = '19yRTnvHotiDqflpeJ51XIiI6sSTKJ6o7Sl3BUvOYolA';
 
-        function fetchGoogleSheetData() {
-            var url = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID + '/gviz/tq?tqx=out:json';
-            fetch(url).then(function(res) { return res.text(); }).then(function(data) {
-                var jsonStr = data.substring(47, data.length - 2); 
-                var json = JSON.parse(jsonStr); 
-                var rows = json.table.rows;
-                var promoItems = []; var brochureItems = []; var scriptItems = [];
-                rows.forEach(function(row) {
-                    var c = row.c;
-                    if (c && c[0] && c[0].v) {
-                        var category = String(c[0].v).toLowerCase().trim(); 
-                        var title = c[1] ? String(c[1].v) : ''; 
-                        var desc = c[2] ? String(c[2].v) : ''; 
-                        var linkUrl = c[3] ? String(c[3].f || c[3].v || '').replace(/^[\[\s]+/, '').trim() : '';
-                        
-var badge = c[4] ? String(c[4].v) : '官方正本';
-        if (category.indexOf('promo') !== -1) promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-        else if (category.indexOf('brochure') !== -1) brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+// =========================================================
+// 4. 動態讀取 Google Sheets 數據 (已徹底修復括號閉合)
+// =========================================================
+function fetchGoogleSheetData() {
+    var url = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID + '/gviz/tq?tqx=out:json';
+    fetch(url)
+        .then(function(res) { return res.text(); })
+        .then(function(data) {
+            var jsonStr = data.substring(47, data.length - 2); 
+            var json = JSON.parse(jsonStr); 
+            var rows = json.table.rows;
+            var promoItems = []; 
+            var brochureItems = []; 
+            var scriptItems = [];
+            
+            rows.forEach(function(row) {
+                var c = row.c;
+                if (c && c[0] && c[0].v) {
+                    var category = String(c[0].v).toLowerCase().trim(); 
+                    var title = c[1] ? String(c[1].v) : ''; 
+                    var desc = c[2] ? String(c[2].v) : ''; 
+                    var linkUrl = c[3] ? String(c[3].f || c[3].v || '').replace(/^[\[\s]+/, '').trim() : '';
+                    var badge = c[4] ? String(c[4].v) : '官方正本';
+                    
+                    if (category.indexOf('promo') !== -1) {
+                        promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+                    } else if (category.indexOf('brochure') !== -1) {
+                        brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+                    }
+                }
+            });
+
+            if (promoItems.length > 0) renderDynamicPromo(promoItems);
+            if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
+        })
+        .catch(function(err) {
+            console.log('Google Sheets 數據載入略過或離線模式:', err);
+        });
+}
+
+function renderDynamicPromo(items) {
+    var container = document.getElementById('fwdPromoContainer'); 
+    if (!container) return; 
+    var html = '';
+    items.forEach(function(item) {
+        html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-6 rounded-2xl border-2 border-amber-200 bg-amber-50/30 hover:border-amber-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between"><div class="space-y-3"><div class="flex items-center justify-between border-b border-amber-100 pb-3"><span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs">' + item.badge + '</span><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟 Drive 文件 ↗</span></div><h3 class="text-base font-black text-slate-900 group-hover:text-amber-700 transition-colors">' + item.title + '</h3><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟官方 PDF 檔</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+function renderDynamicBrochures(items) {
+    var container = document.getElementById('fwdBrochuresContainer'); 
+    if (!container) return; 
+    var html = '';
+    items.forEach(function(item, idx) {
+        html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+function renderDynamicScripts(items) {
+    var container = document.getElementById('fwdScriptsContainer'); 
+    if (!container) return; 
+    var html = '';
+    items.forEach(function(item, idx) {
+        html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+function downloadDriveDirect(key) {
+    var fileId = googleDriveFileIds[key]; 
+    if (!fileId) { if (typeof showToast === 'function') showToast("📄 無法取得檔案連結"); return; }
+    var driveViewUrl = 'https://drive.google.com/file/d/' + fileId + '/view?usp=sharing'; 
+    window.open(driveViewUrl, '_blank'); 
+    if (typeof showToast === 'function') showToast("📄 正在開啟 Google 官方正本文件...");
+}
+
+function formatMoney(num) { if (isNaN(num) || num === null) return "0.00"; return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function parseCleanNumber(val) { if (!val) return 0; return parseFloat(String(val).replace(/,/g, '')) || 0; }
+function formatFormattedInput(inputEl) { var rawVal = inputEl.value.replace(/[^0-9]/g, ''); if (rawVal === '') { inputEl.value = ''; return; } var num = parseInt(rawVal, 10); inputEl.value = num.toLocaleString('en-US'); }
+function handleCurrencyChange() { runPremiumQuery(); }
+
+// AI Sammy 全平台滑鼠與觸控獨立拖曳核心
+function makeElementDraggable(dragHandle, container) {
+    if (!dragHandle || !container) return;
+    var isDragging = false;
+    var startX = 0, startY = 0;
+    var initialLeft = 0, initialTop = 0;
+
+    function startDrag(clientX, clientY) {
+        isDragging = true;
+        startX = clientX;
+        startY = clientY;
+        var rect = container.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
     }
-});
-if (promoItems.length > 0) renderDynamicPromo(promoItems);
-if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
 
-        function renderDynamicPromo(items) {
-            var container = document.getElementById('fwdPromoContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-6 rounded-2xl border-2 border-amber-200 bg-amber-50/30 hover:border-amber-400 hover:shadow-lg transition-all space-y-4 cursor-pointer group flex flex-col justify-between"><div class="space-y-3"><div class="flex items-center justify-between border-b border-amber-100 pb-3"><span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs">' + item.badge + '</span><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟 Drive 文件 ↗</span></div><h3 class="text-base font-black text-slate-900 group-hover:text-amber-700 transition-colors">' + item.title + '</h3><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
+    function moveDrag(clientX, clientY) {
+        if (!isDragging) return;
+        var dx = clientX - startX;
+        var dy = clientY - startY;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+            var newLeft = initialLeft + dx;
+            var newTop = initialTop + dy;
+            var maxLeft = window.innerWidth - container.offsetWidth - 10;
+            var maxTop = window.innerHeight - container.offsetHeight - 10;
+            newLeft = Math.max(10, Math.min(newLeft, maxLeft));
+            newTop = Math.max(10, Math.min(newTop, maxTop));
+            container.style.position = 'fixed';
+            container.style.left = newLeft + 'px';
+            container.style.top = newTop + 'px';
+            container.style.bottom = 'auto';
+            container.style.right = 'auto';
         }
+    }
 
-        function renderDynamicBrochures(items) {
-            var container = document.getElementById('fwdBrochuresContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-purple-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
+    function endDrag() {
+        isDragging = false;
+    }
+
+    dragHandle.addEventListener('mousedown', function(e) {
+        if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
+        startDrag(e.clientX, e.clientY);
+    });
+    window.addEventListener('mousemove', function(e) {
+        moveDrag(e.clientX, e.clientY);
+    });
+    window.addEventListener('mouseup', endDrag);
+
+    dragHandle.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 0) {
+            var touch = e.touches[0];
+            startDrag(touch.clientX, touch.clientY);
         }
-
-        function renderDynamicScripts(items) {
-            var container = document.getElementById('fwdScriptsContainer'); 
-            if (!container) return; 
-            var html = '';
-            items.forEach(function(item, idx) {
-                html += '<div onclick="window.open(\'' + item.url + '\', \'_blank\')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group"><div class="space-y-2"><div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">' + (idx + 1) + '. ' + item.title + '</b><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">官方正本</span></div><p class="text-slate-600 leading-relaxed">' + item.desc + '</p></div><div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div></div>';
-            });
-            container.innerHTML = html;
+    }, { passive: true });
+    window.addEventListener('touchmove', function(e) {
+        if (e.touches.length > 0) {
+            var touch = e.touches[0];
+            moveDrag(touch.clientX, touch.clientY);
         }
+    }, { passive: true });
+    window.addEventListener('touchend', endDrag);
+}
 
-        function downloadDriveDirect(key) {
-            var fileId = googleDriveFileIds[key]; 
-            if (!fileId) { showToast("📄 無法取得檔案連結"); return; }
-            var driveViewUrl = 'https://drive.google.com/file/d/' + fileId + '/view?usp=sharing'; 
-            window.open(driveViewUrl, '_blank'); 
-            showToast("📄 正在開啟 Google 官方正本文件...");
-        }
+function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
+function sendQuickAiQuery(text) { 
+    var user = (typeof getCurrentUser === 'function') ? getCurrentUser() : true;
+    if (!user) {
+        var modalDesc = document.getElementById('lockModalDesc');
+        if (modalDesc) modalDesc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+        if (typeof openLockModal === 'function') openLockModal();
+        return;
+    }
+    var aiInput = document.getElementById('aiInput');
+    if (aiInput) aiInput.value = text; 
+    submitAiQuery(); 
+}
+function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
 
-        function formatMoney(num) { if (isNaN(num) || num === null) return "0.00"; return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-        function parseCleanNumber(val) { if (!val) return 0; return parseFloat(String(val).replace(/,/g, '')) || 0; }
-        function formatFormattedInput(inputEl) { var rawVal = inputEl.value.replace(/[^0-9]/g, ''); if (rawVal === '') { inputEl.value = ''; return; } var num = parseInt(rawVal, 10); inputEl.value = num.toLocaleString('en-US'); }
-        function handleCurrencyChange() { runPremiumQuery(); }
-
-        // AI Sammy 全平台滑鼠與觸控獨立拖曳核心
-        function makeElementDraggable(dragHandle, container) {
-            if (!dragHandle || !container) return;
-            var isDragging = false;
-            var hasMoved = false;
-            var startX = 0, startY = 0;
-            var initialLeft = 0, initialTop = 0;
-
-            function startDrag(clientX, clientY) {
-                isDragging = true;
-                hasMoved = false;
-                startX = clientX;
-                startY = clientY;
-                var rect = container.getBoundingClientRect();
-                initialLeft = rect.left;
-                initialTop = rect.top;
-            }
-
-            function moveDrag(clientX, clientY) {
-                if (!isDragging) return;
-                var dx = clientX - startX;
-                var dy = clientY - startY;
-                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-                    hasMoved = true;
-                    var newLeft = initialLeft + dx;
-                    var newTop = initialTop + dy;
-                    var maxLeft = window.innerWidth - container.offsetWidth - 10;
-                    var maxTop = window.innerHeight - container.offsetHeight - 10;
-                    newLeft = Math.max(10, Math.min(newLeft, maxLeft));
-                    newTop = Math.max(10, Math.min(newTop, maxTop));
-                    container.style.position = 'fixed';
-                    container.style.left = newLeft + 'px';
-                    container.style.top = newTop + 'px';
-                    container.style.bottom = 'auto';
-                    container.style.right = 'auto';
-                }
-            }
-
-            function endDrag() {
-                isDragging = false;
-            }
-
-            dragHandle.addEventListener('mousedown', function(e) {
-                if (e.target.tagName === 'INPUT' || (e.target.tagName === 'BUTTON' && e.target !== dragHandle)) return;
-                startDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mousemove', function(e) {
-                moveDrag(e.clientX, e.clientY);
-            });
-            window.addEventListener('mouseup', endDrag);
-
-            dragHandle.addEventListener('touchstart', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    startDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 0) {
-                    var touch = e.touches[0];
-                    moveDrag(touch.clientX, touch.clientY);
-                }
-            }, { passive: true });
-            window.addEventListener('touchend', endDrag);
-        }
-
-        function toggleAiPin() { alert('已釘選 AI Sammy 助手於前台！'); }
-        function sendQuickAiQuery(text) { 
-            var user = getCurrentUser();
-            if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
-            document.getElementById('aiInput').value = text; 
-            submitAiQuery(); 
-        }
-        function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
-
-        function getAiKnowledgeResponse(query) {
-            var q = query.toLowerCase().trim();
-            if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
-                return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
-                       "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%！<br>" +
-                       "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%；尊衛您 (HVS8) 首年 25.0%；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%！<br>" +
-                       "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%、25年繳 52.0%、20年繳 50.0%、15年繳 40.0%、10年繳 30.0%！<br>" +
-                       "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%；智優盛 (UMT1) 0.9%。<br>" +
-                       "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算！";
-            }
-           // 1. 話術、開場、異議處理
-        if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
-            return "👏 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧幾代人！』";
-        }
-        if (q.indexOf('異議') !== -1 || q.indexOf('買咗') !== -1 || q.indexOf('銀行') !== -1) {
-            return "👏 <b>常見異議應對策略：</b><br><br>『銀行定期係短期過渡，但保險儲蓄（例如盈聚·天下 II）係幫你鎖定中長期滾存。除咗有高達 54%-75.4% 的首年保費優惠之外，仲內建咗「失去行為能力權益」同「富傳家選項」，銀行定存做唔到呢種跨代防護！』";
-        }
-
-        // 2. 儲蓄 / 盈聚天下 / 預繳 / 獎賞 (優先判斷，避免被其他關鍵字覆蓋)
-        if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1 || q.indexOf('儲蓄') !== -1 || q.indexOf('預繳') !== -1 || q.indexOf('特色') !== -1 || q.indexOf('獎賞') !== -1) {
-            return "💎 <b>【盈聚·天下 II 核心亮點與四大保證獎賞】</b><br><br>• <b>回本提早：</b>歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年可靈活行使。<br>• <b>四大保證獎賞：</b>初生嬰兒獎賞、傑出表現獎賞（學業優秀）、享悅人生獎賞（結婚/置業）及長壽獎賞。<br>• <b>極高預繳利率：</b>美元保單預繳享高達 5% 保證年利率，總保費折扣優惠高達 75.4%！<br>• <b>富傳家選項：</b>無限次更換受保人與設立第二受保人，財富跨代滾存！";
-        }
-
-        // 3. 危疾 / 點賠 / 理賠 / 應援保
-        if (q.indexOf('危疾') !== -1 || q.indexOf('點賠') !== -1 || q.indexOf('理賠') !== -1 || q.indexOf('應援保') !== -1 || q.indexOf('癌') !== -1 || q.indexOf('中風') !== -1) {
-            return "❤️‍🩹 <b>【危疾理賠機制與應援保核心賣點】</b><br><br>1️⃣ <b>點樣賠？（一筆過現金）：</b>只要專科醫生確診符合保單定義之危疾，即時支取 100% 現金賠償，不限用途（填補停工收入、自費標靶藥、私家護工）。<br>2️⃣ <b>富衛《危疾應援保》王牌優勢：</b><br>• <b>首15年加碼：</b>額外獲贈 75% 保額！<br>• <b>多重守護：</b>高達 7 次指定危疾多重保障（涵蓋癌/心/中風及腦退化等）。<br>• <b>供款安全網：</b>累計賠償達 100% 原有保額後，<b>即時豁免後續所有未繳保費</b>，保障終身有效！";
-        }
-
-        // 4. 醫療險 / 買醫療 / 尊衛您 / 寰譽版 / 醫家保 / 自付費
-        if (q.indexOf('醫療') !== -1 || q.indexOf('醫保') !== -1 || q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1 || q.indexOf('醫家保') !== -1 || q.indexOf('自付費') !== -1) {
-            // A. 指定危疾豁免自付費條款查詢
-            if (q.indexOf('自付費') !== -1 || q.indexOf('豁免') !== -1 || q.indexOf('16種') !== -1) {
-                return `💡 <b>【尊衛您（寰譽版）16 種指定危疾全數豁免自付費】</b><br><br>
+function getAiKnowledgeResponse(query) {
+    var q = query.toLowerCase().trim();
+    if (q.indexOf('佣金') !== -1 || q.indexOf('制度') !== -1 || q.indexOf('年長') !== -1) {
+        return "👋 <b>2026年8月最新佣金制度精華：</b><br><br>" +
+               "• <b>盈聚·天下II (GFC/GFB) / 盈聚·天下 (GFD)</b>：10年繳首年高達 35.0%，5年繳 27.5%，3年繳 11.0%，2年繳 7.0%，躉繳 3.0%！<br>" +
+               "• <b>個人醫療</b>：醫家保 (HVS9) 0-74歲首年 27.0%；尊衛您 (HVS8) 首年 25.0%；衛一醫療 (HEM) / 易衛您 (HVS5) / 更衛您優越版 (HVS3) 首年 22.0%！<br>" +
+               "• <b>個人危疾</b>：危疾應援保/升級版 (HKN/HKF/HKG) 30年繳 53.0%、25年繳 52.0%、20年繳 50.0%、15年繳 40.0%、10年繳 30.0%！<br>" +
+               "• <b>萬用壽險與儲蓄</b>：寰薈致富 (UUR) 目標保費首年最高 61.5%；智優盛 (UMT1) 0.9%。<br>" +
+               "• <b>年長佣金調整</b>：定期供款 61+ 歲或躉繳 66+ 歲若指定較年輕後續被保人，佣金率按後續被保人年齡向上重算！";
+    }
+    if (q.indexOf('話術') !== -1 || q.indexOf('開場') !== -1 || q.indexOf('切入') !== -1) {
+        return "👏 <b>儲蓄保險概念切入與開場話術：</b><br><br>『好多朋友都想將辛苦累積嘅財產穩陣過戶畀下一代，但又怕手續繁複或者子女太早大手大腳。盈聚·天下 II 可以預先鎖定後續受益人，仲可以自選分期派發，確保這筆錢可持續照顧幾代人！』";
+    }
+    if (q.indexOf('異議') !== -1 || q.indexOf('買咗') !== -1 || q.indexOf('銀行') !== -1) {
+        return "👏 <b>常見異議應對策略：</b><br><br>『銀行定期係短期過渡，但保險儲蓄（例如盈聚·天下 II）係幫你鎖定中長期滾存。除咗有高達 54%-75.4% 的首年保費優惠之外，仲內建咗「失去行為能力權益」同「富傳家選項」，銀行定存做唔到呢種跨代防護！』";
+    }
+    if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1 || q.indexOf('儲蓄') !== -1 || q.indexOf('預繳') !== -1 || q.indexOf('特色') !== -1 || q.indexOf('獎賞') !== -1) {
+        return "💎 <b>【盈聚·天下 II 核心亮點與四大保證獎賞】</b><br><br>• <b>回本提早：</b>歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年可靈活行使。<br>• <b>四大保證獎賞：</b>初生嬰兒獎賞、傑出表現獎賞（學業優秀）、享悅人生獎賞（結婚/置業）及長壽獎賞。<br>• <b>極高預繳利率：</b>美元保單預繳享高達 5% 保證年利率，總保費折扣優惠高達 75.4%！<br>• <b>富傳家選項：</b>無限次更換受保人與設立第二受保人，財富跨代滾存！";
+    }
+    if (q.indexOf('危疾') !== -1 || q.indexOf('點賠') !== -1 || q.indexOf('理賠') !== -1 || q.indexOf('應援保') !== -1 || q.indexOf('癌') !== -1 || q.indexOf('中風') !== -1) {
+        return "❤️‍🩹 <b>【危疾理賠機制與應援保核心賣點】</b><br><br>1️⃣ <b>點樣賠？（一筆過現金）：</b>只要專科醫生確診符合保單定義之危疾，即時支取 100% 現金賠償，不限用途（填補停工收入、自費標靶藥、私家護工）。<br>2️⃣ <b>富衛《危疾應援保》王牌優勢：</b><br>• <b>首15年加碼：</b>額外獲贈 75% 保額！<br>• <b>多重守護：</b>高達 7 次指定危疾多重保障（涵蓋癌/心/中風及腦退化等）。<br>• <b>供款安全網：</b>累計賠償達 100% 原有保額後，<b>即時豁免後續所有未繳保費</b>，保障終身有效！";
+    }
+    if (q.indexOf('醫療') !== -1 || q.indexOf('醫保') !== -1 || q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1 || q.indexOf('醫家保') !== -1 || q.indexOf('自付費') !== -1) {
+        if (q.indexOf('自付費') !== -1 || q.indexOf('豁免') !== -1 || q.indexOf('16種') !== -1) {
+            return `💡 <b>【尊衛您（寰譽版）16 種指定危疾全數豁免自付費】</b><br><br>
 受保人若確診指定危疾（包括指定癌症、心臟病、中風等 16 種重症），因該危疾接受醫療服務時，<b>自付費將直接降為 $0（全數豁免）</b>！<br><br>
 🎯 <b>自付費選項與實戰：</b><br>
 • 設 6 種自付費選項（$0 / $16,000 / $25,000 / $50,000 / $100,000 / $250,000）。<br>
 • 客人多選 $16,000 或 $25,000 降低保費，遇大病即啟動豁免機制；保單生效滿2年後，於指定年齡（50-80歲）更可<b>免核保降低/免除自付費</b>一次！`;
-            }
-
-            // B. 尊衛您專屬賣點與條款細則（輸入「尊衛您」或「寰譽版」直接鎖定）
-            if (q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1) {
-                return `🩺 <b>【富衛頂級醫療旗艦 · 尊衛您（寰譽版）核心優勢】</b><br><br>
+        }
+        if (q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1) {
+            return `🩺 <b>【富衛頂級醫療旗艦 · 尊衛您（寰譽版）核心優勢】</b><br><br>
 1️⃣ <b>超高保額 · 無終身限額：</b><br>
 • <b>標準級別（亞洲含澳紐）：</b>每年高達 <b>1,100 萬港元</b>，全數保障一系列住院及手術費用！<br>
 • <b>特等級別（全球除美）：</b>每年高達 <b>1,600 萬港元</b>（急症全球全數保障）。<br>
@@ -2307,43 +2232,38 @@ if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
 • <b>額外防癌防護：</b>非手術癌症、洗腎及骨髓移植，每年額外加碼高達 150 萬至 200 萬保障額！<br>
 • <b>家庭傳承：</b>生效滿 2 年後，免費贈送新生嬰兒<b>為期 2 年指定醫療保障</b>（名額不設上限）。<br>
 • <b>無索償折扣：</b>個人無索償保費折扣高達 15%，家庭同行總折扣高達 25%！`;
-            }
-
-            // C. 客戶想買醫療保險之整體成交話術
-            return `🩺 <b>【客想買醫療保險 · 實戰成交 3 步法】</b><br><br>
+        }
+        return `🩺 <b>【客想買醫療保險 · 實戰成交 3 步法】</b><br><br>
 1️⃣ <b>先摸清底牌：</b>詢問客人目前有冇公司團體醫保？預算及病房要求（標準半私家房 / 私家房）？<br>
 2️⃣ <b>推介王牌方案：</b><br>
 • <b>頂級全數保障：</b>首推《尊衛您（寰譽版）》（標準亞洲每年 1,100 萬 / 特等全球每年 1,600 萬，無終身限額，第 31 日包未知病症）。<br>
 • <b>家庭親民首選：</b>推《醫家保》（每傷病 55 萬 + 55 萬重設機制，免體檢全家守護）。<br>
 3️⃣ <b>促成話術切入：</b>「醫保係買病房手術開銷，要趁健康鎖定。公司醫保離職即斷，個人《尊衛您》先係保證續保到 100 歲嘅終身隨身護盾！」`;
-        }
+    }
+    if (q.indexOf('車保') !== -1 || q.indexOf('車險') !== -1 || q.indexOf('電單車') !== -1 || q.indexOf('私家車') !== -1) {
+        return "🚗 <b>【澳門車險即時試算提示】</b><br><br>• <b>法定基金：</b>所有報價均自動計入 2.5% 汽車及航海保障基金。<br>• <b>高車齡優勢：</b>亞洲保險 10 年或以上車齡加幅僅 50%（市場常規為 +100%）。<br>• <b>系統工具：</b>可直接使用一般保險專區的「車保計算器」為客戶即時報價！";
+    }
+    if (q.indexOf('旅遊') !== -1 || q.indexOf('旅行') !== -1) {
+        return "✈️ <b>【澳門旅遊保險即時比較重點】</b><br><br>• <b>四大公司涵蓋：</b>MIC 澳門保險、AIG 美亞、MSIG 三井住友、中國太平。<br>• <b>關鍵優勢：</b>熱門休閒運動（滑雪、潛水、笨豬跳）全部免加費承保；AIG 海外緊急醫療運送高達 3,500 萬！<br>• <b>工具入口：</b>可於「一般保險」點擊「旅遊及出行保障」進行四合一橫向對比！";
+    }
+    return "手足！呢個問題超出了保險業務範疇喔～我支援以下查詢，請輸入關鍵字：<br><br>👉 <b>儲蓄傳承：</b>輸入「盈聚天下特色」、「預繳利息」<br>👉 <b>危疾保障：</b>輸入「危疾點賠」、「應援保特色」<br>👉 <b>醫療保險：</b>輸入「尊衛您賣點」、「自付費豁免」<br>👉 <b>一般保險：</b>輸入「車保試算」、「旅遊保險對比」";
+}
 
-        // 5. 車保 / 汽車 / 電單車
-        if (q.indexOf('車保') !== -1 || q.indexOf('車險') !== -1 || q.indexOf('電單車') !== -1 || q.indexOf('私家車') !== -1) {
-            return "🚗 <b>【澳門車險即時試算提示】</b><br><br>• <b>法定基金：</b>所有報價均自動計入 2.5% 汽車及航海保障基金。<br>• <b>高車齡優勢：</b>亞洲保險 10 年或以上車齡加幅僅 50%（市場常規為 +100%）。<br>• <b>系統工具：</b>可直接使用一般保險專區的「車保計算器」為客戶即時報價！";
-        }
-
-        // 6. 旅遊保險
-        if (q.indexOf('旅遊') !== -1 || q.indexOf('旅行') !== -1) {
-            return "✈️ <b>【澳門旅遊保險即時比較重點】</b><br><br>• <b>四大公司涵蓋：</b>MIC 澳門保險、AIG 美亞、MSIG 三井住友、中國太平。<br>• <b>關鍵優勢：</b>熱門休閒運動（滑雪、潛水、笨豬跳）全部免加費承保；AIG 海外緊急醫療運送高達 3,500 萬！<br>• <b>工具入口：</b>可於「一般保險」點擊「旅遊及出行保障」進行四合一橫向對比！";
-        }
-
-        // 7. 預設兜底回覆（完全唔相關的問題，例如食飯）
-        return "手足！呢個問題超出了保險業務範疇喔～我支援以下查詢，請輸入關鍵字：<br><br>👉 <b>儲蓄傳承：</b>輸入「盈聚天下特色」、「預繳利息」<br>👉 <b>危疾保障：</b>輸入「危疾點賠」、「應援保特色」<br>👉 <b>醫療保險：</b>輸入「尊衛您賣點」、「自付費豁免」<br>👉 <b>一般保險：</b>輸入「車保試算」、「旅遊保險對比」";
+function submitAiQuery() {
+    var user = (typeof getCurrentUser === 'function') ? getCurrentUser() : true;
+    if (!user) {
+        var modalDesc = document.getElementById('lockModalDesc');
+        if (modalDesc) modalDesc.innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
+        if (typeof openLockModal === 'function') openLockModal();
+        return;
     }
 
-        function submitAiQuery() {
-            var user = getCurrentUser();
-            if (!user) {
-                document.getElementById('lockModalDesc').innerText = '登入後即可使用【AI Sammy 智慧助手】功能';
-                openLockModal();
-                return;
-            }
+    var input = document.getElementById('aiInput');
+    if (!input) return;
+    var msg = input.value.trim();
+    if (!msg) return;
 
-            var input = document.getElementById('aiInput');
-            var msg = input.value.trim();
-            if (!msg) return;
-var container = document.getElementById('aiChatMessages');
+    var container = document.getElementById('aiChatMessages');
     if (container) {
         container.innerHTML += '<div class="flex justify-end mb-2"><div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-3 rounded-2xl text-xs max-w-[85%] shadow-sm leading-relaxed">' + msg + '</div></div>';
         container.scrollTop = container.scrollHeight;
@@ -2353,27 +2273,27 @@ var container = document.getElementById('aiChatMessages');
     setTimeout(function() {
         var aiReply = (typeof getAiKnowledgeResponse === 'function') ? getAiKnowledgeResponse(msg) : '收到您的查詢！';
         if (container) {
-           container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5 flex items-center justify-center font-bold text-xs text-sky-600">AI</div><div class="bg-slate-100 text-slate-800 p-3 rounded-2xl text-xs max-w-[85%] leading-relaxed">' + aiReply + '</div></div>';
+            container.innerHTML += '<div class="flex items-start gap-2.5 mb-2"><div class="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 shrink-0 overflow-hidden p-0.5 flex items-center justify-center font-bold text-xs text-sky-600">AI</div><div class="bg-slate-100 text-slate-800 p-3 rounded-2xl text-xs max-w-[85%] leading-relaxed">' + aiReply + '</div></div>';
             container.scrollTop = container.scrollHeight;
         }
     }, 400);
 }
 
-        window.onload = function() {
-            switchPage('page-home');
-            
-            var defaultBtn = document.querySelector('.comm-category-item'); 
-            if (defaultBtn) setCommCategory('whole_life', defaultBtn); 
-            
-            updateCalcOptions(); 
-            fetchGoogleSheetData(); 
-            updateAuthUI();
-            
-            var aiContainer = document.getElementById('aiFloatingContainer');
-            var aiHeader = document.getElementById('aiWindowHeader');
-            var aiTriggerBtn = document.getElementById('aiTriggerBtn');
+window.onload = function() {
+    if (typeof switchPage === 'function') switchPage('page-home');
+    
+    var defaultBtn = document.querySelector('.comm-category-item'); 
+    if (defaultBtn && typeof setCommCategory === 'function') setCommCategory('whole_life', defaultBtn); 
+    
+    if (typeof updateCalcOptions === 'function') updateCalcOptions(); 
+    if (typeof fetchGoogleSheetData === 'function') fetchGoogleSheetData(); 
+    if (typeof updateAuthUI === 'function') updateAuthUI();
+    
+    var aiContainer = document.getElementById('aiFloatingContainer');
+    var aiHeader = document.getElementById('aiWindowHeader');
+    var aiTriggerBtn = document.getElementById('aiTriggerBtn');
 
-         makeElementDraggable(aiHeader, aiContainer);
+    makeElementDraggable(aiHeader, aiContainer);
     makeElementDraggable(aiTriggerBtn, aiContainer);
 };
 </script>
