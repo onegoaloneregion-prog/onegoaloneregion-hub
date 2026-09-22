@@ -1799,242 +1799,43 @@
             runPremiumQuery();
         }
 
-        function runPremiumQuery() {
-            var p = document.getElementById('calcProduct').value; 
-            var age = parseInt(document.getElementById('calcAge').value) || 30; 
-            var gender = document.getElementById('calcGender').value; 
-            var curr = document.getElementById('calcCurrency').value; 
-            var sumInsured = parseCleanNumber(document.getElementById('calcSumInsured').value) || 500000; 
-            var rateType = document.getElementById('calcRateType').value; 
-            var payTerm = document.getElementById('calcPayTerm').value; 
-            var ded = document.getElementById('calcDeductible').value;
-            var currSymbol = (curr === 'USD') ? '$' : 'HKD '; 
-            var currUnit = (curr === 'USD') ? 'USD' : 'HKD'; 
-            document.getElementById('currLabel').innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
-            var baseHkdSum = (curr === 'USD') ? (sumInsured * 7.8) : sumInsured; 
-            var annual = 0;
-            if (p === 'myterm') {
-        var isSmoker = (rateType === 'standard');
-        var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
-        annual = calcMyTermPremium(age, gender, termKey, isSmoker, baseHkdSum);
-        if (curr === 'USD') annual = annual / 7.8;
-                // 自主保 2026 Q3 客戶優惠折算 (首年 25% 折扣，第 2-5 年 20% 折扣)
-        window.mytermPromo = {
-            active: true,
-            y1Annual: annual * 0.75,
-            y1Monthly: (annual * 0.75) * 0.09,
-            y25Annual: annual * 0.80,
-            y25Monthly: (annual * 0.80) * 0.09
-        };
-                } else if (p === 'lifepromise') {
-        var isSmoker = (rateType === 'standard');
-        annual = calcLifePromisePremium(age, gender, isSmoker, baseHkdSum);
-        if (curr === 'USD') annual = annual / 7.8;
-    } else if (p === 'crisis_supporter') { 
-                annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, false); 
-                var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked'); 
-                if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10; 
-            } else if (p === 'crisis_supporter_pro') { 
-                annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, true); 
-                var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked'); 
-                if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10; 
-            } else if (p === 'vprime') { 
-                annual = calcVPrimeFullPremium(age, gender, ded); 
-            } else if (p === 'vfamily') { 
-                annual = calcVFamilyFullPremium(age, gender); 
-                var childChk = document.getElementById('riderChildOption'); 
-                if (childChk && childChk.checked) annual += 1281; 
-            } else if (p === 'vcansurance') { 
-                annual = calcVCansuranceFullPremium(age, gender); 
-            }
-            if (p !== 'crisis_supporter' && p !== 'crisis_supporter_pro') { 
-                var hcChk = document.getElementById('riderHospitalCash'); 
-                if (hcChk && hcChk.checked) { 
-                    var hcLvl = document.getElementById('hospitalCashLevel').value; 
-                    annual += calcHospitalCashPremium(age, gender, hcLvl); 
-                } 
-            }
-            if (curr === 'USD') annual = annual / 7.8; 
-            var monthly = annual * 0.09; 
-            currentCalcResult.annual = annual; 
-            currentCalcResult.monthly = monthly; 
-            currentCalcResult.currSymbol = currSymbol;
-            var pNameText = document.getElementById('calcProduct').options[document.getElementById('calcProduct').selectedIndex].text; 
-            var gText = (gender === 'male') ? '男性' : '女性'; 
-            var rateTypeText = (rateType === 'preferred') ? '優惠費率(非吸煙)' : '標準費率';
-            var cardTitleText = age + ' 歲 · ' + pNameText;
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') { 
-                cardTitleText += ' (' + payTerm + '年繳 · ' + gText + ' · ' + rateTypeText + ' · ' + currUnit + ' ' + sumInsured.toLocaleString('en-US') + ')'; 
-            } else if (p === 'vprime') { 
-                cardTitleText += ' (自付費 $' + parseInt(ded).toLocaleString('en-US') + ' · ' + gText + ' · ' + currUnit + ')'; 
-            } else { 
-                cardTitleText += ' (' + gText + ' · ' + currUnit + ')'; 
-            }
-            document.getElementById('cardMainTitle').innerText = cardTitleText; 
-            document.getElementById('valAnnualText').innerHTML = currSymbol + formatMoney(annual) + ' <span class="text-xs font-normal text-slate-500">' + currUnit + '/年</span>'; 
-            document.getElementById('valMonthlyText').innerHTML = currSymbol + formatMoney(monthly) + ' <span class="text-xs font-normal text-slate-500">' + currUnit + '/月</span>';
-            
-            var promoBadgeText = ""; 
-            var promoHtml = "";
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                promoBadgeText = "🎁 雙18客戶優惠 · 第2及第3個保單年度享 18% 保費折扣 (82折)"; 
-                var y2Val = annual * 0.82; 
-                var y2Mon = y2Val * 0.09;
-                promoHtml = '<p class="font-bold text-orange-900 mb-2">優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年 (原價)</span><b>' + currSymbol + formatMoney(annual) + ' /年 (月供 ' + currSymbol + formatMoney(monthly) + ')</b></div><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 2 年 (82折)</span><b>' + currSymbol + formatMoney(y2Val) + ' /年 (月供 ' + currSymbol + formatMoney(y2Mon) + ')</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 3 年 (82折)</span><b>' + currSymbol + formatMoney(y2Val) + ' /年 (月供 ' + currSymbol + formatMoney(y2Mon) + ')</b></div>';
-            } else if (p === 'vprime') {
-                var dedInt = parseInt(ded);
-                if (dedInt === 0) { 
-                    promoBadgeText = "🎁 尊衛您客戶優惠 · 首年享 3 個月保費折扣 (75折)"; 
-                    var vp0Y1 = annual * 0.75; 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">首年優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年原價</span><b>' + currSymbol + formatMoney(annual) + ' /年</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 1 年折後價 (享3個月折扣)</span><b>' + currSymbol + formatMoney(vp0Y1) + ' /年 (月供 ' + currSymbol + formatMoney(vp0Y1 * 0.09) + ')</b></div>'; 
-                } else if (dedInt < 100000) { 
-                    promoBadgeText = "🎁 尊衛您客戶優惠 · 享 5+3+2 個月跨年保費折扣"; 
-                    var vpMidY1 = annual * 0.5833; var vpMidY2 = annual * 0.75; var vpMidY3 = annual * 0.8333; 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">跨年優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (扣減 5 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY1 * 0.09) + ')</b></div><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/30 px-2 rounded"><span>第 2 年 (扣減 3 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY2 * 0.09) + ')</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/20 px-2 rounded"><span>第 3 年 (扣減 2 個月保費)</span><b>' + currSymbol + formatMoney(vpMidY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY3 * 0.09) + ')</b></div>'; 
-                } else { 
-                    promoBadgeText = "🎁 尊衛您大額優惠 · 享 5+4+3 個月跨年保費折扣"; 
-                    var vpHighY1 = annual * 0.5833; var vpHighY2 = annual * 0.6667; var vpHighY3 = annual * 0.75; 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">大額自付費優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (扣減 5 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY1 * 0.09) + ')</b></div><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/30 px-2 rounded"><span>第 2 年 (扣減 4 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY2 * 0.09) + ')</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/20 px-2 rounded"><span>第 3 年 (扣減 3 個月保費)</span><b>' + currSymbol + formatMoney(vpHighY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY3 * 0.09) + ')</b></div>'; 
-                }
-            } else if (p === 'vfamily') {
-                var childOpt = document.getElementById('riderChildOption');
-                if (childOpt && childOpt.checked) { 
-                    promoBadgeText = "🎁 醫家保「9+9」客戶優惠 · 主險+子女選項跨年折扣"; 
-                    var vf9Y1 = annual * 0.75; var vf9Y2 = annual * 0.75; 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">「9+9」連子女選項折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-orange-800 py-1 border-b border-orange-100/60 bg-orange-100/40 px-2 rounded"><span>第 1 年 (醫家保扣3個月+子女扣6個月)</span><b>' + currSymbol + formatMoney(vf9Y1) + ' /年 (月供 ' + currSymbol + formatMoney(vf9Y1 * 0.09) + ')</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/30 px-2 rounded"><span>第 2 年 (醫家保扣3個月+子女扣3個月)</span><b>' + currSymbol + formatMoney(vf9Y2) + ' /年 (月供 ' + currSymbol + formatMoney(vf9Y2 * 0.09) + ')</b></div>'; 
-                } else { 
-                    promoBadgeText = "🎁 醫家保客戶優惠 · 首個保單年度享 3 個月保費折扣 (75折)"; 
-                    var vfY1 = annual * 0.75; 
-                    promoHtml = '<p class="font-bold text-orange-900 mb-2">首年優惠折算保費一覽 (' + currUnit + ')：</p><div class="flex justify-between text-slate-700 py-1 border-b border-orange-100/60"><span>第 1 年原價</span><b>' + currSymbol + formatMoney(annual) + ' /年</b></div><div class="flex justify-between text-orange-800 py-1 bg-orange-100/40 px-2 rounded"><span>第 1 年折後價 (享 3 個月保費折扣)</span><b>' + currSymbol + formatMoney(vfY1) + ' /年 (月供 ' + currSymbol + formatMoney(vfY1 * 0.09) + ')</b></div>'; 
-                }
-                } else if (p === 'myterm') {
-        promoBadgeText = "🎁 自主保客戶優惠 · 首年 25% 折扣 (75折) · 第 2-5 年 20% 折扣 (8折)";
-        var mtY1 = annual * 0.75;
-        var mtY25 = annual * 0.80;
-        promoHtml = '<p class="font-bold text-orange-900 mb-2">自主保 2026 Q3 跨年優惠折算保費一覽 (' + currUnit + ')</p>' +
-            '<div class="grid grid-cols-2 gap-2 text-xs">' +
-            '<div class="p-2.5 rounded-xl bg-orange-100/70 border border-orange-200">' +
-            '<span class="text-slate-600 block text-[11px]">首個保單年度 (減 25%)</span>' +
-            '<span class="text-sm font-black text-orange-600">' + currSymbol + formatMoney(mtY1) + '</span>' +
-            '<span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY1 * 0.09) + '</span>' +
-            '</div>' +
-            '<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm">' +
-            '<span class="text-slate-600 block text-[11px]">第 2 至 5 個保單年度 (減 20%)</span>' +
-            '<span class="text-sm font-black text-slate-800">' + currSymbol + formatMoney(mtY25) + '</span>' +
-            '<span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY25 * 0.09) + '</span>' +
-            '</div>' +
-            '</div>';
-            }
-            var promoBadgeEl = document.getElementById('purplePromoBadge'); 
-            var promoDetailsEl = document.getElementById('promoDetailsList');
-            if (promoBadgeText !== "") { 
-                if (promoBadgeEl) promoBadgeEl.classList.remove('hidden'); 
-                if (promoDetailsEl) promoDetailsEl.classList.remove('hidden'); 
-                document.getElementById('promoBadgeText').innerText = promoBadgeText; 
-                document.getElementById('promoDetailsList').innerHTML = promoHtml; 
-            } else { 
-                if (promoBadgeEl) promoBadgeEl.classList.add('hidden'); 
-              var ageHtml = "";
-        ageList.forEach(function(a) {
-            var aAnn = 0;
-            if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-                aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
-                var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
-                if (selectedCrisisRider && selectedCrisisRider.value === 'family') aAnn = aAnn * 1.10;
-            } else if (p === 'vprime') {
-                aAnn = calcVPrimeFullPremium(a, gender, ded);
-            } else if (p === 'vfamily') {
-                aAnn = calcVFamilyFullPremium(a, gender);
-            } else if (p === 'myterm') {
-                var isSmoker = (rateType === 'standard');
-                var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
-                aAnn = calcMyTermPremium(a, gender, termKey, isSmoker, baseHkdSum);
-            } else if (p === 'lifepromise') {
-                var isSmoker = (rateType === 'standard');
-                aAnn = calcLifePromisePremium(a, gender, isSmoker, baseHkdSum);
-            }
-
-            if (curr === 'USD') aAnn = aAnn / 7.8;
-            var aMon = aAnn * 0.09;
-            var isCurrentAge = (a === age);
-            var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-200 bg-white hover:border-slate-300";
-            var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
-            ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div><div class="font-bold text-slate-800 text-sm flex items-center">' + starBadge + a + ' 歲</div><div class="text-[11px] text-slate-400 mt-0.5">年齡對比</div></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(aAnn) + ' <span class="text-[10px] text-slate-400 font-normal">/年</span></div><div class="text-slate-500 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>';
-        });
-        if (document.getElementById('ageBreakdownList')) {
-            document.getElementById('ageBreakdownList').innerHTML = ageHtml;
-      
-               // 只有危疾產品才需要渲染費率與年期比較，其餘產品清空或略過
-    if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
-        var rateTypeMatrix = [{ g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' }, { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' }, { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' }, { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }];
-        var rateTypeHtml = "";
-        rateTypeMatrix.forEach(function(item) {
-            var rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, baseHkdSum, (p === 'crisis_supporter_pro'));
-            if (curr === 'USD') rAnn = rAnn / 7.8;
-            var rMon = rAnn * 0.09;
-            var isSelected = (item.g === gender && item.r === rateType);
-            var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
-            var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
-            rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>';
-        });
-        if (document.getElementById('rateTypeBreakdownList')) {
-            document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
-        }
-    }
-}
-            document.getElementById('compSectionTitle').innerText = age + ' 歲 · ' + pNameText + ' · 保費比較 (' + gText + ' · ' + currUnit + ')'; 
-            var ageList = [25, 30, 35, 36, 40, 45, 50, 55]; 
-            if (!ageList.includes(age)) { ageList.push(age); ageList.sort(function(a, b){ return a - b; }); } 
-            var ageHtml = "";
-            ageList.forEach(function(a) { 
-                var aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p==='crisis_supporter_pro')); 
-                if (curr === 'USD') aAnn = aAnn / 7.8; 
-                var aMon = aAnn * 0.09; 
-                var isCurrentAge = (a === age); 
-                var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50"; 
-                var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : ''; 
-                ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all"><div>' + starBadge + '<b class="text-slate-900 text-sm">' + a + ' 歲</b></div><div class="text-right"><div class="font-black text-slate-800 text-sm">' + currSymbol + formatMoney(aAnn) + ' /年</div><div class="text-[11px] text-slate-500">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>'; 
-            }); 
-            document.getElementById('ageBreakdownList').innerHTML = ageHtml;
-        }
-        // 富衛「自主保定期保障計劃 (MyTerm)」每千元投保額基本年繳保費率表 (HKD/USD 通用)
-const myTermRates = {
-    // 5 年續保期 (HTM1)
-    '5': {
-        male_pref: { 19:0.75,20:0.75,21:0.75,22:0.75,23:0.75,24:0.75,25:0.75,26:0.75,27:0.75,28:0.76,29:0.77,30:0.80,31:0.82,32:0.85,33:0.87,34:0.90,35:0.94,36:0.99,37:1.03,38:1.08,39:1.14,40:1.20,41:1.29,42:1.39,43:1.49,44:1.61,45:1.74,46:1.89,47:2.05,48:2.24,49:2.45,50:2.67,51:2.92,52:3.19,53:3.48,54:3.79,55:4.15,56:4.54,57:4.97,58:5.44,59:5.96,60:6.55,61:7.20 },
-        male_std:  { 19:1.54,20:1.54,21:1.54,22:1.54,23:1.54,24:1.54,25:1.55,26:1.57,27:1.57,28:1.58,29:1.61,30:1.63,31:1.67,32:1.72,33:1.79,34:1.88,35:1.99,36:2.08,37:2.21,38:2.28,39:2.42,40:2.54,41:2.73,42:2.91,43:3.15,44:3.43,45:3.71,46:4.01,47:4.35,48:4.74,49:5.20,50:5.66,51:6.19,52:6.77,53:7.39,54:8.07,55:8.81,56:9.63,57:10.56,58:11.55,59:12.65,60:13.89,61:15.29 },
-        fem_pref:  { 19:0.67,20:0.67,21:0.67,22:0.67,23:0.67,24:0.67,25:0.67,26:0.67,27:0.67,28:0.68,29:0.68,30:0.68,31:0.69,32:0.70,33:0.72,34:0.74,35:0.80,36:0.85,37:0.86,38:0.87,39:0.88,40:0.89,41:0.94,42:1.00,43:1.06,44:1.13,45:1.22,46:1.31,47:1.40,48:1.51,49:1.62,50:1.75,51:1.89,52:2.05,53:2.24,54:2.44,55:2.66,56:2.91,57:3.17,58:3.47,59:3.81,60:4.20,61:4.64 },
-        fem_std:   { 19:1.26,20:1.33,21:1.40,22:1.40,23:1.40,24:1.41,25:1.41,26:1.41,27:1.41,28:1.41,29:1.41,30:1.42,31:1.45,32:1.45,33:1.47,34:1.49,35:1.63,36:1.75,37:1.75,38:1.75,39:1.78,40:1.82,41:1.92,42:2.04,43:2.18,44:2.30,45:2.47,46:2.68,47:2.83,48:3.09,49:3.30,50:3.56,51:3.87,52:4.19,53:4.57,54:4.96,55:5.42,56:5.95,57:6.53,58:7.20,59:7.98,60:8.87,61:9.86 }
+ // =========================================================
+// 1. 自主保定期保障計劃 (MyTerm) 官方費率表與計算函數
+// =========================================================
+var myTermRates = {
+    "5": {
+        male_pref: { 18:0.75, 19:0.75, 20:0.75, 21:0.75, 22:0.75, 23:0.75, 24:0.75, 25:0.75, 26:0.75, 27:0.75, 28:0.76, 29:0.77, 30:0.80, 31:0.82, 32:0.85, 33:0.88, 34:0.92, 35:0.96, 36:1.01, 37:1.07, 38:1.14, 39:1.22, 40:1.31, 41:1.41, 42:1.52, 43:1.64, 44:1.77, 45:1.91, 46:2.07, 47:2.25, 48:2.45, 49:2.67, 50:2.92, 51:3.20, 52:3.51, 53:3.86, 54:4.25, 55:4.69, 56:5.18, 57:5.73, 58:6.34, 59:7.02, 60:7.78 },
+        male_std:  { 18:1.54, 19:1.54, 20:1.54, 21:1.54, 22:1.54, 23:1.54, 24:1.54, 25:1.55, 26:1.57, 27:1.57, 28:1.58, 29:1.61, 30:1.63, 31:1.67, 32:1.72, 33:1.77, 34:1.83, 35:1.90, 36:1.98, 37:2.07, 38:2.17, 39:2.29, 40:2.42, 41:2.57, 42:2.74, 43:2.93, 44:3.14, 45:3.38, 46:3.65, 47:3.95, 48:4.29, 49:4.67, 50:5.10, 51:5.58, 52:6.12, 53:6.72, 54:7.39, 55:8.14, 56:8.98, 57:9.92, 58:10.97, 59:12.14, 60:13.44 },
+        fem_pref:  { 18:0.67, 19:0.67, 20:0.67, 21:0.67, 22:0.67, 23:0.67, 24:0.67, 25:0.67, 26:0.67, 27:0.67, 28:0.68, 29:0.68, 30:0.68, 31:0.69, 32:0.71, 33:0.73, 34:0.76, 35:0.79, 36:0.83, 37:0.88, 38:0.93, 39:0.99, 40:1.06, 41:1.14, 42:1.23, 43:1.33, 44:1.44, 45:1.56, 46:1.69, 47:1.83, 48:1.99, 49:2.16, 50:2.35, 51:2.56, 52:2.79, 53:3.05, 54:3.34, 55:3.66, 56:4.01, 57:4.40, 58:4.83, 59:5.31, 60:5.84 },
+        fem_std:   { 18:1.26, 19:1.26, 20:1.33, 21:1.40, 22:1.40, 23:1.40, 24:1.41, 25:1.41, 26:1.41, 27:1.41, 28:1.41, 29:1.41, 30:1.42, 31:1.45, 32:1.49, 33:1.54, 34:1.60, 35:1.67, 36:1.75, 37:1.84, 38:1.94, 39:2.05, 40:2.17, 41:2.30, 42:2.45, 43:2.61, 44:2.79, 45:2.99, 46:3.21, 47:3.45, 48:3.72, 49:4.02, 50:4.35, 51:4.72, 52:5.13, 53:5.59, 54:6.10, 55:6.67, 56:7.31, 57:8.02, 58:8.81, 59:9.69, 60:10.67 }
     },
-    // 10 年續保期 (HTM2)
-    '10': {
-        male_pref: { 19:0.77,20:0.78,21:0.78,22:0.78,23:0.78,24:0.78,25:0.78,26:0.78,27:0.79,28:0.80,29:0.81,30:0.82,31:0.83,32:0.86,33:0.88,34:0.91,35:0.95,36:1.00,37:1.06,38:1.12,39:1.20,40:1.29,41:1.40,42:1.54,43:1.68,44:1.85,45:2.01,46:2.22,47:2.45,48:2.61,49:2.82,50:3.10,51:3.30,52:3.55,53:3.84,54:4.16,55:4.55,56:4.99,57:5.41,58:5.76,59:6.19,60:6.73,61:7.36 },
-        male_std:  { 19:1.55,20:1.55,21:1.55,22:1.55,23:1.55,24:1.55,25:1.56,26:1.58,27:1.58,28:1.59,29:1.62,30:1.64,31:1.68,32:1.73,33:1.80,34:1.89,35:2.00,36:2.16,37:2.35,38:2.53,39:2.73,40:2.98,41:3.27,42:3.63,43:4.02,44:4.43,45:4.87,46:5.37,47:5.87,48:6.19,49:6.60,50:7.12,51:7.59,52:8.18,53:8.92,54:9.80,55:10.85,56:12.07,57:13.18,58:14.20,59:15.24,60:16.40,61:17.77 },
-        fem_pref:  { 19:0.68,20:0.68,21:0.68,22:0.68,23:0.68,24:0.68,25:0.68,26:0.68,27:0.68,28:0.69,29:0.69,30:0.69,31:0.70,32:0.71,33:0.73,34:0.75,35:0.81,36:0.87,37:0.91,38:0.94,39:1.00,40:1.06,41:1.14,42:1.23,43:1.34,44:1.46,45:1.61,46:1.77,47:1.98,48:2.18,49:2.37,50:2.57,51:2.75,52:2.93,53:3.12,54:3.33,55:3.57,56:3.84,57:4.04,58:4.37,59:4.76,60:5.18,61:5.65 },
-        fem_std:   { 19:1.54,20:1.54,21:1.54,22:1.54,23:1.54,24:1.54,25:1.55,26:1.56,27:1.56,28:1.57,29:1.59,30:1.61,31:1.63,32:1.65,33:1.69,34:1.74,35:1.81,36:1.89,37:1.91,38:1.99,39:2.14,40:2.32,41:2.57,42:2.85,43:3.15,44:3.47,45:3.76,46:4.00,47:4.37,48:4.83,49:5.28,50:5.76,51:6.21,52:6.70,53:7.15,54:7.67,55:8.22,56:8.81,57:9.29,58:9.95,59:10.66,60:11.45,61:12.36 }
+    "10": {
+        male_pref: { 18:0.77, 19:0.77, 20:0.78, 21:0.78, 22:0.78, 23:0.78, 24:0.78, 25:0.78, 26:0.78, 27:0.79, 28:0.80, 29:0.81, 30:0.82, 31:0.83, 32:0.86, 33:0.89, 34:0.93, 35:0.97, 36:1.02, 37:1.08, 38:1.15, 39:1.23, 40:1.32, 41:1.42, 42:1.53, 43:1.65, 44:1.78, 45:1.93, 46:2.09, 47:2.27, 48:2.47, 49:2.69, 50:2.94, 51:3.22, 52:3.53, 53:3.88, 54:4.27, 55:4.71, 56:5.20, 57:5.75, 58:6.36, 59:7.04, 60:7.80 },
+        male_std:  { 18:1.55, 19:1.55, 20:1.55, 21:1.55, 22:1.55, 23:1.55, 24:1.55, 25:1.56, 26:1.58, 27:1.58, 28:1.59, 29:1.62, 30:1.64, 31:1.68, 32:1.73, 33:1.78, 34:1.84, 35:1.91, 36:1.99, 37:2.08, 38:2.18, 39:2.30, 40:2.43, 41:2.58, 42:2.75, 43:2.94, 44:3.15, 45:3.39, 46:3.66, 47:3.96, 48:4.30, 49:4.68, 50:5.11, 51:5.59, 52:6.13, 53:6.73, 54:7.40, 55:8.15, 56:8.99, 57:9.93, 58:10.98, 59:12.15, 60:13.45 },
+        fem_pref:  { 18:0.68, 19:0.68, 20:0.68, 21:0.68, 22:0.68, 23:0.68, 24:0.68, 25:0.68, 26:0.68, 27:0.68, 28:0.69, 29:0.69, 30:0.69, 31:0.70, 32:0.72, 33:0.74, 34:0.77, 35:0.80, 36:0.84, 37:0.89, 38:0.94, 39:1.00, 40:1.07, 41:1.15, 42:1.24, 43:1.34, 44:1.45, 45:1.57, 46:1.70, 47:1.84, 48:2.00, 49:2.17, 50:2.36, 51:2.57, 52:2.80, 53:3.06, 54:3.35, 55:3.67, 56:4.02, 57:4.41, 58:4.84, 59:5.32, 60:5.85 },
+        fem_std:   { 18:1.54, 19:1.54, 20:1.54, 21:1.54, 22:1.54, 23:1.54, 24:1.54, 25:1.55, 26:1.56, 27:1.56, 28:1.57, 29:1.59, 30:1.61, 31:1.63, 32:1.67, 33:1.72, 34:1.78, 35:1.85, 36:1.93, 37:2.02, 38:2.12, 39:2.23, 40:2.35, 41:2.48, 42:2.63, 43:2.79, 44:2.97, 45:3.17, 46:3.39, 47:3.63, 48:3.90, 49:4.20, 50:4.53, 51:4.90, 52:5.31, 53:5.77, 54:6.28, 55:6.85, 56:7.49, 57:8.20, 58:8.99, 59:9.87, 60:10.85 }
     },
-    // 20 年續保期 (HTM3)
-    '20': {
-        male_pref: { 19:1.11,20:1.12,21:1.12,22:1.12,23:1.12,24:1.12,25:1.12,26:1.12,27:1.13,28:1.14,29:1.15,30:1.16,31:1.17,32:1.19,33:1.22,34:1.27,35:1.33,36:1.43,37:1.55,38:1.66,39:1.79,40:1.94,41:2.12,42:2.34,43:2.60,44:2.88,45:3.20,46:3.57,47:3.91,48:4.12,49:4.40,50:4.77,51:5.23,52:5.83,53:6.56,54:7.39,55:8.26,56:9.20,57:10.28,58:11.10,59:12.02,60:13.03,61:14.22 },
-        male_std:  { 19:3.36,20:3.36,21:3.36,22:3.36,23:3.36,24:3.38,25:3.41,26:3.44,27:3.44,28:3.45,29:3.46,30:3.50,31:3.54,32:3.59,33:3.67,34:3.73,35:3.82,36:3.96,37:4.15,38:4.36,39:4.62,40:4.92,41:5.32,42:5.80,43:6.34,44:6.98,45:7.73,46:8.59,47:9.20,48:9.80,49:10.68,50:11.89,51:13.34,52:15.08,53:17.17,54:19.09,55:21.21,56:23.46,57:25.68,58:27.56,59:29.85,60:32.61,61:35.97 },
-        fem_pref:  { 19:1.00,20:1.00,21:1.00,22:1.00,23:1.00,24:1.00,25:1.00,26:1.00,27:1.00,28:1.00,29:1.01,30:1.01,31:1.03,32:1.04,33:1.07,34:1.10,35:1.16,36:1.22,37:1.25,38:1.29,39:1.38,40:1.49,41:1.63,42:1.79,43:1.96,44:2.13,45:2.32,46:2.53,47:2.79,48:3.08,49:3.30,50:3.58,51:3.84,52:4.09,53:4.39,54:4.77,55:5.17,56:5.61,57:6.11,58:6.80,59:7.53,60:8.32,61:9.16 },
-        fem_std:   { 19:2.69,20:2.69,21:2.69,22:2.69,23:2.69,24:2.69,25:2.69,26:2.69,27:2.69,28:2.70,29:2.72,30:2.73,31:2.76,32:2.81,33:2.87,34:2.97,35:3.09,36:3.30,37:3.40,38:3.54,39:3.71,40:3.93,41:4.23,42:4.58,43:4.96,44:5.36,45:5.79,46:6.19,47:6.69,48:7.47,49:8.34,50:9.30,51:10.29,52:11.30,53:12.29,54:13.34,55:14.40,56:15.50,57:16.67,58:17.78,59:19.38,60:20.97,61:22.75 }
+    "20": {
+        male_pref: { 18:1.11, 19:1.11, 20:1.12, 21:1.12, 22:1.12, 23:1.12, 24:1.12, 25:1.12, 26:1.12, 27:1.13, 28:1.14, 29:1.15, 30:1.16, 31:1.17, 32:1.20, 33:1.24, 34:1.29, 35:1.35, 36:1.42, 37:1.50, 38:1.59, 39:1.69, 40:1.80, 41:1.93, 42:2.07, 43:2.23, 44:2.41, 45:2.61, 46:2.83, 47:3.08, 48:3.36, 49:3.67, 50:4.02, 51:4.41, 52:4.85, 53:5.34, 54:5.89, 55:6.51, 56:7.21, 57:8.00, 58:8.89, 59:9.89, 60:11.02 },
+        male_std:  { 18:3.36, 19:3.36, 20:3.36, 21:3.36, 22:3.36, 23:3.36, 24:3.38, 25:3.41, 26:3.44, 27:3.44, 28:3.45, 29:3.46, 30:3.50, 31:3.54, 32:3.61, 33:3.69, 34:3.79, 35:3.91, 36:4.05, 37:4.21, 38:4.39, 39:4.60, 40:4.84, 41:5.11, 42:5.41, 43:5.75, 44:6.13, 45:6.56, 46:7.04, 47:7.58, 48:8.19, 49:8.88, 50:9.66, 51:10.54, 52:11.53, 53:12.64, 54:13.88, 55:15.26, 56:16.80, 57:18.52, 58:20.44, 59:22.58, 60:24.96 },
+        fem_pref:  { 18:1.00, 19:1.00, 20:1.00, 21:1.00, 22:1.00, 23:1.00, 24:1.00, 25:1.00, 26:1.00, 27:1.00, 28:1.00, 29:1.01, 30:1.01, 31:1.03, 32:1.06, 33:1.10, 34:1.15, 35:1.21, 36:1.28, 37:1.36, 38:1.45, 39:1.55, 40:1.66, 41:1.79, 42:1.93, 43:2.09, 44:2.27, 45:2.47, 46:2.69, 47:2.94, 48:3.22, 49:3.53, 50:3.88, 51:4.27, 52:4.71, 53:5.20, 54:5.75, 55:6.37, 56:7.06, 57:7.83, 58:8.69, 59:9.65, 60:10.72 },
+        fem_std:   { 18:2.69, 19:2.69, 20:2.69, 21:2.69, 22:2.69, 23:2.69, 24:2.69, 25:2.69, 26:2.69, 27:2.69, 28:2.70, 29:2.72, 30:2.73, 31:2.76, 32:2.80, 33:2.85, 34:2.91, 35:2.99, 36:3.08, 37:3.19, 38:3.31, 39:3.45, 40:3.61, 41:3.79, 42:3.99, 43:4.22, 44:4.48, 45:4.77, 46:5.10, 47:5.47, 48:5.89, 49:6.36, 50:6.89, 51:7.48, 52:8.14, 53:8.88, 54:9.71, 55:10.64, 56:11.68, 57:12.84, 58:14.13, 59:15.56, 60:17.14 }
     }
 };
 
-        function calcMyTermPremium(age, gender, termKey, isSmoker, sumInsured) {
+function calcMyTermPremium(age, gender, termKey, isSmoker, sumInsured) {
     if (age < 18 || age > 60) return 0;
     var t = termKey || '20';
     var termData = myTermRates[t] || myTermRates['20'];
     var g = (gender === 'male' || gender === '男') ? 'male' : 'fem';
     var s = isSmoker ? 'std' : 'pref';
-    var rate = termData[g + '_' + s]?.[age] || 0;
-    return (sumInsured / 1000) * rate;
+    var rate = (termData && termData[g + '_' + s]) ? termData[g + '_' + s][age] : 0;
+    return (sumInsured / 1000) * (rate || 0);
 }
 
-    // ==========================================
-// 衛你所愛壽險計劃 (Life Promise - 20年供款期) 官方保費率與計算
-// ==========================================
+// =========================================================
+// 2. 衛你所愛壽險計劃 (Life Promise) 官方費率表與計算函數
+// =========================================================
 var lifePromiseRates20 = {
     male_pref: { 1:9.48,2:9.71,3:9.93,4:10.19,5:10.39,6:11.05,7:11.29,8:11.72,9:12.16,10:12.60,11:13.04,12:13.49,13:13.93,14:14.39,15:14.83,16:14.97,17:15.16,18:15.55,19:15.95,20:16.34,21:16.71,22:17.13,23:17.54,24:18.02,25:18.39,26:18.89,27:19.32,28:19.77,29:20.24,30:20.76,31:21.27,32:21.79,33:22.30,34:22.85,35:23.48,36:24.01,37:24.64,38:25.27,39:25.91,40:26.56,41:27.99,42:28.74,43:29.49,44:30.25,45:30.99,46:31.76,47:32.65,48:33.53,49:34.43,50:36.57,51:39.28,52:40.56,53:41.82,54:43.11,55:45.07,56:46.36,57:47.61,58:48.83,59:50.01,60:50.64 },
     male_std:  { 1:9.48,2:9.71,3:9.93,4:10.19,5:10.39,6:11.05,7:11.29,8:11.72,9:12.16,10:12.60,11:13.04,12:13.49,13:13.93,14:14.39,15:14.83,16:15.51,17:15.89,18:16.33,19:16.75,20:17.20,21:17.61,22:18.09,23:18.55,24:19.07,25:19.50,26:20.07,27:20.58,28:21.10,29:21.65,30:22.26,31:22.84,32:23.45,33:24.07,34:24.72,35:25.47,36:26.13,37:26.88,38:27.65,39:28.42,40:29.21,41:30.86,42:31.80,43:32.75,44:33.72,45:34.70,46:35.74,47:36.91,48:38.07,49:39.25,50:41.70,51:44.66,52:46.36,53:47.97,54:49.58,55:51.60,56:53.25,57:54.78,58:56.36,59:57.76,60:58.56 },
@@ -2046,15 +1847,252 @@ function calcLifePromisePremium(age, gender, isSmoker, sumInsured) {
     if (age < 1 || age > 60) return 0;
     var g = (gender === 'male' || gender === '男') ? 'male' : 'fem';
     var s = isSmoker ? 'std' : 'pref';
-    var baseRate = lifePromiseRates20[g + '_' + s]?.[age] || 0;
-
-    // 大額保費調整 (Size Discount Adjustment)
+    var baseRate = (lifePromiseRates20 && lifePromiseRates20[g + '_' + s]) ? lifePromiseRates20[g + '_' + s][age] : 0;
     var adj = 0;
     if (sumInsured < 200000) adj = 4.80;
     else if (sumInsured < 280000) adj = 2.80;
     else if (sumInsured < 560000) adj = 1.00;
+    return (sumInsured / 1000) * ((baseRate || 0) + adj);
+}
 
-    return (sumInsured / 1000) * (baseRate + adj);
+// =========================================================
+// 3. 保費計算器核心查詢函數 runPremiumQuery
+// =========================================================
+function runPremiumQuery() {
+    var pEl = document.getElementById('calcProduct');
+    if (!pEl) return;
+    var p = pEl.value;
+
+    var ageEl = document.getElementById('calcAge');
+    var age = ageEl ? (parseInt(ageEl.value, 10) || 30) : 30;
+
+    var genderEl = document.getElementById('calcGender');
+    var gender = genderEl ? genderEl.value : 'male';
+
+    var currEl = document.getElementById('calcCurrency');
+    var curr = currEl ? currEl.value : 'HKD';
+
+    var sumInsuredEl = document.getElementById('calcSumInsured');
+    var sumInsured = 500000;
+    if (sumInsuredEl) {
+        if (typeof parseCleanNumber === 'function') {
+            sumInsured = parseCleanNumber(sumInsuredEl.value) || 500000;
+        } else {
+            sumInsured = parseFloat(String(sumInsuredEl.value).replace(/,/g, '')) || 500000;
+        }
+    }
+
+    var rateTypeEl = document.getElementById('calcRateType');
+    var rateType = rateTypeEl ? rateTypeEl.value : 'preferred';
+
+    var payTermEl = document.getElementById('calcPayTerm');
+    var payTerm = payTermEl ? payTermEl.value : '20';
+
+    var dedEl = document.getElementById('calcDeductible');
+    var ded = dedEl ? dedEl.value : '0';
+
+    var currSymbol = (curr === 'USD') ? '$' : 'HKD ';
+    var currUnit = (curr === 'USD') ? 'USD' : 'HKD';
+    if (document.getElementById('currLabel')) {
+        document.getElementById('currLabel').innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
+    }
+
+    var baseHkdSum = (curr === 'USD') ? (sumInsured * 7.8) : sumInsured;
+    var annual = 0;
+
+    // A. 基礎年費計算（帶安全檢查）
+    if (p === 'myterm') {
+        var isSmk = (rateType === 'standard');
+        var termKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
+        annual = calcMyTermPremium(age, gender, termKey, isSmk, baseHkdSum);
+        if (curr === 'USD') annual = annual / 7.8;
+    } else if (p === 'lifepromise') {
+        var isSmk2 = (rateType === 'standard');
+        annual = calcLifePromisePremium(age, gender, isSmk2, baseHkdSum);
+        if (curr === 'USD') annual = annual / 7.8;
+    } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+        if (typeof calcCrisisFullPremium === 'function') {
+            annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
+        }
+        var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
+        if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10;
+        if (curr === 'USD') annual = annual / 7.8;
+    } else if (p === 'vprime') {
+        if (typeof calcVPrimeFullPremium === 'function') {
+            annual = calcVPrimeFullPremium(age, gender, ded);
+        }
+        if (curr === 'USD') annual = annual / 7.8;
+    } else if (p === 'vfamily') {
+        if (typeof calcVFamilyFullPremium === 'function') {
+            annual = calcVFamilyFullPremium(age, gender);
+        }
+        if (curr === 'USD') annual = annual / 7.8;
+    }
+
+    var monthly = annual * 0.09;
+
+    // B. 更新主顯示金額與標題
+    var pName = (pEl.options && pEl.selectedIndex >= 0) ? pEl.options[pEl.selectedIndex].text : '';
+    var genderName = (gender === 'male' || gender === '男') ? '男性' : '女性';
+    var titleText = age + ' 歲 · ' + pName + ' (' + genderName + ' · ' + currUnit + ')';
+
+    var resTitleEl = document.getElementById('calcResTitle') || document.querySelector('.result-title');
+    if (resTitleEl) resTitleEl.innerText = titleText;
+
+    var fmtAnnual = (typeof formatMoney === 'function') ? formatMoney(annual) : annual.toFixed(2);
+    var fmtMonthly = (typeof formatMoney === 'function') ? formatMoney(monthly) : monthly.toFixed(2);
+
+    ['calcResAnnual', 'resAnnualPrem'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.innerText = currSymbol + fmtAnnual;
+    });
+    ['calcResMonthly', 'resMonthlyPrem'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.innerText = currSymbol + fmtMonthly;
+    });
+
+    // C. 優惠 Banner 資訊
+    var promoBadgeText = "";
+    var promoHtml = "";
+
+    if (p === 'vprime') {
+        var dedInt = parseInt(ded, 10);
+        if (dedInt === 0) {
+            promoBadgeText = "🎁 尊衛您客戶優惠 · 享 4+2+1 個月跨年保費折扣";
+            var vpLowY1 = annual * 0.6667; var vpLowY2 = annual * 0.8333; var vpLowY3 = annual * 0.9167;
+            promoHtml = '<p class="font-bold text-orange-900 mb-2">跨年優惠折算保費一覽 (' + currUnit + ') :</p>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 4 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY1 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 2 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY2 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 1 個月保費)</span><span>' + currSymbol + formatMoney(vpLowY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpLowY3 * 0.09) + ')</span></div>';
+        } else if (dedInt < 100000) {
+            promoBadgeText = "🎁 尊衛您客戶優惠 · 享 5+3+2 個月跨年保費折扣";
+            var vpMidY1 = annual * 0.5833; var vpMidY2 = annual * 0.75; var vpMidY3 = annual * 0.8333;
+            promoHtml = '<p class="font-bold text-orange-900 mb-2">跨年優惠折算保費一覽 (' + currUnit + ') :</p>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 5 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY1 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 3 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY2 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 2 個月保費)</span><span>' + currSymbol + formatMoney(vpMidY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpMidY3 * 0.09) + ')</span></div>';
+        } else {
+            promoBadgeText = "🎁 尊衛您大額優惠 · 享 5+4+3 個月跨年保費折扣";
+            var vpHighY1 = annual * 0.5833; var vpHighY2 = annual * 0.6667; var vpHighY3 = annual * 0.75;
+            promoHtml = '<p class="font-bold text-orange-900 mb-2">大額自付費優惠折算保費一覽 (' + currUnit + ') :</p>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 1 年 (扣減 5 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY1) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY1 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (扣減 4 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY2) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY2 * 0.09) + ')</span></div>' +
+                '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (扣減 3 個月保費)</span><span>' + currSymbol + formatMoney(vpHighY3) + ' /年 (月供 ' + currSymbol + formatMoney(vpHighY3 * 0.09) + ')</span></div>';
+        }
+    } else if (p === 'myterm') {
+        promoBadgeText = "🎁 自主保客戶優惠 · 首年 25% 折扣 (75折) · 第 2-5 年 20% 折扣 (8折)";
+        var mtY1 = annual * 0.75; var mtY25 = annual * 0.80;
+        promoHtml = '<p class="font-bold text-orange-900 mb-2">自主保跨年優惠折算保費一覽 (' + currUnit + ')</p>' +
+            '<div class="grid grid-cols-2 gap-2 text-xs">' +
+            '<div class="p-2.5 rounded-xl bg-orange-100/70 border border-orange-200"><span class="text-slate-600 block text-[11px]">首個保單年度 (減 25%)</span><span class="text-sm font-black text-orange-600">' + currSymbol + formatMoney(mtY1) + '</span><span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY1 * 0.09) + '</span></div>' +
+            '<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm"><span class="text-slate-600 block text-[11px]">第 2 至 5 個保單年度 (減 20%)</span><span class="text-sm font-black text-slate-800">' + currSymbol + formatMoney(mtY25) + '</span><span class="text-[10px] text-slate-500 block mt-0.5">月供約 ' + currSymbol + formatMoney(mtY25 * 0.09) + '</span></div>' +
+            '</div>';
+    } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+        promoBadgeText = "🎁 雙18客戶優惠 · 第2及第3個保單年度享 18% 保費折扣 (82折)";
+        var csY1 = annual; var csY23 = annual * 0.82;
+        promoHtml = '<p class="font-bold text-orange-900 mb-2">優惠折算保費一覽 (' + currUnit + ') :</p>' +
+            '<div class="flex justify-between py-1 text-slate-700"><span>第 1 年 (原價)</span><span>' + currSymbol + formatMoney(csY1) + ' /年 (月供 ' + currSymbol + formatMoney(csY1 * 0.09) + ')</span></div>' +
+            '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 2 年 (82折)</span><span>' + currSymbol + formatMoney(csY23) + ' /年 (月供 ' + currSymbol + formatMoney(csY23 * 0.09) + ')</span></div>' +
+            '<div class="flex justify-between py-1 text-orange-600 font-bold bg-orange-50/50 px-2 rounded-lg"><span>第 3 年 (82折)</span><span>' + currSymbol + formatMoney(csY23) + ' /年 (月供 ' + currSymbol + formatMoney(csY23 * 0.09) + ')</span></div>';
+    }
+
+    var promoBadgeEl = document.getElementById('purplePromoBadge');
+    var promoDetailsEl = document.getElementById('promoDetailsList');
+    if (promoBadgeText !== "") {
+        if (promoBadgeEl) { promoBadgeEl.innerText = promoBadgeText; promoBadgeEl.classList.remove('hidden'); }
+        if (promoDetailsEl) promoDetailsEl.innerHTML = promoHtml;
+    } else {
+        if (promoBadgeEl) promoBadgeEl.classList.add('hidden');
+        if (promoDetailsEl) promoDetailsEl.innerHTML = "";
+    }
+
+    // D. 底部「保費比較」年齡列表卡片
+    var ageList = [Math.max(1, age - 2), Math.max(1, age - 1), age, Math.min(65, age + 1), Math.min(65, age + 2)];
+    ageList = ageList.filter(function(v, idx, arr) { return arr.indexOf(v) === idx; });
+
+    var ageHtml = "";
+    ageList.forEach(function(a) {
+        var aAnn = 0;
+        if (p === 'vprime') {
+            if (typeof calcVPrimeFullPremium === 'function') aAnn = calcVPrimeFullPremium(a, gender, ded);
+        } else if (p === 'vfamily') {
+            if (typeof calcVFamilyFullPremium === 'function') aAnn = calcVFamilyFullPremium(a, gender);
+        } else if (p === 'myterm') {
+            var subSmk = (rateType === 'standard');
+            var subTermKey = (payTerm === '5' || payTerm === '10' || payTerm === '20') ? payTerm : '20';
+            aAnn = calcMyTermPremium(a, gender, subTermKey, subSmk, baseHkdSum);
+        } else if (p === 'lifepromise') {
+            var subSmk2 = (rateType === 'standard');
+            aAnn = calcLifePromisePremium(a, gender, subSmk2, baseHkdSum);
+        } else if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+            if (typeof calcCrisisFullPremium === 'function') aAnn = calcCrisisFullPremium(a, gender, payTerm, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
+        }
+
+        if (curr === 'USD') aAnn = aAnn / 7.8;
+        var aMon = aAnn * 0.09;
+        var isCurrentAge = (a === age);
+        var borderStyle = isCurrentAge ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-200 bg-white hover:border-slate-300";
+        var starBadge = isCurrentAge ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
+
+        ageHtml += '<div class="p-3.5 rounded-2xl ' + borderStyle + ' flex items-center justify-between transition-all mb-2.5"><div><div class="font-bold text-slate-800 text-sm flex items-center">' + starBadge + a + ' 歲</div><div class="text-[11px] text-slate-400 mt-0.5">年齡對比</div></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(aAnn) + ' <span class="text-[10px] text-slate-400 font-normal">/年</span></div><div class="text-slate-500 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(aMon) + '</div></div></div>';
+    });
+
+    if (document.getElementById('ageBreakdownList')) {
+        document.getElementById('ageBreakdownList').innerHTML = ageHtml;
+    }
+
+    // E. 繳款年期與費率比較（危疾專用卡片）
+    var payTermCompSec = document.getElementById('payTermCompSection');
+    var rateTypeCompSec = document.getElementById('rateTypeCompSection');
+
+    if (p === 'crisis_supporter' || p === 'crisis_supporter_pro') {
+        if (payTermCompSec) payTermCompSec.style.display = 'block';
+        if (rateTypeCompSec) rateTypeCompSec.style.display = 'block';
+
+        var termList = ['10', '15', '20', '25'];
+        var termHtml = "";
+        termList.forEach(function(t) {
+            var tAnn = 0;
+            if (typeof calcCrisisFullPremium === 'function') {
+                tAnn = calcCrisisFullPremium(age, gender, t, rateType, baseHkdSum, (p === 'crisis_supporter_pro'));
+            }
+            if (curr === 'USD') tAnn = tAnn / 7.8;
+            var tMon = tAnn * 0.09;
+            var isSelectedTerm = (t === payTerm);
+            var styleClass = isSelectedTerm ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
+            var starMark = isSelectedTerm ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
+            termHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all mb-2.5"><div>' + starMark + '<b class="text-slate-800 text-sm">' + t + ' 年繳</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(tAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(tMon) + '</div></div></div>';
+        });
+        if (document.getElementById('payTermBreakdownList')) {
+            document.getElementById('payTermBreakdownList').innerHTML = termHtml;
+        }
+
+        var rateTypeMatrix = [
+            { g: 'male', r: 'preferred', label: '男性 · 優惠費率 (非吸煙)' },
+            { g: 'male', r: 'standard', label: '男性 · 標準費率 (吸煙)' },
+            { g: 'female', r: 'preferred', label: '女性 · 優惠費率 (非吸煙)' },
+            { g: 'female', r: 'standard', label: '女性 · 標準費率 (吸煙)' }
+        ];
+        var rateTypeHtml = "";
+        rateTypeMatrix.forEach(function(item) {
+            var rAnn = 0;
+            if (typeof calcCrisisFullPremium === 'function') {
+                rAnn = calcCrisisFullPremium(age, item.g, payTerm, item.r, baseHkdSum, (p === 'crisis_supporter_pro'));
+            }
+            if (curr === 'USD') rAnn = rAnn / 7.8;
+            var rMon = rAnn * 0.09;
+            var isSelected = (item.g === gender && item.r === rateType);
+            var styleClass = isSelected ? "border-2 border-[#E87722] bg-orange-100/80 shadow-md ring-2 ring-orange-200" : "border border-slate-100 bg-slate-50/50";
+            var starMark = isSelected ? '<span class="text-[#E87722] font-black text-sm mr-1.5">★</span>' : '';
+            rateTypeHtml += '<div class="p-3.5 rounded-2xl ' + styleClass + ' flex items-center justify-between transition-all mb-2.5"><div>' + starMark + '<b class="text-slate-800 text-sm">' + item.label + '</b></div><div class="text-right"><div class="text-orange-600 font-black text-sm">' + currSymbol + formatMoney(rAnn) + ' / 年</div><div class="text-slate-400 text-xs mt-0.5">月供 ' + currSymbol + formatMoney(rMon) + '</div></div></div>';
+        });
+        if (document.getElementById('rateTypeBreakdownList')) {
+            document.getElementById('rateTypeBreakdownList').innerHTML = rateTypeHtml;
+        }
+    } else {
+        if (payTermCompSec) payTermCompSec.style.display = 'none';
+        if (rateTypeCompSec) rateTypeCompSec.style.display = 'none';
+    }
 }
 
         // 9 大官方車險 Google Drive 檔案 ID
@@ -2086,17 +2124,14 @@ function calcLifePromisePremium(age, gender, isSmoker, sumInsured) {
                         var title = c[1] ? String(c[1].v) : ''; 
                         var desc = c[2] ? String(c[2].v) : ''; 
                         var linkUrl = c[3] ? String(c[3].f || c[3].v || '').replace(/^[\[\s]+/, '').trim() : '';
-                        var badge = c[4] ? String(c[4].v) : '官方正本';
-                       if (category.indexOf('promo') !== -1) promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-else if (category.indexOf('brochure') !== -1) brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-else if (category.indexOf('script') !== -1) scriptItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
-                    }
-                });
-                if (promoItems.length > 0) renderDynamicPromo(promoItems);
-                if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
-                //if (scriptItems.length > 0) renderDynamicScripts(scriptItems);
-            }).catch(function(err) { console.log('使用預設數據載入中。', err); });
-        }
+                        
+var badge = c[4] ? String(c[4].v) : '官方正本';
+        if (category.indexOf('promo') !== -1) promoItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+        else if (category.indexOf('brochure') !== -1) brochureItems.push({ title: title, desc: desc, url: linkUrl, badge: badge });
+    }
+});
+if (promoItems.length > 0) renderDynamicPromo(promoItems);
+if (brochureItems.length > 0) renderDynamicBrochures(brochureItems);
 
         function renderDynamicPromo(items) {
             var container = document.getElementById('fwdPromoContainer'); 
