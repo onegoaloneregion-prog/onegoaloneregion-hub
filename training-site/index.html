@@ -257,14 +257,29 @@
 
                <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
    
- <!-- 手冊導覽下拉選單 (單行完整顯示 · 緊湊無多餘留白) -->
-        <div class="relative py-1 shrink-0 inline-flex items-center">
-          <select onchange="handleManualNavSelect(this)" class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 appearance-none tracking-normal whitespace-nowrap w-[98px]">
-            <option value="" disabled selected>手冊導覽 ▼</option>
-            <option value="intro" class="text-slate-800 bg-white">🏢 公司簡介</option>
-            <option value="promo" class="text-slate-800 bg-white">🚀 晉升制度 (2026 導航)</option>
-          </select>
-        </div>
+<!-- 手冊導覽 (嚴格登入攔截 · 點選即跳頁 · 文字永遠不變) -->
+<div class="relative py-1 shrink-0 inline-flex items-center" id="manualNavWrapper">
+  <button type="button" 
+          onclick="handleManualNavClick(event)" 
+          class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 inline-flex items-center gap-1 tracking-normal whitespace-nowrap">
+    <span>手冊導覽</span>
+    <span class="text-[10px] opacity-70">▼</span>
+  </button>
+
+  <!-- 下拉選單彈出框 (改為固定層級與明確 display，防止被導覽列 overflow 裁切) -->
+  <div id="manualDropdownMenu" style="display: none;" class="absolute left-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl p-1.5 z-[999999] text-xs sm:text-sm space-y-1">
+    <button type="button" 
+            onclick="triggerManualAction('company')" 
+            class="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
+      <span>🏢</span> 公司簡介
+    </button>
+    <button type="button" 
+            onclick="triggerManualAction('promotion')" 
+            class="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
+      <span>🚀</span> 晉升制度 (2026 導航)
+    </button>
+  </div>
+</div>
                    
         <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1 shrink-0">
           <span>10Life</span>
@@ -774,6 +789,46 @@
         </div>
     </div>
 
+    <!-- PAGE: 公司簡介 (結構同一般保險，支援返回主頁) -->
+  <div id="page-company" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
+    <div class="flex items-center justify-between">
+      <button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-500 hover:border-orange-200 transition font-bold text-xs sm:text-sm cursor-pointer shadow-xs">
+        <span>←</span> 返回主頁
+      </button>
+      <span class="text-xs font-bold text-slate-400">OGOR 團隊內部專區</span>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-[#E87722] text-xs font-bold">
+          <span>🏢</span> ONE GOAL ONE REGION
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">公司簡介與核心價值</h1>
+        <p class="text-xs sm:text-sm text-slate-500">秉持專業、透明與客觀數據，為夥伴與客戶提供頂尖的成長平台與全面保障。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm sm:text-base">
+            <span class="text-orange-500 font-black">●</span> 我們的願景
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            成為最具專業影響力與凝聚力的頂尖團隊，以客觀數據與專業規劃為本，為每一位夥伴與客戶創造長期深遠價值。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm sm:text-base">
+            <span class="text-orange-500 font-black">●</span> 互助共享文化
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            團隊開放互助、經驗無私傳承。一人有難百人支援，結合現代數位工具與系統化培訓，實現個人成長與區域共同目標。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+    
     <!-- PAGE 5: 一般保險主頁 -->
     <div id="page-gi" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
@@ -2640,36 +2695,78 @@ window.onload = function() {
     makeElementDraggable(aiHeader, aiContainer);
     makeElementDraggable(aiTriggerBtn, aiContainer);
 };
-        // 手冊導覽下拉點擊開關
-function toggleManualDropdown(e) {
-  if (e) e.stopPropagation();
+// ==========================================
+// 主頁面手冊導覽核心控制邏輯
+// ==========================================
+
+// 1. 點擊「手冊導覽」按鈕
+function handleManualNavClick(e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  // 取得目前使用者登入狀態
+  var user = null;
+  if (typeof getCurrentUser === 'function') {
+    user = getCurrentUser();
+  } else {
+    var raw = sessionStorage.getItem('ogor_current_user');
+    user = raw ? JSON.parse(raw) : null;
+  }
+  
   var menu = document.getElementById('manualDropdownMenu');
+
+  // 未登入：強制關閉選單並彈出登入/鎖定提示
+  if (!user) {
+    if (menu) menu.style.display = 'none';
+    
+    var descEl = document.getElementById('lockModalDesc');
+    if (descEl) descEl.innerText = '登入後即可查閱【團隊手冊】內容';
+    if (typeof openLockModal === 'function') {
+      openLockModal();
+    } else if (typeof openAuthModal === 'function') {
+      openAuthModal('login');
+    } else {
+      alert('🔒 請先登入系統以查閱團隊手冊內容！');
+    }
+    return false;
+  }
+
+  // 已登入：切換顯示/隱藏
   if (menu) {
-    menu.classList.toggle('hidden');
+    if (menu.style.display === 'none' || menu.style.display === '') {
+      menu.style.display = 'block';
+    } else {
+      menu.style.display = 'none';
+    }
   }
 }
 
-// 點擊頁面其他地方自動收起下拉
-document.addEventListener('click', function() {
+// 2. 點選分頁執行跳轉
+function triggerManualAction(action) {
   var menu = document.getElementById('manualDropdownMenu');
-  if (menu && !menu.classList.contains('hidden')) {
-    menu.classList.add('hidden');
+  if (menu) menu.style.display = 'none';
+
+  if (action === 'company') {
+    if (typeof switchPage === 'function') {
+      switchPage('page-company');
+    }
+  } else if (action === 'promotion') {
+    if (typeof switchPage === 'function') {
+      switchPage('page-promotion-system');
+    }
+  }
+}
+
+// 3. 點擊頁面其他空白處自動收起選單
+document.addEventListener('click', function(e) {
+  var wrapper = document.getElementById('manualNavWrapper');
+  var menu = document.getElementById('manualDropdownMenu');
+  if (wrapper && menu && !wrapper.contains(e.target)) {
+    menu.style.display = 'none';
   }
 });
-
-// 跳轉到晉升制度系統
-function goToPromotionSystem() {
-  var menu = document.getElementById('manualDropdownMenu');
-  if (menu) menu.classList.add('hidden');
-  
-  if (typeof switchPage === 'function') {
-    switchPage('page-promotion-system');
-  } else {
-    document.querySelectorAll('.page-view').forEach(function(el) { el.classList.add('hidden'); });
-    var target = document.getElementById('page-promotion-system');
-    if (target) target.classList.remove('hidden');
-  }
-}
 </script>
     <!-- PAGE: 晉升制度全能導航系統分頁 -->
 <div id="page-promotion-system" class="page-view hidden py-4 px-2 sm:px-4 max-w-7xl mx-auto space-y-4">
@@ -3212,6 +3309,100 @@ function goToPromotionSystem() {
         };
       }
     }).mount('#app');
+// ==========================================
+// 手冊導覽：嚴格登入驗證、跳頁與自訂選單控制
+// ==========================================
+
+// 檢查登入狀態
+function isUserLoggedInStatus() {
+  if (typeof currentUser !== 'undefined' && currentUser) return true;
+  if (typeof isUserLoggedIn === 'function' && isUserLoggedIn()) return true;
+  
+  var keys = ['currentUser', 'user_token', 'token', 'ogor_user', 'user', 'sb-access-token', 'firebase:authUser'];
+  for (var i = 0; i < keys.length; i++) {
+    var val = localStorage.getItem(keys[i]);
+    if (val && val !== 'null' && val !== 'undefined') return true;
+  }
+  
+  var authBtn = document.querySelector('button[onclick*="openAuthModal"], .auth-btn');
+  if (authBtn && !authBtn.innerText.includes('登入') && !authBtn.innerText.includes('註冊')) {
+    return true;
+  }
+
+  return false;
+}
+
+// 點擊「手冊導覽」按鈕：未登入即時彈窗攔截，絕不展開
+function handleManualNavClick(e) {
+  if (e) {
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+  }
+
+  if (!isUserLoggedInStatus()) {
+    var menu = document.getElementById('manualDropdownMenu');
+    if (menu) menu.classList.add('hidden');
+
+    if (typeof openAuthModal === 'function') {
+      openAuthModal('login');
+    } else {
+      alert('🔒 請先登入系統以查閱團隊手冊內容！');
+    }
+    return false;
+  }
+
+  var m = document.getElementById('manualDropdownMenu');
+  if (m) {
+    m.classList.toggle('hidden');
+  }
+}
+
+// 點選選項直接切換分頁
+function triggerManualAction(action) {
+  var m = document.getElementById('manualDropdownMenu');
+  if (m) m.classList.add('hidden');
+
+  function showTargetPage(pageId) {
+    var allPages = document.querySelectorAll('.page-view, [id^="page-"]');
+    allPages.forEach(function(el) {
+      el.classList.add('hidden');
+    });
+    var targetEl = document.getElementById(pageId);
+    if (targetEl) {
+      targetEl.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  if (action === 'company') {
+    if (typeof switchPage === 'function') {
+      switchPage('page-company');
+    } else if (typeof checkAndSwitchPage === 'function') {
+      checkAndSwitchPage('page-company', '公司簡介');
+    }
+    showTargetPage('page-company');
+
+  } else if (action === 'promotion') {
+    if (typeof goToPromotionSystem === 'function') {
+      goToPromotionSystem();
+    } else if (typeof switchPage === 'function') {
+      switchPage('page-promotion-a');
+    } else if (typeof checkAndSwitchPage === 'function') {
+      checkAndSwitchPage('page-promotion-a', '晉升制度 (2026 導航)');
+    } else {
+      showTargetPage('page-promotion-a');
+    }
+  }
+}
+
+// 點擊頁面其他空白處自動關閉選單
+document.addEventListener('click', function(e) {
+  var wrapper = document.getElementById('manualNavWrapper');
+  var menu = document.getElementById('manualDropdownMenu');
+  if (wrapper && menu && !wrapper.contains(e.target)) {
+    menu.classList.add('hidden');
+  }
+});
   </script>
 </body>
 </html>"></iframe>
