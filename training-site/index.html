@@ -242,7 +242,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased relative min-h-screen">
 
-    <!-- Top Navigation -->
+  <!-- Top Navigation -->
     <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 shrink-0 cursor-pointer mr-6" onclick="switchPage('page-home')">
@@ -250,56 +250,55 @@
                 <div><span class="text-base sm:text-lg font-black tracking-wider text-slate-900 block leading-none whitespace-nowrap">ONE GOAL ONE REGION</span></div>
             </div>
 
-           <div class="nav-scroll-container flex items-center space-x-3 sm:space-x-5 overflow-x-auto shrink max-w-[60vw] sm:max-w-none py-1">
-                <button type="button" onclick="switchPage('page-calc')" class="shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap cursor-pointer">
+            <div class="nav-scroll-container flex items-center space-x-3 sm:space-x-5 overflow-x-auto shrink max-w-[60vw] sm:max-w-none py-1">
+                <button type="button" onclick="switchPage('page-calc')" class="shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-orange-200 bg-orange-50/80 text-orange-600 hover:bg-orange-100 font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer">
                     <span>🧮 保費計算器</span>
                 </button>
 
-               <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
-   
-<!-- 手冊導覽 (嚴格登入攔截 · 點選即跳頁 · 文字永遠不變) -->
-<div class="relative py-1 shrink-0 inline-flex items-center" id="manualNavWrapper">
-  <button type="button" 
-          onclick="handleManualNavClick(event)" 
-          class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 inline-flex items-center gap-1 tracking-normal whitespace-nowrap">
-    <span>手冊導覽</span>
-    <span class="text-[10px] opacity-70">▼</span>
-  </button>
+                <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
+                    <!-- 手冊導覽 (直接點擊彈出 · 擺脫 overflow-y 裁切 · 100% 點擊即出) -->
+                    <div class="py-1 shrink-0 inline-flex items-center" id="manualNavWrapper">
+                        <button type="button" 
+                                id="manualNavTriggerBtn"
+                                onclick="handleManualNavClick(event)" 
+                                class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 inline-flex items-center gap-1 tracking-normal whitespace-nowrap">
+                            <span>手冊導覽</span>
+                            <span class="text-[10px] opacity-70">▼</span>
+                        </button>
 
-  <!-- 下拉選單彈出框 (改為固定層級與明確 display，防止被導覽列 overflow 裁切) -->
-  <div id="manualDropdownMenu" style="display: none;" class="absolute left-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl p-1.5 z-[999999] text-xs sm:text-sm space-y-1">
-    <button type="button" 
-            onclick="triggerManualAction('company')" 
-            class="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
-      <span>🏢</span> 公司簡介
-    </button>
-    <button type="button" 
-            onclick="triggerManualAction('promotion')" 
-            class="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
-      <span>🚀</span> 晉升制度 (2026 導航)
-    </button>
-  </div>
-</div>
-                   
-        <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1 shrink-0">
-          <span>10Life</span>
-          <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-black">客觀數據</span>
-        </button>
+                        <!-- 浮動下拉卡片 (使用 fixed 脫離頂部橫條的 overflow 遮擋) -->
+                        <div id="manualDropdownMenu" style="display: none;" class="fixed bg-white border border-slate-200 rounded-2xl shadow-2xl p-2 z-[9999999] w-48 text-xs sm:text-sm space-y-1">
+                            <button type="button" 
+                                    onclick="triggerManualAction('company')" 
+                                    class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
+                                <span>🏢</span> 公司簡介
+                            </button>
+                            <button type="button" 
+                                    onclick="triggerManualAction('promotion')" 
+                                    class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
+                                <span>🚀</span> 晉升制度 (2026 導航)
+                            </button>
+                        </div>
+                    </div>
 
-        <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black shrink-0">一般保險</button>
-        <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black shrink-0">FWD專區</button>
-        <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer shrink-0">佣金計算機</button>
-        <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black shrink-0">🎮 知識遊戲</button>
-      </div>
+                    <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1 shrink-0">
+                        <span>10Life</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-black">客觀數據</span>
+                    </button>
 
-      <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
-        <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
-        <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer"></button>
-      </div>
-    </div>
-  </div>
-</nav>
+                    <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black shrink-0">一般保險</button>
+                    <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black shrink-0">FWD專區</button>
+                    <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer shrink-0">佣金計算機</button>
+                    <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black shrink-0">🎮 知識遊戲</button>
+                </div>
 
+                <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
+                    <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
+                    <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer"></button>
+                </div>
+            </div>
+        </div>
+    </nav>
     <!-- PAGE 1: 預設首頁 -->
     <div id="page-home" class="page-view space-y-12 pb-16">
         <section id="welcome" class="pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -2696,33 +2695,33 @@ window.onload = function() {
     makeElementDraggable(aiTriggerBtn, aiContainer);
 };
 // ==========================================
-// 主頁面手冊導覽核心控制邏輯
+// 主頁面手冊導覽核心控制邏輯 (Fixed 智慧定位版)
 // ==========================================
 
-// 1. 點擊「手冊導覽」按鈕
+function checkTeamHandbookLogin() {
+  if (typeof getCurrentUser === 'function' && getCurrentUser()) return true;
+  var sessionUser = sessionStorage.getItem('ogor_current_user');
+  if (sessionUser && sessionUser !== 'null') return true;
+  return false;
+}
+
 function handleManualNavClick(e) {
   if (e) {
-    e.stopPropagation();
-    e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
   }
 
-  // 取得目前使用者登入狀態
-  var user = null;
-  if (typeof getCurrentUser === 'function') {
-    user = getCurrentUser();
-  } else {
-    var raw = sessionStorage.getItem('ogor_current_user');
-    user = raw ? JSON.parse(raw) : null;
-  }
-  
+  var isLogged = checkTeamHandbookLogin();
   var menu = document.getElementById('manualDropdownMenu');
+  var btn = document.getElementById('manualNavTriggerBtn') || e.currentTarget;
 
-  // 未登入：強制關閉選單並彈出登入/鎖定提示
-  if (!user) {
+  // 1. 未登入：強制攔截並彈出登入框
+  if (!isLogged) {
     if (menu) menu.style.display = 'none';
-    
+
     var descEl = document.getElementById('lockModalDesc');
     if (descEl) descEl.innerText = '登入後即可查閱【團隊手冊】內容';
+
     if (typeof openLockModal === 'function') {
       openLockModal();
     } else if (typeof openAuthModal === 'function') {
@@ -2733,9 +2732,12 @@ function handleManualNavClick(e) {
     return false;
   }
 
-  // 已登入：切換顯示/隱藏
+  // 2. 已登入：計算按鈕位置並顯示選單（徹底擺脫 nav-scroll-container 的裁切）
   if (menu) {
     if (menu.style.display === 'none' || menu.style.display === '') {
+      var rect = btn.getBoundingClientRect();
+      menu.style.top = (rect.bottom + 8) + 'px';
+      menu.style.left = rect.left + 'px';
       menu.style.display = 'block';
     } else {
       menu.style.display = 'none';
@@ -2743,10 +2745,14 @@ function handleManualNavClick(e) {
   }
 }
 
-// 2. 點選分頁執行跳轉
 function triggerManualAction(action) {
   var menu = document.getElementById('manualDropdownMenu');
   if (menu) menu.style.display = 'none';
+
+  if (!checkTeamHandbookLogin()) {
+    if (typeof openLockModal === 'function') openLockModal();
+    return;
+  }
 
   if (action === 'company') {
     if (typeof switchPage === 'function') {
@@ -2759,14 +2765,22 @@ function triggerManualAction(action) {
   }
 }
 
-// 3. 點擊頁面其他空白處自動收起選單
+// 點擊空白處關閉選單
 document.addEventListener('click', function(e) {
   var wrapper = document.getElementById('manualNavWrapper');
   var menu = document.getElementById('manualDropdownMenu');
-  if (wrapper && menu && !wrapper.contains(e.target)) {
-    menu.style.display = 'none';
+  if (menu && menu.style.display === 'block') {
+    if (!menu.contains(e.target) && (!wrapper || !wrapper.contains(e.target))) {
+      menu.style.display = 'none';
+    }
   }
 });
+
+// 當滾動頁面時也關閉選單，保持介面俐落
+window.addEventListener('scroll', function() {
+  var menu = document.getElementById('manualDropdownMenu');
+  if (menu) menu.style.display = 'none';
+}, { passive: true });
 </script>
     <!-- PAGE: 晉升制度全能導航系統分頁 -->
 <div id="page-promotion-system" class="page-view hidden py-4 px-2 sm:px-4 max-w-7xl mx-auto space-y-4">
@@ -3308,101 +3322,7 @@ document.addEventListener('click', function(e) {
           isAllPromotionMet, selectedCompRank, rankList, currentRankComp, rankSim, simulatedRankMonthlyTotal, fullProductList
         };
       }
-    }).mount('#app');
-// ==========================================
-// 手冊導覽：嚴格登入驗證、跳頁與自訂選單控制
-// ==========================================
-
-// 檢查登入狀態
-function isUserLoggedInStatus() {
-  if (typeof currentUser !== 'undefined' && currentUser) return true;
-  if (typeof isUserLoggedIn === 'function' && isUserLoggedIn()) return true;
-  
-  var keys = ['currentUser', 'user_token', 'token', 'ogor_user', 'user', 'sb-access-token', 'firebase:authUser'];
-  for (var i = 0; i < keys.length; i++) {
-    var val = localStorage.getItem(keys[i]);
-    if (val && val !== 'null' && val !== 'undefined') return true;
-  }
-  
-  var authBtn = document.querySelector('button[onclick*="openAuthModal"], .auth-btn');
-  if (authBtn && !authBtn.innerText.includes('登入') && !authBtn.innerText.includes('註冊')) {
-    return true;
-  }
-
-  return false;
-}
-
-// 點擊「手冊導覽」按鈕：未登入即時彈窗攔截，絕不展開
-function handleManualNavClick(e) {
-  if (e) {
-    if (e.stopPropagation) e.stopPropagation();
-    if (e.preventDefault) e.preventDefault();
-  }
-
-  if (!isUserLoggedInStatus()) {
-    var menu = document.getElementById('manualDropdownMenu');
-    if (menu) menu.classList.add('hidden');
-
-    if (typeof openAuthModal === 'function') {
-      openAuthModal('login');
-    } else {
-      alert('🔒 請先登入系統以查閱團隊手冊內容！');
-    }
-    return false;
-  }
-
-  var m = document.getElementById('manualDropdownMenu');
-  if (m) {
-    m.classList.toggle('hidden');
-  }
-}
-
-// 點選選項直接切換分頁
-function triggerManualAction(action) {
-  var m = document.getElementById('manualDropdownMenu');
-  if (m) m.classList.add('hidden');
-
-  function showTargetPage(pageId) {
-    var allPages = document.querySelectorAll('.page-view, [id^="page-"]');
-    allPages.forEach(function(el) {
-      el.classList.add('hidden');
-    });
-    var targetEl = document.getElementById(pageId);
-    if (targetEl) {
-      targetEl.classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  if (action === 'company') {
-    if (typeof switchPage === 'function') {
-      switchPage('page-company');
-    } else if (typeof checkAndSwitchPage === 'function') {
-      checkAndSwitchPage('page-company', '公司簡介');
-    }
-    showTargetPage('page-company');
-
-  } else if (action === 'promotion') {
-    if (typeof goToPromotionSystem === 'function') {
-      goToPromotionSystem();
-    } else if (typeof switchPage === 'function') {
-      switchPage('page-promotion-a');
-    } else if (typeof checkAndSwitchPage === 'function') {
-      checkAndSwitchPage('page-promotion-a', '晉升制度 (2026 導航)');
-    } else {
-      showTargetPage('page-promotion-a');
-    }
-  }
-}
-
-// 點擊頁面其他空白處自動關閉選單
-document.addEventListener('click', function(e) {
-  var wrapper = document.getElementById('manualNavWrapper');
-  var menu = document.getElementById('manualDropdownMenu');
-  if (wrapper && menu && !wrapper.contains(e.target)) {
-    menu.classList.add('hidden');
-  }
-});
+   }).mount('#app');
   </script>
 </body>
 </html>"></iframe>
