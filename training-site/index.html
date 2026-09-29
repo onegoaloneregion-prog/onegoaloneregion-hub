@@ -255,48 +255,35 @@
                     <span>🧮 保費計算器</span>
                 </button>
 
-                <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
-                    <!-- 手冊導覽下拉選單（支援電腦懸浮 Hover / 手機點擊展開，不誤跳首頁） -->
-  <div class="relative py-2 shrink-0 inline-block text-left">
-  <button type="button" 
-          onclick="var m=document.getElementById('manualMenuBox'); m.style.display=(m.style.display==='block'?'none':'block'); if(window.event) window.event.stopPropagation();" 
-          class="text-orange-500 hover:opacity-80 cursor-pointer inline-flex items-center gap-1 font-bold">
-    <span>手冊導覽</span>
-    <span class="text-[10px] opacity-70">▼</span>
-  </button>
-  
-  <div id="manualMenuBox" 
-       style="display: none;" 
-       class="absolute left-0 top-full mt-1 w-56 bg-white border border-slate-200 rounded-2xl shadow-2xl p-2 z-[9999] text-xs sm:text-sm space-y-1">
-    <button type="button" 
-            onclick="document.getElementById('manualMenuBox').style.display='none'; alert('🏢 公司簡介內容整理中，敬請期待！');" 
-            class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold">
-      <span>🏢</span> 公司簡介
-    </button>
-    <button type="button" 
-            onclick="document.getElementById('manualMenuBox').style.display='none'; goToPromotionSystem();" 
-            class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold">
-      <span>🚀</span> 晉升制度 (2026 導航)
-    </button>
-  </div>
-</div>
-                    <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1">
-    <span>10Life</span>
-    <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-black">客觀數據</span>
-</button>
-                    <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black">一般保險</button>
-                    <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black">FWD專區</button>
-                    <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer">佣金計算機</button>
-                    <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black">🎮 知識遊戲</button>
-                </div>
-
-                <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
-                    <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
-                    <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer">🔒 登入 / 註冊</button>
-                </div>
-            </div>
+               <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
+   
+ <!-- 手冊導覽下拉選單 (單行完整顯示 · 緊湊無多餘留白) -->
+        <div class="relative py-1 shrink-0 inline-flex items-center">
+          <select onchange="handleManualNavSelect(this)" class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 appearance-none tracking-normal whitespace-nowrap w-[98px]">
+            <option value="" disabled selected>手冊導覽 ▼</option>
+            <option value="intro" class="text-slate-800 bg-white">🏢 公司簡介</option>
+            <option value="promo" class="text-slate-800 bg-white">🚀 晉升制度 (2026 導航)</option>
+          </select>
         </div>
-    </nav>
+                   
+        <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1 shrink-0">
+          <span>10Life</span>
+          <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-black">客觀數據</span>
+        </button>
+
+        <button type="button" onclick="checkAndSwitchPage('page-gi', '一般保險')" class="text-purple-500 hover:opacity-80 cursor-pointer font-black shrink-0">一般保險</button>
+        <button type="button" onclick="checkAndSwitchPage('page-fwd', 'FWD專區')" class="text-purple-600 hover:opacity-80 cursor-pointer font-black shrink-0">FWD專區</button>
+        <button type="button" onclick="checkAndSwitchPage('page-commission', '佣金計算機')" class="text-[#E87722] hover:opacity-80 cursor-pointer shrink-0">佣金計算機</button>
+        <button type="button" onclick="checkAndSwitchPage('page-game', '產品知識遊戲區')" class="text-indigo-600 hover:opacity-80 cursor-pointer font-black shrink-0">🎮 知識遊戲</button>
+      </div>
+
+      <div id="authButtons" class="shrink-0 pl-1 flex items-center gap-2">
+        <span id="currentUserBadge" class="hidden text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
+        <button type="button" id="authBtnAction" onclick="openAuthModal('login')" class="text-xs font-bold px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-sm flex items-center gap-1 whitespace-nowrap cursor-pointer"></button>
+      </div>
+    </div>
+  </div>
+</nav>
 
     <!-- PAGE 1: 預設首頁 -->
     <div id="page-home" class="page-view space-y-12 pb-16">
@@ -1685,7 +1672,7 @@
 
         // =========================================================================
         // 4. 易衛您 (vCANsurance) - 標準保障級別 官方標準保費表 (港元 HKD)
-        // 來源：vCANsurance Medical Plan Standard Schedule (2026.02.25 生效)[cite: 1]
+        // 來源：vCANsurance Medical Plan Standard Schedule (2026.02.25 生效)
         // =========================================================================
         var vcansuranceOfficialData = {
             male: {
@@ -1710,18 +1697,19 @@
             }
         };
 
-        function calcVCansuranceFullPremium(age, gender) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            var table = (gender === 'female') ? vcansuranceOfficialData.female : vcansuranceOfficialData.male;
-            if (table[age] !== undefined) return table[age];
-            var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
-            var lower = keys[0], upper = keys[keys.length-1];
-            for (var i = 0; i < keys.length; i++) {
-                if (keys[i] <= age) lower = keys[i];
-                if (keys[i] >= age) { upper = keys[i]; break; }
-            }
-            return table[lower] + ((age - lower) / (upper - lower)) * (table[upper] - table[lower]);
-        }
+      function calcVcansuranceFullPremium(age, gender) {
+  age = Math.min(80, Math.max(0, parseInt(age) || 0));
+  var isFemale = (gender === 'female' || gender === '女性' || gender === 'F');
+  var table = isFemale ? vcansuranceOfficialData.female : vcansuranceOfficialData.male;
+  if (table[age] !== undefined) return table[age];
+  var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
+  var lower = keys[0], upper = keys[keys.length-1];
+  for (var i = 0; i < keys.length; i++) {
+    if (keys[i] <= age) lower = keys[i];
+    if (keys[i] >= age) { upper = keys[i]; break; }
+  }
+  return table[lower] + ((age - lower) / (upper - lower)) * (table[upper] - table[lower]);
+}
 
         function toggleHospitalCashSelect() { 
             var chk = document.getElementById('riderHospitalCash'); 
@@ -2120,8 +2108,8 @@ function runPremiumQuery() {
     var isCrisis = (p.indexOf('crisis') !== -1 || pName.indexOf('應援') !== -1);
     var isPrime = (p.indexOf('prime') !== -1 || pName.indexOf('尊衛您') !== -1 || pName.indexOf('寰譽') !== -1);
     var isFamily = (p.indexOf('family') !== -1 || pName.indexOf('醫家保') !== -1);
-    var isCare = (p.indexOf('care') !== -1 || p.indexOf('hvs5') !== -1 || pName.indexOf('易衛您') !== -1);
-
+   var isCare = (p.indexOf('care') !== -1 || p.indexOf('hvs5') !== -1);
+var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pName.indexOf('易衛您') !== -1);
     if (isMyTerm) {
         var isSmk = (rateType === 'standard');
         annual = calcMyTermPremium(age, gender, payTerm, isSmk, baseHkdSum);
@@ -2152,14 +2140,16 @@ function runPremiumQuery() {
     } else if (isFamily) {
         if (typeof calcVFamilyFullPremium === 'function') annual = calcVFamilyFullPremium(age, gender);
         if (curr === 'USD') annual = annual / 7.8;
-    } else if (isCare) {
-        annual = getVCarePremium(age, gender);
-        if (curr === 'USD') annual = annual / 7.8;
-    }
-
+ } else if (isVcan) {
+    annual = calcVcansuranceFullPremium(age, gender);
+    if (curr === 'USD') annual = annual / 7.8;
+} else if (isCare) {
+    annual = getVCarePremium(age, gender);
+    if (curr === 'USD') annual = annual / 7.8;
+}
     // 附加保障計算 (住院現金保障附約 標準 每日 HKD 800)
     var hospCashCb = document.getElementById('hospCashCheckbox');
-    if (hospCashCb && hospCashCb.checked && (isPrime || isFamily || isCare)) {
+   if (hospCashCb && hospCashCb.checked && (isPrime || isFamily || isCare || isVcan)) {
         var riderPrem = getHospitalCashRiderPrem(age, gender);
         if (curr === 'USD') riderPrem = riderPrem / 7.8;
         annual += riderPrem;
