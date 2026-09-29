@@ -2782,19 +2782,19 @@ window.addEventListener('scroll', function() {
   if (menu) menu.style.display = 'none';
 }, { passive: true });
 </script>
-    <!-- PAGE: 晉升制度全能導航系統分頁 -->
-<div id="page-promotion-system" class="page-view hidden py-4 px-2 sm:px-4 max-w-7xl mx-auto space-y-4">
-  <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-    <div class="flex items-center gap-2">
-      <span class="text-xl">🚀</span>
-      <span class="font-extrabold text-slate-900 text-sm">富衛澳門 2026 新人收入與晉升全能導航系統</span>
-    </div>
-    <button type="button" onclick="switchPage('page-calc')" class="text-xs bg-[#E87722] hover:opacity-90 text-white font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-sm">
-      <span>🧮</span> 返回保費計算器
-    </button>
-  </div>
-  <div class="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200" style="height: 85vh;">
-    <iframe id="promoSystemFrame" class="w-full h-full border-0" srcdoc="<!DOCTYPE html>
+<!-- PAGE: 晉升制度全能導航系統分頁 -->
+    <div id="page-promotion-system" class="page-view hidden py-4 px-2 sm:px-4 max-w-7xl mx-auto space-y-4">
+        <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">🚀</span>
+                <span class="font-extrabold text-slate-900 text-sm">富衛澳門 2026 新人收入與晉升全能導航系統</span>
+            </div>
+            <button type="button" onclick="switchPage('page-home')" class="text-xs bg-[#E87722] hover:opacity-90 text-white font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-sm cursor-pointer">
+                <span>←</span> 返回主頁
+            </button>
+        </div>
+        <div class="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200" style="height: 85vh;">
+            <iframe id="promoSystemFrame" class="w-full h-full border-0" srcdoc="<!DOCTYPE html>
 <html lang='zh-HK'>
 <head>
   <meta charset='UTF-8'>
@@ -3249,24 +3249,112 @@ window.addEventListener('scroll', function() {
       setup() {
         const currentTab = ref('calculator');
         const tabs = [
-          { id: 'calculator', name: '收入試算', icon: '💰' },
-          { id: 'promotion', name: '晉升藍圖', icon: '🚀' },
-          { id: 'rankComp', name: '職級薪酬', icon: '🌟' },
-          { id: 'assessment', name: '合資格評核', icon: '🛡️' },
-          { id: 'products', name: '佣金總表', icon: '📑' },
-          { id: 'incentives', name: '榮譽表彰', icon: '🏆' }
+          { id: 'calculator', name: '收入試算 (所有計劃/年期)', icon: '💰' },
+          { id: 'promotion', name: '晉升藍圖 (ASM➔RD 75折)', icon: '🚀' },
+          { id: 'rankComp', name: ' 各職級薪酬與管理收益全景', icon: '🌟' },
+          { id: 'assessment', name: '合資格評核 (VA)', icon: '🛡️' },
+          { id: 'products', name: '熱門產品佣金總表', icon: '📑' },
+          { id: 'incentives', name: ' 2026 榮譽與獎勵表彰', icon: '🏆' }
         ];
         const userRank = ref('WMC');
-        const userRankName = computed(() => userRank.value);
+        const userRankName = computed(() => {
+          const names = {
+            'WMC': '理財顧問 (新人 WMC)',
+            'ASM': '分組副經理 (ASM)',
+            'UM': '分組經理 (UM)',
+            'BM': '分行經理 (BM)',
+            'AM': '營業經理 (AM)'
+          };
+          return names[userRank.value] || '理財顧問';
+        });
         const formatNumber = (val) => Math.round(Number(val) || 0).toLocaleString('en-US');
         const productCatalog = reactive([
-          { id: 'crisis', name: '危疾應援保 / 升級版', category: '個人危疾', badgeColor: 'bg-rose-100 text-rose-800', desc: '多重危疾保障', selectedTerm: '20年繳', terms: [{ label: '10年繳', fyc: 30.0 }, { label: '20年繳', fyc: 50.0 }] },
-          { id: 'maxfocus2', name: '盈聚·天下II 保險計劃', category: '終身壽險/儲蓄', badgeColor: 'bg-amber-100 text-amber-800', desc: '財富傳承', selectedTerm: '5年繳', terms: [{ label: '2年繳', fyc: 7.0 }, { label: '5年繳', fyc: 27.5 }] }
+          {
+            id: 'crisis',
+            name: '危疾應援保 / 升級版',
+            category: '個人危疾',
+            badgeColor: 'bg-rose-100 text-rose-800',
+            desc: '全方位多重重疾保障，支援 10/15/20/25/30 年供款',
+            selectedTerm: '20年繳',
+            terms: [
+              { label: '10年繳', fyc: 30.0 },
+              { label: '15年繳', fyc: 40.0 },
+              { label: '20年繳', fyc: 50.0 },
+              { label: '25年繳', fyc: 52.0 },
+              { label: '30年繳', fyc: 53.0 }
+            ]
+          },
+          {
+            id: 'maxfocus2',
+            name: '盈聚·天下II 保險計劃',
+            category: '終身壽險/儲蓄',
+            badgeColor: 'bg-amber-100 text-amber-800',
+            desc: '旗艦財富傳承，支援 躉繳/2/3/5/10 年繳',
+            selectedTerm: '5年繳',
+            terms: [
+              { label: '躉繳', fyc: 3.0 },
+              { label: '2年繳', fyc: 7.0 },
+              { label: '3年繳', fyc: 11.0 },
+              { label: '5年繳', fyc: 27.5 },
+              { label: '10年繳', fyc: 35.0 }
+            ]
+          },
+          {
+            id: 'vfamily',
+            name: '醫家保醫療計劃 (0-74歲)',
+            category: '個人醫療',
+            badgeColor: 'bg-emerald-100 text-emerald-800',
+            desc: '靈活醫療守護與子女家庭加添選項',
+            selectedTerm: '每年供款',
+            terms: [
+              { label: '每年供款', fyc: 27.0 }
+            ]
+          },
+          {
+            id: 'lifepromise',
+            name: '衛你所愛壽險計劃',
+            category: '終身壽險',
+            badgeColor: 'bg-blue-100 text-blue-800',
+            desc: '多元保障供款年期靈活配置',
+            selectedTerm: '20年繳',
+            terms: [
+              { label: '5年繳', fyc: 22.5 },
+              { label: '10年繳', fyc: 31.5 },
+              { label: '15年繳', fyc: 40.5 },
+              { label: '20年繳', fyc: 50.0 }
+            ]
+          },
+          {
+            id: 'vprime',
+            name: '尊衛您 (寰譽版) 醫療計劃',
+            category: '高端醫療',
+            badgeColor: 'bg-purple-100 text-purple-800',
+            desc: '尊貴醫療保障，終身保額無上限',
+            selectedTerm: '每年供款',
+            terms: [
+              { label: '每年供款', fyc: 25.0 }
+            ]
+          },
+          {
+            id: 'noble_term',
+            name: '承譽定期壽險',
+            category: '定期壽險',
+            badgeColor: 'bg-slate-100 text-slate-800',
+            desc: '純保障高槓桿定期人壽計劃',
+            selectedTerm: '20年期',
+            terms: [
+              { label: '10年期', fyc: 41.9 },
+              { label: '20年期', fyc: 41.9 }
+            ]
+          }
         ]);
         const selectedProduct = ref(productCatalog[0]);
         const selectProduct = (p) => selectedProduct.value = p;
         const setProductTerm = (p, t) => { p.selectedTerm = t.label; selectedProduct.value = p; };
-        const currentTermFyc = (p) => (p.terms.find(t => t.label === p.selectedTerm) || p.terms[0]).fyc;
+        const currentTermFyc = (p) => {
+          const match = p.terms.find(t => t.label === p.selectedTerm);
+          return match ? match.fyc : p.terms[0].fyc;
+        };
         const activeProductFyc = computed(() => currentTermFyc(selectedProduct.value));
         const inputAfyp = ref(80000);
         const policyCount = ref(3);
@@ -3279,54 +3367,77 @@ window.addEventListener('scroll', function() {
         const baseFyc = computed(() => totalAfyp.value * (activeProductFyc.value / 100));
         const totalSc = computed(() => baseFyc.value);
         const extraTenAmount = computed(() => hasExtraTenPercent.value ? baseFyc.value * 0.10 : 0);
-        const qsbRate = computed(() => totalSc.value >= 60000 ? 0.35 : 0.15);
+        const qsbRate = computed(() => {
+          if (personalPersistency.value < 85) return 0;
+          const sc = totalSc.value;
+          const scale = fldpEvaluationScale.value;
+          if (sc >= 60000 * scale) return 0.35;
+          if (sc >= 40500 * scale) return 0.25;
+          if (sc >= 27000 * scale) return 0.15;
+          return 0;
+        });
         const qsbBonusAmount = computed(() => baseFyc.value * qsbRate.value);
-        const estimatedYeb = computed(() => baseFyc.value * 0.10);
+        const estimatedYeb = computed(() => {
+          if (personalPersistency.value < 85) return 0;
+          const sc = totalSc.value;
+          let rate = 0;
+          if (sc >= 440000) rate = 0.30;
+          else if (sc >= 250000) rate = 0.26;
+          else if (sc >= 165000) rate = 0.22;
+          else if (sc >= 88000) rate = 0.10;
+          return baseFyc.value * rate;
+        });
         const grandTotalIncome = computed(() => baseFyc.value + extraTenAmount.value + (fldpNaa.value * 12) + qsbBonusAmount.value + estimatedYeb.value);
 
         const careerTrack = ref('team');
         const targetRank = ref('ASM');
         const teamRanks = [
-          { id: 'ASM', code: 'ASM', name: '分組副經理', summary: '6.6萬 SC (75折)', originalDesc: '原88k', reqSc: 66000, reqBranchSc: 0, reqTeamSc: 0, reqVa: 0 },
-          { id: 'UM', code: 'UM', name: '分組經理', summary: '9萬 SC + 1+1 VA (75折)', originalDesc: '原120k', reqSc: 90000, reqBranchSc: 0, reqTeamSc: 0, reqVa: 1 },
-          { id: 'BM', code: 'BM', name: '分行經理', summary: '30萬 SC (75折)', originalDesc: '原400k', reqSc: 90000, reqBranchSc: 300000, reqTeamSc: 0, reqVa: 2 }
+          { id: 'ASM', code: 'ASM', name: '分組副經理', summary: '6.6萬 SC (75折)', originalDesc: '原88k', reqSc: 66000, originalReqSc: 88000, reqBranchSc: 0, reqTeamSc: 0, reqVa: 0 },
+          { id: 'UM', code: 'UM', name: '分組經理', summary: '9萬 SC + 1+1 VA (75折)', originalDesc: '原120k', reqSc: 90000, originalReqSc: 120000, reqBranchSc: 0, reqTeamSc: 0, reqVa: 1 },
+          { id: 'BM', code: 'BM', name: '分行經理', summary: '30萬 SC (75折)', originalDesc: '原400k', reqSc: 90000, originalReqSc: 120000, reqBranchSc: 300000, originalBranchSc: 400000, reqTeamSc: 0, reqVa: 2 }
         ];
         const wmRanks = [{ id: 'WMD', code: 'WMD', name: '財富管理總監', summary: '480,000 SC' }];
-        const currentStats = reactive({ personalSc: 55000, branchSc: 220000, teamSc: 650000, vaCount: 1, teamVaCount: 4 });
+        const currentStats = reactive({ personalSc: 55000, branchSc: 220000, teamSc: 650000, vaCount: 1, teamVaCount: 4, vmCount: 1, tenureMonths: 8 });
         const activeRankObj = computed(() => teamRanks.find(r => r.id === targetRank.value) || teamRanks[0]);
         const checkPersonalSc = computed(() => ({ met: currentStats.personalSc >= activeRankObj.value.reqSc }));
         const checkBranchSc = computed(() => ({ met: currentStats.branchSc >= (activeRankObj.value.reqBranchSc || 0) }));
         const checkTeamSc = computed(() => ({ met: currentStats.teamSc >= (activeRankObj.value.reqTeamSc || 0) }));
         const checkVa = computed(() => ({ met: currentStats.vaCount >= (activeRankObj.value.reqVa || 0) }));
-        const isAllPromotionMet = computed(() => checkPersonalSc.value.met && checkBranchSc.value.met);
+        const isAllPromotionMet = computed(() => checkPersonalSc.value.met && checkBranchSc.value.met && checkTeamSc.value.met && checkVa.value.met);
 
         const selectedCompRank = ref('UM');
         const rankList = [
           { id: 'WMC', name: '理財顧問 (新人)', icon: '🌱' },
+          { id: 'ASM', name: '分組副經理', icon: '🥉' },
           { id: 'UM', name: '分組經理', icon: '🥈' },
-          { id: 'BM', name: '分行經理', icon: '🥇' }
+          { id: 'BM', name: '分行經理', icon: '🥇' },
+          { id: 'AM', name: '營業經理', icon: '👑' }
         ];
         const rankCompData = {
-          'UM': { code: 'UM', name: '分組經理 (UM)', highlight: '享有下線 Override', annualPotential: '年入約 MOP $60萬+', benefits: [{ title: '下線 Override', rate: '7.0% + 7.0%', desc: '下線 FYC 額外提成', note: '按月隨糧發' }] }
+          'UM': { code: 'UM', name: '分組經理 (UM)', tag: '基層管理領袖', highlight: '享有下線 Override', annualPotential: '年入約 MOP $60萬 ~ $150萬+', benefits: [{ title: '下線 Override', rate: '7.0% + 7.0%', desc: '下線 FYC 額外提成', note: '按月隨糧發' }] }
         };
         const currentRankComp = computed(() => rankCompData[selectedCompRank.value] || rankCompData['UM']);
-        const rankSim = reactive({ personalFyc: 40000, downlineFyc: 250000 });
-        const simulatedRankMonthlyTotal = computed(() => (rankSim.personalFyc || 0) + (rankSim.downlineFyc || 0) * 0.14);
-        const fullProductList = [{ name: '危疾應援保', cat: '危疾', term: '20年繳', y1: 50.0 }];
+        const rankSim = reactive({ personalFyc: 40000, downlineFyc: 250000, enableNror: true, recruitFyc: 30000, recruitType: 'direct' });
+        const simulatedOverride = computed(() => (rankSim.downlineFyc || 0) * 0.14);
+        const simulatedNrorAmount = computed(() => (rankSim.recruitFyc || 0) * 0.20);
+        const simulatedAllowance = computed(() => 16000);
+        const simulatedRankMonthlyTotal = computed(() => (rankSim.personalFyc || 0) + simulatedOverride.value + simulatedNrorAmount.value);
+        const fullProductList = [{ name: '危疾應援保', cat: '危疾', term: '20年繳', y1: 50.0, y2: 9.0, y3plus: '18%' }];
 
         return {
           currentTab, tabs, userRank, userRankName, formatNumber, productCatalog, selectedProduct, selectProduct, setProductTerm,
           currentTermFyc, activeProductFyc, inputAfyp, policyCount, fldpNaa, selectedQuarter, personalPersistency, hasExtraTenPercent,
           fldpEvaluationScale, totalAfyp, baseFyc, totalSc, extraTenAmount, qsbRate, qsbBonusAmount, estimatedYeb, grandTotalIncome,
           careerTrack, targetRank, teamRanks, wmRanks, currentStats, activeRankObj, checkPersonalSc, checkBranchSc, checkTeamSc, checkVa,
-          isAllPromotionMet, selectedCompRank, rankList, currentRankComp, rankSim, simulatedRankMonthlyTotal, fullProductList
+          isAllPromotionMet, selectedCompRank, rankList, currentRankComp, rankSim, simulatedOverride, simulatedNrorAmount, simulatedAllowance,
+          simulatedRankMonthlyTotal, fullProductList
         };
       }
-   }).mount('#app');
+    }).mount('#app');
   </script>
 </body>
 </html>"></iframe>
-  </div>
-</div>
+        </div>
+    </div>
 </body>
 </html>
