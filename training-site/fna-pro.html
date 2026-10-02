@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WealthAdvisor Pro | 顧問專業理財需要與風險評估系統</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for interactive analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- html2pdf.js for client-side programmatic PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            },
+            accent: {
+              gold: '#d97706',
+              amber: '#f59e0b',
+              emerald: '#059669',
+              rose: '#e11d48'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white; }
+      .card-shadow { box-shadow: none !important; border: 1px solid #e2e8f0; }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col bg-slate-50">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-gradient-to-r from-brand-900 via-brand-800 to-slate-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-900 font-bold shadow-md text-lg">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            WealthAdvisor Pro 
+            <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full font-normal">顧問會客專用</span>
+          </span>
+          <p class="text-xs text-slate-300">全面財務需要分析 (FNA) 與全方位風險避險模型</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Quick Demo Presets -->
+        <div class="hidden md:flex items-center space-x-2 bg-slate-800/80 p-1.5 rounded-lg border border-slate-700">
+          <span class="text-xs text-slate-400 pl-2">快速載入範例：</span>
+          <button onclick="loadSamplePreset('family')" class="text-xs px-2.5 py-1 rounded bg-slate-700 hover:bg-brand-600 text-white transition">中產雙職家庭 (2子女)</button>
+          <button onclick="loadSamplePreset('married_no_kids')" class="text-xs px-2.5 py-1 rounded bg-slate-700 hover:bg-brand-600 text-white transition font-medium text-amber-300">已婚未有子女 (二人世界/備孕)</button>
+          <button onclick="loadSamplePreset('young')" class="text-xs px-2.5 py-1 rounded bg-slate-700 hover:bg-brand-600 text-white transition">新婚成家 (準備置業)</button>
+          <button onclick="loadSamplePreset('hwi')" class="text-xs px-2.5 py-1 rounded bg-slate-700 hover:bg-brand-600 text-white transition">高淨值企管 (留學退休)</button>
+          <button onclick="clearAllInputs()" class="text-xs px-2 py-1 rounded bg-rose-900/60 hover:bg-rose-700 text-rose-200 transition" title="清空全部重填"><i class="fa-solid fa-rotate-left"></i> 重設清空</button>
+        </div>
+
+        <button onclick="openExportModal()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 border border-white/20">
+          <i class="fa-solid fa-file-pdf text-sm"></i> 匯出 PDF / 微信分享
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- WeChat & PDF Export Modal -->
+  <div id="wechatModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all">
+      <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-700 text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-white text-base">
+            <i class="fa-solid fa-file-export"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold">匯出專屬診斷報告 / 微信分享</h3>
+            <p class="text-[11px] text-blue-100">顧問可一鍵下載 PDF 建議書或複製文字發送至微信</p>
+          </div>
+        </div>
+        <button onclick="closeWechatShareModal()" class="text-blue-100 hover:text-white text-lg p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <!-- Dual Action Buttons: PDF Direct Export & WeChat Copy -->
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="triggerPdfExport()" id="exportPdfBtn" class="py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-file-pdf text-base"></i> 匯出 / 儲存為 PDF
+          </button>
+          <button onclick="copyWechatSummary()" id="copyWechatBtn" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-brands fa-weixin text-base"></i> 一鍵複製微信報告
+          </button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span><i class="fa-solid fa-copy text-indigo-600 mr-1"></i> 即時生成的專業摘要文字：</span>
+            <span class="text-[11px] text-slate-400 font-normal">適合直接貼到 WeChat / WhatsApp</span>
+          </label>
+          <textarea id="wechatSummaryText" rows="9" readonly class="w-full text-xs font-mono bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-700 leading-relaxed focus:outline-none select-all"></textarea>
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button onclick="closeWechatShareModal()" class="px-5 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Progress Step Tabs -->
+    <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 mb-6 no-print">
+      <nav class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="stepTabs">
+        <button onclick="switchStep(1)" id="tab-btn-1" class="step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition bg-brand-50 text-brand-700 border-2 border-brand-500">
+          <span class="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center">1</span>
+          <span>客戶與家庭</span>
+        </button>
+        <button onclick="switchStep(2)" id="tab-btn-2" class="step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs flex items-center justify-center">2</span>
+          <span>收支與資產</span>
+        </button>
+        <button onclick="switchStep(3)" id="tab-btn-3" class="step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs flex items-center justify-center">3</span>
+          <span>環球留學規劃</span>
+        </button>
+        <button onclick="switchStep(4)" id="tab-btn-4" class="step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-50 border-2 border-transparent">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs flex items-center justify-center">4</span>
+          <span>退休與現有保障</span>
+        </button>
+        <button onclick="switchStep(5)" id="tab-btn-5" class="step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-50 border-2 border-transparent col-span-2 sm:col-span-1">
+          <span class="w-6 h-6 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center"><i class="fa-solid fa-chart-pie"></i></span>
+          <span class="font-bold text-amber-700">診斷報告與建議</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Form Section Container -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left / Main Working Area (Steps 1 to 4) -->
+      <div id="inputFormContainer" class="lg:col-span-8 space-y-6">
+
+        <!-- ========================================== -->
+        <!-- STEP 1: 客戶基本資料與家庭結構 -->
+        <!-- ========================================== -->
+        <section id="step-1" class="step-panel bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-user-tie text-brand-600"></i> 第一部分：客戶基本背景與家庭架構
+              </h2>
+              <p class="text-sm text-slate-500 mt-1">了解客戶作為經濟支柱的責任規模，以及其受養人情況</p>
+            </div>
+            <span class="text-xs bg-brand-100 text-brand-800 font-semibold px-2.5 py-1 rounded-full">第 1 / 4 步</span>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Client Basic Info -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">客戶姓名 / 稱謂</label>
+                <input type="text" id="clientName" value="" placeholder="例如：陳先生 (David)" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm placeholder:text-slate-400" oninput="calculateAll()">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">客戶性別</label>
+                <select id="clientGender" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" onchange="calculateAll()">
+                  <option value="male" selected>男 (Male)</option>
+                  <option value="female">女 (Female)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">現時年齡</label>
+                <div class="relative">
+                  <input type="number" id="clientAge" value="" placeholder="例如：35" min="18" max="75" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  <span class="absolute right-3 top-2 text-xs text-slate-400">歲</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">吸煙習慣</label>
+                <select id="clientSmoker" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" onchange="calculateAll()">
+                  <option value="non-smoker" selected>非吸煙者 (保費優惠)</option>
+                  <option value="smoker">吸煙者</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Profession & Health -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">職業及職級 (影響意外職系與收入保障)</label>
+                <input type="text" id="clientJob" value="" placeholder="例如：科技公司 高級項目經理" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm placeholder:text-slate-400" oninput="calculateAll()">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">直系家族病史關注 (癌症 / 心血管 / 糖尿病等)</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <label class="cursor-pointer border p-2 rounded-xl flex items-center justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                    <span class="font-medium text-slate-700"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> 沒有家族病史</span>
+                    <input type="radio" name="familyHistoryToggle" value="no" checked onchange="toggleFamilyHistory(false)" class="accent-brand-600">
+                  </label>
+                  <label class="cursor-pointer border p-2 rounded-xl flex items-center justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                    <span class="font-medium text-slate-700"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> 有直系家族病史</span>
+                    <input type="radio" name="familyHistoryToggle" value="yes" onchange="toggleFamilyHistory(true)" class="accent-brand-600">
+                  </label>
+                </div>
+                <!-- Conditional Input Box -->
+                <div id="familyHistoryDetailBlock" class="mt-2.5 hidden">
+                  <input type="text" id="clientFamilyHealth" value="" placeholder="請註明家族病史（例如：直系親屬曾有心血管狀況 / 癌症）" class="w-full px-3 py-2 border border-amber-300 bg-amber-50/40 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-xs text-slate-800 placeholder:text-slate-400" oninput="calculateAll()">
+                  <p class="text-[11px] text-amber-700 mt-1"><i class="fa-solid fa-circle-info"></i> 家族病史有助顧問評估危疾加保需求或多重賠償特性。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Marital Status -->
+            <div class="pt-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-2">婚姻及家庭狀態 (深入了解責任結構)</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="cursor-pointer border p-3.5 rounded-xl flex flex-col justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                  <span class="font-bold text-slate-800"><i class="fa-solid fa-people-roof mr-1 text-brand-600"></i> 已婚 (有子女)</span>
+                  <span class="text-[11px] text-slate-500 mt-1">需撫養及教育規劃</span>
+                  <input type="radio" name="maritalStatus" value="married_kids" onchange="handleMaritalStatusChange('married_kids')" class="accent-brand-600 mt-2 self-end">
+                </label>
+                <label class="cursor-pointer border p-3.5 rounded-xl flex flex-col justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                  <span class="font-bold text-slate-800"><i class="fa-solid fa-heart mr-1 text-rose-500"></i> 已婚 (未有子女)</span>
+                  <span class="text-[11px] text-slate-500 mt-1">二人世界 / 備孕籌劃中</span>
+                  <input type="radio" name="maritalStatus" value="married_no_kids" checked onchange="handleMaritalStatusChange('married_no_kids')" class="accent-brand-600 mt-2 self-end">
+                </label>
+                <label class="cursor-pointer border p-3.5 rounded-xl flex flex-col justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                  <span class="font-bold text-slate-800"><i class="fa-solid fa-ring mr-1 text-indigo-500"></i> 準備結婚 / 訂婚</span>
+                  <span class="text-[11px] text-slate-500 mt-1">籌備婚禮置業中</span>
+                  <input type="radio" name="maritalStatus" value="engaged" onchange="handleMaritalStatusChange('engaged')" class="accent-brand-600 mt-2 self-end">
+                </label>
+                <label class="cursor-pointer border p-3.5 rounded-xl flex flex-col justify-between text-xs hover:border-brand-500 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 transition">
+                  <span class="font-bold text-slate-800"><i class="fa-solid fa-user mr-1 text-slate-400"></i> 單身 / 未婚</span>
+                  <span class="text-[11px] text-slate-500 mt-1">個人自立與長輩責任</span>
+                  <input type="radio" name="maritalStatus" value="single" onchange="handleMaritalStatusChange('single')" class="accent-brand-600 mt-2 self-end">
+                </label>
+              </div>
+            </div>
+
+            <!-- Spouse Details (Conditional) -->
+            <div id="spouseBlock" class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-venus-mars text-rose-500"></i> 配偶資料與家庭收入共擔
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">配偶稱謂 / 姓名</label>
+                  <input type="text" id="spouseName" value="" placeholder="例如：陳太太 (Grace)" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">配偶年齡</label>
+                  <input type="number" id="spouseAge" value="" placeholder="例如：33" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">配偶職業狀態</label>
+                  <select id="spouseWork" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" onchange="calculateAll()">
+                    <option value="working" selected>全職在職 (雙職家庭)</option>
+                    <option value="homemaker">全職家庭主婦/主夫 (全賴客戶一人支撐)</option>
+                    <option value="parttime">兼職 / 自由工作</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Children Overview -->
+            <div class="pt-2">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <label class="block text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                    <i class="fa-solid fa-children text-amber-600"></i> 子女與受養人狀況
+                    <span id="childStatusBadge" class="text-xs font-normal px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">未有子女</span>
+                  </label>
+                  <p class="text-xs text-slate-500">如屬「未有子女」或「二人世界」，可保持清空或僅規劃預期寶寶儲備</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="clearChildrenList()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs font-medium rounded-lg border border-slate-200 transition">
+                    <i class="fa-solid fa-circle-xmark"></i> 清空(未有子女)
+                  </button>
+                  <button type="button" onclick="addChildRow()" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold rounded-lg border border-brand-200 flex items-center gap-1 transition">
+                    <i class="fa-solid fa-plus"></i> 新增一名子女 / 未來寶寶
+                  </button>
+                </div>
+              </div>
+
+              <!-- Children list container -->
+              <div id="childrenContainer" class="space-y-3">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <!-- Dependent Parents -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">需要供養之長輩人數 (父母 / 岳父母)</label>
+                <div class="flex items-center gap-2">
+                  <input type="number" id="parentCount" value="" placeholder="例如：2" min="0" max="6" class="w-24 px-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  <span class="text-xs text-slate-500">位長輩</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">每月給予長輩之奉養金總計 (HKD)</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                  <input type="text" inputmode="numeric" id="parentAllowance" value="" placeholder="例如：8,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button onclick="switchStep(2)" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition">
+                下一步：收支與資產盤點 <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STEP 2: 現金流、收支與資產負債盤點 -->
+        <!-- ========================================== -->
+        <section id="step-2" class="step-panel hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-emerald-600"></i> 第二部分：收入、家庭開支與負債
+              </h2>
+              <p class="text-sm text-slate-500 mt-1">準確計算家庭每月儲蓄力、不可或缺的應急基金，以及按揭負債總額</p>
+            </div>
+            <span class="text-xs bg-brand-100 text-brand-800 font-semibold px-2.5 py-1 rounded-full">第 2 / 4 步</span>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Monthly Incomes -->
+            <div>
+              <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-wave text-emerald-600"></i> 每月經常性收入 (HKD)
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">客戶本人月薪 (連平均佣金/雙糧折算)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="clientIncome" value="" placeholder="例如：65,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm font-semibold placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">配偶月收入 (若無可填 0)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="spouseIncome" value="" placeholder="例如：35,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">其他被動收入 (租金/股息等)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="otherIncome" value="" placeholder="例如：5,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monthly Expenses breakdown -->
+            <div class="pt-2">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-receipt text-rose-500"></i> 每月家庭剛性支出明細 (HKD)
+                </h3>
+                <span class="text-xs text-slate-500">建議詳細問詢以精確評估危疾生活替代金</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">房屋按揭供款 / 租金</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="expMortgage" value="" placeholder="例如：26,000" class="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">日常生活飲食及水電雜費</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="expLiving" value="" placeholder="例如：18,000" class="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">子女目前學費/興趣班/保姆</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="expChildCare" value="" placeholder="例如：12,000" class="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-600 mb-1">長輩家用 / 父母醫療補貼</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="expParentTotal" value="" placeholder="例如：8,000" class="w-full pl-7 pr-2 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Liabilities & Assets -->
+            <div class="pt-2">
+              <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-scale-balanced text-brand-700"></i> 資產與債務現況 (HKD)
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">物業未清還之按揭餘額 (身故責任重中之重)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="debtMortgage" value="" placeholder="例如：4,800,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm font-semibold text-rose-700 placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-1">若支柱不幸離世，家庭能否保住居所免遭收樓</p>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">私人貸款 / 信用卡 / 汽車貸款</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="debtOther" value="" placeholder="例如：120,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">現有流動資產 (銀行存款、短期定期)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="assetLiquid" value="" placeholder="例如：800,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm font-semibold text-emerald-700 placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-1">可用於扣減應急金儲備</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cashflow summary badge -->
+            <div id="cashflowMetricBox" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <span class="text-xs text-emerald-800 font-bold block">家庭每月可支配結餘 (儲蓄投資潛力)</span>
+                <span id="monthlySurplusLabel" class="text-xl font-extrabold text-emerald-700">+HK$ 0 / 月</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-500 block">建議緊急預備金 (6個月生活費)</span>
+                <span id="emergencyFundNeed" class="text-sm font-bold text-slate-800">HK$ 0</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+              <button onclick="switchStep(1)" class="px-5 py-2 border border-slate-300 hover:bg-slate-50 rounded-xl text-sm text-slate-600 transition">
+                <i class="fa-solid fa-arrow-left"></i> 上一步
+              </button>
+              <button onclick="switchStep(3)" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition">
+                下一步：環球留學規劃 <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STEP 3: 子女環球留學大學庫與教育基金策劃 -->
+        <!-- ========================================== -->
+        <section id="step-3" class="step-panel hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-indigo-600"></i> 第三部分：子女未來環球升學規劃庫
+              </h2>
+              <p class="text-sm text-slate-500 mt-1">內建世界頂尖大學最新學費與生活費標準，精算未來通脹後的所需教育基金</p>
+            </div>
+            <span class="text-xs bg-brand-100 text-brand-800 font-semibold px-2.5 py-1 rounded-full">第 3 / 4 步</span>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Global Universities Benchmark Quick Guide -->
+            <div class="bg-gradient-to-br from-indigo-900 via-slate-900 to-brand-900 text-white p-4 rounded-xl shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold flex items-center gap-1.5">
+                  <i class="fa-solid fa-earth-americas"></i> 2026/2027 世界主要升學熱門地每年費用參考 (含學費 + 住宿生活費)
+                </span>
+                <span class="text-[11px] bg-indigo-500/30 px-2 py-0.5 rounded text-indigo-200">依據最新官方平均數據</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                  <div class="font-bold text-amber-300">🇬🇧 英國 (UK)</div>
+                  <div class="text-[11px] text-slate-300">牛津/劍橋/IC/LSE</div>
+                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 450,000 - 680,000/年</div>
+                </div>
+                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                  <div class="font-bold text-rose-300">🇺🇸 美國 (USA)</div>
+                  <div class="text-[11px] text-slate-300">常春藤/UC Berkeley/NYU</div>
+                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 600,000 - 880,000/年</div>
+                </div>
+                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                  <div class="font-bold text-emerald-300">🇦🇺 澳洲 (AUS)</div>
+                  <div class="text-[11px] text-slate-300">墨爾本/雪梨大學/UNSW</div>
+                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 380,000 - 520,000/年</div>
+                </div>
+                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                  <div class="font-bold text-sky-300">🇨🇦 加拿大 (CAN)</div>
+                  <div class="text-[11px] text-slate-300">多倫多/UBC/麥基爾</div>
+                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 320,000 - 480,000/年</div>
+                </div>
+                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10 col-span-2 sm:col-span-1">
+                  <div class="font-bold text-purple-300">🇭🇰/🇸🇬 本地及亞洲</div>
+                  <div class="text-[11px] text-slate-300">港大/中大/NUS/南洋</div>
+                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 150,000 - 320,000/年</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Per-Child Target University Configuration -->
+            <div id="childrenEducationCards" class="space-y-4">
+              <!-- Dynamically populated based on children added in Step 1 -->
+            </div>
+
+            <!-- Education Inflation Assumption -->
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                  預估海外學費年化通脹率 (%)
+                </label>
+                <div class="flex items-center gap-3">
+                  <input type="range" id="eduInflation" min="2" max="6" step="0.5" value="4" class="w-full accent-indigo-600" oninput="document.getElementById('eduInflationVal').innerText = this.value + '%'; calculateAll();">
+                  <span id="eduInflationVal" class="text-sm font-bold text-indigo-700 w-12 text-right">4.0%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">歷史上歐美大學學費通脹平均約 3.5% - 4.5%</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                  現時已為子女預備之專項教育儲備 (HKD)
+                </label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                  <input type="text" inputmode="numeric" id="existingEduFund" value="" placeholder="例如：300,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+              <button onclick="switchStep(2)" class="px-5 py-2 border border-slate-300 hover:bg-slate-50 rounded-xl text-sm text-slate-600 transition">
+                <i class="fa-solid fa-arrow-left"></i> 上一步
+              </button>
+              <button onclick="switchStep(4)" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition">
+                下一步：退休與現有保單 <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STEP 4: 退休願景與現有保險保障盤點 -->
+        <!-- ========================================== -->
+        <section id="step-4" class="step-panel hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-umbrella text-brand-600"></i> 第四部分：退休目標與現有保險盤點
+              </h2>
+              <p class="text-sm text-slate-500 mt-1">對照現有保單，找出客戶家庭真正的「危疾、醫療、身故」三層保障缺口</p>
+            </div>
+            <span class="text-xs bg-brand-100 text-brand-800 font-semibold px-2.5 py-1 rounded-full">第 4 / 4 步</span>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Retirement Goals Section -->
+            <div class="bg-amber-50/70 p-5 rounded-xl border border-amber-200/80 space-y-4">
+              <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2">
+                <i class="fa-solid fa-mug-hot text-amber-600"></i> 理想退休生活願景規劃
+              </h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">期望退休年齡</label>
+                  <div class="relative">
+                    <input type="number" id="retireAge" value="" placeholder="例如：60" min="50" max="75" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                    <span class="absolute right-3 top-2 text-xs text-slate-400">歲</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">預期規劃壽命 (長壽風險考量)</label>
+                  <div class="relative">
+                    <input type="number" id="lifeExpectancy" value="" placeholder="例如：85" min="70" max="100" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                    <span class="absolute right-3 top-2 text-xs text-slate-400">歲</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">退休後每月理想生活費 (現時購買力)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="retireMonthlyExpense" value="" placeholder="例如：30,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm font-bold text-amber-800 placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">現有強積金/公積金/退休金估算結餘 (HKD)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="existingMPF" value="" placeholder="例如：500,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">預計其他退休被動月收入 (如有物業收租/長年金)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="otherRetireIncome" value="" placeholder="例如：10,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Existing Insurance Policies Checklist -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-file-shield text-brand-600"></i> 客戶現有個人及公司團體保險盤點
+                  </h3>
+                  <p class="text-xs text-slate-500">輸入客戶已買或公司提供的現有保額，系統將自動扣減並計算出真正「保障缺口」</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Existing Life Coverage -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-heart-pulse text-rose-500"></i> 現有人壽身故保額 (HKD)
+                    </span>
+                    <span class="text-[11px] text-slate-400">個人+公司團體</span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="existLifeCover" value="" placeholder="例如：1,000,000" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+
+                <!-- Existing Critical Illness Coverage -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-virus-covid text-amber-500"></i> 現有嚴重疾病(危疾)保額 (HKD)
+                    </span>
+                    <span class="text-[11px] text-slate-400">重大疾病一筆過理賠</span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="text" inputmode="numeric" id="existCICover" value="" placeholder="例如：500,000" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">現有強積金/公積金/退休金估算結餘 (HKD)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="number" id="existingMPF" value="" placeholder="例如：500,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">預計其他退休被動月收入 (如有物業收租/長年金)</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="number" id="otherRetireIncome" value="" placeholder="例如：0 或 10,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Existing Insurance Policies Checklist -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-file-shield text-brand-600"></i> 客戶現有個人及公司團體保險盤點
+                  </h3>
+                  <p class="text-xs text-slate-500">輸入客戶已買或公司提供的現有保額，系統將自動扣減並計算出真正「保障缺口」</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Existing Life Coverage -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-heart-pulse text-rose-500"></i> 現有人壽身故保額 (HKD)
+                    </span>
+                    <span class="text-[11px] text-slate-400">個人+公司團體</span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="number" id="existLifeCover" value="" placeholder="例如：1,000,000" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  </div>
+                </div>
+
+                <!-- Existing Critical Illness Coverage -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-virus-covid text-amber-500"></i> 現有嚴重疾病(危疾)保額 (HKD)
+                    </span>
+                    <span class="text-[11px] text-slate-400">重大疾病一筆過理賠</span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                    <input type="number" id="existCICover" value="" placeholder="例如：500,000" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm placeholder:text-slate-400" oninput="calculateAll()">
+                  </div>
+                </div>
+
+                <!-- Existing Medical Hospitalization -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-hospital text-blue-600"></i> 現有住院醫療保險級別
+                    </span>
+                    <span class="text-[11px] text-slate-400">實報實銷</span>
+                  </div>
+                  <select id="existMedicalTier" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" onchange="calculateAll()">
+                    <option value="basic" selected>僅有基本公司醫療 / 普通大房計劃 (限額低)</option>
+                    <option value="vhis_standard">普通自願醫保標準計劃 (有分項上限)</option>
+                    <option value="none">完全沒有任何個人醫療保障</option>
+                    <option value="high_end">已有高端全數賠償醫療 (半私家/私家房)</option>
+                  </select>
+                </div>
+
+                <!-- Existing Accident / Disability -->
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <i class="fa-solid fa-crutch text-teal-600"></i> 意外及傷殘收入保障
+                    </span>
+                    <span class="text-[11px] text-slate-400">斷症賠償/津貼</span>
+                  </div>
+                  <select id="existAccidentTier" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" onchange="calculateAll()">
+                    <option value="low" selected>公司少額意外保障 (HK$ 300,000 - 500,000)</option>
+                    <option value="none">無意外保障</option>
+                    <option value="adequate">充足個人意外保障 (HK$ 1,000,000 以上)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+              <button onclick="switchStep(3)" class="px-5 py-2 border border-slate-300 hover:bg-slate-50 rounded-xl text-sm text-slate-600 transition">
+                <i class="fa-solid fa-arrow-left"></i> 上一步
+              </button>
+              <button onclick="switchStep(5)" class="px-7 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-amber-500/20 transition">
+                查看全方位財務診斷報告 <i class="fa-solid fa-chart-line"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- Right Side: Quick Real-time Gap Summary Card -->
+      <!-- ========================================== -->
+      <aside class="lg:col-span-4 space-y-4 no-print" id="liveSidebar">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 sticky top-20">
+          <div class="flex items-center justify-between mb-2 border-b border-slate-100 pb-2.5">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-gauge-high text-brand-600"></i> 實時風險評估快覽
+            </h3>
+            <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">隨時聯動</span>
+          </div>
+
+          <!-- Radar Chart Visual Wrapper without excessive blank space -->
+          <div class="relative w-full h-44 mb-2 flex items-center justify-center">
+            <canvas id="quickRadarChart" class="max-h-44 w-full"></canvas>
+            <div id="quickChartFallback" class="hidden absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-xs text-center p-3">
+              <i class="fa-solid fa-chart-pie text-2xl text-slate-300 mb-1"></i>
+              <span>輸入客戶資料後即時繪製風險雷達</span>
+            </div>
+          </div>
+
+          <!-- Quick Metrics List (Strictly formatted with commas) -->
+          <div class="space-y-2 text-xs">
+            <!-- Life gap -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <span class="text-slate-600 flex items-center gap-1.5 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> 人壽責任缺口
+              </span>
+              <span id="sideLifeGap" class="font-bold text-rose-600 text-sm tracking-tight">HK$ 0</span>
+            </div>
+
+            <!-- CI gap -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <span class="text-slate-600 flex items-center gap-1.5 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 危疾保障缺口
+              </span>
+              <span id="sideCIGap" class="font-bold text-amber-600 text-sm tracking-tight">HK$ 0</span>
+            </div>
+
+            <!-- Education gap -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <span class="text-slate-600 flex items-center gap-1.5 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 子女留學缺口
+              </span>
+              <span id="sideEduGap" class="font-bold text-indigo-600 text-sm tracking-tight">HK$ 0</span>
+            </div>
+
+            <!-- Retirement gap -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <span class="text-slate-600 flex items-center gap-1.5 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 退休養老缺口
+              </span>
+              <span id="sideRetireGap" class="font-bold text-emerald-600 text-sm tracking-tight">HK$ 0</span>
+            </div>
+          </div>
+
+          <button onclick="switchStep(5)" class="w-full mt-3 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition shadow">
+            生成客戶解說方案 <i class="fa-solid fa-file-invoice-dollar text-amber-400"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ========================================== -->
+      <!-- STEP 5: 完整診斷報告與建議書 (客戶會客展示專用) -->
+      <!-- ========================================== -->
+      <section id="step-5" class="step-panel hidden lg:col-span-12 space-y-6">
+        
+        <!-- Client Proposal Banner -->
+        <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="relative z-10 max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-semibold mb-3">
+              <i class="fa-solid fa-certificate"></i> 客戶專屬理財安全與避險診斷書
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <span id="reportClientName">尊貴客戶</span> 的家庭財務防護與目標儲備綜合評估
+            </h1>
+            <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+              根據您提供的家庭結構、環球升學願景及生活支出，我們運用業界標準「雙十法則」與「現金流折現長壽模型」，為您量身診斷四大核心防禦防線。
+            </p>
+          </div>
+        </div>
+
+        <!-- 4 Core Defense Gap Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Card 1: Life Coverage -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-house-chimney-crack text-rose-500"></i> 家庭頂樑柱身故責任
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-semibold">首要防禦</span>
+              </div>
+              <div class="text-2xl font-black text-rose-600 mb-1" id="cardLifeGap">HK$ 0</div>
+              <p class="text-xs text-slate-500 leading-normal">
+                包含剩餘按揭餘額 + 子女直至大學畢業生活費 + 父母供養備用金。
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600 space-y-1">
+              <div class="flex justify-between"><span>所需總身故責任：</span><b id="cardLifeNeed">HK$ 0</b></div>
+              <div class="flex justify-between"><span>現有保額+流動：</span><b id="cardLifeExist">HK$ 0</b></div>
+            </div>
+          </div>
+
+          <!-- Card 2: Critical Illness -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-ribbon text-amber-500"></i> 重大疾病收入替代金
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-semibold">家庭現金流</span>
+              </div>
+              <div class="text-2xl font-black text-amber-600 mb-1" id="cardCIGap">HK$ 0</div>
+              <p class="text-xs text-slate-500 leading-normal">
+                涵蓋 3 年家庭剛性開支與療養費用，確保患重疾暫停工作時供樓及生活不中斷。
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600 space-y-1">
+              <div class="flex justify-between"><span>建議危疾準備(3年)：</span><b id="cardCINeed">HK$ 0</b></div>
+              <div class="flex justify-between"><span>現有危疾總額：</span><b id="cardCIExist">HK$ 0</b></div>
+            </div>
+          </div>
+
+          <!-- Card 3: Education Fund -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-graduation-cap text-indigo-500"></i> 子女環球名校儲蓄缺口
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-semibold">不可逆時間表</span>
+              </div>
+              <div class="text-2xl font-black text-indigo-600 mb-1" id="cardEduGap">HK$ 0</div>
+              <p class="text-xs text-slate-500 leading-normal">
+                已計算選定大學每年學費及生活費，並按 4% 年化留學通脹複利折算。
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600 space-y-1">
+              <div class="flex justify-between"><span>未來教育總預算：</span><b id="cardEduNeed">HK$ 0</b></div>
+              <div class="flex justify-between"><span>已備教育資金：</span><b id="cardEduExist">HK$ 0</b></div>
+            </div>
+          </div>
+
+          <!-- Card 4: Retirement Longevity -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-umbrella text-emerald-500"></i> 退休金庫與長壽缺口
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold">尊嚴晚年</span>
+              </div>
+              <div class="text-2xl font-black text-emerald-600 mb-1" id="cardRetireGap">HK$ 0</div>
+              <p class="text-xs text-slate-500 leading-normal">
+                保障退休後至 85 歲不斷流的穩定現金流，扣除強積金後之真實缺口。
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600 space-y-1">
+              <div class="flex justify-between"><span>總需退休資金庫：</span><b id="cardRetireNeed">HK$ 0</b></div>
+              <div class="flex justify-between"><span>現有強積金及公積金：</span><b id="cardRetireExist">HK$ 0</b></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Detailed Breakdown & Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Visual Chart Section -->
+          <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm mb-4 flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <i class="fa-solid fa-chart-bar text-brand-600"></i> 目標需求 vs 現有儲備對比 (HKD)
+              </span>
+              <span class="text-xs text-slate-400 font-normal">單位：港幣 (HKD)</span>
+            </h3>
+            <div class="h-72 w-full">
+              <canvas id="detailedBarChart"></canvas>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2 text-center">
+              *紅色/金色柱線代表目前暴露的風險空白，是本次會客急需優先填補之部分。
+            </p>
+          </div>
+
+          <!-- Financial Pyramid (理財金字塔) Status -->
+          <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-amber-500"></i> 客戶家庭「三層理財金字塔」健檢
+              </h3>
+              
+              <div class="space-y-3.5 mt-4">
+                <!-- Layer 3: Wealth Legacy -->
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-800">頂層：財富傳承與資產隔離</span>
+                    <span id="pyramidLegacyStatus" class="font-semibold text-amber-600">待完善</span>
+                  </div>
+                  <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="pyramidLegacyBar" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 35%"></div>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">多元貨幣儲蓄保單、第二受保人世代延續、意願信託籌劃</p>
+                </div>
+
+                <!-- Layer 2: Growth & Accumulation -->
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-800">中層：子女留學金 & 退休年金庫</span>
+                    <span id="pyramidGrowthStatus" class="font-semibold text-indigo-600">進度 45%</span>
+                  </div>
+                  <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="pyramidGrowthBar" class="bg-indigo-600 h-full rounded-full transition-all duration-500" style="width: 45%"></div>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">教育年金保險、合資格延期年金 (QDAP)、長期複利分紅</p>
+                </div>
+
+                <!-- Layer 1: Protection Base -->
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-800">底層：人壽房貸防護 & 高額醫療危疾</span>
+                    <span id="pyramidDefenseStatus" class="font-semibold text-rose-600">有缺口 (警戒)</span>
+                  </div>
+                  <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="pyramidDefenseBar" class="bg-rose-500 h-full rounded-full transition-all duration-500" style="width: 30%"></div>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">自願醫保高額全數賠償、多次多重危疾、定期/終身壽險</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500">金字塔底座不穩，上方資產將隨時面臨清零風險。</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Professional Advisor Recommendation & Action Plan -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-emerald-600"></i> 理財顧問專業避險建議與執行路徑
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">針對評估出的缺口，提供按優先順序配置的產品組合方案</p>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg">方案配置</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="recommendationCardsContainer">
+            <!-- Dynamically populated via JavaScript -->
+          </div>
+
+          <!-- Meeting Closing Advisor Pitch / Script -->
+          <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-comments text-brand-600"></i> 會客總結溝通建議 (顧問話術心法)
+            </h4>
+            <div id="advisorMeetingScript" class="text-xs text-slate-600 leading-relaxed space-y-2">
+              <!-- Dynamically generated script -->
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center no-print pt-2 pb-10">
+          <button onclick="switchStep(4)" class="px-5 py-2.5 border border-slate-300 hover:bg-white bg-slate-50 rounded-xl text-sm text-slate-700 transition">
+            <i class="fa-solid fa-arrow-left"></i> 返回修改資料
+          </button>
+          <div class="flex gap-3">
+            <button onclick="openExportModal()" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-full text-xs font-bold flex items-center gap-2 shadow-md transition">
+              <i class="fa-solid fa-file-pdf"></i> 匯出 PDF / 微信分享
+            </button>
+            <button onclick="clearAllInputs(); switchStep(1);" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow transition">
+              <i class="fa-solid fa-rotate-right"></i> 重新開始訪談
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // Global Universities tuition & living cost database (Annual in HKD equivalent for international students)
+    const UNIVERSITY_DATABASE = [
+      { id: 'uk_oxbridge', name: '英國：牛津 / 劍橋大學 (Oxbridge)', country: 'UK', annualHKD: 620000, durationYears: 3 },
+      { id: 'uk_g5', name: '英國：帝國理工 / LSE / UCL (G5頂尖名校)', country: 'UK', annualHKD: 550000, durationYears: 3 },
+      { id: 'uk_general', name: '英國：曼徹斯特 / 愛丁堡 / 華威等名校', country: 'UK', annualHKD: 450000, durationYears: 3 },
+      { id: 'us_ivy', name: '美國：哈佛 / 哥倫比亞 / 耶魯 (常春藤名校)', country: 'USA', annualHKD: 820000, durationYears: 4 },
+      { id: 'us_top_public', name: '美國：UC Berkeley / UCLA / 密西根等名校', country: 'USA', annualHKD: 650000, durationYears: 4 },
+      { id: 'us_private', name: '美國：紐約大學 (NYU) / 南加大 (USC) 私立名校', country: 'USA', annualHKD: 750000, durationYears: 4 },
+      { id: 'aus_go8', name: '澳洲：墨爾本大學 / 雪梨大學 (八大名校)', country: 'AUS', annualHKD: 460000, durationYears: 3 },
+      { id: 'aus_general', name: '澳洲：蒙納許 / 昆士蘭 / 新南威爾斯大學', country: 'AUS', annualHKD: 420000, durationYears: 3 },
+      { id: 'can_top', name: '加拿大：多倫多大學 / UBC / 麥基爾大學', country: 'CAN', annualHKD: 380000, durationYears: 4 },
+      { id: 'hk_top3', name: '香港：香港大學 / 中大 / 科大 (本地國際生/私立)', country: 'HK', annualHKD: 220000, durationYears: 4 },
+      { id: 'sg_top', name: '新加坡：國立大學 (NUS) / 南洋理工 (NTU)', country: 'SG', annualHKD: 320000, durationYears: 4 },
+      { id: 'custom', name: '自訂目標院校預算', country: 'Other', annualHKD: 400000, durationYears: 4 }
+    ];
+
+    // State object for children (starts empty by default for fresh fact finding)
+    let childrenList = [];
+
+    // Charts instances
+    let quickRadarChartInstance = null;
+    let detailedBarChartInstance = null;
+
+    // Formatting helper strictly ensuring commas everywhere
+    function fmtMoney(amount) {
+      if (!amount || isNaN(amount) || amount <= 0) return 'HK$ 0';
+      return 'HK$ ' + Math.round(amount).toLocaleString('en-US');
+    }
+
+    function fmtMoneyShort(amount) {
+      if (!amount || isNaN(amount) || amount <= 0) return '$0';
+      return '$' + Math.round(amount).toLocaleString('en-US');
+    }
+
+    // Live currency input thousands-separator handler:
+    // Strips non-digits and formats with commas immediately as the user types
+    function handleCurrencyInput(inputElem) {
+      const rawVal = inputElem.value.replace(/[^0-9]/g, '');
+      if (rawVal === '') {
+        inputElem.value = '';
+      } else {
+        inputElem.value = Number(rawVal).toLocaleString('en-US');
+      }
+      calculateAll();
+    }
+
+    // Helper to safely parse raw number from elements that may contain commas
+    function getNumericValue(elementId) {
+      const elem = document.getElementById(elementId);
+      if (!elem || !elem.value) return 0;
+      const cleanVal = String(elem.value).replace(/[^0-9.-]/g, '');
+      const num = parseFloat(cleanVal);
+      return isNaN(num) ? 0 : num;
+    }
+
+    function setFormattedValue(elementId, numValue) {
+      const elem = document.getElementById(elementId);
+      if (!elem) return;
+      if (numValue === '' || numValue === null || numValue === undefined || isNaN(numValue)) {
+        elem.value = '';
+      } else {
+        elem.value = Number(numValue).toLocaleString('en-US');
+      }
+    }
+
+    // WeChat Share Modal Handlers
+    function openExportModal() {
+      openWechatShareModal();
+    }
+
+    async function triggerPdfExport() {
+      const btn = document.getElementById('exportPdfBtn');
+      const originalText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-base"></i> 生成 PDF 中...';
+        btn.disabled = true;
+      }
+
+      // Switch to Step 5 to ensure all report DOM elements are rendered
+      switchStep(5);
+      closeWechatShareModal();
+
+      const clientName = document.getElementById('clientName')?.value.trim() || '客戶';
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const filename = `退休及理財策劃報告_${clientName}_${todayStr}.pdf`;
+
+      const element = document.getElementById('step-5');
+
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      try {
+        if (typeof html2pdf === 'undefined') {
+          // Fallback to window.print if library fails
+          window.print();
+          return;
+        }
+
+        // Generate PDF as blob
+        const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+        // Check if Web Share API supports file sharing (triggers native Windows/Mobile share menu like in your screenshot)
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({
+            title: filename,
+            text: `${clientName} 的退休及理財策劃報告`,
+            files: [pdfFile]
+          });
+        } else {
+          // Fallback direct file download if system share is not supported
+          const downloadUrl = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(downloadUrl);
+        }
+      } catch (err) {
+        console.error('PDF generation or sharing error:', err);
+      } finally {
+        if (btn) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }
+    }
+
+    function openWechatShareModal() {
+      const modal = document.getElementById('wechatModal');
+      const textarea = document.getElementById('wechatSummaryText');
+      if (!modal || !textarea) return;
+
+      const clientName = document.getElementById('clientName')?.value.trim() || '尊貴客戶';
+      const lifeGap = document.getElementById('cardLifeGap')?.innerText || 'HK$ 0';
+      const ciGap = document.getElementById('cardCIGap')?.innerText || 'HK$ 0';
+      const eduGap = document.getElementById('cardEduGap')?.innerText || 'HK$ 0';
+      const retGap = document.getElementById('cardRetireGap')?.innerText || 'HK$ 0';
+      const monthlySurplus = document.getElementById('monthlySurplusLabel')?.innerText || 'HK$ 0';
+      const defenseStatus = document.getElementById('pyramidDefenseStatus')?.innerText || '評估中';
+
+      // Generate structured, clean WeChat text
+      const dateStr = new Date().toLocaleDateString('zh-HK');
+      const wechatMessage = `【WealthAdvisor 專屬理財安全與避險診斷報告】
+📅 諮詢日期：${dateStr}
+👤 諮詢客戶：${clientName}
+
+━━━━━━━━━━━━━━━━━━━
+🛡️ 四大核心風險防禦缺口評估：
+1️⃣ 人壽身故責任缺口：${lifeGap}
+   （覆蓋未清按揭餘額 + 家庭撫養生活備用金）
+2️⃣ 重大疾病收入替代缺口：${ciGap}
+   （3年家庭剛性生活費，避免中斷供樓）
+3️⃣ 子女名校留學缺口：${eduGap}
+   （已計入 4% 年化留學通脹複利）
+4️⃣ 退休金長壽生活缺口：${retGap}
+   （扣除強積金後之安老現金流淨差額）
+
+━━━━━━━━━━━━━━━━━━━
+📊 家庭現金流健康指標：
+• 每月可支配結餘：${monthlySurplus}
+• 三層金字塔防守層：${defenseStatus}
+
+💡 顧問核心建議：
+先拉緊「定期人壽 + 高額自願醫保 + 多次危疾」防守底座，再以每月穩定結餘配置多元貨幣儲蓄與退休年金，以達到資產增值與全家安康雙重保障！
+───────────────────
+如需深入探討產品測算，歡迎隨時微信聯繫您的理財顧問。`;
+
+      textarea.value = wechatMessage;
+      modal.classList.remove('hidden');
+    }
+
+    function closeWechatShareModal() {
+      const modal = document.getElementById('wechatModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function copyWechatSummary() {
+      const textarea = document.getElementById('wechatSummaryText');
+      const copyBtn = document.getElementById('copyWechatBtn');
+      if (!textarea) return;
+
+      textarea.select();
+      textarea.setSelectionRange(0, 99999); // For mobile devices
+
+      let successful = false;
+      try {
+        successful = document.execCommand('copy');
+      } catch (err) {
+        successful = false;
+      }
+
+      if (copyBtn) {
+        if (successful) {
+          copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已成功複製！可直接前往微信貼上';
+          copyBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+          copyBtn.classList.add('bg-slate-800');
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fa-regular fa-clone"></i> 一鍵複製微信報告訊息';
+            copyBtn.classList.remove('bg-slate-800');
+            copyBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+          }, 2500);
+        } else {
+          copyBtn.innerHTML = '<i class="fa-solid fa-arrow-pointer"></i> 請直接長按上方文字全選複製';
+        }
+      }
+    }
+
+    function renderChildrenRows() {
+      const container = document.getElementById('childrenContainer');
+      const eduCardsContainer = document.getElementById('childrenEducationCards');
+      if (!container || !eduCardsContainer) return;
+
+      container.innerHTML = '';
+      eduCardsContainer.innerHTML = '';
+
+      if (childrenList.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-4 bg-slate-50 border border-dashed border-slate-300 rounded-xl text-slate-400 text-xs">
+            目前尚未新增子女資料。如客戶暫無子女，可略過此部分或點擊上方「新增」規劃未來育兒儲備。
+          </div>
+        `;
+        eduCardsContainer.innerHTML = `
+          <div class="p-6 text-center bg-slate-50 rounded-xl text-slate-500 text-xs">
+            尚未填寫子女資訊。若未來有生育規劃，可返回第一步新增以啟動預估。
+          </div>
+        `;
+        return;
+      }
+
+      childrenList.forEach((child, index) => {
+        // Step 1 row
+        const row = document.createElement('div');
+        row.className = 'flex flex-wrap items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200';
+        row.innerHTML = `
+          <div class="flex-1 min-w-[120px]">
+            <label class="block text-[11px] text-slate-500">稱謂 / 姓名</label>
+            <input type="text" value="${child.name || ''}" placeholder="例如：長子 / 次女" oninput="updateChild(${index}, 'name', this.value)" class="w-full px-2.5 py-1 text-xs border border-slate-300 rounded-lg bg-white placeholder:text-slate-400">
+          </div>
+          <div class="w-24">
+            <label class="block text-[11px] text-slate-500">現時年齡</label>
+            <div class="relative">
+              <input type="number" min="0" max="25" value="${child.age !== undefined && child.age !== null ? child.age : ''}" placeholder="例如：5" oninput="updateChild(${index}, 'age', parseInt(this.value) || 0)" class="w-full px-2 py-1 text-xs border border-slate-300 rounded-lg bg-white placeholder:text-slate-400">
+              <span class="absolute right-2 top-1 text-[11px] text-slate-400">歲</span>
+            </div>
+          </div>
+          <div class="w-32">
+            <label class="block text-[11px] text-slate-500">距讀大學還有</label>
+            <span class="text-xs font-bold text-brand-700 block py-1">${Math.max(0, 18 - (child.age || 0))} 年儲蓄期</span>
+          </div>
+          <button type="button" onclick="removeChildRow(${index})" class="text-slate-400 hover:text-rose-500 text-xs px-2 py-1 mt-3">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        `;
+        container.appendChild(row);
+
+        // Step 3 Education Card
+        const uniOptions = UNIVERSITY_DATABASE.map(uni => `
+          <option value="${uni.id}" ${child.targetUniId === uni.id ? 'selected' : ''}>
+            ${uni.name} (${fmtMoney(uni.annualHKD)}/年)
+          </option>
+        `).join('');
+
+        const selectedUni = UNIVERSITY_DATABASE.find(u => u.id === child.targetUniId) || UNIVERSITY_DATABASE[0];
+        const yearsUntilCollege = Math.max(0, 18 - (child.age || 0));
+        const inflationRate = parseFloat(document.getElementById('eduInflation')?.value || 4) / 100;
+        
+        // Future inflated cost calculation = AnnualCost * (1 + inflation)^yearsUntilCollege * durationYears
+        const annualFutureCost = selectedUni.annualHKD * Math.pow(1 + inflationRate, yearsUntilCollege);
+        const totalFutureEduCost = annualFutureCost * selectedUni.durationYears;
+
+        const eduCard = document.createElement('div');
+        eduCard.className = 'p-4 rounded-xl border border-slate-200 bg-white shadow-sm space-y-3';
+        eduCard.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">
+                ${index + 1}
+              </span>
+              <span class="text-sm font-bold text-slate-800">${child.name || ('子女 ' + (index + 1))} (現年 ${child.age || 0} 歲)</span>
+            </div>
+            <span class="text-xs text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full font-medium">
+              預計入學年份：${new Date().getFullYear() + yearsUntilCollege} 年 (尚餘 ${yearsUntilCollege} 年)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">目標志願留學校園 / 國家</label>
+              <select onchange="updateChildUni(${index}, this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                ${uniOptions}
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">修讀學年年期</label>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="px-3 py-1.5 bg-slate-100 rounded-lg font-bold text-slate-700">${selectedUni.durationYears} 年制學士學位</span>
+                <span class="text-slate-400">目前標準每年約：${fmtMoney(selectedUni.annualHKD)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-50/60 p-3 rounded-lg flex items-center justify-between text-xs">
+            <div>
+              <span class="text-slate-500 block">通脹後預計就讀總費用 (學費+生活住宿)：</span>
+              <span class="text-base font-extrabold text-indigo-900">${fmtMoney(totalFutureEduCost)}</span>
+            </div>
+            <div class="text-right">
+              <span class="text-slate-500 block">建議每月專項儲蓄：</span>
+              <span class="text-xs font-bold text-indigo-700">約 ${fmtMoney(yearsUntilCollege > 0 ? totalFutureEduCost / (yearsUntilCollege * 12) : 0)} /月</span>
+            </div>
+          </div>
+        `;
+        eduCardsContainer.appendChild(eduCard);
+      });
+    }
+
+    function addChildRow() {
+      const newId = childrenList.length + 1;
+      childrenList.push({
+        id: Date.now(),
+        name: `子女 ${newId}`,
+        age: 3,
+        targetUniId: 'uk_g5',
+        customCost: 550000,
+        years: 3
+      });
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function clearChildrenList() {
+      childrenList = [];
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function toggleFamilyHistory(hasHistory) {
+      const detailBlock = document.getElementById('familyHistoryDetailBlock');
+      const input = document.getElementById('clientFamilyHealth');
+      if (!detailBlock) return;
+
+      if (hasHistory) {
+        detailBlock.classList.remove('hidden');
+        if (input && !input.value) {
+          input.focus();
+        }
+      } else {
+        detailBlock.classList.add('hidden');
+        if (input) input.value = '';
+      }
+      calculateAll();
+    }
+
+    function handleMaritalStatusChange(status) {
+      const spouseBlock = document.getElementById('spouseBlock');
+      const childBadge = document.getElementById('childStatusBadge');
+      
+      const isMarriedType = status.startsWith('married') || status === 'engaged';
+      if (spouseBlock) {
+        spouseBlock.style.display = isMarriedType ? 'block' : 'none';
+      }
+
+      if (status === 'married_no_kids') {
+        if (childBadge) childBadge.innerText = '已婚未有子女';
+        if (childrenList.length > 0) {
+          childrenList = [];
+          renderChildrenRows();
+        }
+      } else if (status === 'married_kids') {
+        if (childBadge) childBadge.innerText = '已育有子女';
+        if (childrenList.length === 0) {
+          childrenList.push({
+            id: Date.now(),
+            name: '長子 / 長女',
+            age: 5,
+            targetUniId: 'uk_g5',
+            customCost: 550000,
+            years: 3
+          });
+          renderChildrenRows();
+        }
+      } else if (status === 'single') {
+        if (childBadge) childBadge.innerText = '單身 (專注個人保障)';
+        if (childrenList.length > 0) {
+          childrenList = [];
+          renderChildrenRows();
+        }
+      }
+      calculateAll();
+    }
+
+    function removeChildRow(index) {
+      childrenList.splice(index, 1);
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function updateChild(index, key, val) {
+      childrenList[index][key] = val;
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function updateChildUni(index, uniId) {
+      childrenList[index].targetUniId = uniId;
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function switchStep(stepNumber) {
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.add('hidden'));
+
+      const targetPanel = document.getElementById(`step-${stepNumber}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+
+      const sidebar = document.getElementById('liveSidebar');
+      const container = document.getElementById('inputFormContainer');
+      if (stepNumber === 5) {
+        if (sidebar) sidebar.classList.add('hidden');
+        if (container) {
+          container.classList.remove('lg:col-span-8');
+          container.classList.add('hidden');
+        }
+      } else {
+        if (sidebar) sidebar.classList.remove('hidden');
+        if (container) {
+          container.classList.remove('hidden');
+          container.classList.add('lg:col-span-8');
+        }
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        if (!btn) continue;
+        if (i === stepNumber) {
+          btn.className = "step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition bg-brand-50 text-brand-700 border-2 border-brand-500 shadow-sm";
+        } else {
+          btn.className = "step-nav-btn py-3 px-3 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-50 border-2 border-transparent";
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      calculateAll();
+    }
+
+    function clearAllInputs() {
+      // Clear values and leave placeholders
+      document.getElementById('clientName').value = '';
+      document.getElementById('clientAge').value = '';
+      document.getElementById('clientJob').value = '';
+      document.getElementById('spouseName').value = '';
+      document.getElementById('spouseAge').value = '';
+      document.getElementById('parentCount').value = '';
+      setFormattedValue('parentAllowance', '');
+      setFormattedValue('clientIncome', '');
+      setFormattedValue('spouseIncome', '');
+      setFormattedValue('otherIncome', '');
+      setFormattedValue('expMortgage', '');
+      setFormattedValue('expLiving', '');
+      setFormattedValue('expChildCare', '');
+      setFormattedValue('expParentTotal', '');
+      setFormattedValue('debtMortgage', '');
+      setFormattedValue('debtOther', '');
+      setFormattedValue('assetLiquid', '');
+      setFormattedValue('existingEduFund', '');
+      document.getElementById('retireAge').value = '';
+      document.getElementById('lifeExpectancy').value = '';
+      setFormattedValue('retireMonthlyExpense', '');
+      setFormattedValue('existingMPF', '');
+      setFormattedValue('otherRetireIncome', '');
+      setFormattedValue('existLifeCover', '');
+      setFormattedValue('existCICover', '');
+
+      const fhNoRadio = document.querySelector('input[name="familyHistoryToggle"][value="no"]');
+      if (fhNoRadio) {
+        fhNoRadio.checked = true;
+        toggleFamilyHistory(false);
+      }
+
+      const maritalRadio = document.querySelector('input[name="maritalStatus"][value="married_no_kids"]');
+      if (maritalRadio) {
+        maritalRadio.checked = true;
+        handleMaritalStatusChange('married_no_kids');
+      }
+
+      childrenList = [];
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function calculateAll() {
+      // 1. Gather inputs via getNumericValue (which cleanly strips commas)
+      const clientName = document.getElementById('clientName')?.value.trim() || '尊貴客戶';
+      const clientAge = parseInt(document.getElementById('clientAge')?.value) || 35;
+      const clientIncome = getNumericValue('clientIncome');
+      const spouseIncome = getNumericValue('spouseIncome');
+      const otherIncome = getNumericValue('otherIncome');
+      const totalFamilyIncome = clientIncome + spouseIncome + otherIncome;
+
+      // Expenses
+      const expMortgage = getNumericValue('expMortgage');
+      const expLiving = getNumericValue('expLiving');
+      const expChildCare = getNumericValue('expChildCare');
+      const expParent = getNumericValue('expParentTotal');
+      const totalMonthlyExpense = expMortgage + expLiving + expChildCare + expParent;
+      const monthlySurplus = totalFamilyIncome - totalMonthlyExpense;
+
+      // Liabilities & Assets
+      const mortgageDebt = getNumericValue('debtMortgage');
+      const otherDebt = getNumericValue('debtOther');
+      const liquidAsset = getNumericValue('assetLiquid');
+
+      // Update cashflow box
+      const surplusLabel = document.getElementById('monthlySurplusLabel');
+      if (surplusLabel) {
+        surplusLabel.innerText = (monthlySurplus >= 0 ? '+' : '') + fmtMoney(monthlySurplus) + ' / 月';
+        surplusLabel.className = monthlySurplus >= 0 ? "text-xl font-extrabold text-emerald-700" : "text-xl font-extrabold text-rose-600";
+      }
+      const emergBox = document.getElementById('emergencyFundNeed');
+      if (emergBox) {
+        emergBox.innerText = fmtMoney(totalMonthlyExpense * 6);
+      }
+
+      // Calculation 1: Life Protection Need
+      let childUpkeepTotal = 0;
+      childrenList.forEach(child => {
+        const yearsToSupport = Math.max(0, 22 - (child.age || 0));
+        childUpkeepTotal += yearsToSupport * 12 * 10000;
+      });
+
+      const parentSupportYears = 12;
+      const parentUpkeepTotal = expParent * 12 * parentSupportYears;
+      const totalLifeObligationNeed = mortgageDebt + otherDebt + childUpkeepTotal + parentUpkeepTotal + (totalMonthlyExpense * 12);
+      
+      const existLifeCover = getNumericValue('existLifeCover');
+      const lifeGap = Math.max(0, totalLifeObligationNeed - (existLifeCover + Math.max(0, liquidAsset - totalMonthlyExpense * 6)));
+
+      // Calculation 2: Critical Illness Gap
+      const annualExpense = totalMonthlyExpense * 12;
+      const suggestedCINeed = annualExpense > 0 ? (annualExpense * 3) + 300000 : 0;
+      const existCICover = getNumericValue('existCICover');
+      const ciGap = Math.max(0, suggestedCINeed - existCICover);
+
+      // Calculation 3: Education Gap
+      const eduInflationRate = parseFloat(document.getElementById('eduInflation')?.value || 4) / 100;
+      let totalInflatedEducationNeed = 0;
+
+      childrenList.forEach(child => {
+        const uni = UNIVERSITY_DATABASE.find(u => u.id === child.targetUniId) || UNIVERSITY_DATABASE[0];
+        const yearsUntilCollege = Math.max(0, 18 - (child.age || 0));
+        const inflatedAnnual = uni.annualHKD * Math.pow(1 + eduInflationRate, yearsUntilCollege);
+        totalInflatedEducationNeed += inflatedAnnual * uni.durationYears;
+      });
+
+      const existingEduFund = getNumericValue('existingEduFund');
+      const educationGap = Math.max(0, totalInflatedEducationNeed - existingEduFund);
+
+      // Calculation 4: Retirement Gap
+      const retireAge = parseInt(document.getElementById('retireAge')?.value) || 60;
+      const lifeExp = parseInt(document.getElementById('lifeExpectancy')?.value) || 85;
+      const retireYears = Math.max(1, lifeExp - retireAge);
+      const retireMonthlyExp = getNumericValue('retireMonthlyExpense');
+      const otherRetireMonthlyIncome = getNumericValue('otherRetireIncome');
+      const netMonthlyRetireNeed = Math.max(0, retireMonthlyExp - otherRetireMonthlyIncome);
+
+      const totalRetirementNeed = netMonthlyRetireNeed * 12 * retireYears;
+      const existingMPF = getNumericValue('existingMPF');
+      const retirementGap = Math.max(0, totalRetirementNeed - existingMPF);
+
+      // Update sidebar numbers (strictly formatted with commas)
+      const sLife = document.getElementById('sideLifeGap');
+      const sCI = document.getElementById('sideCIGap');
+      const sEdu = document.getElementById('sideEduGap');
+      const sRet = document.getElementById('sideRetireGap');
+
+      if (sLife) sLife.innerText = fmtMoney(lifeGap);
+      if (sCI) sCI.innerText = fmtMoney(ciGap);
+      if (sEdu) sEdu.innerText = fmtMoney(educationGap);
+      if (sRet) sRet.innerText = fmtMoney(retirementGap);
+
+      // Update Step 5 Card metrics
+      const rClient = document.getElementById('reportClientName');
+      if (rClient) rClient.innerText = clientName;
+
+      const cLifeGap = document.getElementById('cardLifeGap');
+      if (cLifeGap) cLifeGap.innerText = fmtMoney(lifeGap);
+      const cLifeNeed = document.getElementById('cardLifeNeed');
+      if (cLifeNeed) cLifeNeed.innerText = fmtMoney(totalLifeObligationNeed);
+      const cLifeExist = document.getElementById('cardLifeExist');
+      if (cLifeExist) cLifeExist.innerText = fmtMoney(existLifeCover);
+
+      const cCIGap = document.getElementById('cardCIGap');
+      if (cCIGap) cCIGap.innerText = fmtMoney(ciGap);
+      const cCINeed = document.getElementById('cardCINeed');
+      if (cCINeed) cCINeed.innerText = fmtMoney(suggestedCINeed);
+      const cCIExist = document.getElementById('cardCIExist');
+      if (cCIExist) cCIExist.innerText = fmtMoney(existCICover);
+
+      const cEduGap = document.getElementById('cardEduGap');
+      if (cEduGap) cEduGap.innerText = fmtMoney(educationGap);
+      const cEduNeed = document.getElementById('cardEduNeed');
+      if (cEduNeed) cEduNeed.innerText = fmtMoney(totalInflatedEducationNeed);
+      const cEduExist = document.getElementById('cardEduExist');
+      if (cEduExist) cEduExist.innerText = fmtMoney(existingEduFund);
+
+      const cRetGap = document.getElementById('cardRetireGap');
+      if (cRetGap) cRetGap.innerText = fmtMoney(retirementGap);
+      const cRetNeed = document.getElementById('cardRetireNeed');
+      if (cRetNeed) cRetNeed.innerText = fmtMoney(totalRetirementNeed);
+      const cRetExist = document.getElementById('cardRetireExist');
+      if (cRetExist) cRetExist.innerText = fmtMoney(existingMPF);
+
+      // Update Pyramid & Recommendations
+      updatePyramid(lifeGap, ciGap, educationGap, retirementGap);
+      generateRecommendations(lifeGap, ciGap, educationGap, retirementGap, clientAge, monthlySurplus);
+
+      // Render Charts & update radar
+      updateCharts(totalLifeObligationNeed, existLifeCover, suggestedCINeed, existCICover, totalInflatedEducationNeed, existingEduFund, totalRetirementNeed, existingMPF);
+    }
+
+    function updateCharts(lifeNeed, lifeExist, ciNeed, ciExist, eduNeed, eduExist, retireNeed, retireExist) {
+      if (typeof Chart === 'undefined') return;
+
+      const quickRadarCanvas = document.getElementById('quickRadarChart');
+      const fallbackMsg = document.getElementById('quickChartFallback');
+      
+      // Calculate gap values in millions or thousands
+      const lifeG = Math.max(0, lifeNeed - lifeExist);
+      const ciG = Math.max(0, ciNeed - ciExist);
+      const eduG = Math.max(0, eduNeed - eduExist);
+      const retG = Math.max(0, retireNeed - retireExist);
+
+      const totalGaps = lifeG + ciG + eduG + retG;
+
+      // 1. Sidebar Radar / Polar Chart
+      if (quickRadarCanvas) {
+        if (totalGaps === 0 && lifeNeed === 0 && ciNeed === 0) {
+          if (fallbackMsg) fallbackMsg.classList.remove('hidden');
+          if (quickRadarChartInstance) {
+            quickRadarChartInstance.destroy();
+            quickRadarChartInstance = null;
+          }
+        } else {
+          if (fallbackMsg) fallbackMsg.classList.add('hidden');
+          
+          // Normalized scale scores for radar (0 to 100)
+          const norm = (val, maxVal) => maxVal > 0 ? Math.min(100, Math.round((val / maxVal) * 100)) : 20;
+
+          const chartData = {
+            labels: ['人壽缺口', '危疾缺口', '留學缺口', '退休缺口'],
+            datasets: [{
+              label: '風險缺口指數',
+              data: [
+                lifeNeed > 0 ? norm(lifeG, lifeNeed) : 10,
+                ciNeed > 0 ? norm(ciG, ciNeed) : 10,
+                eduNeed > 0 ? norm(eduG, eduNeed) : 10,
+                retireNeed > 0 ? norm(retG, retireNeed) : 10
+              ],
+              backgroundColor: 'rgba(239, 68, 68, 0.2)',
+              borderColor: '#e11d48',
+              borderWidth: 2,
+              pointBackgroundColor: '#e11d48',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: '#e11d48'
+            }]
+          };
+
+          if (quickRadarChartInstance) {
+            quickRadarChartInstance.data = chartData;
+            quickRadarChartInstance.update();
+          } else {
+            quickRadarChartInstance = new Chart(quickRadarCanvas, {
+              type: 'radar',
+              data: chartData,
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  r: {
+                    angleLines: { color: 'rgba(226, 232, 240, 0.8)' },
+                    grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                    pointLabels: {
+                      font: { size: 11, family: 'Noto Sans TC' },
+                      color: '#475569'
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: { display: false }
+                  }
+                },
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) => ` 風險暴露度: ${ctx.raw}%`
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+
+      // 2. Step 5 Detailed Bar Chart
+      const detailedBarCanvas = document.getElementById('detailedBarChart');
+      if (detailedBarCanvas) {
+        const barData = {
+          labels: ['家庭身故責任', '嚴重疾病收入替代', '子女環球留學', '退休長壽資金庫'],
+          datasets: [
+            {
+              label: '現有儲備 / 已有保額',
+              data: [lifeExist, ciExist, eduExist, retireExist],
+              backgroundColor: '#0284c7',
+              borderRadius: 6
+            },
+            {
+              label: '風險缺口 (急需補充)',
+              data: [lifeG, ciG, eduG, retG],
+              backgroundColor: '#e11d48',
+              borderRadius: 6
+            }
+          ]
+        };
+
+        if (detailedBarChartInstance) {
+          detailedBarChartInstance.data = barData;
+          detailedBarChartInstance.update();
+        } else {
+          detailedBarChartInstance = new Chart(detailedBarCanvas, {
+            type: 'bar',
+            data: barData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: { display: false }
+                },
+                y: {
+                  stacked: true,
+                  ticks: {
+                    callback: (value) => fmtMoney(value)
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: { font: { family: 'Noto Sans TC', size: 12 } }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (ctx) => ` ${ctx.dataset.label}: ${fmtMoney(ctx.raw)}`
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+
+    function updatePyramid(lifeGap, ciGap, eduGap, retireGap) {
+      const defenseBar = document.getElementById('pyramidDefenseBar');
+      const defenseStatus = document.getElementById('pyramidDefenseStatus');
+      if (!defenseBar || !defenseStatus) return;
+
+      if (lifeGap > 2000000 || ciGap > 1000000) {
+        defenseBar.style.width = '28%';
+        defenseBar.className = 'bg-rose-500 h-full rounded-full transition-all duration-500';
+        defenseStatus.innerText = '嚴重缺口 (極高風險)';
+        defenseStatus.className = 'font-semibold text-rose-600';
+      } else if (lifeGap > 0 || ciGap > 0) {
+        defenseBar.style.width = '60%';
+        defenseBar.className = 'bg-amber-500 h-full rounded-full transition-all duration-500';
+        defenseStatus.innerText = '局部防護 (有漏洞)';
+        defenseStatus.className = 'font-semibold text-amber-600';
+      } else {
+        defenseBar.style.width = '100%';
+        defenseBar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-500';
+        defenseStatus.innerText = '防護充足 (穩健)';
+        defenseStatus.className = 'font-semibold text-emerald-600';
+      }
+
+      const growthBar = document.getElementById('pyramidGrowthBar');
+      const growthStatus = document.getElementById('pyramidGrowthStatus');
+      if (!growthBar || !growthStatus) return;
+
+      const totalGoal = eduGap + retireGap;
+      if (totalGoal > 6000000) {
+        growthBar.style.width = '35%';
+        growthStatus.innerText = '儲蓄缺口巨大';
+        growthStatus.className = 'font-semibold text-rose-600';
+      } else if (totalGoal > 2000000) {
+        growthBar.style.width = '55%';
+        growthStatus.innerText = '儲備進度 50%';
+        growthStatus.className = 'font-semibold text-indigo-600';
+      } else {
+        growthBar.style.width = '90%';
+        growthStatus.innerText = '即將達標';
+        growthStatus.className = 'font-semibold text-emerald-600';
+      }
+    }
+
+    function generateRecommendations(lifeGap, ciGap, eduGap, retireGap, age, surplus) {
+      const container = document.getElementById('recommendationCardsContainer');
+      const scriptBox = document.getElementById('advisorMeetingScript');
+      if (!container || !scriptBox) return;
+
+      container.innerHTML = '';
+
+      const maritalVal = document.querySelector('input[name="maritalStatus"]:checked')?.value || 'married_kids';
+      const hasKids = childrenList.length > 0;
+      const clientName = document.getElementById('clientName')?.value.trim() || '客戶';
+
+      // Plan 1: Medical & Critical Illness Solution
+      const plan1 = document.createElement('div');
+      plan1.className = 'p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex flex-col justify-between';
+      plan1.innerHTML = `
+        <div>
+          <span class="text-[10px] font-bold tracking-wider text-rose-700 bg-rose-100 px-2 py-0.5 rounded uppercase">優先等級：1 (即時防護)</span>
+          <h4 class="text-sm font-bold text-slate-800 mt-2">多次賠付危疾 + 高端自願醫保 (VHIS)</h4>
+          <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+            補足 <b>${fmtMoney(ciGap)}</b> 的危疾收入替代缺口。建議配置「多重癌心腦理賠 + 癌症持續現金津貼」保單，並配合全數賠償高端醫療鎖定優質私家醫院資源。
+          </p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-rose-200/60 text-xs text-rose-800 font-semibold flex justify-between">
+          <span>建議保費預算比例：</span>
+          <span>約家庭收入 7% - 10%</span>
+        </div>
+      `;
+      container.appendChild(plan1);
+
+      // Plan 2: Family Protection & Term / Whole Life
+      const plan2 = document.createElement('div');
+      plan2.className = 'p-4 rounded-xl border border-amber-200 bg-amber-50/50 flex flex-col justify-between';
+      
+      let plan2Title = "定期純人壽 (Term Life) 鎖定按揭餘額";
+      let plan2Desc = `目前身故責任缺口達 <b>${fmtMoney(lifeGap)}</b>。高性價比的做法是以「20-25年定期人壽」覆蓋房貸與生活支出，保費極具槓桿優勢，確保極端風險時家人不被收樓。`;
+      
+      if (maritalVal === 'married_no_kids' || (!hasKids && maritalVal.startsWith('married'))) {
+        plan2Title = "夫婦互相對保人壽 (Couples Term Life)";
+        plan2Desc = `在未有子女的情況下，身故防護以<b>「相濡以沫、互保按揭」</b>為核心。若其中一人不幸離世，保險金能一筆過償清物業按揭，讓另一半安居無後顧之憂。`;
+      }
+
+      plan2.innerHTML = `
+        <div>
+          <span class="text-[10px] font-bold tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded uppercase">優先等級：2 (伴侶與家庭責任)</span>
+          <h4 class="text-sm font-bold text-slate-800 mt-2">${plan2Title}</h4>
+          <p class="text-xs text-slate-600 mt-1 leading-relaxed">${plan2Desc}</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-amber-200/60 text-xs text-amber-800 font-semibold flex justify-between">
+          <span>建議保額配置：</span>
+          <span>至少覆蓋 100% 房貸餘額</span>
+        </div>
+      `;
+      container.appendChild(plan2);
+
+      // Plan 3: Children Education OR Couple Asset Accumulation
+      const plan3 = document.createElement('div');
+      plan3.className = 'p-4 rounded-xl border border-indigo-200 bg-indigo-50/50 flex flex-col justify-between';
+
+      if (!hasKids && maritalVal === 'married_no_kids') {
+        plan3.innerHTML = `
+          <div>
+            <span class="text-[10px] font-bold tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded uppercase">優先等級：3 (二人財富增值)</span>
+            <h4 class="text-sm font-bold text-slate-800 mt-2">多元貨幣儲蓄分紅 + 提前退休年金</h4>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              目前暫無子女養育負擔，家庭擁有充沛的每月儲蓄力！建議將部分可支配現金轉化為<b>「合資格延期年金 (QDAP) 與多元貨幣高分紅保單」</b>，既可享稅務寬免，又能提早鎖定 55 歲退休被動收入，亦能隨時轉作未來育兒彈性基金。
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-indigo-200/60 text-xs text-emerald-800 font-semibold flex justify-between">
+            <span>策劃方向：</span>
+            <span>扣稅年金 / 早退被動現金流</span>
+          </div>
+        `;
+      } else {
+        plan3.innerHTML = `
+          <div>
+            <span class="text-[10px] font-bold tracking-wider text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded uppercase">優先等級：3 (目標累積)</span>
+            <h4 class="text-sm font-bold text-slate-800 mt-2">多元貨幣儲蓄分紅保險 (留學教育年金)</h4>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              為子女留學缺口 <b>${fmtMoney(eduGap)}</b> 設立專項隔離基金。利用保單多種貨幣轉換功能（英鎊、美元、澳元），在大學入學時精準支取，同時享受長期複利滾存。
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-indigo-200/60 text-xs text-indigo-800 font-semibold flex justify-between">
+            <span>建議供款期：</span>
+            <span>5年 / 10年期分紅分期</span>
+          </div>
+        `;
+      }
+      container.appendChild(plan3);
+
+      // Script generator based on children & marital status
+      if (maritalVal === 'married_no_kids' || (!hasKids && maritalVal.startsWith('married'))) {
+        scriptBox.innerHTML = `
+          <p>「<b>${clientName}</b>，非常感謝今日坦誠同我分享財務狀況。同有小朋友嘅家庭唔同，兩位而家享受緊好高質素嘅二人世界，家庭財政好有彈性，但亦都有好鮮明嘅風險盲點需要預先防範：</p>
+          <p>第一，現時家庭仲有 <b>${fmtMoney(getNumericValue('debtMortgage'))}</b> 嘅物業按揭，假如其中一方因為重大健康危機暫停工作，另一方就要獨自背負供樓同照顧嘅雙重壓力。因此<b>『互保房貸』</b>同足夠嘅<b>『危疾收入替代金 (${fmtMoney(ciGap)})』</b>係維持兩人穩定生活嘅第一道防線。」</p>
+          <p>「第二，趁目前未有子女負擔、儲蓄力最強嘅黃金期，將每月約 <b>${fmtMoney(Math.round(surplus * 0.35))}</b> 嘅結餘，配置入<b>『多元貨幣儲蓄保單及退休年金』</b>。未來無論決定生育作為育兒基金，定係維持二人世界提早退休環遊世界，呢筆資金都享有複利滾存同極高自由度。咁樣安排兩位覺得係咪最稱心？」</p>
+        `;
+      } else {
+        scriptBox.innerHTML = `
+          <p>「<b>${clientName}</b>，非常感謝你今日花時間同我做呢個全面財務掃描。我哋整理之後發現一個好重要嘅事實：</p>
+          <p>你作為成個家庭最核心嘅經濟火車頭，現時身故承擔嘅責任（包括按揭同小朋友長大）有成 <b>${fmtMoney(lifeGap)}</b> 未有完全對沖。如果先生/女士平安健康，以你嘅月入能力，供樓同養育子女絕對冇問題；但一旦發生重大健康問題，現有保額可能只夠支撐短暫開支，樓按同小朋友嘅留學夢想就會受到衝擊。」</p>
+          <p>「所以我建議我哋今日第一步唔係盲目做高風險投資，而係<b>『先築底、後起樓』</b>：用最輕嘅保費槓桿，先將定期人壽同危疾防禦網拉起，守護好現有資產；然後將每月約 <b>${fmtMoney(Math.round(surplus * 0.35))}</b> 嘅結餘，放落子女多元貨幣教育儲蓄，確保入大學時學費百分之百準備好。咁樣安排你覺得係咪最安心嘅方向？」</p>
+        `;
+      }
+    }
+
+    function loadSamplePreset(presetType) {
+      if (presetType === 'married_no_kids') {
+        document.getElementById('clientName').value = '林先生 & 梁小姐';
+        document.getElementById('clientAge').value = 33;
+        document.getElementById('clientJob').value = '外資企業 營運經理';
+        setFormattedValue('clientIncome', 62000);
+        setFormattedValue('spouseIncome', 45000);
+        setFormattedValue('expMortgage', 26000);
+        setFormattedValue('expLiving', 19000);
+        setFormattedValue('expChildCare', 0);
+        setFormattedValue('expParentTotal', 9000);
+        setFormattedValue('debtMortgage', 4800000);
+        setFormattedValue('debtOther', 0);
+        setFormattedValue('assetLiquid', 1100000);
+        setFormattedValue('existLifeCover', 1500000);
+        setFormattedValue('existCICover', 500000);
+        document.getElementById('retireAge').value = 58;
+        setFormattedValue('retireMonthlyExpense', 35000);
+        setFormattedValue('existingMPF', 750000);
+        setFormattedValue('existingEduFund', 0);
+
+        const genderSelect = document.getElementById('clientGender');
+        if (genderSelect) genderSelect.value = 'male';
+        const fhNoRadio = document.querySelector('input[name="familyHistoryToggle"][value="no"]');
+        if (fhNoRadio) {
+          fhNoRadio.checked = true;
+          toggleFamilyHistory(false);
+        }
+
+        const radio = document.querySelector('input[name="maritalStatus"][value="married_no_kids"]');
+        if (radio) radio.checked = true;
+        handleMaritalStatusChange('married_no_kids');
+        childrenList = [];
+      } else if (presetType === 'family') {
+        document.getElementById('clientName').value = '陳志豪 (David Chan)';
+        document.getElementById('clientAge').value = 38;
+        document.getElementById('clientJob').value = '外資投行 項目副總裁';
+        setFormattedValue('clientIncome', 75000);
+        setFormattedValue('spouseIncome', 40000);
+        setFormattedValue('expMortgage', 32000);
+        setFormattedValue('expLiving', 22000);
+        setFormattedValue('expChildCare', 16000);
+        setFormattedValue('expParentTotal', 10000);
+        setFormattedValue('debtMortgage', 5800000);
+        setFormattedValue('debtOther', 0);
+        setFormattedValue('assetLiquid', 950000);
+        setFormattedValue('existLifeCover', 2000000);
+        setFormattedValue('existCICover', 700000);
+        document.getElementById('retireAge').value = 60;
+        setFormattedValue('retireMonthlyExpense', 38000);
+        setFormattedValue('existingMPF', 850000);
+        setFormattedValue('existingEduFund', 400000);
+
+        const genderSelect = document.getElementById('clientGender');
+        if (genderSelect) genderSelect.value = 'male';
+        const fhYesRadio = document.querySelector('input[name="familyHistoryToggle"][value="yes"]');
+        if (fhYesRadio) {
+          fhYesRadio.checked = true;
+          toggleFamilyHistory(true);
+          const fhInput = document.getElementById('clientFamilyHealth');
+          if (fhInput) fhInput.value = '父親曾有心血管狀況，希望預防重大疾病';
+        }
+
+        const radio = document.querySelector('input[name="maritalStatus"][value="married_kids"]');
+        if (radio) radio.checked = true;
+
+        childrenList = [
+          { id: 1, name: '大仔 (Ethan)', age: 7, targetUniId: 'uk_oxbridge', customCost: 620000, years: 3 },
+          { id: 2, name: '細女 (Sophia)', age: 4, targetUniId: 'us_top_public', customCost: 650000, years: 4 }
+        ];
+      } else if (presetType === 'young') {
+        document.getElementById('clientName').value = '李家榮 (Kelvin)';
+        document.getElementById('clientAge').value = 29;
+        document.getElementById('clientJob').value = '會計師事務所 經理';
+        setFormattedValue('clientIncome', 48000);
+        setFormattedValue('spouseIncome', 32000);
+        setFormattedValue('expMortgage', 20000);
+        setFormattedValue('expLiving', 15000);
+        setFormattedValue('expChildCare', 0);
+        setFormattedValue('expParentTotal', 6000);
+        setFormattedValue('debtMortgage', 3800000);
+        setFormattedValue('debtOther', 80000);
+        setFormattedValue('assetLiquid', 400000);
+        setFormattedValue('existLifeCover', 800000);
+        setFormattedValue('existCICover', 300000);
+        document.getElementById('retireAge').value = 60;
+        setFormattedValue('retireMonthlyExpense', 25000);
+        setFormattedValue('existingMPF', 280000);
+        setFormattedValue('existingEduFund', 0);
+
+        childrenList = [
+          { id: 1, name: '準寶寶 (籌備中)', age: 0, targetUniId: 'aus_go8', customCost: 460000, years: 3 }
+        ];
+      } else if (presetType === 'hwi') {
+        document.getElementById('clientName').value = '黃先生 (Arthur Wong)';
+        document.getElementById('clientAge').value = 46;
+        document.getElementById('clientJob').value = '國際貿易公司 董事總經理';
+        setFormattedValue('clientIncome', 160000);
+        setFormattedValue('spouseIncome', 0);
+        setFormattedValue('expMortgage', 45000);
+        setFormattedValue('expLiving', 38000);
+        setFormattedValue('expChildCare', 25000);
+        setFormattedValue('expParentTotal', 15000);
+        setFormattedValue('debtMortgage', 7500000);
+        setFormattedValue('debtOther', 0);
+        setFormattedValue('assetLiquid', 2800000);
+        setFormattedValue('existLifeCover', 3000000);
+        setFormattedValue('existCICover', 1200000);
+        document.getElementById('retireAge').value = 58;
+        setFormattedValue('retireMonthlyExpense', 60000);
+        setFormattedValue('existingMPF', 1800000);
+        setFormattedValue('existingEduFund', 1200000);
+
+        childrenList = [
+          { id: 1, name: '長子 (Marcus)', age: 12, targetUniId: 'us_ivy', customCost: 820000, years: 4 },
+          { id: 2, name: '次女 (Jasmine)', age: 10, targetUniId: 'uk_g5', customCost: 550000, years: 3 }
+        ];
+      }
+
+      renderChildrenRows();
+      calculateAll();
+      switchStep(1);
+    }
+
+    window.onload = function () {
+      renderChildrenRows();
+      calculateAll();
+    };
+  </script>
+</body>
+</html>
