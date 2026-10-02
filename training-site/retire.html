@@ -1,1 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>退休策劃系統 (精美圖案視覺增強版)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- html2pdf.js for direct client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Floating illustration subtle animation */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(1deg); }
+    }
+    .animate-float {
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+
+    /* Print specific optimization */
+    @media print {
+      body {
+        background-color: white !important;
+        color: #0f172a !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .card-shadow {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-amber-400 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/25">
+          <i class="fa-solid fa-umbrella-beach"></i>
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-none flex items-center gap-2">
+            退休策劃系統
+            <span class="text-[11px] px-2.5 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-full uppercase tracking-wider shadow-sm">
+              <i class="fa-solid fa-palette mr-1"></i>視覺圖解旗艦版
+            </span>
+          </h1>
+          <p class="text-xs text-slate-500 mt-1">精算複利模型 • 人生里程碑可視化 • 時間價值圖案解析</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5 no-print">
+        <button onclick="resetDefaults()" class="text-xs sm:text-sm px-3.5 py-2 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 font-medium">
+          <i class="fa-solid fa-arrow-rotate-left"></i> 重設預設值
+        </button>
+        <button id="exportPdfBtn" onclick="exportAndSharePDF()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-md shadow-blue-500/25 transition-all flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 微信分享</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- Top Banner with Rich SVG Art & Financial Quote -->
+    <div class="relative bg-gradient-to-r from-slate-950 via-indigo-950 to-blue-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl overflow-hidden border border-indigo-700/30">
+      <!-- Background Ambient Glow -->
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute right-48 -top-24 w-60 h-60 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/25 border border-blue-400/30 text-blue-200 text-xs font-semibold">
+            <i class="fa-solid fa-lightbulb text-amber-300"></i> 理財核心思考
+          </div>
+          <h2 class="text-xl sm:text-3xl font-black tracking-tight leading-snug">
+            「你有冇諗過退休唔係隨意即可，<br class="hidden sm:inline" />而係需要<span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">刻意規劃</span>嘅一生大事？」
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            核心思考提問：若儲蓄途中發生意外或疾病，如何不影響現有財富而保證退休計劃繼續實行？
+          </p>
+        </div>
+
+        <!-- Custom Financial Illustration SVG -->
+        <div class="shrink-0 w-64 h-36 relative flex items-center justify-center animate-float">
+          <svg class="w-full h-full drop-shadow-2xl" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FDE047"/>
+                <stop offset="100%" stop-color="#D97706"/>
+              </linearGradient>
+              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38BDF8"/>
+                <stop offset="100%" stop-color="#2563EB"/>
+              </linearGradient>
+              <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Decorative Base Platform -->
+            <ellipse cx="160" cy="155" rx="130" ry="18" fill="url(#glassGrad)"/>
+            
+            <!-- Growth Chart Curved Ribbon -->
+            <path d="M 40 145 C 90 140, 130 115, 170 85 C 210 55, 245 40, 280 25" stroke="#38BDF8" stroke-width="4" stroke-dasharray="6 4" stroke-linecap="round"/>
+            <path d="M 270 25 L 285 24 L 282 39" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Central Target Shield (Financial Security) -->
+            <path d="M 160 30 C 195 30 205 45 205 75 C 205 110 160 135 160 135 C 160 135 115 110 115 75 C 115 45 125 30 160 30 Z" fill="url(#shieldGrad)" opacity="0.9"/>
+            <path d="M 160 40 C 187 40 195 52 195 75 C 195 102 160 123 160 123 C 160 123 125 102 125 75 C 125 52 133 40 160 40 Z" fill="#1E3A8A" opacity="0.7"/>
+
+            <!-- Umbrella Graphic inside Shield (Retirement Protection) -->
+            <path d="M 140 70 A 20 20 0 0 1 180 70 Z" fill="#F8FAFC"/>
+            <path d="M 160 70 L 160 86 A 4 4 0 0 1 152 86" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Stack of Gold Coins (Wealth Compound) -->
+            <!-- Coin 1 -->
+            <ellipse cx="85" cy="130" rx="22" ry="7" fill="#B45309"/>
+            <rect x="63" y="122" width="44" height="8" fill="url(#goldGrad)"/>
+            <ellipse cx="85" cy="122" rx="22" ry="7" fill="#FDE047"/>
+            <!-- Coin 2 -->
+            <ellipse cx="85" cy="116" rx="22" ry="7" fill="#B45309"/>
+            <rect x="63" y="108" width="44" height="8" fill="url(#goldGrad)"/>
+            <ellipse cx="85" cy="108" rx="22" ry="7" fill="#FDE047"/>
+            <text x="85" y="112" font-size="10" font-weight="900" fill="#78350F" text-anchor="middle">$</text>
+
+            <!-- Hourglass / Clock (Time Value) -->
+            <g transform="translate(225, 80)">
+              <circle cx="20" cy="20" r="24" fill="#0F172A" stroke="#F59E0B" stroke-width="3"/>
+              <circle cx="20" cy="20" r="2" fill="#F59E0B"/>
+              <line x1="20" y1="20" x2="20" y2="9" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+              <line x1="20" y1="20" x2="29" y2="20" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Badge spark -->
+              <polygon points="34,4 37,12 45,15 37,18 34,26 31,18 23,15 31,12" fill="#FDE047"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMINENT TOP BANNER: 策劃退休三大戒律 (置頂醒目位置) -->
+    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-amber-200/80 shadow-md bg-gradient-to-br from-amber-50/40 via-white to-orange-50/30">
+      <div class="flex items-center justify-between mb-3.5 pb-2.5 border-b border-amber-100">
+        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-sm shadow-md shadow-amber-500/25">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </span>
+          策劃退休三大戒律
+        </h3>
+        <span class="text-xs px-3 py-1 bg-amber-100 text-amber-800 rounded-full font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-amber-600"></i> 理財關鍵心法
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
+        <div class="p-4 rounded-2xl bg-rose-50/80 border border-rose-200 flex items-start gap-3.5 transition-all hover:shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 text-lg shadow-sm">
+            <i class="fa-solid fa-stopwatch-20"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-rose-900 flex items-center gap-1.5">
+              <span>一、不可太遲開始</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-200/80 text-rose-800 font-semibold">時間代價</span>
+            </div>
+            <p class="text-rose-700/90 text-xs mt-1 leading-relaxed">遲 5 年至 10 年，每月所需儲蓄倍增甚至無法如期達標，時間是複利最大盟友。</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start gap-3.5 transition-all hover:shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 text-lg shadow-sm">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <span>二、不可儲得太少</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-800 font-semibold">長壽風險</span>
+            </div>
+            <p class="text-amber-700/90 text-xs mt-1 leading-relaxed">容易低估長壽風險與醫療通脹，儲蓄不足將導致退休後資金過早耗盡。</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200 flex items-start gap-3.5 transition-all hover:shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 text-lg shadow-sm">
+            <i class="fa-solid fa-chart-line-down"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+              <span>三、不可太保守投資</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200/80 text-indigo-800 font-semibold">通脹蠶食</span>
+            </div>
+            <p class="text-indigo-700/90 text-xs mt-1 leading-relaxed">全放活期現金會被平均 3% 通脹完全蠶食實質購買力，必須善用穩健投資工具。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISUAL INFOGRAPHIC: 4 Life Milestones Visual Diagram -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4">
+      
+      <!-- Milestone 1 -->
+      <div class="bg-white rounded-2xl p-4 border border-blue-100 shadow-sm flex items-center gap-3.5 relative overflow-hidden group hover:border-blue-300 transition-all">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-person-running"></i>
+        </div>
+        <div>
+          <div class="text-[11px] font-bold text-blue-600 uppercase tracking-wider">第一站 • 現時起點</div>
+          <div class="font-extrabold text-slate-800 text-sm sm:text-base" id="tileCurAge">40 歲</div>
+          <div class="text-[11px] text-slate-400">開啟紀律複利儲蓄</div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-slate-100/80 -z-0 text-5xl font-black pointer-events-none select-none">1</div>
+      </div>
+
+      <!-- Milestone 2 -->
+      <div class="bg-white rounded-2xl p-4 border border-indigo-100 shadow-sm flex items-center gap-3.5 relative overflow-hidden group hover:border-indigo-300 transition-all">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-hourglass-half"></i>
+        </div>
+        <div>
+          <div class="text-[11px] font-bold text-indigo-600 uppercase tracking-wider">第二站 • 黃金儲蓄期</div>
+          <div class="font-extrabold text-slate-800 text-sm sm:text-base" id="tileSaveYears">25 年工作期</div>
+          <div class="text-[11px] text-slate-400">錢搵錢複利滾存巔峰</div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-slate-100/80 -z-0 text-5xl font-black pointer-events-none select-none">2</div>
+      </div>
+
+      <!-- Milestone 3 -->
+      <div class="bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex items-center gap-3.5 relative overflow-hidden group hover:border-amber-300 transition-all">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-cocktail"></i>
+        </div>
+        <div>
+          <div class="text-[11px] font-bold text-amber-600 uppercase tracking-wider">第三站 • 榮休里程碑</div>
+          <div class="font-extrabold text-slate-800 text-sm sm:text-base" id="tileRetireAge">65 歲</div>
+          <div class="text-[11px] text-slate-400">啟動自動化月領年金</div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-slate-100/80 -z-0 text-5xl font-black pointer-events-none select-none">3</div>
+      </div>
+
+      <!-- Milestone 4 -->
+      <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex items-center gap-3.5 relative overflow-hidden group hover:border-emerald-300 transition-all">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+        <div>
+          <div class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">第四站 • 圓滿人生期</div>
+          <div class="font-extrabold text-slate-800 text-sm sm:text-base" id="tileLifeAge">85 歲預期</div>
+          <div class="text-[11px] text-slate-400">安享晚年及傳承規劃</div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-slate-100/80 -z-0 text-5xl font-black pointer-events-none select-none">4</div>
+      </div>
+
+    </div>
+
+    <!-- MAIN INTERACTIVE GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN: Inputs (4 cols) -->
+      <div class="lg:col-span-4 space-y-5 no-print">
+        
+        <!-- Profile Card -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-blue-100/80 text-blue-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-user-gear"></i>
+              </span>
+              年齡與生活目標
+            </h3>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">參數設定</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="currentAge" class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-calendar-check text-blue-500"></i> 現時歲數
+                </label>
+                <span id="currentAgeVal" class="text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded-md">40 歲</span>
+              </div>
+              <input type="range" id="currentAge" min="18" max="70" value="40" step="1" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" oninput="calculate()">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="retireAge" class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-flag-checkered text-amber-500"></i> 預期退休歲數
+                </label>
+                <span id="retireAgeVal" class="text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-md">65 歲</span>
+              </div>
+              <input type="range" id="retireAge" min="45" max="80" value="65" step="1" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500" oninput="calculate()">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="lifeExpectancy" class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-heart-pulse text-rose-500"></i> 預期壽命 (終年)
+                </label>
+                <span id="lifeExpectancyVal" class="text-slate-800 font-bold bg-slate-100 px-2 py-0.5 rounded-md">85 歲</span>
+              </div>
+              <input type="range" id="lifeExpectancy" min="70" max="105" value="85" step="1" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-700" oninput="calculate()">
+            </div>
+
+            <div class="pt-3 border-t border-slate-100">
+              <label for="monthlyExpense" class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-cart-shopping text-emerald-500"></i> 現時理想每月開支 (HKD)</span>
+                <span class="text-[10px] text-slate-400 font-normal">現時物價水平</span>
+              </label>
+              <div class="relative rounded-2xl shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">$</div>
+                <input type="text" inputmode="numeric" id="monthlyExpense" value="10,000"
+                  class="block w-full pl-8 pr-3 py-2.5 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-bold text-slate-900 transition-all"
+                  oninput="formatAndCalculate(this)">
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1.5">系統將自動以平均通脹率複利折算至退休後的未來實際開支</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Assumptions Card -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-emerald-100/80 text-emerald-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-chart-line"></i>
+              </span>
+              經濟假設與投資回報
+            </h3>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold">費雪模型</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="inflationRate" class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-fire-burner text-rose-500"></i> 預計平均年通脹率
+                </label>
+                <span id="inflationRateVal" class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-md">3.0 %</span>
+              </div>
+              <input type="range" id="inflationRate" min="1.0" max="8.0" value="3.0" step="0.1" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-500" oninput="calculate()">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="saveReturnRate" class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-seedling text-emerald-500"></i> 投資年回報率 (全期)
+                </label>
+                <span id="saveReturnRateVal" class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">7.0 %</span>
+              </div>
+              <input type="range" id="saveReturnRate" min="0" max="15" value="7.0" step="0.5" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600" oninput="calculate()">
+            </div>
+
+            <!-- Real Rate Display Ribbon -->
+            <div class="p-3 rounded-2xl bg-gradient-to-r from-slate-50 to-emerald-50/50 border border-emerald-100/60 text-xs flex justify-between items-center">
+              <span class="text-slate-600 font-medium flex items-center gap-1.5">
+                <i class="fa-solid fa-calculator text-emerald-600"></i> 實質實收回報率 (Net Rate)：
+              </span>
+              <span id="realRateDisplay" class="font-extrabold text-emerald-800 text-sm">3.88%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Existing Assets Card -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-purple-100/80 text-purple-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </span>
+              現有已備資產 (可扣除)
+            </h3>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 font-semibold">減輕目標</span>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label for="mpfFund" class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns text-purple-500"></i> 強積金 (MPF) 現值
+              </label>
+              <div class="relative rounded-2xl shadow-sm">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-xs">$</span>
+                <input type="text" inputmode="numeric" id="mpfFund" value="0"
+                  class="block w-full pl-7 pr-3 py-2 rounded-2xl border border-slate-200 text-sm font-semibold focus:border-purple-500 focus:ring-1 focus:ring-purple-200" oninput="formatAndCalculate(this)">
+              </div>
+            </div>
+
+            <div>
+              <label for="insuranceFund" class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-file-shield text-blue-500"></i> 儲蓄保險預期退休總額
+              </label>
+              <div class="relative rounded-2xl shadow-sm">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-xs">$</span>
+                <input type="text" inputmode="numeric" id="insuranceFund" value="0"
+                  class="block w-full pl-7 pr-3 py-2 rounded-2xl border border-slate-200 text-sm font-semibold focus:border-purple-500 focus:ring-1 focus:ring-purple-200" oninput="formatAndCalculate(this)">
+              </div>
+            </div>
+
+            <div>
+              <label for="otherFund" class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-coins text-amber-500"></i> 其他投資 / 定期現金儲備
+              </label>
+              <div class="relative rounded-2xl shadow-sm">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-xs">$</span>
+                <input type="text" inputmode="numeric" id="otherFund" value="0"
+                  class="block w-full pl-7 pr-3 py-2 rounded-2xl border border-slate-200 text-sm font-semibold focus:border-purple-500 focus:ring-1 focus:ring-purple-200" oninput="formatAndCalculate(this)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Dashboard & Visual Analysis (8 cols) -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- Visual Timeline Graphic (生命線) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm card-shadow">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-extrabold text-slate-900 flex items-center gap-2 text-base">
+              <i class="fa-solid fa-timeline text-blue-600"></i> 人生生命線（儲蓄積累期 vs 退休安享期）
+            </h3>
+            <span class="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full font-bold" id="totalTimelineSpan">總跨度 45 年</span>
+          </div>
+
+          <div class="relative pt-4 pb-2">
+            <!-- Two Phase Interactive Bar -->
+            <div class="flex h-7 w-full rounded-2xl overflow-hidden shadow-inner bg-slate-100 p-1">
+              <div id="savePhaseBar" class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 rounded-xl flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-sm" style="width: 55.5%">
+                <i class="fa-solid fa-briefcase mr-1.5 hidden sm:inline"></i> 儲蓄工作期 <span id="saveYearsBadge" class="ml-1 opacity-90">25年</span>
+              </div>
+              <div id="retirePhaseBar" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-xl flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-sm ml-1" style="width: 44.5%">
+                <i class="fa-solid fa-mug-hot mr-1.5 hidden sm:inline"></i> 退休提款期 <span id="retireYearsBadge" class="ml-1 opacity-90">20年</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Age Labels Below -->
+            <div class="relative flex justify-between mt-3 text-xs font-bold text-slate-700">
+              <div class="text-left flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
+                <div>
+                  <span class="block text-slate-400 text-[10px] uppercase font-normal">現時年齡</span>
+                  <span id="timelineCurAge" class="text-blue-600 font-extrabold text-sm sm:text-base">40 歲</span>
+                </div>
+              </div>
+              <div class="text-center flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                <div>
+                  <span class="block text-slate-400 text-[10px] uppercase font-normal">退休里程碑</span>
+                  <span id="timelineRetAge" class="text-amber-600 font-extrabold text-sm sm:text-base">65 歲</span>
+                </div>
+              </div>
+              <div class="text-right flex items-center gap-1.5">
+                <div>
+                  <span class="block text-slate-400 text-[10px] uppercase font-normal">預期壽命</span>
+                  <span id="timelineEndAge" class="text-slate-800 font-extrabold text-sm sm:text-base">85 歲</span>
+                </div>
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-800 inline-block"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- KPI 1 -->
+          <div class="bg-gradient-to-br from-white to-blue-50/70 p-5 rounded-3xl border border-blue-100 shadow-sm relative overflow-hidden">
+            <div class="text-xs font-bold text-blue-800 tracking-wide mb-1 flex items-center justify-between">
+              <span>退休時每月生活開支</span>
+              <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-arrow-trend-up"></i></span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-blue-900 tracking-tight" id="kpiFutureExpense">$20,938</div>
+            <div class="text-[11px] text-slate-500 mt-2">
+              現時購買力 <strong class="text-slate-800" id="kpiCurrentExpense">$10,000</strong> 經通脹折算
+            </div>
+          </div>
+
+          <!-- KPI 2 -->
+          <div class="bg-gradient-to-br from-white to-amber-50/70 p-5 rounded-3xl border border-amber-100 shadow-sm relative overflow-hidden">
+            <div class="text-xs font-bold text-amber-800 tracking-wide mb-1 flex items-center justify-between">
+              <span>退休時所需儲備總額</span>
+              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-amber-900 tracking-tight" id="kpiLumpSum">$3,492,756</div>
+            <div class="text-[11px] text-slate-500 mt-2">
+              淨缺口：<span id="kpiNetLumpSum" class="font-bold text-amber-700">$3,492,756</span> (已扣已備資產)
+            </div>
+          </div>
+
+          <!-- KPI 3 -->
+          <div class="bg-gradient-to-br from-white to-emerald-50/70 p-5 rounded-3xl border border-emerald-100 shadow-sm relative overflow-hidden">
+            <div class="text-xs font-bold text-emerald-800 tracking-wide mb-1 flex items-center justify-between">
+              <span>現時每月所需儲蓄 (7% 回報)</span>
+              <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight" id="kpiMonthlySave">$4,312</div>
+            <div class="text-[11px] text-emerald-800 font-semibold mt-2 flex items-center gap-1">
+              <i class="fa-regular fa-circle-check"></i> 即時開始，享受最大複利效益
+            </div>
+          </div>
+        </div>
+
+        <!-- DUAL CHART SECTION: Inflation & Compound Power -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Inflation Impact Chart Card -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm card-shadow flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-fire"></i>
+                </span>
+                通脹購買力侵蝕對比
+              </h3>
+              <span class="text-[10px] px-2.5 py-0.5 bg-rose-50 text-rose-600 rounded-full font-bold" id="inflationMultipleBadge">+109% 升幅</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-3">維持相同衣食住行生活水平，在退休時每個月需要支出的金額翻倍</p>
+            <div class="h-44 w-full relative">
+              <canvas id="inflationChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Compound Interest Breakdown Card -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm card-shadow flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-chart-pie"></i>
+                </span>
+                退休金結構：本金 vs 投資回報
+              </h3>
+              <span class="text-[10px] px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full font-bold" id="compoundPowerBadge">複利貢獻 69%</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-3">若能善用複利效應，超過一半以上的退休金是由「錢搵錢」累積而來</p>
+            <div class="h-44 w-full relative">
+              <canvas id="breakdownChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delay Cost Comparison Section (Visual Bar Chart + Detailed Table) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm card-shadow space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-sm shadow-sm">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+                延遲儲蓄的巨大代價（時間價值分析）
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">越遲開始，需要每月儲蓄的金額呈幾何級數遞增</p>
+            </div>
+            <span class="text-xs px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-bold self-start sm:self-auto flex items-center gap-1.5">
+              <i class="fa-solid fa-bolt text-amber-500"></i> 時間就是金錢
+            </span>
+          </div>
+
+          <!-- Delay Cost Visual Bar Chart -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-column text-indigo-500"></i> 各方案每月所需儲蓄對比 (HKD)</span>
+              <span class="text-slate-400 text-[11px]">柱狀圖直觀對比</span>
+            </div>
+            <div class="h-52 w-full relative bg-slate-50/70 rounded-2xl p-2 border border-slate-100">
+              <canvas id="delayBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Delay Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">
+                  <th class="py-3 px-3 rounded-l-xl">計劃方案</th>
+                  <th class="py-3 px-3">開始儲蓄歲數</th>
+                  <th class="py-3 px-3">儲蓄期年數</th>
+                  <th class="py-3 px-3">每月所需儲蓄 (HKD)</th>
+                  <th class="py-3 px-3">每月額外增加負擔</th>
+                  <th class="py-3 px-3 rounded-r-xl">累積總本金付出</th>
+                </tr>
+              </thead>
+              <tbody id="delayTableBody" class="divide-y divide-slate-100 text-xs sm:text-sm">
+                <!-- Dynamically Injected -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dynamic Asset Curve Chart -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm card-shadow">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm shadow-sm">
+                  <i class="fa-solid fa-chart-area"></i>
+                </span>
+                全期資產滾存與提款走勢預測
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">藍色累積期持續複利增長；橙色退休期每月扣減通脹後生活費，直至終年安享晚年</p>
+            </div>
+          </div>
+          <div class="h-64 sm:h-72 w-full relative">
+            <canvas id="assetChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Notes Card -->
+        <div class="bg-gradient-to-r from-slate-50 to-blue-50/40 border border-slate-200/80 rounded-3xl p-5 text-xs text-slate-600 space-y-2.5">
+          <div class="font-extrabold text-slate-900 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-circle-info text-blue-600"></i> 精算說明與顧問備註
+          </div>
+          <p>
+            1. <strong>精算複利模型</strong>：退休期實質折現率採用國際標準 <strong>Fisher 公式</strong> $(1 + \text{回報}) / (1 + \text{通脹}) - 1$，精確對應每月生活費每年自動隨通脹上調，終身維持實質購買力。
+          </p>
+          <p>
+            2. <strong>資產滾存曲線</strong>：走勢圖清晰模擬儲蓄累積期（複利幾何增長）至退休頂峰，以及退休後在維持年金回報下逐月提款之資產消耗全過程。
+          </p>
+          <p>
+            3. <strong>財富防禦關鍵</strong>：退休計劃長達數十年，若期間發生危疾或意外，應配置醫療與人壽架構保障本金，避免儲蓄計劃被迫中斷。
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-8 no-print">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      退休規劃計算工具 • 專業理財分析模擬 • 數據僅供參考，不構成任何投資建議
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC & VISUALIZATION ENGINES -->
+  <script>
+    // Global chart instances
+    let assetChart = null;
+    let delayBarChart = null;
+    let inflationChart = null;
+    let breakdownChart = null;
+
+    // Helper: Format Currency
+    function formatCurrency(val) {
+      if (isNaN(val) || !isFinite(val)) return '$0';
+      return '$' + Math.round(val).toLocaleString('en-US');
+    }
+
+    // Helper: Get numeric value from formatted currency input
+    function getCurrencyValue(id) {
+      const el = document.getElementById(id);
+      if (!el) return 0;
+      const cleanVal = el.value.replace(/,/g, '').trim();
+      const val = parseFloat(cleanVal);
+      return isNaN(val) ? 0 : val;
+    }
+
+    // Helper: Real-time formatting with thousand separator and cursor position preservation
+    function formatAndCalculate(input) {
+      const cursorPosition = input.selectionStart;
+      const originalLength = input.value.length;
+      
+      const cleanVal = input.value.replace(/,/g, '').replace(/[^\d]/g, '');
+      if (cleanVal === '') {
+        input.value = '';
+      } else {
+        const formatted = parseInt(cleanVal, 10).toLocaleString('en-US');
+        input.value = formatted;
+        
+        // Preserve cursor position naturally even after comma insertions
+        const newLength = formatted.length;
+        const newPosition = cursorPosition + (newLength - originalLength);
+        try {
+          input.setSelectionRange(Math.max(0, newPosition), Math.max(0, newPosition));
+        } catch (e) {}
+      }
+      calculate();
+    }
+
+    // Helper: Financial PV of Ordinary Annuity (Target lump sum calculation)
+    function calculatePV(rate, nper, pmt) {
+      if (rate === 0) return pmt * nper;
+      return pmt * ((1 - Math.pow(1 + rate, -nper)) / rate);
+    }
+
+    // Helper: Financial PMT for Sinking Fund (Monthly savings needed to reach target FV)
+    function calculatePMT(rate, nper, fv) {
+      if (rate === 0) return fv / nper;
+      return (fv * rate) / (Math.pow(1 + rate, nper) - 1);
+    }
+
+    // Reset Defaults
+    function resetDefaults() {
+      document.getElementById('currentAge').value = 40;
+      document.getElementById('retireAge').value = 65;
+      document.getElementById('lifeExpectancy').value = 85;
+      document.getElementById('monthlyExpense').value = '10,000';
+      document.getElementById('inflationRate').value = 3.0;
+      document.getElementById('saveReturnRate').value = 7.0;
+      document.getElementById('mpfFund').value = '0';
+      document.getElementById('insuranceFund').value = '0';
+      document.getElementById('otherFund').value = '0';
+      calculate();
+    }
+
+    function calculate() {
+      // 1. Gather Inputs
+      const currentAge = parseInt(document.getElementById('currentAge').value);
+      let retireAge = parseInt(document.getElementById('retireAge').value);
+      let lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+
+      // Boundary validations
+      if (retireAge <= currentAge) {
+        retireAge = currentAge + 1;
+        document.getElementById('retireAge').value = retireAge;
+      }
+      if (lifeExpectancy <= retireAge) {
+        lifeExpectancy = retireAge + 1;
+        document.getElementById('lifeExpectancy').value = lifeExpectancy;
+      }
+
+      const monthlyExpenseNow = getCurrencyValue('monthlyExpense');
+      const inflation = (parseFloat(document.getElementById('inflationRate').value) || 0) / 100;
+      const saveReturn = (parseFloat(document.getElementById('saveReturnRate').value) || 0) / 100;
+      const retireReturn = saveReturn;
+
+      const mpfFund = getCurrencyValue('mpfFund');
+      const insuranceFund = getCurrencyValue('insuranceFund');
+      const otherFund = getCurrencyValue('otherFund');
+      const totalCurrentAssets = mpfFund + insuranceFund + otherFund;
+
+      // Update Labels
+      document.getElementById('currentAgeVal').innerText = `${currentAge} 歲`;
+      document.getElementById('retireAgeVal').innerText = `${retireAge} 歲`;
+      document.getElementById('lifeExpectancyVal').innerText = `${lifeExpectancy} 歲`;
+      document.getElementById('inflationRateVal').innerText = `${(inflation * 100).toFixed(1)} %`;
+      document.getElementById('saveReturnRateVal').innerText = `${(saveReturn * 100).toFixed(1)} %`;
+
+      // Update Milestone Graphic Cards
+      const saveYears = retireAge - currentAge;
+      const retireYears = lifeExpectancy - retireAge;
+      const totalYears = lifeExpectancy - currentAge;
+
+      document.getElementById('tileCurAge').innerText = `${currentAge} 歲`;
+      document.getElementById('tileSaveYears').innerText = `${saveYears} 年工作期`;
+      document.getElementById('tileRetireAge').innerText = `${retireAge} 歲`;
+      document.getElementById('tileLifeAge').innerText = `${lifeExpectancy} 歲預期`;
+
+      // Update Life Span Timeline
+      document.getElementById('saveYearsBadge').innerText = `${saveYears}年`;
+      document.getElementById('retireYearsBadge').innerText = `${retireYears}年`;
+      document.getElementById('savePhaseBar').style.width = `${(saveYears / totalYears) * 100}%`;
+      document.getElementById('retirePhaseBar').style.width = `${(retireYears / totalYears) * 100}%`;
+      document.getElementById('totalTimelineSpan').innerText = `總跨度 ${totalYears} 年 (儲蓄 ${saveYears} 年 / 退休 ${retireYears} 年)`;
+      
+      document.getElementById('timelineCurAge').innerText = `${currentAge} 歲`;
+      document.getElementById('timelineRetAge').innerText = `${retireAge} 歲`;
+      document.getElementById('timelineEndAge').innerText = `${lifeExpectancy} 歲`;
+
+      // 3. Real Rate of Return (Fisher Equation: (1 + r) / (1 + i) - 1)
+      const realRate = ((1 + retireReturn) / (1 + inflation)) - 1;
+      document.getElementById('realRateDisplay').innerText = `${(realRate * 100).toFixed(2)}%`;
+
+      // 4. Future Monthly Expense at Retirement (compounded by inflation)
+      const futureMonthlyExpense = monthlyExpenseNow * Math.pow(1 + inflation, saveYears);
+      document.getElementById('kpiFutureExpense').innerText = formatCurrency(futureMonthlyExpense);
+      document.getElementById('kpiCurrentExpense').innerText = formatCurrency(monthlyExpenseNow);
+
+      // 5. Total Lump Sum Needed at Retirement (Target Corpus)
+      const monthlyRealRate = realRate / 12;
+      const totalRetireMonths = retireYears * 12;
+      const requiredLumpSum = calculatePV(monthlyRealRate, totalRetireMonths, futureMonthlyExpense);
+
+      // Existing assets compound to retirement age (at saveReturn rate)
+      const futureValueOfExistingAssets = totalCurrentAssets * Math.pow(1 + saveReturn, saveYears);
+      const netLumpSumNeeded = Math.max(0, requiredLumpSum - futureValueOfExistingAssets);
+
+      document.getElementById('kpiLumpSum').innerText = formatCurrency(requiredLumpSum);
+      document.getElementById('kpiNetLumpSum').innerText = formatCurrency(netLumpSumNeeded);
+
+      // 6. Monthly Savings Needed (Starting Now)
+      const monthlySaveRate = saveReturn / 12;
+      const totalSaveMonths = saveYears * 12;
+      const monthlySavingNow = calculatePMT(monthlySaveRate, totalSaveMonths, netLumpSumNeeded);
+
+      document.getElementById('kpiMonthlySave').innerText = formatCurrency(monthlySavingNow);
+
+      // 7. Render Delay Comparison Table & Bar Chart Data (5, 10, 15 years delay)
+      const delayScenariosData = renderDelayTable(saveYears, currentAge, retireAge, netLumpSumNeeded, saveReturn, monthlySavingNow);
+      renderDelayBarChart(delayScenariosData);
+
+      // 8. Render Inflation Erosion Chart
+      renderInflationChart(monthlyExpenseNow, futureMonthlyExpense, saveYears);
+
+      // 9. Render Compound Interest Breakdown Chart
+      const totalContributionBaseline = monthlySavingNow * totalSaveMonths;
+      const compoundGain = Math.max(0, netLumpSumNeeded - totalContributionBaseline);
+      renderBreakdownChart(totalContributionBaseline, compoundGain, futureValueOfExistingAssets);
+
+      // 10. Render Full Asset Trajectory Chart
+      renderChart(currentAge, retireAge, lifeExpectancy, monthlySavingNow, saveReturn, retireReturn, inflation, futureMonthlyExpense, totalCurrentAssets);
+    }
+
+    function renderDelayTable(saveYears, currentAge, retireAge, netLumpSumNeeded, saveReturn, baselineMonthly) {
+      const tbody = document.getElementById('delayTableBody');
+      tbody.innerHTML = '';
+
+      const scenarios = [
+        { label: '即刻開始 (黃金時間)', delay: 0, tag: '最佳方案', tagClass: 'bg-emerald-100 text-emerald-800' },
+        { label: '延遲 5 年開始', delay: 5, tag: '壓力上升', tagClass: 'bg-blue-100 text-blue-800' },
+        { label: '延遲 10 年開始', delay: 10, tag: '嚴峻考驗', tagClass: 'bg-amber-100 text-amber-800' },
+        { label: '延遲 15 年開始', delay: 15, tag: '極高負擔', tagClass: 'bg-orange-100 text-orange-800' },
+        { label: '零回報純現金儲蓄 (0% 投資)', delay: 0, zeroReturn: true, tag: '極保守代價', tagClass: 'bg-rose-100 text-rose-800' },
+      ];
+
+      const chartData = {
+        labels: [],
+        monthlyData: [],
+        colors: []
+      };
+
+      scenarios.forEach(item => {
+        if (item.delay >= saveYears) {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 opacity-60';
+          tr.innerHTML = `
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-slate-500">${item.label}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-600">已過退休期</span>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-slate-400">${currentAge + item.delay} 歲</td>
+            <td class="py-3 px-3 text-slate-400">-</td>
+            <td class="py-3 px-3 text-slate-400" colspan="3">延遲時間已超出剩餘工作年期（${saveYears} 年），無法如期達成</td>
+          `;
+          tbody.appendChild(tr);
+          return;
+        }
+
+        const actualSaveYears = saveYears - item.delay;
+        const actualStartAge = currentAge + item.delay;
+        const totalMonths = actualSaveYears * 12;
+        let monthlyReq = 0;
+
+        if (item.zeroReturn) {
+          monthlyReq = netLumpSumNeeded / (saveYears * 12);
+        } else {
+          const rMonthly = saveReturn / 12;
+          monthlyReq = calculatePMT(rMonthly, totalMonths, netLumpSumNeeded);
+        }
+
+        const totalContribution = monthlyReq * totalMonths;
+        const extraPerMonth = monthlyReq - baselineMonthly;
+        const extraPercent = baselineMonthly > 0 ? ((extraPerMonth / baselineMonthly) * 100) : 0;
+
+        // Push data to visual delay chart
+        chartData.labels.push(item.label.split(' ')[0]);
+        chartData.monthlyData.push(Math.round(monthlyReq));
+        if (item.delay === 0 && !item.zeroReturn) {
+          chartData.colors.push('#10b981'); // Emerald
+        } else if (item.zeroReturn) {
+          chartData.colors.push('#f43f5e'); // Rose
+        } else if (item.delay === 5) {
+          chartData.colors.push('#3b82f6'); // Blue
+        } else if (item.delay === 10) {
+          chartData.colors.push('#f59e0b'); // Amber
+        } else {
+          chartData.colors.push('#f97316'); // Orange
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = item.delay === 0 && !item.zeroReturn ? 'bg-blue-50/60 font-semibold' : 'hover:bg-slate-50';
+
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-slate-900">${item.label}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${item.tagClass}">${item.tag}</span>
+            </div>
+          </td>
+          <td class="py-3 px-3 text-slate-700">${actualStartAge} 歲</td>
+          <td class="py-3 px-3 text-slate-700">${actualSaveYears} 年</td>
+          <td class="py-3 px-3 font-bold text-slate-900 ${item.zeroReturn ? 'text-rose-600' : 'text-blue-700'}">
+            ${formatCurrency(monthlyReq)}
+          </td>
+          <td class="py-3 px-3">
+            ${item.delay === 0 && !item.zeroReturn ? 
+              '<span class="text-slate-400">基準</span>' : 
+              `<span class="text-rose-600 font-semibold">+${formatCurrency(extraPerMonth)}</span> <span class="text-[11px] text-slate-500">(+${Math.round(extraPercent)}%)</span>`
+            }
+          </td>
+          <td class="py-3 px-3 text-slate-700">${formatCurrency(totalContribution)}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      return chartData;
+    }
+
+    function renderDelayBarChart(chartData) {
+      const canvas = document.getElementById('delayBarChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      if (delayBarChart) {
+        delayBarChart.destroy();
+      }
+
+      delayBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: '每月所需儲蓄 (HKD)',
+            data: chartData.monthlyData,
+            backgroundColor: chartData.colors,
+            borderRadius: 8,
+            maxBarThickness: 42
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(c) {
+                  return ' 每月需儲蓄: ' + formatCurrency(c.raw);
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, family: 'Noto Sans TC' } }
+            },
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                callback: function(v) {
+                  return '$' + (v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v);
+                },
+                font: { size: 10 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderInflationChart(currentExp, futureExp, saveYears) {
+      const canvas = document.getElementById('inflationChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const inflationPercent = currentExp > 0 ? (((futureExp - currentExp) / currentExp) * 100).toFixed(0) : 0;
+      const badge = document.getElementById('inflationMultipleBadge');
+      if (badge) {
+        badge.innerText = `購買力縮水 ${inflationPercent}%`;
+      }
+
+      if (inflationChart) {
+        inflationChart.destroy();
+      }
+
+      inflationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['現時物價生活費', `退休時生活費 (${saveYears}年後)`],
+          datasets: [{
+            data: [Math.round(currentExp), Math.round(futureExp)],
+            backgroundColor: ['#94a3b8', '#f43f5e'],
+            borderRadius: 8,
+            maxBarThickness: 45
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(c) {
+                  return ' 月開支: ' + formatCurrency(c.raw);
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: '#f8fafc' },
+              ticks: {
+                callback: function(v) { return '$' + (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v); },
+                font: { size: 10 }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 11, family: 'Noto Sans TC' } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderBreakdownChart(totalContrib, compoundGain, existingAssetFV) {
+      const canvas = document.getElementById('breakdownChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const total = totalContrib + compoundGain + existingAssetFV;
+      const compoundRatio = total > 0 ? ((compoundGain / total) * 100).toFixed(0) : 0;
+      const badge = document.getElementById('compoundPowerBadge');
+      if (badge) {
+        badge.innerText = `複利增值佔比 ${compoundRatio}%`;
+      }
+
+      if (breakdownChart) {
+        breakdownChart.destroy();
+      }
+
+      const labels = ['累積自己儲蓄本金', '投資複利收益 (錢搵錢)'];
+      const data = [Math.round(totalContrib), Math.round(compoundGain)];
+      const bgColors = ['#64748b', '#10b981'];
+
+      if (existingAssetFV > 0) {
+        labels.push('現有資產滾存');
+        data.push(Math.round(existingAssetFV));
+        bgColors.push('#8b5cf6');
+      }
+
+      breakdownChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: bgColors,
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                boxWidth: 12,
+                font: { size: 10, family: 'Noto Sans TC' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(c) {
+                  return ' ' + c.label + ': ' + formatCurrency(c.raw);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderChart(currentAge, retireAge, lifeExpectancy, monthlySave, saveReturn, retireReturn, inflation, futureMonthlyExpense, initialAssets) {
+      if (typeof Chart === 'undefined') {
+        console.warn('Chart.js 尚未加載完成');
+        return;
+      }
+
+      const labels = [];
+      const balanceData = [];
+      const totalContributedData = [];
+
+      let currentBalance = initialAssets;
+      let totalContributed = initialAssets;
+
+      const monthlySaveRate = saveReturn / 12;
+      const monthlyRetireRate = retireReturn / 12;
+      let currentExpenseYearly = futureMonthlyExpense * 12;
+
+      for (let age = currentAge; age <= lifeExpectancy; age++) {
+        labels.push(`${age}歲`);
+
+        if (age === currentAge) {
+          balanceData.push(Math.round(currentBalance));
+          totalContributedData.push(Math.round(totalContributed));
+        } else if (age <= retireAge) {
+          // Accumulation phase
+          for (let m = 0; m < 12; m++) {
+            currentBalance = currentBalance * (1 + monthlySaveRate) + monthlySave;
+            totalContributed += monthlySave;
+          }
+          balanceData.push(Math.round(currentBalance));
+          totalContributedData.push(Math.round(totalContributed));
+        } else {
+          // Decumulation phase
+          const monthlyWithdrawal = currentExpenseYearly / 12;
+          for (let m = 0; m < 12; m++) {
+            currentBalance = Math.max(0, currentBalance * (1 + monthlyRetireRate) - monthlyWithdrawal);
+          }
+          currentExpenseYearly *= (1 + inflation);
+          balanceData.push(Math.round(currentBalance));
+          totalContributedData.push(Math.round(totalContributed));
+        }
+      }
+
+      const canvas = document.getElementById('assetChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      if (assetChart) {
+        assetChart.destroy();
+      }
+
+      assetChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '預測投資資產總值 (複利增長與提款)',
+              data: balanceData,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.12)',
+              fill: true,
+              tension: 0.35,
+              pointRadius: 2,
+              borderWidth: 2.5
+            },
+            {
+              label: '累積自付儲蓄本金',
+              data: totalContributedData,
+              borderColor: '#94a3b8',
+              borderDash: [5, 5],
+              backgroundColor: 'transparent',
+              tension: 0.1,
+              pointRadius: 0,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                boxWidth: 14,
+                font: { size: 12, family: 'Inter, Noto Sans TC' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': $' + context.raw.toLocaleString();
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 12, font: { size: 11 } }
+            },
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                callback: function(value) {
+                  if (value >= 1000000) return '$' + (value / 1000000).toFixed(1) + 'M';
+                  if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'k';
+                  return '$' + value;
+                },
+                font: { size: 11 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Initialize on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      calculate();
+    });
+
+    // Handle PDF Export and Direct iPhone Share to WeChat
+    async function exportAndSharePDF() {
+      const btn = document.getElementById('exportPdfBtn');
+      const btnText = document.getElementById('exportBtnText');
+      const originalText = btnText.innerText;
+
+      try {
+        btnText.innerText = '正在生成 PDF...';
+        btn.disabled = true;
+
+        const mainElement = document.querySelector('main');
+        const filename = `退休策劃報告_${new Date().toISOString().slice(0, 10)}.pdf`;
+
+        const opt = {
+          margin: [8, 8, 8, 8],
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Generate PDF Blob
+        const pdfWorker = html2pdf().set(opt).from(mainElement);
+        const pdfBlob = await pdfWorker.outputPdf('blob');
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+        // Check if Web Share API with Files is supported (iOS Safari)
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({
+            files: [pdfFile],
+            title: '退休策劃報告',
+            text: '為您精算準備的個人專屬退休策劃報告（PDF）'
+          });
+        } else {
+          // Fallback: Trigger standard download / iOS print view
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(pdfBlob);
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+        }
+      } catch (err) {
+        // If user cancelled sharing or error occurred, fallback to native window.print()
+        if (err.name !== 'AbortError') {
+          window.print();
+        }
+      } finally {
+        btnText.innerText = originalText;
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
