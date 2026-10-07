@@ -268,11 +268,11 @@
 
                         <!-- 浮動下拉卡片 (使用 fixed 脫離頂部橫條的 overflow 遮擋) -->
                         <div id="manualDropdownMenu" style="display: none;" class="fixed bg-white border border-slate-200 rounded-2xl shadow-2xl p-2 z-[9999999] w-48 text-xs sm:text-sm space-y-1">
-                            <button type="button" 
-                                    onclick="triggerManualAction('company')" 
-                                    class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
-                                <span>🏢</span> 公司簡介
-                            </button>
+                        <button type="button"
+        onclick="document.getElementById('manualDropdownMenu').style.display='none'; switchPage('page-company-profile');"
+        class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-[#E87722] transition-colors cursor-pointer">
+    <span>🏢</span> <span>公司簡介</span>
+</button>
                             <button type="button" 
                                     onclick="triggerManualAction('promotion')" 
                                     class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
@@ -852,6 +852,416 @@
             </div>
         </div>
     </div>
+    <!-- PAGE: 富衛集團 (FWD Group) 公司簡介 (SPA 內頁無縫切換版) -->
+    <div id="page-company-profile" class="page-view hidden py-6 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
+        
+        <!-- 頂部返回列與快速定位導覽 -->
+        <div class="sticky top-2 z-40 bg-white/95 backdrop-blur-md border border-[#E5E0D8] rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#F8F6F2] hover:bg-orange-50 text-slate-700 hover:text-[#E87722] font-bold text-xs transition cursor-pointer border border-[#E5E0D8]">
+                    ← 返回前頁
+                </button>
+                <div>
+                    <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                        <span>富衛集團 · FWD GROUP</span>
+                        <span class="px-1.5 py-0.5 text-[9px] font-semibold bg-orange-100 text-[#E87722] border border-orange-200 rounded">香港主板上市</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 hidden md:inline">全球機構資本結構 · 泛亞保險監管體系 · 資產管理協同報告</span>
+                </div>
+            </div>
+
+            <!-- 內部錨點快速滾動 -->
+            <div class="flex items-center space-x-4 text-xs font-semibold text-slate-600">
+                <a href="#fwd-overview" class="hover:text-[#E87722] transition-colors">公司概況</a>
+                <a href="#fwd-shareholders" class="hover:text-[#E87722] transition-colors">股東後盾</a>
+                <a href="#fwd-financial" class="hover:text-[#E87722] transition-colors">評級與監管</a>
+                <a href="#fwd-assets" class="hover:text-[#E87722] transition-colors">資產管理</a>
+                <a href="#fwd-services" class="hover:text-[#E87722] transition-colors">服務生態</a>
+            </div>
+        </div>
+
+        <!-- 專題內容主體卡片 -->
+        <div class="bg-[#F8F6F2] text-[#1E232A] rounded-3xl border border-[#E5E0D8] shadow-xl overflow-hidden p-5 sm:p-10 space-y-16">
+            
+            <!-- SECTION 01: 概況與核心指標 -->
+            <section id="fwd-overview" class="space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7">
+                        <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#E87722] mb-3">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#E87722] animate-pulse"></span>
+                            <span>SECTION 01 · COMPANY PROFILE</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4">
+                            創造保險新體驗<br>
+                            <span class="text-[#E87722]">泛亞高速增長 · 機構級資本支撐</span>
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+                            富衛集團（FWD Group）立足泛亞地區，業務覆蓋十大多元市場，已在香港聯交所主板上市。憑藉穩健的長線資產佈局及全球頂尖機構股東的雄厚資本實力，持續為客戶提供高標準、全方位的財富與健康守護。
+                        </p>
+                    </div>
+
+                    <div class="lg:col-span-5">
+                        <div class="relative rounded-2xl overflow-hidden shadow-lg border border-[#E5E0D8]">
+                            <img src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=900&q=80" 
+                                 alt="香港金融中心天際線" 
+                                 class="w-full h-56 sm:h-64 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4 text-white">
+                                <div class="text-[10px] tracking-wider uppercase text-amber-300 font-bold">HEADQUARTERED IN HONG KONG</div>
+                                <div class="text-sm font-bold">立足香港國際金融樞紐 · 輻射泛亞高速增長市場</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 顧問心聲 Callout -->
+                <div class="bg-gradient-to-r from-orange-50/70 via-white to-orange-50/40 border-l-4 border-l-[#E87722] border border-[#E5E0D8] p-5 sm:p-6 rounded-2xl shadow-sm">
+                    <div class="flex items-center gap-2 mb-1.5 text-xs font-bold tracking-wider text-[#E87722] uppercase">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>理財顧問視角 · 專業心聲</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-800 leading-relaxed italic">
+                        「作為一名專業理財顧問，我始終致力於為客戶精選最具長期確定性與高品質服務的解決方案。富衛保險背靠頂級主權與國家級養老基金資本，兼具泛亞市場的抗周期分散優勢，這正是我向客戶客觀推薦富衛的堅定信心來源。」
+                    </p>
+                </div>
+
+                <!-- 四大指標卡片 -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-[#E6E1D8] shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase">服務客戶總數</span>
+                            <span class="w-7 h-7 rounded-full bg-orange-100 text-[#E87722] flex items-center justify-center text-xs"><i class="fa-solid fa-users"></i></span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">3,000<span class="text-base font-normal text-[#E87722] ml-1">萬+</span></div>
+                        <div class="mt-2 text-[11px] text-slate-500">覆蓋泛亞多元客群，深獲數千萬家庭長期信賴</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-[#E6E1D8] shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase">管理資產總規模 (AUM)</span>
+                            <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs"><i class="fa-solid fa-vault"></i></span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">&gt;500<span class="text-base font-normal text-[#E87722] ml-1">億美元</span></div>
+                        <div class="mt-2 text-[11px] text-slate-500">穩固雄厚的底層資金池，支撐長期保單價值</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-[#E6E1D8] shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase">泛亞核心市場</span>
+                            <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs"><i class="fa-solid fa-earth-asia"></i></span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">10<span class="text-base font-normal text-[#E87722] ml-1">個市場</span></div>
+                        <div class="mt-2 text-[11px] text-slate-500">香港、澳門、日本、泰國、印尼、新加坡等</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-[#E6E1D8] shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase">國際雙權威評級</span>
+                            <span class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs"><i class="fa-solid fa-award"></i></span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">A2 <span class="text-lg font-normal text-slate-400">/</span> A</div>
+                        <div class="mt-2 text-[11px] text-slate-500">穆迪 (Moody's) A2 · 惠譽 (Fitch) A 級展望</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 02: 股東後盾與資本結構 -->
+            <section id="fwd-shareholders" class="space-y-6 pt-8 border-t border-[#E5E0D8]">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#E87722] mb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E87722]"></span>
+                        <span>SECTION 02 · SHAREHOLDER MATRIX</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                        強大股東後盾 · 科技策略定位與多元資本聯盟
+                    </h2>
+                </div>
+
+                <!-- 盈科拓展集團主卡片 (3 大支柱) -->
+                <div class="bg-[#1A2621] text-white p-6 sm:p-9 rounded-2xl shadow-lg border border-[#273B34] space-y-6">
+                    <div class="border-b border-[#2C423A] pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <div class="text-xs font-semibold tracking-widest text-[#E87722] uppercase">主要股東 · 主導機構</div>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mt-1">PACIFIC CENTURY GROUP · 盈科拓展集團</h3>
+                        </div>
+                        <span class="px-3 py-1 bg-stone-800 text-stone-300 text-xs font-mono rounded border border-stone-700 self-start sm:self-auto">
+                            ESTABLISHED 1993
+                        </span>
+                    </div>
+
+                    <p class="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+                        盈科拓展集團成立於 1993 年，為駐足亞洲的跨國私人投資集團，實力雄厚。長期推動泛亞金融科技革新與基礎設施整合，旗下核心業務涵蓋三大支柱領域，為富衛提供跨產業資源與數位技術支撐。
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+                        <div class="border border-[#2C423A] bg-[#22332D] rounded-xl overflow-hidden flex flex-col">
+                            <div class="h-28 w-full relative">
+                                <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80" alt="金融服務" class="w-full h-full object-cover opacity-80">
+                                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] font-bold bg-[#E87722] text-white rounded">PILLAR 01</span>
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-sm font-bold text-white">金融服務</div>
+                                    <p class="text-stone-300 text-[11px] mt-1">佈局泛亞多元險種、保險科技平台及創新人身保障機制。</p>
+                                </div>
+                                <div class="pt-2 border-t border-[#2F473E] space-y-1 text-stone-200">
+                                    <div>• 富衛集團 (FWD Group)</div>
+                                    <div>• bolttech (保特保險科技)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-[#2C423A] bg-[#22332D] rounded-xl overflow-hidden flex flex-col">
+                            <div class="h-28 w-full relative">
+                                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" alt="科技電訊" class="w-full h-full object-cover opacity-80">
+                                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] font-bold bg-[#E87722] text-white rounded">PILLAR 02</span>
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-sm font-bold text-white">科技、媒體與電訊</div>
+                                    <p class="text-stone-300 text-[11px] mt-1">引領香港數位連繫與新一代通訊生態，賦能無縫數碼體驗。</p>
+                                </div>
+                                <div class="pt-2 border-t border-[#2F473E] space-y-1 text-stone-200">
+                                    <div>• 電訊盈科 (PCCW · 0008.HK)</div>
+                                    <div>• 香港電訊 (HKT · 6823.HK)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-[#2C423A] bg-[#22332D] rounded-xl overflow-hidden flex flex-col">
+                            <div class="h-28 w-full relative">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" alt="地產物業" class="w-full h-full object-cover opacity-80">
+                                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] font-bold bg-[#E87722] text-white rounded">PILLAR 03</span>
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-sm font-bold text-white">地產物業發展</div>
+                                    <p class="text-stone-300 text-[11px] mt-1">開發優質尊尚商業與住宅資產，累積厚實底層硬資產儲備。</p>
+                                </div>
+                                <div class="pt-2 border-t border-[#2F473E] space-y-1 text-stone-200">
+                                    <div>• 盈科大衍地產 (PCPD · 0432.HK)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 全球機構投資者名冊網格 -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 bg-[#E87722] rounded-full"></span>
+                        全球主權基金 · 國家級養老金 · 國際再保巨擘
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] shadow-xs">
+                            <div class="font-bold text-slate-900">Apollo</div>
+                            <div class="text-[10px] text-slate-500 mt-1">頂級資產管理巨擘 (超6,500億美元AUM)</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] border-t-2 border-t-red-600 shadow-xs">
+                            <div class="font-bold text-slate-900">CPP 投資局</div>
+                            <div class="text-[10px] text-slate-500 mt-1">加拿大國家養老金 (超6,000億加元)</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] border-t-2 border-t-blue-600 shadow-xs">
+                            <div class="font-bold text-slate-900">李嘉誠基金會</div>
+                            <div class="text-[10px] text-slate-500 mt-1">國際著名戰略投資機構</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] border-t-2 border-t-amber-500 shadow-xs">
+                            <div class="font-bold text-slate-900">GIC Ventures</div>
+                            <div class="text-[10px] text-slate-500 mt-1">新加坡政府主權財富基金</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] border-t-2 border-t-emerald-600 shadow-xs">
+                            <div class="font-bold text-slate-900">Swiss Re 瑞再</div>
+                            <div class="text-[10px] text-slate-500 mt-1">全球第二大再保險巨頭</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-[#E6E1D8] border-t-2 border-t-[#E87722] shadow-xs">
+                            <div class="font-bold text-slate-900">PineBridge 柏瑞</div>
+                            <div class="text-[10px] text-slate-500 mt-1">環球多資產主動管理專家</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 03: 信用評級與 GWS 嚴格監管 -->
+            <section id="fwd-financial" class="space-y-6 pt-8 border-t border-[#E5E0D8]">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#E87722] mb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E87722]"></span>
+                        <span>SECTION 03 · RATINGS & GWS REGULATION</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                        國際權威評級認可 · 香港保監局 GWS 嚴格監管
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <!-- 評級卡片 -->
+                    <div class="bg-white p-6 rounded-2xl border-t-4 border-t-amber-500 border border-[#E6E1D8] shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-amber-700 uppercase">財務實力評估</span>
+                            <i class="fa-solid fa-medal text-amber-500 text-lg"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">雙重國際高信用評級</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            國際獨立機構穆迪 (Moody's) 與惠譽 (Fitch) 定期深度審計，認可資本充足率與風險承擔實力。
+                        </p>
+                        <div class="space-y-2 pt-2">
+                            <div class="bg-amber-50/60 p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                                <b>Moody's 穆迪</b>
+                                <span class="text-sm font-extrabold text-amber-600 font-mono">A2 級</span>
+                            </div>
+                            <div class="bg-amber-50/60 p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                                <b>Fitch 惠譽</b>
+                                <span class="text-sm font-extrabold text-amber-600 font-mono">A 級展望</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GWS 卡片 -->
+                    <div class="bg-white p-6 rounded-2xl border-t-4 border-t-[#E87722] border border-[#E6E1D8] shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#E87722] uppercase">最高規格審管</span>
+                            <i class="fa-solid fa-building-shield text-[#E87722] text-lg"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">香港保監局 GWS 監管框架</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            少數被納入香港保險業監管局 <strong>GWS (集團內部廣泛監管)</strong> 框架的跨國保險機構之一。
+                        </p>
+                        <div class="space-y-2 pt-1 text-[11px] text-slate-700">
+                            <div class="p-2 bg-orange-50/40 rounded border border-orange-200/60">• 對標國際保險監督官協會 (IAIS) 標準</div>
+                            <div class="p-2 bg-orange-50/40 rounded border border-orange-200/60">• 嚴格測試集團資本適足防範風險</div>
+                            <div class="p-2 bg-orange-50/40 rounded border border-orange-200/60">• 實行透明資訊披露與嚴密治理</div>
+                        </div>
+                    </div>
+
+                    <!-- 亞洲抗逆卡片 -->
+                    <div class="bg-white p-6 rounded-2xl border-t-4 border-t-blue-600 border border-[#E6E1D8] shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-blue-700 uppercase">市場抗逆優勢</span>
+                            <i class="fa-solid fa-chart-line text-blue-600 text-lg"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">亞洲 10 國市場地域平衡</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            業務廣泛佈局於香港、澳門、日本、泰國、印尼、菲律賓、越南及新加坡，分散單一市場週期波動風險。
+                        </p>
+                        <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200 text-slate-600 leading-relaxed">
+                            跨市場多元配置，穩定捕捉整個亞洲經濟成長紅利，讓客戶資產跨週期穩健沉澱。
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 04: 資產管理與紅利實現機制 -->
+            <section id="fwd-assets" class="space-y-6 pt-8 border-t border-[#E5E0D8]">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6 space-y-4 text-xs">
+                        <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#E87722]">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#E87722]"></span>
+                            <span>SECTION 04 · ASSET MANAGEMENT</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                            機構級長線資本協同<br>
+                            <span class="text-[#E87722] font-normal">確保保單紅利實現率長期穩健</span>
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed">
+                            富衛股東名冊涵蓋加拿大養老基金 (CPP)、新加坡政府投資公司 (GIC) 及瑞士再保 (Swiss Re) 等長線主權資金，並與全球領先管理機構（PineBridge 柏瑞投資、Apollo、華泰基金）深度協同。
+                        </p>
+
+                        <div class="p-4 bg-white border-l-4 border-l-[#E87722] border border-[#E5E0D8] rounded-r-xl shadow-xs">
+                            <b class="text-slate-900 block mb-1">獲取專屬機構投資者的頂級項目</b>
+                            <span class="text-slate-500">全球大型基建、核心商用物業、優質私募及長線高評級固定收益資產優先參與。</span>
+                        </div>
+
+                        <div class="p-4 bg-white border-l-4 border-l-emerald-600 border border-[#E5E0D8] rounded-r-xl shadow-xs">
+                            <b class="text-slate-900 block mb-1">跨週期平滑機制，實現穩健分紅</b>
+                            <span class="text-slate-500">資本蓄水池充裕，富衛保單各年度紅利實現率（Fulfillment Ratio）保持高度可預期性。</span>
+                        </div>
+                    </div>
+
+                    <!-- 機制流程解析卡片 -->
+                    <div class="lg:col-span-6 bg-white p-6 rounded-2xl border border-[#E5E0D8] shadow-sm space-y-3.5 text-xs">
+                        <div class="border-b pb-2 flex justify-between font-bold text-slate-800">
+                            <span>資本增值協同機制解析</span>
+                            <span class="text-[#E87722] font-mono">STRUCTURE FLOW</span>
+                        </div>
+
+                        <div class="p-3.5 bg-slate-50 border rounded-xl">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase">LEVEL 01 · 頂層長線主權與資本</div>
+                            <div class="font-bold text-slate-900 text-sm mt-0.5">CPP 投資局 / GIC / Swiss Re / PCG</div>
+                            <div class="text-slate-500 text-[11px] mt-1">注入高確定性、超長期的資本基石，提供無可比擬的底層安全防護</div>
+                        </div>
+
+                        <div class="text-center text-[#E87722]"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                        <div class="p-3.5 bg-slate-50 border rounded-xl">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase">LEVEL 02 · 專業機構級主動資產管理</div>
+                            <div class="font-bold text-slate-900 text-sm mt-0.5">PineBridge (柏瑞) + Apollo + 華泰基金</div>
+                            <div class="text-slate-500 text-[11px] mt-1">跨週期全球多資產動態配置，嚴選具抗通脹優勢之機構級核心投資項目</div>
+                        </div>
+
+                        <div class="text-center text-[#E87722]"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                        <div class="p-3.5 bg-gradient-to-r from-[#1A2621] to-[#22332D] text-white rounded-xl shadow-sm">
+                            <div class="text-[10px] font-bold text-[#E87722] uppercase">LEVEL 03 · 客戶端保單長遠價值</div>
+                            <div class="font-bold text-sm mt-0.5">每年度穩健之保單紅利實現率 (Fulfillment Ratio)</div>
+                            <div class="text-stone-300 text-[11px] mt-1">協助個人及家庭在教育、退休儲蓄與家族跨代傳承中實現長期穩健增長</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 05: 深入日常的現代化全方位服務 -->
+            <section id="fwd-services" class="space-y-6 pt-8 border-t border-[#E5E0D8]">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#E87722] mb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E87722]"></span>
+                        <span>SECTION 05 · SERVICE ECOSYSTEM</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                        不只是一份保單 · 深入日常的現代化全方位服務
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div class="bg-white rounded-2xl overflow-hidden border border-[#E5E0D8] shadow-sm flex flex-col justify-between">
+                        <div class="h-36 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1576267423445-b2e0074d68a4?auto=format&fit=crop&w=600&q=80" alt="數碼理賠" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 left-2 px-2 py-0.5 text-[9px] font-bold bg-[#E87722] text-white rounded">數碼效能與人性關懷</span>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <b class="text-slate-900 text-sm block">先進數碼平台 & 專屬理賠大使</b>
+                                <p class="text-slate-500 text-[11px] mt-1.5 leading-relaxed">專屬 APP 7×24 辦理理賠與進度追蹤，專屬理賠大使聯合理財顧問全程陪跑。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden border-t-4 border-t-[#E87722] border border-[#E5E0D8] shadow-sm flex flex-col justify-between">
+                        <div class="h-36 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80" alt="FWDCare" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 left-2 px-2 py-0.5 text-[9px] font-bold bg-emerald-600 text-white rounded">健康全方位照護</span>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <b class="text-slate-900 text-sm block">FWDCare 全人健康支援服務</b>
+                                <p class="text-slate-500 text-[11px] mt-1.5 leading-relaxed">綠色醫療通道諮詢、全球頂級第二醫療意見，及出院後居家復康指導服務。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden border border-[#E5E0D8] shadow-sm flex flex-col justify-between">
+                        <div class="h-36 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80" alt="FWD Max" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 left-2 px-2 py-0.5 text-[9px] font-bold bg-purple-600 text-white rounded">日常多元生活賞遇</span>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <b class="text-slate-900 text-sm block">FWD Max 會員生活體驗平台</b>
+                                <p class="text-slate-500 text-[11px] mt-1.5 leading-relaxed">精選商戶禮遇、身心健康工作坊，更享有富衛呈獻頂級人氣演唱會門票優先登記換領。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
 
     <!-- PAGE 2: 佣金計算機 -->
     <div id="page-commission" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
@@ -920,7 +1330,17 @@
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-purple-500"></span> OGOR 綜合保障智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">一般保險指引與報價</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋家居、旅遊、商業及車險等全方位一般保險方案支援</p></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs space-y-4"><div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🏠</div><h3 class="font-black text-slate-900 text-lg">家居及財物保障</h3><p class="text-xs text-slate-500 leading-relaxed">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p></div>
+           <!-- 家居及財物保障入口卡片 (點擊切換至小冊子專頁) -->
+        <div onclick="switchPage('page-gi-home')" class="p-6 rounded-3xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer space-y-3 relative group">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">🏡</div>
+                <span class="text-xs font-black text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子 ↗</span>
+            </div>
+            <div>
+                <h3 class="font-black text-slate-900 text-base group-hover:text-emerald-700 transition-colors">家居及財物保障</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mt-1">提供家居財物、樓宇結構及第三者責任保障，保障因意外導致之財物損失。</p>
+            </div>
+        </div>
 <!-- 旅遊及出行保障卡片（點擊開啟旅遊保險比較系統） -->
             <div onclick="window.open('travel-calc.html', '_blank')" class="p-6 rounded-3xl border border-slate-200 bg-white hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer space-y-3 relative group">
                 <div class="flex items-center justify-between">
@@ -936,6 +1356,61 @@
             </div>
             <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
+        </div>
+    </div>
+    <!-- PAGE: 家居保險產品小冊子專頁 -->
+    <div id="page-gi-home" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
+        <!-- 頂部返回列 (返回一般保險主頁) -->
+        <div class="flex items-center justify-between">
+            <button type="button" onclick="switchPage('page-gi')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-emerald-600 font-bold text-xs sm:text-sm shadow-sm transition cursor-pointer">
+                ← 返回一般保險
+            </button>
+            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                MSIG 三井住友 (澳門) 官方正本
+            </span>
+        </div>
+
+        <!-- 白色大卡片主體 -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                    🏡 General Insurance · Home Protection
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">家居保險小冊子專區</h2>
+                <p class="text-xs sm:text-sm text-slate-500">點擊以下卡片即可直接在新分頁檢視官方 Google Drive 正本小冊子文件</p>
+            </div>
+
+            <!-- 小冊子卡片網格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <!-- 小冊子主要卡片 (請將下方網址替換為你的 Google Drive 連結) -->
+                <div onclick="window.open('https://drive.google.com/file/d/1y2V7VF69wYHXeYCCvHvkxI-3g8cpUU9I/view?usp=drive_link', '_blank')" class="p-6 rounded-2xl border-2 border-emerald-200 bg-emerald-50/20 hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-emerald-100 pb-3">
+                            <b class="text-slate-900 text-base group-hover:text-emerald-700 transition-colors">
+                                1. MSIG 家居保險小冊子 (澳門專用)
+                            </b>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                                官方正本
+                            </span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-xs">
+                            涵蓋高達 HK$1,000,000 家居財物意外損毀、HK$5,000,000 個人法律責任，特設網購保障、搬遷保障、精神科/爆竊受傷津貼及環保生活電器置換額外保障。
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] pt-1 text-slate-500">
+                            <div class="bg-white p-2 rounded-lg border border-slate-100">
+                                • 適用地區：澳門住宅物業
+                            </div>
+                            <div class="bg-white p-2 rounded-lg border border-slate-100">
+                                • 自選保障：樓宇全險 / 個人意外
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                        📥 開啟 / 下載官方 PDF 檔 (Google Drive) ↗
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
