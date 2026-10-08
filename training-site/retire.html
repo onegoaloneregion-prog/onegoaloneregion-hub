@@ -1293,12 +1293,27 @@
         const mainElement = document.querySelector('main');
         const filename = `退休策劃報告_${new Date().toISOString().slice(0, 10)}.pdf`;
 
+       // 1. 匯出前強制鎖定為桌面標準寬度 1100px，防止表格與文字直立擠壓
+        mainElement.classList.add('pdf-export-mode');
+        window.dispatchEvent(new Event('resize'));
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        // 2. 升級 opt 參數配置 (加入 1200px 模擬寬度與分頁保護)
         const opt = {
-          margin: [8, 8, 8, 8],
-          filename: filename,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            margin: [8, 8, 8, 8],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                logging: false,
+                letterRendering: true,
+                windowWidth: 1200,      // 👈 核心關鍵：強制以 1200px 寬度截圖！
+                scrollX: 0,
+                scrollY: 0
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
         // Generate PDF Blob
@@ -1329,8 +1344,12 @@
           window.print();
         }
       } finally {
-        btnText.innerText = originalText;
+       btnText.innerText = originalText;
         btn.disabled = false;
+        
+        // 還原原本的螢幕排版
+        mainElement.classList.remove('pdf-export-mode');
+        window.dispatchEvent(new Event('resize'));
       }
     }
   </script>
