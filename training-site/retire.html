@@ -16,7 +16,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!-- 防止 PDF 截斷與排版擠壓修復 -->
+    <style>
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background-color: #ffffff !important;
+            }
+            .card, .p-6, .rounded-3xl, .rounded-2xl, table, tr, canvas {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            header, nav, button, .no-print {
+                display: none !important;
+            }
+        }
 
+        .pdf-export-mode {
+            width: 1100px !important;
+            min-width: 1100px !important;
+            max-width: 1100px !important;
+            margin: 0 auto !important;
+        }
+    </style>
   <script>
     tailwind.config = {
       theme: {
@@ -131,7 +154,7 @@
             <i class="fa-solid fa-lightbulb text-amber-300"></i> 理財核心思考
           </div>
           <h2 class="text-xl sm:text-3xl font-black tracking-tight leading-snug">
-            「你有冇諗過退休唔係隨意即可，<br class="hidden sm:inline" />而係需要<span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">刻意規劃</span>嘅一生大事？」
+            「你有冇諗過退休唔係隨意即可，<br class="hidden sm:inline" />而係需要<span class="text-amber-300 font-black">刻意規劃</span>嘅一生大事？」
           </h2>
           <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
             核心思考提問：若儲蓄途中發生意外或疾病，如何不影響現有財富而保證退休計劃繼續實行？
