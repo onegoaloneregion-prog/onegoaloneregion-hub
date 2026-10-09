@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新投保營運指引智能導航系統 (V7.0)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            beige: {
+              50: '#FAF8F5',
+              100: '#F5EFE6',
+              200: '#E8DEC8',
+              300: '#D8C7A5',
+              400: '#C2AA7D',
+              500: '#AA8E57',
+              600: '#8E733F',
+              700: '#715A30',
+              800: '#554324',
+              900: '#3A2E19',
+              950: '#231B0E',
+            },
+            warmgray: {
+              50: '#FAFAF9',
+              100: '#F5F5F4',
+              200: '#E7E5E4',
+              700: '#44403C',
+              800: '#292524',
+              900: '#1C1917',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'PingFang TC', 'Microsoft JhengHei', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 自訂米色滾動條 */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F5EFE6;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #D8C7A5;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #AA8E57;
+    }
+  </style>
+</head>
+<body class="bg-beige-50 text-beige-950 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-beige-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <!-- 標題與標籤 -->
+        <div class="flex items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-bold text-beige-950">新投保營運指引智能導航</h1>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                V7.0 (2026/07)
+              </span>
+            </div>
+            <p class="text-xs text-beige-600 hidden sm:block">嚴格遵循官方手冊標準 · 智能審核免驗身、財務倍數、第三者繳款與法規期限</p>
+          </div>
+        </div>
+
+        <!-- 頂部全文搜尋框 -->
+        <div class="flex items-center gap-2 w-full md:w-80">
+          <div class="relative w-full">
+            <input 
+              type="text" 
+              id="globalSearchInput" 
+              placeholder="搜尋指引關鍵字 (例如: 藍咭, 50萬, 6天, W-8BEN)..." 
+              oninput="handleSearch(this.value)"
+              class="w-full text-xs pl-8 pr-3 py-2 bg-beige-50 border border-beige-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-500 focus:bg-white text-beige-900 placeholder-beige-400"
+            />
+            <span class="absolute left-2.5 top-2.5 text-beige-400 text-xs">🔍</span>
+          </div>
+          <button 
+            onclick="clearSearch()" 
+            class="text-xs px-2.5 py-2 bg-beige-200/80 hover:bg-beige-300 text-beige-800 rounded-lg transition shrink-0 font-medium">
+            清除
+          </button>
+        </div>
+      </div>
+
+      <!-- 模組標籤選單 (水平滑動) -->
+      <nav class="flex items-center gap-1.5 mt-3 overflow-x-auto custom-scrollbar pb-1 text-xs">
+        <button onclick="switchTab('calculator')" id="tab-calculator" class="nav-tab active px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-800 text-white shadow-sm">
+          🎯 智能核保自檢
+        </button>
+        <button onclick="switchTab('documents')" id="tab-documents" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          📑 必備文件清單 (Part 1)
+        </button>
+        <button onclick="switchTab('nonmacau')" id="tab-nonmacau" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          🌐 非澳門居民要求 (Part 2)
+        </button>
+        <button onclick="switchTab('payment')" id="tab-payment" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          💳 繳費與第三者門檻 (Part 3)
+        </button>
+        <button onclick="switchTab('medical')" id="tab-medical" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          🩺 體檢與免驗身限額 (Part 5)
+        </button>
+        <button onclick="switchTab('financial')" id="tab-financial" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          💰 財務核保與倍數 (Part 6)
+        </button>
+        <button onclick="switchTab('timeline')" id="tab-timeline" class="nav-tab px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition bg-beige-100 text-beige-800 hover:bg-beige-200">
+          ⏳ 交付時效與終止 (Part 8-9)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主內容容器 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+    <!-- 全文搜尋即時反饋區 (預設隱藏) -->
+    <div id="searchResultsCard" class="hidden mb-6 bg-white border border-beige-300 rounded-2xl p-5 shadow-sm space-y-3">
+      <div class="flex items-center justify-between border-b border-beige-200 pb-2">
+        <h3 class="text-sm font-bold text-beige-950 flex items-center gap-2">
+          🔍 搜尋結果 (<span id="resultCount" class="text-amber-800 font-bold">0</span> 筆相符官方條款)
+        </h3>
+        <button onclick="clearSearch()" class="text-xs text-beige-600 hover:text-beige-900 underline">關閉搜尋結果</button>
+      </div>
+      <div id="resultsList" class="space-y-2.5 max-h-80 overflow-y-auto custom-scrollbar text-xs"></div>
+    </div>
+
+    <!-- TAB 1: 智能核保自檢計算機 -->
+    <section id="section-calculator" class="tab-content space-y-6">
+      <!-- 簡要導言橫幅 -->
+      <div class="bg-gradient-to-r from-beige-100 via-amber-50/70 to-beige-100 p-5 rounded-2xl border border-beige-300/80 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 class="text-base font-bold text-beige-950 flex items-center gap-2">
+              <span>🎯</span> 智能投保審批條件自檢器 (新生意一站式評估)
+            </h2>
+            <p class="text-xs text-beige-700 mt-0.5">
+              輸入客戶身分、年齡、投保額及付款模式，系統即時自動計算體檢要求、免驗身限額、財務問卷等級、第三者審查要求及法規紅旗警示。
+            </p>
+          </div>
+          <div class="text-[11px] text-beige-600 bg-white/70 px-3 py-1.5 rounded-lg border border-beige-200/80 shrink-0 font-medium">
+            匯率固定：USD 1 = HKD 8
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- 輸入條件表單 (左側 5 欄) -->
+        <div class="lg:col-span-5 bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-beige-200 pb-2">
+            <h3 class="text-sm font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-beige-600"></span> 1. 客戶背景與險種
+            </h3>
+            <span class="text-[11px] text-beige-500">自動即時運算</span>
+          </div>
+
+          <!-- 身分別 -->
+          <div>
+            <label class="block text-xs font-semibold text-beige-800 mb-1">客戶身分別 / 居住地</label>
+            <select id="calcIdentity" onchange="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+              <option value="macau_id">澳門居民 (持澳門永久/非永久居民身份證)</option>
+              <option value="china_id">中國內地人士 (持內地居民身份證/通行證)</option>
+              <option value="blue_card_gt1">外地僱員 (持藍咭，有效期 > 1 年)</option>
+              <option value="blue_card_lt1">外地僱員 (持藍咭，有效期 < 1 年)</option>
+              <option value="japan">日本居民 / 日本國籍人士</option>
+              <option value="usa">美國公民 / 綠卡 / 稅務居民 (US Person)</option>
+              <option value="other_overseas">其他非傳統國家 / 海外居民</option>
+            </select>
+          </div>
+
+          <!-- 客戶職業族群 -->
+          <div>
+            <label class="block text-xs font-semibold text-beige-800 mb-1">職業及入息身分</label>
+            <select id="calcOccupation" onchange="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+              <option value="employed">受薪人士 (一般受僱職員 / 專業人士)</option>
+              <option value="child">兒童及全日制學生 (<= 18歲 或 18-25學生)</option>
+              <option value="housewife">全職家庭主婦 (下次生日年齡 >= 19)</option>
+              <option value="retiree">退休人士 (下次生日年齡 >= 55)</option>
+              <option value="retiree_young">提前退休人士 (年齡 < 55)</option>
+              <option value="unemployed">待業人士</option>
+            </select>
+          </div>
+
+          <!-- 年齡與理財顧問職級 -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">下次生日年齡 (ANB)</label>
+              <input type="number" id="calcAge" value="35" min="1" max="99" onchange="runAutoCheck()" oninput="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">理財顧問職級</label>
+              <select id="calcAdvisorTier" onchange="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+                <option value="standard">普通級 (所有理財顧問或以上)</option>
+                <option value="premier">卓越級理財顧問</option>
+                <option value="prestige">貴族級理財顧問</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 投保險種與金額 -->
+          <div class="border-t border-beige-200 pt-3 space-y-3">
+            <h3 class="text-sm font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-beige-600"></span> 2. 投保產品與投保額
+            </h3>
+
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">投保計劃類別</label>
+              <select id="calcProductType" onchange="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+                <option value="standard_life">傳統人壽保障計劃 (非衛你所愛/自主保)</option>
+                <option value="care_for_love">衛你所愛壽險計劃 / 自主保定期系列</option>
+                <option value="critical_illness">危疾保障計劃</option>
+                <option value="hospital_cash">住院現金保障附約</option>
+                <option value="lump_sum_saving">躉繳儲蓄計劃</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">6個月內新申請及現有總投保額 (港元 HKD)</label>
+              <input type="number" id="calcSumAssured" value="5000000" step="500000" onchange="runAutoCheck()" oninput="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+            </div>
+
+            <div id="salaryInputDiv">
+              <label class="block text-xs font-semibold text-beige-800 mb-1">受薪客戶之年薪 (港元 HKD)</label>
+              <input type="number" id="calcAnnualSalary" value="500000" step="50000" onchange="runAutoCheck()" oninput="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+            </div>
+          </div>
+
+          <!-- 繳費細節 -->
+          <div class="border-t border-beige-200 pt-3 space-y-3">
+            <h3 class="text-sm font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-beige-600"></span> 3. 繳費方式與第三者付款
+            </h3>
+
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">繳費付款人身分</label>
+              <select id="calcPayer" onchange="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+                <option value="self">投保人 / 被保人本人付款</option>
+                <option value="third_family">第三方：直系親屬 (配偶 / 父母 / 子女 / 兄弟姊妹 / 祖父母 / 孫)</option>
+                <option value="third_inlaw">第三方：配偶父母 (岳父母/老爺公公)</option>
+                <option value="third_company">第三方：僱主 / 有限公司 / 合夥公司 / 股東 (>25%)</option>
+                <option value="third_other">第三方：非認可關係或代理人代繳 (嚴禁)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-beige-800 mb-1">首期/總保費金額 (折合澳門幣 MOP)</label>
+              <input type="number" id="calcPremiumAmount" value="150000" step="10000" onchange="runAutoCheck()" oninput="runAutoCheck()" class="w-full text-xs p-2.5 bg-beige-50 border border-beige-300 rounded-lg text-beige-900 focus:ring-2 focus:ring-beige-500 focus:bg-white">
+              <p class="text-[11px] text-beige-500 mt-1">第三方付款門檻依此 MOP 金額即時劃分（<12萬 / 12萬-50萬 / &ge;50萬）。</p>
+            </div>
+          </div>
+
+          <button onclick="runAutoCheck()" class="w-full py-2.5 bg-beige-800 hover:bg-beige-900 text-white font-bold rounded-lg text-xs shadow transition">
+            🔄 重新評估核保條件
+          </button>
+        </div>
+
+        <!-- 評估診斷結果面板 (右側 7 欄) -->
+        <div class="lg:col-span-7 space-y-4">
+          
+          <!-- 警示紅旗卡片 (如有違反規則) -->
+          <div id="redFlagBox" class="hidden p-4 rounded-xl border-l-4 border-red-500 bg-red-50 text-red-900 text-xs">
+            <h4 class="font-bold flex items-center gap-1.5 mb-1.5 text-sm text-red-800">
+              ⚠️ 核心合規限制與拒保警告 (Red Flags)
+            </h4>
+            <ul id="redFlagList" class="list-disc pl-4 space-y-1 font-medium"></ul>
+          </div>
+
+          <!-- 診斷綜合結論卡片 -->
+          <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+              <div>
+                <h3 class="text-sm font-bold text-beige-900">📋 核保審批要求診斷書</h3>
+                <p class="text-[11px] text-beige-600">依據 FWD 2026/07 V7.0 手冊即時比對</p>
+              </div>
+              <span id="overallBadge" class="text-xs px-3 py-1 font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                可受理投保
+              </span>
+            </div>
+
+            <!-- 1. 體檢要求 -->
+            <div class="p-3.5 bg-beige-50/80 rounded-xl border border-beige-200">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-beige-900 flex items-center gap-1.5">
+                  🩺 體檢要求 (Medical UW)
+                </span>
+                <span id="medResultTag" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-beige-200 text-beige-800">
+                  免驗身 (NM)
+                </span>
+              </div>
+              <p id="medResultDetail" class="text-xs text-beige-700">未超過該年齡與產品對應之免驗身限額。</p>
+              <div id="medTestItems" class="hidden mt-2 text-xs p-2.5 bg-white rounded-lg border border-beige-200 text-beige-800 space-y-1"></div>
+            </div>
+
+            <!-- 2. 財務核保要求 -->
+            <div class="p-3.5 bg-beige-50/80 rounded-xl border border-beige-200">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-beige-900 flex items-center gap-1.5">
+                  💰 財務核保文件 (Financial UW)
+                </span>
+                <span id="finResultTag" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-beige-200 text-beige-800">
+                  標準程序 (免額外問卷)
+                </span>
+              </div>
+              <p id="finResultDetail" class="text-xs text-beige-700">常規核保，投保額未達問卷觸發門檻。</p>
+              <div id="finMultiplierCheck" class="mt-2 text-xs p-2 bg-amber-50/60 rounded border border-amber-200/80 text-amber-900"></div>
+            </div>
+
+            <!-- 3. 第三者付款及資金要求 -->
+            <div class="p-3.5 bg-beige-50/80 rounded-xl border border-beige-200">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-beige-900 flex items-center gap-1.5">
+                  💳 繳費審查要求 (Payment Rules)
+                </span>
+                <span id="payResultTag" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-beige-200 text-beige-800">
+                  常規存入
+                </span>
+              </div>
+              <p id="payResultDetail" class="text-xs text-beige-700">投保人本人付款且合規。</p>
+              <ul id="payDocsList" class="hidden mt-2 list-disc pl-4 text-xs text-beige-800 space-y-1 bg-white p-2.5 rounded-lg border border-beige-200"></ul>
+            </div>
+
+            <!-- 4. 必備文件核對清單 (自適應生成) -->
+            <div class="p-3.5 bg-beige-50/80 rounded-xl border border-beige-200">
+              <span class="text-xs font-bold text-beige-900 block mb-2">
+                📑 此案例必交表格及身分證明清單
+              </span>
+              <ul id="requiredDocChecklist" class="space-y-1.5 text-xs text-beige-800"></ul>
+            </div>
+
+            <!-- 5. 投保簽署時效提醒 -->
+            <div class="p-3 bg-amber-50/70 rounded-xl border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2">
+              <span class="text-base shrink-0">⏳</span>
+              <div>
+                <span class="font-bold">遞交遞送法定時限要求：</span>
+                <span id="deadlineText">澳門居民之投保書必須於簽署後 14 天內遞交至新生意部。</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 投保申請書所需文件 (個人 vs 商業) -->
+    <section id="section-documents" class="tab-content hidden space-y-6">
+      
+      <!-- 個人壽險文件清單 (Part 1.1) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第一部分 1.1：個人壽險申請所需文件 (非投資相連)</h2>
+            <p class="text-xs text-beige-600">所有非投資相連個人壽險必須遞交之法定合規文件與標準程序</p>
+          </div>
+          <span class="text-xs bg-beige-100 text-beige-800 font-semibold px-2.5 py-1 rounded-md border border-beige-300">
+            共 16 項標準指引
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-beige-800">
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-beige-700"></span> 必備核心表格
+            </h4>
+            <ul class="space-y-1.5 pl-2">
+              <li><strong>1. 人壽保險申請書</strong>：投保人及 18 歲（實際年齡）或以上被保人必須簽署。</li>
+              <li><strong>2. 人壽保險利益說明文件 (BI)</strong>：<br>
+                <span class="text-amber-800 font-medium">⚠️ 打印日期不能早於 FNA 簽名日期；簽署日期必須在申請書簽署日期或之前。</span></li>
+              <li><strong>3. 客戶轉保聲明書</strong>：若客戶於「轉保聲明一欄」作答為「是」時必須遞交。</li>
+              <li><strong>4. 財務需要及投資取向分析表格 (FNA)</strong>。</li>
+              <li><strong>5. 直接扣賬授權書</strong>：如選擇使用銀行戶口繳付保費。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-beige-700"></span> 身分及地址證明規範 (經授權見證)
+            </h4>
+            <ul class="space-y-1.5 pl-2">
+              <li><strong>6. 身分證明副本</strong>：投保人及被保人之出生證明/身份證/護照副本。<br>
+                <span class="text-beige-900 font-medium bg-amber-50 px-1 py-0.5 rounded border border-amber-200 inline-block mt-1">
+                  需符合標準化核實程序 4 步驟：1. 作出核實聲明 2. 核實人簽署 3. 填寫全寫名稱 4. 核實日期。
+                </span>
+              </li>
+              <li><strong>7. 非永久性澳門身份證人士</strong>：須遞交進入澳門護照副本 / 單程證 / 居民身份證 / 戶口注銷證明書等副本。</li>
+              <li><strong>8. 有效住址證明</strong>：可能需要提供 <strong>3 個月內</strong> 發出之有效地址證明，登記人姓名須為投保人（若永久與住宅地址不符，兩者皆須遞交並經授權人士標準化核實）。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-beige-700"></span> 財務問卷與稅務申報 (自我證明)
+            </h4>
+            <ul class="space-y-1.5 pl-2">
+              <li><strong>9. 特別財務問卷 (SFQ)</strong>：按第六部分財務要求觸發。</li>
+              <li><strong>10. 財務分析問卷 (FAQ)</strong>：按第六部分財務要求觸發。</li>
+              <li><strong>11. 保費繳付特別安排申請書 (SAPPA)</strong>：若客戶以第三者繳款。</li>
+              <li><strong>12. 個人自我證明表格</strong>：如投保人是其他司法管轄區（澳門及美國除外）之稅務居民。</li>
+              <li><strong>13. 實體自我證明表格</strong>：實體投保人填寫。</li>
+              <li><strong>14. 控權人自我證明表格</strong>：如適用必須填寫。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-beige-700"></span> 遞交時限與認可住址證明類型
+            </h4>
+            <div class="p-2.5 bg-white rounded-lg border border-beige-200 space-y-1">
+              <p class="font-bold text-beige-900">遞交時效限制：</p>
+              <p>• 澳門居民：投保書必須於<strong>簽署後 14 天內</strong>遞交至新生意部。</p>
+              <p>• 非澳門身份證人士：必須於<strong>簽署後 7 個工作天內</strong>遞交，否則必須重新簽署。</p>
+            </div>
+            <p class="text-[11px] text-beige-700">
+              <strong>認可地址證明</strong>：公用事業帳單、政府/機構通訊、流動電話/收費電視結單、金融機構住址紀錄/認收信、澳門大專院校居所信函、院舍證明、經財政局加蓋釐印之澳門租約、澳門僱主信函等。
+            </p>
+            <p class="text-[11px] text-amber-900 font-medium">
+              <strong>第三者住址證明限制</strong>：只適用於與申請人同住之直系家庭成員（如父母、子女），且僅限無法提供本人名義證明者（如學生、家庭主婦）。證明上須註明原因、關係、投保人簽署確認並連同第三者身分證副本遞交。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商業壽險申請 (Part 1.2) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第一部分 2：商業壽險申請 (公司投保人)</h2>
+            <p class="text-xs text-beige-600">公司作為投保人購買法人團體/要員/合夥人保險所需遞交之法定機構文件</p>
+          </div>
+          <span class="text-xs bg-beige-100 text-beige-800 font-semibold px-2.5 py-1 rounded-md border border-beige-300">
+            法人查冊與權限審查
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-beige-800">
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-1.5">
+            <h4 class="font-bold text-beige-900">1. 公司成立與授權文件</h4>
+            <p>• 公司註冊證書 (CI) 或商業登記證 (BR) 複本。</p>
+            <p>• 公司組織章程大綱及細則 (M&A)。</p>
+            <p>• <strong>董事局決議案</strong>：批准簽訂保險合約之決議案或其他授權證明副本。</p>
+            <p>• 董事局決議案中獲批准授權人之簽名樣式及其詳細資料。</p>
+            <p>• 公司控股結構圖：有效確認公司擁有權架構，識別最終擁有及操控該公司之個體。</p>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-1.5">
+            <h4 class="font-bold text-beige-900">2. 關鍵人員身分查證 (經核實副本)</h4>
+            <p>需遞交下列人士經核實的身份證明文件及/或護照副本：</p>
+            <p class="pl-2">i. 最少 <strong>兩名</strong> 記錄在公司登記冊內的董事（包括執行董事）。</p>
+            <p class="pl-2">ii. 所有獲批准之<strong>授權簽署者</strong>。</p>
+            <p class="pl-2">iii. 所有持股或投票權 <strong>不少於 10%</strong> 之股東 / 實益擁有人，或行使最終控制權之人。</p>
+            <p>• 多層結構公司：需依隨層級找出最終實益擁有人 (UBO) 並核實其身分。</p>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-1.5">
+            <h4 class="font-bold text-beige-900">3. 查冊與職權證明書規定</h4>
+            <p>• <strong>澳門註冊公司</strong>：核保部會自行進行官方公司查冊。</p>
+            <p>• <strong>非澳門註冊公司</strong>：客戶須在當地註冊處進行查冊、或取得公司報告、或由當地註冊代理人簽發之<strong>職權證明書 (現任職位證明書 Certificate of Incumbency)</strong>，該證明書必須於<strong>過去 6 個月內</strong>簽發。</p>
+          </div>
+
+          <div class="p-4 bg-beige-50/60 rounded-xl border border-beige-200 space-y-1.5">
+            <h4 class="font-bold text-beige-900">4. 稅務與申報表格</h4>
+            <p>• 外國帳戶稅務合規法 (FATCA) 之「機構身分聲明書」。</p>
+            <p>• 實體自我證明表格 及 (如適用) 控權人自我證明表格。</p>
+            <p>• 可能需要額外財務證明文件（詳見商業保險財務核保要求）。</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 3: 非持有澳門身份證人士之額外核保要求 -->
+    <section id="section-nonmacau" class="tab-content hidden space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- 國內人士核保要求 (Part 2.1) -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3">
+          <div class="border-b border-beige-200 pb-2">
+            <h3 class="text-sm font-bold text-beige-950 flex items-center gap-2">
+              🇨🇳 中國內地人士 (持內地身份證 / 護照 / 通行證)
+            </h3>
+            <p class="text-[11px] text-beige-600">非澳門居民核保第二部分 2.1 節</p>
+          </div>
+
+          <div class="text-xs space-y-2 text-beige-800">
+            <p class="font-bold text-beige-900">所需核對文件清單：</p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border border-beige-200 rounded">
+                <thead class="bg-beige-100 font-semibold text-beige-900">
+                  <tr>
+                    <th class="p-1.5 border-b border-beige-200">文件名稱</th>
+                    <th class="p-1.5 border-b border-beige-200 text-center">投保人</th>
+                    <th class="p-1.5 border-b border-beige-200 text-center">被保人&ge;18</th>
+                    <th class="p-1.5 border-b border-beige-200 text-center">被保人&lt;18</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-beige-100">
+                  <tr>
+                    <td class="p-1.5 font-medium">重要資料聲明 (內地人士在澳門投購)</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-stone-400">✗ 不需要</td>
+                    <td class="p-1.5 text-center text-stone-400">✗ 不需要</td>
+                  </tr>
+                  <tr>
+                    <td class="p-1.5 font-medium">護照 / 往來港澳通行證 / 旅遊證件副本</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-stone-400">-</td>
+                  </tr>
+                  <tr>
+                    <td class="p-1.5 font-medium">內地居民身份證 (正反面副本)</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-stone-400">-</td>
+                  </tr>
+                  <tr>
+                    <td class="p-1.5 font-medium">入境證明 - 入境標籤 (回條)</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                    <td class="p-1.5 text-center text-stone-400">-</td>
+                  </tr>
+                  <tr>
+                    <td class="p-1.5 font-medium">出生紙副本及關係證明</td>
+                    <td class="p-1.5 text-center text-stone-400">-</td>
+                    <td class="p-1.5 text-center text-stone-400">-</td>
+                    <td class="p-1.5 text-center text-emerald-700 font-bold">✓ 必須</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-3 bg-red-50/80 border border-red-200 rounded-lg text-red-900 space-y-1">
+              <span class="font-bold">🚫 不接受國內人士投保之險種：</span>
+              <p>1. <strong>人身意外保險附約</strong></p>
+              <p>2. <strong>全意守護意外保障基本計劃</strong> (附約除外)</p>
+              <p>3. <strong>父母保障 (保費豁免) 附約</strong>：除非被保人父母居於「內地特惠及主要城市」。</p>
+              <p>4. <strong>保費豁免保障</strong>：除非被保人居於「內地特惠及主要城市」。</p>
+              <p class="text-[11px] text-red-700 mt-1 font-medium">* 司機及工廠工人等藍領行業需個別考慮 (IC)。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 外地僱員 (藍咭) 核保要求 (Part 2.2) -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3">
+          <div class="border-b border-beige-200 pb-2">
+            <h3 class="text-sm font-bold text-beige-950 flex items-center gap-2">
+              🇲🇴 外地僱員核保要求 (藍咭持有人)
+            </h3>
+            <p class="text-[11px] text-beige-600">非澳門居民核保第二部分 2.2 節</p>
+          </div>
+
+          <div class="text-xs space-y-2 text-beige-800">
+            <p class="font-bold text-beige-900">必備文件：</p>
+            <ul class="list-disc pl-4 space-y-1">
+              <li>有效外地僱員身份認別證副本 (藍咭副本)。</li>
+              <li>護照副本 (顯示相片個人資料) 及身分證正反面 (<strong>不需要進行見證</strong>)。</li>
+              <li>非澳門居民投保問卷。</li>
+            </ul>
+
+            <div class="p-3 bg-amber-50 rounded-lg border border-amber-200 space-y-1.5 text-amber-950">
+              <p class="font-bold">⚠️ 藍咭有效期劃分標準：</p>
+              <p>• <strong>有效期少於 1 年 (&lt; 1 年)</strong>：核保程序完全按照<strong>國內人士</strong>之核保要求。</p>
+              <p>• <strong>有效期大於 1 年 (&gt; 1 年)</strong>：按照外地僱員專屬要求審批。</p>
+              <p>• 不接受父母保障保費豁免、保費豁免保障（受限特惠城市）、人身意外附約。</p>
+            </div>
+
+            <div class="p-3 bg-beige-50 rounded-lg border border-beige-200 space-y-1">
+              <span class="font-bold text-beige-900">外僱特定險種特別限制：</span>
+              <p>• <strong>住院現金保障附約</strong>：只限「經濟計劃」，且投保時必須簽署《住院現金保障附約聲明書》。</p>
+              <p>• <strong>意外死亡及失肢附加利益附約 (AD&D)</strong>：總投保額不可超過（基本保額 + 定期壽險附約之總和），且<strong>需加 50% (+50%) 地區風險附加費</strong>。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 美籍人士 (FATCA) 限制 (Part 2.3) -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3">
+          <div class="border-b border-beige-200 pb-2">
+            <h3 class="text-sm font-bold text-beige-950 flex items-center gap-2">
+              🇺🇸 美國人投保之嚴格限制 (FATCA)
+            </h3>
+            <p class="text-[11px] text-beige-600">非澳門居民核保第二部分 2.3 節</p>
+          </div>
+
+          <div class="text-xs space-y-2 text-beige-800">
+            <div class="p-2.5 bg-red-100 border border-red-300 rounded-lg text-red-900 font-bold">
+              🚫 禁令：所有美國居民均不准許投保任何「投資相連產品 (ILAS)」！
+            </div>
+            <p><strong>美籍身分特徵 (U.S. Indicia) 觸發點：</strong><br>
+              美籍公民/綠卡、美國出生、美國住址/通訊地址、美國電話、常行指示轉賬到美國戶口、被授權人持美國地址等。
+            </p>
+            <div class="space-y-1 p-2.5 bg-beige-50 rounded-lg border border-beige-200">
+              <p>• <strong>申報為美國人 / 美國公司</strong>：必須遞交 <strong>W-9 表格</strong>。</p>
+              <p>• <strong>申報非美國人但具有美籍特徵</strong>：個人遞交 <strong>W-8BEN 表格</strong>，公司遞交 <strong>W-8BEN-E 表格</strong>，並須附上書面合理解釋（如美國出生者須遞交放棄美國國籍證明書 Certificate of Loss of Nationality）。</p>
+              <p>• 公司客戶：須同時遞交《外國帳戶稅務合規法 (FATCA) 之機構身分聲明書》。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 日本居民 / 日本國籍限制 (Part 2.4) -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3">
+          <div class="border-b border-beige-200 pb-2">
+            <h3 class="text-sm font-bold text-beige-950 flex items-center gap-2">
+              🇯🇵 日本居民 (擁有日本國籍的投保人) 投保指引
+            </h3>
+            <p class="text-[11px] text-beige-600">非澳門居民核保第二部分 2.4 節</p>
+          </div>
+
+          <div class="text-xs space-y-2 text-beige-800">
+            <div class="p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-900">
+              <span class="font-bold">❌ 拒保條件：</span>根據日本法律限制，若保險申請書上之<strong>住宅地址為日本，投保申請將不獲接受</strong>（不准許投保任何海外保險產品）。
+            </div>
+
+            <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-lg space-y-1.5 text-amber-950">
+              <span class="font-bold">✅ 唯一例外獲接納條件（必須同時符合 2 條件）：</span>
+              <p>1. 投保人/被保人申報國籍為日本或持日本護照；<strong>及</strong></p>
+              <p>2. <strong>住宅地址不在日本</strong>，且投保人與被保險人必須作出明確書面聲明：<br>
+                <em class="font-serif text-amber-900 bg-white p-1.5 rounded border border-amber-300 block mt-1">
+                  「本人確認現時沒有任何日本地址 (包括但不限於通訊、住宅和永久地址)」
+                </em>
+              </p>
+            </div>
+
+            <p class="text-[11px] text-beige-600">
+              * <strong>非傳統國家人士</strong>：若遞交之申請為非傳統國家，新生意部核保部將轉介至法律部及合規部作個別監管風險評估。
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 內地特惠及主要城市速查表格 -->
+      <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm">
+        <h3 class="text-sm font-bold text-beige-900 mb-2 flex items-center gap-2">
+          🏙️ 內地特惠城市與主要城市對照表 (決定豁免保費附約之承保資格)
+        </h3>
+        <p class="text-xs text-beige-600 mb-3">若投保父母保障(保費豁免)或保費豁免保障，被保人/父母必須常居於以下認可城市：</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200">
+            <h4 class="font-bold text-emerald-900 mb-1">🌟 內地特惠城市表</h4>
+            <p><strong>直轄市：</strong>北京、上海、重慶、天津</p>
+            <p><strong>廣東省：</strong>廣州、佛山、東莞、深圳、中山、珠海</p>
+            <p><strong>福建省：</strong>廈門、福州 | <strong>四川省：</strong>成都</p>
+            <p><strong>江蘇省：</strong>蘇州、南京 | <strong>浙江省：</strong>杭州、寧波</p>
+            <p><strong>山東省：</strong>青島</p>
+          </div>
+
+          <div class="p-3.5 bg-beige-50 rounded-xl border border-beige-200">
+            <h4 class="font-bold text-beige-900 mb-1">🏢 內地主要城市表 (節錄代表)</h4>
+            <p><strong>廣東：</strong>汕頭、湛江、清遠、肇慶、惠州、江門、陽江、潮州、韶關、三水、增城、臺山、梅州、茂名、番禺、順德、南海、蛇口、新會</p>
+            <p><strong>其他省會/重鎮：</strong>大連、沈陽、長春、哈爾濱、武漢、長沙、西安、鄭州、濟南、石家莊、南寧、昆明、南昌、三亞、海口、合肥、烏魯木齊等</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 4: 繳付保費安排 (第三者付款、付款證明與關係矩陣) -->
+    <section id="section-payment" class="tab-content hidden space-y-6">
+      
+      <!-- 第三者繳費三大門檻規矩 (Part 3.2) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第三部分 2：第三者繳付保費的文件要求與門檻</h2>
+            <p class="text-xs text-beige-600">依據繳費金額嚴格劃分，以防範洗黑錢與非法代繳風險</p>
+          </div>
+          <span class="text-xs bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-300">
+            V7.0 最新更新條款
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          
+          <!-- 門檻 1 -->
+          <div class="p-4 rounded-xl border border-emerald-300 bg-emerald-50/60 flex flex-col justify-between space-y-2">
+            <div>
+              <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
+                門檻 1：小額繳付
+              </span>
+              <h3 class="text-base font-bold text-emerald-950 mt-2">&lt; MOP 120,000</h3>
+              <p class="text-emerald-800 font-medium">(澳門幣 12 萬元以下或相同等值)</p>
+            </div>
+            <div class="p-2.5 bg-white/95 rounded-lg border border-emerald-200 text-emerald-900">
+              <p class="font-bold">✅ 處理程序：</p>
+              <p>保費將直接存入保單，<strong>無需繳交額外第三者文件</strong>。</p>
+            </div>
+          </div>
+
+          <!-- 門檻 2 -->
+          <div class="p-4 rounded-xl border border-amber-300 bg-amber-50/60 flex flex-col justify-between space-y-2">
+            <div>
+              <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">
+                門檻 2：中額繳付
+              </span>
+              <h3 class="text-base font-bold text-amber-950 mt-2">MOP 120,000 ~ 499,999</h3>
+              <p class="text-amber-800 font-medium">(澳門幣 12 萬至 49 萬 9,999 元)</p>
+            </div>
+            <div class="p-2.5 bg-white/95 rounded-lg border border-amber-200 text-amber-950 space-y-1">
+              <p class="font-bold">📑 必須遞交文件：</p>
+              <p>1. 保費繳付特別安排申請書 (SAPPA)</p>
+              <p>2. 第三者付款人身份證明文件副本</p>
+              <p>3. <strong>如第三者付款人為公司，必須遞交關係證明文件</strong></p>
+            </div>
+          </div>
+
+          <!-- 門檻 3 -->
+          <div class="p-4 rounded-xl border border-red-300 bg-red-50/60 flex flex-col justify-between space-y-2">
+            <div>
+              <span class="text-xs font-bold text-red-800 bg-red-100 px-2 py-0.5 rounded border border-red-200">
+                門檻 3：大額加強審查 (EDD)
+              </span>
+              <h3 class="text-base font-bold text-red-950 mt-2">&ge; MOP 500,000</h3>
+              <p class="text-red-800 font-medium">(超過或等於澳門幣 50 萬元或等值)</p>
+            </div>
+            <div class="p-2.5 bg-white/95 rounded-lg border border-red-200 text-red-950 space-y-1">
+              <p class="font-bold">📑 必須遞交文件 (全部)：</p>
+              <p>1. 保費繳付特別安排申請書 (SAPPA)</p>
+              <p>2. 第三者付款人身份證明文件副本</p>
+              <p>3. <strong>關係證明文件</strong> (核實身分與權益人關係)</p>
+              <p>4. <strong>《加強盡職審查表格-個人客戶 (EDD)》</strong> (個人付款人) 或 <strong>《加強盡職審查表格-商業客戶》</strong> (公司特定付款人)</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-950 space-y-1.5">
+          <p class="font-bold">⚠️ 重要合規紅線及特別規定：</p>
+          <p>• <strong>理財顧問絕對禁令</strong>：公司<strong>嚴禁理財顧問（不論級別）收取客戶現金或以任何形式代客繳款</strong>（不論直接交公司或存入公司戶口），一經發現將作嚴厲紀律處分。</p>
+          <p>• <strong>現金及本票門檻除外</strong>：上述門檻不適用於現金及銀行匯票/本票，其遵循另一套更嚴格要求。</p>
+          <p>• <strong>銀行本票</strong>：如以銀行本票付款，必須遞交購買本票的收據（必須顯示付款人姓名、付款人銀行帳戶號碼、付款金額、簽發日期及發出銀行）。</p>
+          <p>• <strong>未能識別付款人之繳款 (中銀/Jetco ATM/網銀)</strong>：如每筆交易 &ge; MOP 120,000 且未能識別付款人，必須提供有效付款證明（顯示付款人姓名、貨幣、金額、交易日期）。</p>
+          <p>• <strong>分開付款 (Split Payment)</strong>：同一張保單進行多次付款交易，可能需要在《附加資料申請書》中詳細說明分開付款原因及提供付款證明。</p>
+        </div>
+      </div>
+
+      <!-- 認可第三者繳費身分與關係證明矩陣 (Part 3.3, 3.5) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-beige-950 border-b border-beige-200 pb-2">
+          🤝 認可第三方繳款人關係及所需證明文件對照表 (有效期 6 個月)
+        </h3>
+
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-left border border-beige-200">
+            <thead class="bg-beige-100 text-beige-900 font-semibold">
+              <tr>
+                <th class="p-2.5 border-b border-beige-200 w-44">認可第三方付款人關係</th>
+                <th class="p-2.5 border-b border-beige-200">常見可接受之證明文件範例 (僅供參考)</th>
+                <th class="p-2.5 border-b border-beige-200 w-60">特殊聲明 / 授權要求</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-beige-100 text-beige-800">
+              <tr>
+                <td class="p-2.5 font-bold">配偶</td>
+                <td class="p-2.5">結婚證書、雙方身份證及戶口簿 (內地)、台灣身分證副本 (背面顯示配偶姓名)。</td>
+                <td class="p-2.5 text-beige-600">-</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">父母 / 子女</td>
+                <td class="p-2.5">出生證明 (顯示父母姓名)、戶口簿 (顯示父母子女關係)、獨生子女證、台灣身份證 (背面顯示父母姓名)。</td>
+                <td class="p-2.5 text-beige-600">-</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">兄弟姊妹</td>
+                <td class="p-2.5">雙方出生證明 (均顯示相同父母姓名) 或載有共同雙親之官方戶籍證明。</td>
+                <td class="p-2.5 text-beige-600">-</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">祖父母 / 孫子女</td>
+                <td class="p-2.5"><strong>兩份出生證明</strong>：一份顯示保單持有人與其父母關係，另一份顯示其父母與祖父母關係。</td>
+                <td class="p-2.5 text-beige-600">跨代連鎖證明</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">配偶父母 (岳父母/公婆)</td>
+                <td class="p-2.5">結婚證書 (顯示配偶姓名) + 配偶之出生證明 (顯示其父母姓名)。</td>
+                <td class="p-2.5 text-beige-600">-</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-amber-900">僱主與僱員 *</td>
+                <td class="p-2.5">HR 發出之在職證明信/HR系統記錄 (載明職位、部門、就職日期、雙方姓名)、僱傭合約/聘書、薪資單、報稅表。</td>
+                <td class="p-2.5 text-amber-900 font-medium">若付款人為有限公司，必須遞交<strong>董事局決議案</strong>與公司蓋章。</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">獨資業務東主 *</td>
+                <td class="p-2.5">商業登記資料查詢證明、報稅表。</td>
+                <td class="p-2.5 text-emerald-800">不需遞交董事局決議案及組織圖。</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-amber-900">合夥公司之合夥人 *</td>
+                <td class="p-2.5">合夥協議 (Partnership Agreement)。</td>
+                <td class="p-2.5 text-amber-900">需遞交<strong>合夥人授權信</strong> (載明付款義務範圍與符合合夥利益)。</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-amber-900">有限公司之董事 *</td>
+                <td class="p-2.5">公司註冊證書 (CI)、商業登記證、現任職位證明書 (過去6個月內)。</td>
+                <td class="p-2.5 text-amber-900">需遞交<strong>董事局決議案</strong>。</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-amber-900">股東 (持股/控制權 &gt; 25%)</td>
+                <td class="p-2.5">公司登記冊、股權結構證明、非澳門公司之職權證明書 (Incumbency)。</td>
+                <td class="p-2.5 text-amber-900">需證明持股超過 25% 及董事局決議案。</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold">信託之財產授予人 (Settlor)</td>
+                <td class="p-2.5">信託核實表格、顯示信託資料及授予人的信託契約 (Trust Deed) 或協議。</td>
+                <td class="p-2.5 text-beige-600">需附董事局決議案 (如適用)。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-3.5 bg-beige-50 rounded-xl border border-beige-200 text-xs text-beige-800 space-y-1">
+          <p class="font-bold text-beige-900">📌 董事局決議案必須包含的 5 大關鍵要項：</p>
+          <p>a) 投保人姓名 | b) 保單資料 (保單號碼、計劃名稱、投保金額、被保人名字) | c) 公司/合夥人接受之支付義務範圍 (金額、付款頻率和期限) | d) 與投保人的具體關係 | e) 明確聲明：<strong>該交易由董事局或合夥企業認為符合公司或合夥人的整體利益</strong>。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 5: 體檢與免驗身限額對照 (人壽危疾 vs 衛你所愛/自主保) -->
+    <section id="section-medical" class="tab-content hidden space-y-6">
+      
+      <!-- 一般人壽危疾計劃 (Part 5.1) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第五部分 1：常規人壽、危疾之豁免驗身限額 (一般基本計劃)</h2>
+            <p class="text-xs text-beige-600">* 不包括衛你所愛壽險計劃及自主保定期保障計劃系列</p>
+          </div>
+          <span class="text-xs bg-beige-200 text-beige-800 font-bold px-2.5 py-1 rounded-md">
+            標準限額標準
+          </span>
+        </div>
+
+        <!-- 免驗身門檻速覽 -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+          <div class="p-3 bg-beige-50 rounded-xl border border-beige-200">
+            <span class="text-beige-600 block mb-1">下次生日年齡 1-50 歲</span>
+            <span class="text-sm font-bold text-beige-900">HKD 8,800,000</span>
+          </div>
+          <div class="p-3 bg-beige-50 rounded-xl border border-beige-200">
+            <span class="text-beige-600 block mb-1">下次生日年齡 51-60 歲</span>
+            <span class="text-sm font-bold text-beige-900">HKD 4,800,000</span>
+          </div>
+          <div class="p-3 bg-beige-50 rounded-xl border border-beige-200">
+            <span class="text-beige-600 block mb-1">下次生日年齡 61-70 歲</span>
+            <span class="text-sm font-bold text-beige-900">HKD 1,500,000</span>
+          </div>
+          <div class="p-3 bg-red-50 rounded-xl border border-red-200 text-red-900">
+            <span class="block mb-1">71 歲或以上</span>
+            <span class="text-sm font-bold">無豁免額 (必檢 ME)</span>
+          </div>
+        </div>
+
+        <!-- 6個月制豁免驗身限額計算方法 -->
+        <div class="p-3.5 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1.5">
+          <div class="flex items-center gap-1.5 font-bold">
+            <span>💡</span> 6 個月制豁免驗身限額的計算方法 (現有保單生效已由 12 個月修訂為 6 個月)：
+          </div>
+          <p>凡於富衛擁有個人保障額之現有客戶，符合下列標準者，投保新生意時<strong>現有保障額將被豁免計算於免驗身限額內</strong>：</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-2 mt-1">
+            <p>a. FWD 個人總保障額 (壽險及危疾) &le; HKD 24,000,000 / USD 3,000,000 (含現正申請額)；</p>
+            <p>b. 於 FWD 沒有嚴重賠償申請或記錄 (核保部審查)；</p>
+            <p>c. 於 FWD 沒有嚴重身體疾病、病歷、醫療聲明；</p>
+            <p>d. 現正處理之投保書未有顯示不良健康狀況；</p>
+            <p class="font-bold sm:col-span-2">e. 被保人實際年齡在 50 歲或以下 (下次生日年齡 51 歲或以下)。</p>
+          </div>
+        </div>
+
+        <!-- 矩陣表 -->
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-center border border-beige-200">
+            <thead class="bg-beige-100 text-beige-900 font-semibold">
+              <tr>
+                <th class="p-2 border-b border-beige-200 text-left">6個月內之總投保額 (HKD)</th>
+                <th class="p-2 border-b border-beige-200">1-18 歲</th>
+                <th class="p-2 border-b border-beige-200">19-40 歲</th>
+                <th class="p-2 border-b border-beige-200">41-45 歲</th>
+                <th class="p-2 border-b border-beige-200">46-50 歲</th>
+                <th class="p-2 border-b border-beige-200">51-55 歲</th>
+                <th class="p-2 border-b border-beige-200">56-60 歲</th>
+                <th class="p-2 border-b border-beige-200">61-70 歲</th>
+                <th class="p-2 border-b border-beige-200">71 歲以上</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-beige-100 text-beige-800">
+              <tr>
+                <td class="p-2 text-left font-medium">&le; 1,500,000</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 bg-amber-50">ME</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-medium">1,500,001 - 4,800,000</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-medium">4,800,001 - 8,800,000</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 text-emerald-800 font-semibold">NM</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-medium">8,800,001 - 12,000,000</td>
+                <td class="p-2 bg-amber-50">ME</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+                <td class="p-2 bg-amber-50">ME, BP1</td>
+                <td class="p-2 bg-amber-50">ME, BP1, ECG</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-medium">12,000,001 - 24,000,000</td>
+                <td class="p-2 bg-amber-50">ME</td>
+                <td class="p-2 bg-amber-50">ME, BP2</td>
+                <td class="p-2 bg-amber-50">ME, BP2</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+                <td class="p-2 bg-amber-100 font-medium">ME, BP2, ECG, MU</td>
+              </tr>
+              <tr class="bg-amber-100/60 font-semibold">
+                <td class="p-2 text-left text-red-900">&gt; 24,000,000</td>
+                <td class="p-2">ME</td>
+                <td class="p-2">ME, BP3, MU, HIV</td>
+                <td class="p-2">ME, BP3, MU, HIV</td>
+                <td class="p-2">ME, BP3, TMX, MU, HIV</td>
+                <td class="p-2">ME, BP3, TMX, MU, HIV</td>
+                <td class="p-2">ME, BP3, TMX, MU, HIV</td>
+                <td class="p-2">ME, BP3, TMX, MU, HIV</td>
+                <td class="p-2">ME, BP3, TMX, MU, HIV</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 衛你所愛壽險 / 自主保系列 (顧問分級體系 Part 5.2) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第五部分 2：衛你所愛壽險計劃及自主保定期系列豁免限額</h2>
+            <p class="text-xs text-beige-600">按理財顧問職級（普通級 / 卓越級 / 貴族級）實施階梯式免驗身限額</p>
+          </div>
+          <span class="text-xs bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-300">
+            定期險專用級別
+          </span>
+        </div>
+
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-center border border-beige-200">
+            <thead class="bg-beige-100 text-beige-900 font-semibold">
+              <tr>
+                <th class="p-2.5 border-b border-beige-200 text-left">下次生日年齡</th>
+                <th class="p-2.5 border-b border-beige-200">普通級 (所有理財顧問或以上)</th>
+                <th class="p-2.5 border-b border-beige-200 text-amber-900">卓越級理財顧問</th>
+                <th class="p-2.5 border-b border-beige-200 text-purple-900">貴族級理財顧問</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-beige-100 text-beige-800">
+              <tr>
+                <td class="p-2 text-left font-bold">1 - 18 歲</td>
+                <td class="p-2">HKD 5,200,000</td>
+                <td class="p-2 font-semibold text-amber-800">HKD 6,400,000</td>
+                <td class="p-2 font-bold text-purple-800">HKD 9,600,000</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-bold">19 - 45 歲</td>
+                <td class="p-2">HKD 5,200,000</td>
+                <td class="p-2 font-semibold text-amber-800">HKD 6,400,000</td>
+                <td class="p-2 font-bold text-purple-800">HKD 12,000,000</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-bold">46 - 55 歲</td>
+                <td class="p-2">HKD 3,040,000</td>
+                <td class="p-2 font-semibold text-amber-800">HKD 3,600,000</td>
+                <td class="p-2 font-bold text-purple-800">HKD 4,800,000</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-bold">56 - 65 歲</td>
+                <td class="p-2">HKD 960,000</td>
+                <td class="p-2 font-semibold text-amber-800">HKD 1,120,000</td>
+                <td class="p-2 font-bold text-purple-800">HKD 1,500,000</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-left font-bold">66 - 70 歲</td>
+                <td class="p-2">HKD 960,000</td>
+                <td class="p-2 font-semibold text-amber-800">HKD 1,120,000</td>
+                <td class="p-2 font-bold text-purple-800">HKD 1,360,000</td>
+              </tr>
+              <tr class="bg-red-50 text-red-900 font-bold">
+                <td class="p-2 text-left">&gt; 70 歲</td>
+                <td class="p-2">0 (無豁免)</td>
+                <td class="p-2">0 (無豁免)</td>
+                <td class="p-2">0 (無豁免)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 bg-beige-50 rounded-xl border border-beige-200">
+            <span class="font-bold text-beige-900">共同享有生意分配規則：</span>
+            <p class="text-beige-700 mt-0.5">兩名理財顧問共同享有之生意，其豁免驗身限額會根據<strong>較高顧問級別</strong>的限額為準，<strong>唯該高級別理財顧問必須佔生意分配 50% 或以上</strong>。</p>
+          </div>
+          <div class="p-3 bg-beige-50 rounded-xl border border-beige-200">
+            <span class="font-bold text-beige-900">體檢報告有效期 (1年有效標準)：</span>
+            <p class="text-beige-700 mt-0.5">最新保單未有加價/不保、未有任何病歷申報、無索償記錄、前體檢無異常結果者，報告自簽發起 1 年有效。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 體檢化驗項目標準代號說明表 -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-beige-900 border-b border-beige-200 pb-2">
+          🔬 體檢及血液測試代號明細表 (必須於澳門指定化驗所/診所進行)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-beige-800">
+          <div class="p-3 bg-beige-50/60 rounded-lg border border-beige-200 space-y-1">
+            <p><strong>ME (Medical Examination)</strong>：常規醫生驗身</p>
+            <p><strong>BP1 (Blood Profile 1)</strong>：空腹血糖 (高則自動驗 HbA1c)、總膽固醇、肝功能 II (ALT, AST, GGT)</p>
+            <p><strong>BP2 (Blood Profile 2)</strong>：空腹血糖 (高則自動驗 HbA1c)、血全像 (CBC)、腎功能 (Creatinine)、總膽固醇/高密度膽固醇 (HDL)、肝功能 II、乙型肝炎抗原 HBsAg (陽性則自動加驗 HBeAg 及 AFP 甲胎蛋白)</p>
+          </div>
+          <div class="p-3 bg-beige-50/60 rounded-lg border border-beige-200 space-y-1">
+            <p><strong>BP3 (Blood Profile 3)</strong>：空腹血糖、血全像、腎功能、總膽固醇/HDL/三酸甘油脂、全套肝功能 (ALT, AST, Albumin, Globulin, ALP, GGT)、乙型肝炎抗原 (陽性加驗 HBeAg及AFP)</p>
+            <p><strong>ECG</strong>：靜態心電圖 | <strong>TMX</strong>：運動心電圖 (Treadmill Exercise)</p>
+            <p><strong>MU</strong>：常規尿液檢驗 (Microscopic Urinalysis) | <strong>HIV</strong>：愛滋病毒抗體測試</p>
+            <p class="text-[11px] text-red-700 font-semibold">* 未經核保部授權之多餘測試費用，將直接從理財顧問佣金戶口中扣除！</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 6: 財務核保與收入倍數 (受薪、非受薪、商業保險) -->
+    <section id="section-financial" class="tab-content hidden space-y-6">
+      
+      <!-- 受薪人士財務問卷門檻與收入倍數 (Part 6.2) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第六部分 2：受薪人士財務核保問卷門檻與年薪倍數上限</h2>
+            <p class="text-xs text-beige-600">包含所有於富衛及其他保險公司之現有及正在審批的投保額</p>
+          </div>
+          <span class="text-xs bg-beige-200 text-beige-800 font-bold px-2.5 py-1 rounded-md">
+            受薪人士標準
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- 壽險問卷門檻 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900">人壽保障總投保額門檻 (傳統人壽)</h4>
+            <div class="space-y-1.5 pl-1">
+              <p>• <strong>&lt; HKD 16,000,000 (&lt; USD 2M)</strong>：免遞交財務問卷</p>
+              <p>• <strong>HKD 16,000,001 ~ 20,000,000</strong>：需遞交<strong>財務分析問卷 (FAQ)</strong></p>
+              <p>• <strong>HKD 20,000,001 ~ 24,000,000</strong>：需遞交 <strong>SFQ (特別財務問卷) + FAQ</strong></p>
+              <p class="text-amber-900 font-bold">• <strong>&gt; HKD 24,000,000 (&gt; USD 3M)</strong>：SFQ + FAQ + <strong>固定入息及資產證明</strong></p>
+            </div>
+          </div>
+
+          <!-- 危疾問卷門檻 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-2">
+            <h4 class="font-bold text-beige-900">危疾保障總投保額門檻 (全行業合計)</h4>
+            <div class="space-y-1.5 pl-1">
+              <p>• <strong>&lt; HKD 8,800,000 (&lt; USD 1.1M)</strong>：免遞交財務問卷</p>
+              <p>• <strong>HKD 8,800,001 ~ 10,000,000</strong>：需遞交<strong>財務分析問卷 (FAQ)</strong></p>
+              <p class="text-amber-900 font-bold">• <strong>&gt; HKD 10,000,000 (&gt; USD 1.25M)</strong>：SFQ + FAQ + <strong>固定入息及資產證明</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 年薪倍數表對照 (壽險 vs 危疾) -->
+        <div>
+          <h4 class="text-xs font-bold text-beige-900 mb-2">📊 一般年薪倍數上限對照表 (最高投保額限制)</h4>
+          <div class="overflow-x-auto text-xs">
+            <table class="w-full text-center border border-beige-200">
+              <thead class="bg-beige-100 text-beige-900 font-semibold">
+                <tr>
+                  <th class="p-2 border-b border-beige-200 text-left">下次生日年齡</th>
+                  <th class="p-2 border-b border-beige-200">傳統人壽最高年薪倍數</th>
+                  <th class="p-2 border-b border-beige-200">危疾保障最高年薪倍數</th>
+                  <th class="p-2 border-b border-beige-200">衛你所愛/自主保年薪倍數</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-beige-100 text-beige-800">
+                <tr>
+                  <td class="p-2 text-left font-medium">17 - 40 歲 (衛你所愛 19-41)</td>
+                  <td class="p-2 font-bold text-beige-900">30 倍</td>
+                  <td class="p-2 font-bold text-beige-900">25 倍</td>
+                  <td class="p-2">30 倍</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-left font-medium">41 - 50 歲 (衛你所愛 42-51)</td>
+                  <td class="p-2 font-bold text-beige-900">25 倍</td>
+                  <td class="p-2 font-bold text-beige-900">20 倍</td>
+                  <td class="p-2">25 倍</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-left font-medium">51 - 55 歲 (衛你所愛 52-56)</td>
+                  <td class="p-2 font-bold text-beige-900">20 倍</td>
+                  <td class="p-2 font-bold text-beige-900">12 倍</td>
+                  <td class="p-2">20 倍</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-left font-medium">56 - 60 歲 (衛你所愛 57-61)</td>
+                  <td class="p-2 font-bold text-beige-900">15 倍</td>
+                  <td class="p-2 font-bold text-beige-900">10 倍</td>
+                  <td class="p-2">15 倍</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-left font-medium">61 - 65 歲 (衛你所愛 62-65)</td>
+                  <td class="p-2 font-bold text-beige-900">10 倍</td>
+                  <td class="p-2 font-bold text-beige-900">8 倍</td>
+                  <td class="p-2">10 倍</td>
+                </tr>
+                <tr class="bg-beige-50">
+                  <td class="p-2 text-left font-medium">66 歲或以上</td>
+                  <td class="p-2 font-bold text-beige-900">5 倍</td>
+                  <td class="p-2 font-bold text-beige-900">5 倍</td>
+                  <td class="p-2">5 倍</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 住院現金日額限制 -->
+        <div class="p-3.5 bg-beige-50 rounded-xl border border-beige-200 text-xs text-beige-800 space-y-1">
+          <p class="font-bold text-beige-900">🏥 住院現金每日保障額 (Daily Hospital Cash) 年薪要求：</p>
+          <p>• 每日保額至 HKD 400：無最低年薪限制 | • 每日保額至 HKD 800：最低年薪需達 HKD 120,000</p>
+          <p>• 每日保額至 HKD 1,200 / 1,600 / 2,000：最低年薪需達 HKD 300,000</p>
+        </div>
+      </div>
+
+      <!-- 非受薪人士財務核保規則 (Part 6.1) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-beige-950 border-b border-beige-200 pb-2">
+          👶 非受薪人士投保限制 (兒童/學生、家庭主婦、退休、待業)
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- 兒童與學生 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">1. 兒童及學生</span>
+            <p>• <strong>最高投保額</strong>：不得多於父母之總保額；所有兄弟姊妹保額均須相同（除非不獲受保）。</p>
+            <p>• 壽險危疾 &lt; 400 萬正常核保；400萬-2,000萬為配偶/父母的 100% 或兄弟姊妹的 200%（以較低者為準）；&gt;2,000萬個別考慮 (IC)。</p>
+            <p>• 住院現金最高 USD 100 / HKD 800；意外最高 USD 187,500 / HKD 1,500,000。</p>
+            <p class="text-red-800 font-semibold">🚫 嚴禁投保：保費豁免保障。</p>
+          </div>
+
+          <!-- 家庭主婦 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">2. 全職家庭主婦 (&ge; ANB 19)</span>
+            <p>• <strong>最高投保額</strong>：必須申報配偶總保額，最高不可超過配偶總保額。</p>
+            <p>• 400 萬以內正常；400 萬至 2,000 萬為配偶 100% 保額；超過 2,000 萬個別考慮 (IC)。</p>
+            <p>• 住院現金最高 HKD 800；意外最高 HKD 1,500,000。</p>
+          </div>
+
+          <!-- 退休人士 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">3. 退休人士 (&ge; 55歲非受僱)</span>
+            <p>• 若投保年齡 &lt; 55 歲，必須書面解釋提早退休原因及開始時間。</p>
+            <p>• 壽險危疾：400 萬以內正常；400 萬至 2,000 萬為配偶 100% 保額；&gt; 2,000 萬個別考慮。</p>
+            <p class="text-red-800 font-semibold">🚫 嚴禁投保：保費豁免保障、住院現金保障附約。</p>
+          </div>
+
+          <!-- 待業人士 -->
+          <div class="p-4 bg-beige-50/80 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">4. 待業人士</span>
+            <p>• 必須詳細填寫先前工作職責及開始待業時間。</p>
+            <p>• 壽險危疾 &lt; 400 萬正常；<strong>超過 400 萬一律列為個別考慮 (IC)</strong>。</p>
+            <p class="text-red-800 font-semibold">🚫 嚴禁投保：保費豁免保障、父母保障保費豁免、住院現金保障。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商業壽險與大額躉繳流動資產 (Part 6.4, 6.5, 6.6) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-beige-950 border-b border-beige-200 pb-2">
+          🏢 商業保險額度上限與躉繳大額保費財務要求
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- 商業要員保險 -->
+          <div class="p-4 bg-beige-50 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">公司要員保險 (Keyman Insurance) 最高保額：</span>
+            <p>• <strong>公司全年毛利潤之 3 倍</strong>；或</p>
+            <p>• <strong>公司全年純利潤之 6 倍</strong>；或</p>
+            <p>• <strong>被保險人年薪之 10 倍</strong>。</p>
+            <p class="text-beige-600">合夥人保險最高投保額通常為<strong>公司全年純利潤之 7 倍</strong>（按股份佔比釐定）。</p>
+          </div>
+
+          <!-- 躉繳流動資產 1:1 評估 -->
+          <div class="p-4 bg-beige-50 rounded-xl border border-beige-200 space-y-1.5">
+            <span class="font-bold text-beige-900">躉繳儲蓄計劃 1:1 流動資產評估法則：</span>
+            <p>• 富衛可根據準受保人持有的流動資產，以 <strong>1:1 的比例</strong> 評估其支付躉繳儲蓄保費能力。</p>
+            <p>• <strong>可接受之流動資產</strong>：現金、銀行存款（涵蓋最近3個月月結單）、貨幣市場帳戶、交投活躍的股票、債券、基金。</p>
+            <p class="text-amber-900 font-medium">總存款/總躉繳 &gt; HKD 5,000,000：必須遞交 SFQ + FAQ + 固定入息及資產證明。</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 7: 交付時效、冷靜期與終止流程 (Part 8, Part 9) -->
+    <section id="section-timeline" class="tab-content hidden space-y-6">
+      
+      <!-- 澳門金管局冷靜期 6天保單交付義務 (Part 8.1) -->
+      <div class="bg-white p-6 rounded-2xl border border-beige-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-beige-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-beige-950">第八部分 1：保單交付與簽收嚴格時效 (澳門金管局法規)</h2>
+            <p class="text-xs text-beige-600">理財顧問必須嚴格執行的法定交付時限及逾期罰則</p>
+          </div>
+          <span class="text-xs bg-red-100 text-red-900 font-bold px-2.5 py-1 rounded-md border border-red-300">
+            逾期扣薪 MOP 200
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <!-- 實體保單 -->
+          <div class="p-4 rounded-xl border border-beige-200 bg-beige-50 space-y-2">
+            <div class="flex items-center gap-1.5 font-bold text-beige-900">
+              <span class="w-2 h-2 rounded-full bg-beige-700"></span> 實體保單交付 (Paper Policy)
+            </div>
+            <p>由保單簽發日起計，理財顧問必須於 <strong>6 個曆日內</strong> 交付實體保單予保單持有人。</p>
+            <p class="text-amber-900 font-medium">同日必須協助客戶掃描實體保單最後一頁「保單遞送確認表」上的 <strong>QR Code 二維碼</strong> 完成簽收。</p>
+          </div>
+
+          <!-- 電子保單 -->
+          <div class="p-4 rounded-xl border border-beige-200 bg-beige-50 space-y-2">
+            <div class="flex items-center gap-1.5 font-bold text-beige-900">
+              <span class="w-2 h-2 rounded-full bg-beige-700"></span> 電子保單交付 (e-Policy)
+            </div>
+            <p>由保單簽發日起計，理財顧問必須於 <strong>6 個曆日內</strong> 提醒並督促保單持有人在網上系統完成電子保單簽收。</p>
+            <p class="text-beige-600">確保客戶有充足時間審視權益以符合法規監管。</p>
+          </div>
+
+          <!-- 逾期處罰機制 -->
+          <div class="p-4 rounded-xl border border-red-200 bg-red-50 text-red-950 space-y-2">
+            <div class="flex items-center gap-1.5 font-bold text-red-900">
+              ⚠️ 第 8 個曆日自動處罰條款
+            </div>
+            <p>若富衛未能於 <strong>6 個曆日限期內</strong> 收到實體或電子簽收確認：</p>
+            <p class="font-bold">富衛將於第 8 個曆日以掛號郵遞將保單寄出，並以扣糧方式向理財顧問收取每張保單 MOP $200 作為行政費用！</p>
+            <p class="text-[11px] text-red-700">* 如第6個曆日為非工作天，順延至隨後工作天。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 照會跟進時效與冷靜期取消 (Part 8.4, Part 9.2, Part 9.3) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- 照會與撤銷時限 -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3 text-xs text-beige-800">
+          <h3 class="text-sm font-bold text-beige-900 border-b border-beige-200 pb-2">
+            ⏳ 核保通知書 (照會) 與取消申請時效
+          </h3>
+          <ul class="space-y-2 pl-1">
+            <li>
+              <strong>核保通知書 (照會) 發出起計 42 天</strong>：<br>
+              除等候私人病歷外，若理財顧問於 <strong>42 天內</strong> 沒有任何跟進、回覆或遞交文件，該申請將被富衛自動取消。
+            </li>
+            <li>
+              <strong>更改受保條件通知書 (加費/不保) 發出起計 1 個月</strong>：<br>
+              若 1 個月內客戶無簽署《附加資料申請書》或《更改受保條件同意書》，申請將被自動取消。
+            </li>
+            <li>
+              <strong>投保人主動要求終止</strong>：<br>
+              獲批核前投保人可書面要求終止，核實身分後，富衛於 <strong>7 個工作天內</strong> 退還保費。終止後如欲重啟，一律必須重新填寫新申請書。
+            </li>
+          </ul>
+        </div>
+
+        <!-- 21天冷靜期規定 -->
+        <div class="bg-white p-5 rounded-2xl border border-beige-200 shadow-sm space-y-3 text-xs text-beige-800">
+          <h3 class="text-sm font-bold text-beige-900 border-b border-beige-200 pb-2">
+            🛡️ 21 個曆日冷靜期內取消保單 (Cooling-off Period)
+          </h3>
+          <div class="space-y-2 pl-1">
+            <p>• <strong>冷靜期期限計算</strong>：緊接保單或冷靜期通知書交付予客戶或指定代表之日起計的 <strong>21 個曆日 (21 Calendar Days)</strong>，以較早者為準。</p>
+            <p>• <strong>手續</strong>：需於 21 日內簽署書面聲明遞交至壽險行政部。</p>
+            <div class="p-2.5 bg-amber-50 rounded-lg border border-amber-200 text-amber-950">
+              <strong>市值調整 (MVA) 扣除權利：</strong><br>
+              但凡「投資相連 (ILAS)」和「非投資相連整付保費 (躉繳)」保單，公司退還保費時，<strong>有權在已繳保費中扣除市值調整</strong>（涵蓋變現資產時的虧損）。
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 頁腳免責聲明 -->
+  <footer class="bg-white border-t border-beige-200 py-4 text-center text-[11px] text-beige-600 mt-auto">
+    <p>富衛人壽保險 (澳門) 有限公司 新生意及核保部指引 V7.0 (2026年07月版本) · 內部作業指引與智能工具僅供參考 · 新生意部保留最終核保審批決定權</p>
+  </footer>
+
+  <script>
+    // 知識庫索引數據（用於全文搜尋）
+    const manualKnowledgeBase = [
+      {
+        tag: "文件時限",
+        title: "投保書簽署與遞交法定時限",
+        tab: "documents",
+        snippet: "澳門居民投保書必須於簽署後 14 天內遞交；非澳門身份證人士必須於簽署後 7 個工作天內遞交，否則必須重新簽署。"
+      },
+      {
+        tag: "非澳門居民",
+        title: "中國內地人士必備文件與險種限制",
+        tab: "nonmacau",
+        snippet: "需遞交重要資料聲明、通行證/護照副本、內地身分證正反面、入境標籤回條。嚴禁投保人身意外附約與全意守護基本計劃，豁免保費限特惠城市。"
+      },
+      {
+        tag: "非澳門居民",
+        title: "外地僱員 (藍咭) 有效期劃分標準",
+        tab: "nonmacau",
+        snippet: "藍咭有效期 < 1 年者按國內人士標準核保；> 1 年者按外僱專屬要求核保。住院現金限經濟計劃，意外死亡及失肢需加 50% 地區風險附加費。"
+      },
+      {
+        tag: "美籍人士",
+        title: "美國人 FATCA 限制與 ILAS 禁令",
+        tab: "nonmacau",
+        snippet: "所有美國居民嚴禁投保投資相連產品 (ILAS)。美籍身分須遞交 W-9 表格；有美籍特徵但非美國人須遞交 W-8BEN/W-8BEN-E 及書面合理解釋。"
+      },
+      {
+        tag: "日本國籍",
+        title: "日本居民住宅地址拒保條件與唯一例外聲明",
+        tab: "nonmacau",
+        snippet: "若住宅地址在日本一律拒保。唯一例外是申報日本國籍但住宅地址不在日本，且必須書面聲明『本人確認現時沒有任何日本地址』。"
+      },
+      {
+        tag: "第三者付款",
+        title: "第三者繳費三大門檻 (12萬 / 50萬)",
+        tab: "payment",
+        snippet: "< MOP 120,000 直接存入；120,000 ~ 499,999 需 SAPPA 表格與付款人身分證；>= 500,000 需 SAPPA、身分證、關係證明及 EDD 加強盡職審查表格。"
+      },
+      {
+        tag: "法規禁令",
+        title: "理財顧問代客收現金之絕對禁令",
+        tab: "payment",
+        snippet: "公司嚴禁理財顧問（不論級別）收取客戶現金或以任何形式代客繳款（不論直接交公司或存入公司戶口），違者嚴厲紀律處分。"
+      },
+      {
+        tag: "第三方關係",
+        title: "認可第三方付款人關係及證明",
+        tab: "payment",
+        snippet: "涵蓋配偶、父母子女、兄弟姊妹、祖父母孫、配偶父母、僱主僱員、獨資東主、合夥人、董事、持股 >25% 股東等。公司付款須附董事局決議案。"
+      },
+      {
+        tag: "體檢標準",
+        title: "一般人壽危疾豁免驗身限額與 6 個月法則",
+        tab: "medical",
+        snippet: "1-50歲為 880 萬；51-60歲為 480 萬；61-70歲為 150 萬；71歲以上無豁免。現有客戶符合總額 <= 24M 且 ANB <= 51 等標準，舊單保額可豁免計入。"
+      },
+      {
+        tag: "體檢標準",
+        title: "衛你所愛及自主保理財顧問三階免驗身限額",
+        tab: "medical",
+        snippet: "普通級（19-45歲 520萬）、卓越級（640萬）、貴族級（1,200萬）。共同享有生意以佔比 50% 或以上之高級別理財顧問限額為準。"
+      },
+      {
+        tag: "財務核保",
+        title: "受薪人士財務問卷門檻與年薪倍數",
+        tab: "financial",
+        snippet: "人壽 > 16M 需 FAQ；> 20M 需 SFQ+FAQ；> 24M 需加資產證明。危疾 > 8.8M 需 FAQ；> 10M 需 SFQ+FAQ+資產證明。17-40歲人壽倍數上限 30 倍。"
+      },
+      {
+        tag: "財務核保",
+        title: "非受薪人士 (兒童/主婦/退休/待業) 投保上限",
+        tab: "financial",
+        snippet: "兒童不得高於父母總保額且手足需均等；家庭主婦最高以配偶保額為限；退休人士嚴禁投保豁免保障及住院現金；待業人士 > 400 萬一律個別考慮。"
+      },
+      {
+        tag: "躉繳儲蓄",
+        title: "躉繳儲蓄 1:1 流動資產評估",
+        tab: "financial",
+        snippet: "FWD 可按流動資產 1:1 評估躉繳支付能力（需最近3個月月結單）。存款/躉繳 > 500 萬需遞交 SFQ + FAQ + 資產證明。"
+      },
+      {
+        tag: "交付義務",
+        title: "澳門金管局 6 天交付保單與第 8 天罰則",
+        tab: "timeline",
+        snippet: "保單簽發起 6 個曆日內必須交付實體保單（同日掃描二維碼簽收）或督促網上簽收電子保單。未確認者富衛第 8 天掛號寄出並在顧問佣金扣除 MOP 200。"
+      },
+      {
+        tag: "冷靜期與終止",
+        title: "21 天冷靜期與 42 天照會自動取消",
+        tab: "timeline",
+        snippet: "冷靜期自交付日起計 21 個曆日，ILAS 及整付保費退保可扣除市值調整 (MVA)。核保通知書發出後 42 天無回覆申請將自動取消。"
+      }
+    ];
+
+    // 切換標籤頁
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('section-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-beige-800', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-beige-100', 'text-beige-800');
+      });
+
+      const activeBtn = document.getElementById('tab-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-beige-100', 'text-beige-800');
+        activeBtn.classList.add('bg-beige-800', 'text-white', 'shadow-sm');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 全文搜尋處理
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      const card = document.getElementById('searchResultsCard');
+      const list = document.getElementById('resultsList');
+      const countEl = document.getElementById('resultCount');
+
+      if (!q) {
+        card.classList.add('hidden');
+        list.innerHTML = '';
+        return;
+      }
+
+      const matches = manualKnowledgeBase.filter(item => 
+        item.title.toLowerCase().includes(q) || 
+        item.snippet.toLowerCase().includes(q) || 
+        item.tag.toLowerCase().includes(q)
+      );
+
+      countEl.innerText = matches.length;
+      if (matches.length === 0) {
+        list.innerHTML = '<p class="text-beige-600 p-2 text-center">查無相符指引，請嘗試更換關鍵字 (如: 藍咭, 50萬, 6天, 體檢, W-9)</p>';
+      } else {
+        list.innerHTML = matches.map(m => `
+          <div onclick="switchTab('${m.tab}'); clearSearch();" class="p-2.5 bg-beige-50 hover:bg-beige-100 rounded-xl border border-beige-200 cursor-pointer transition">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-beige-950">${m.title}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-beige-200 text-beige-800 font-semibold">${m.tag}</span>
+            </div>
+            <p class="text-beige-700 text-[11px] leading-relaxed">${m.snippet}</p>
+          </div>
+        `).join('');
+      }
+
+      card.classList.remove('hidden');
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('globalSearchInput');
+      if (input) input.value = '';
+      const card = document.getElementById('searchResultsCard');
+      if (card) card.classList.add('hidden');
+    }
+
+    // 智能核保自檢運算核心
+    function runAutoCheck() {
+      const identity = document.getElementById('calcIdentity').value;
+      const occupation = document.getElementById('calcOccupation').value;
+      const age = parseInt(document.getElementById('calcAge').value) || 35;
+      const advisorTier = document.getElementById('calcAdvisorTier').value;
+      const productType = document.getElementById('calcProductType').value;
+      const sumAssured = parseFloat(document.getElementById('calcSumAssured').value) || 0;
+      const annualSalary = parseFloat(document.getElementById('calcAnnualSalary').value) || 0;
+      const payer = document.getElementById('calcPayer').value;
+      const premium = parseFloat(document.getElementById('calcPremiumAmount').value) || 0;
+
+      // 受薪欄位顯示切換
+      const salaryDiv = document.getElementById('salaryInputDiv');
+      if (occupation === 'employed') {
+        salaryDiv.classList.remove('hidden');
+      } else {
+        salaryDiv.classList.add('hidden');
+      }
+
+      const redFlags = [];
+      const checklist = [];
+      let overallAcceptable = true;
+
+      // 1. 身份合規性與 Red Flags 判定
+      if (identity === 'usa' && productType === 'standard_life') {
+        // 美籍提示
+        redFlags.push("所有美國居民嚴禁投保任何「投資相連產品 (ILAS)」。");
+      }
+      if (identity === 'japan') {
+        redFlags.push("若保險申請書上住宅地址為日本，投保申請將直接被【拒保】！");
+        redFlags.push("日本國籍唯一獲接納條件：住宅地址不在日本，且投保人與被保人必須書面確認聲明『現時沒有任何日本地址』。");
+      }
+      if (identity === 'china_id' || identity === 'blue_card_lt1') {
+        if (productType === 'hospital_cash') {
+          redFlags.push("國內人士及有效期 < 1 年之外地僱員：住院現金保障附約受嚴格限制。");
+        }
+      }
+      if (identity === 'blue_card_gt1') {
+        if (productType === 'hospital_cash') {
+          redFlags.push("外地僱員藍咭持有人 (>1年)：住院現金保障附約只限【經濟計劃】，且必須簽署《住院現金保障附約聲明書》。");
+        }
+      }
+      if (payer === 'third_other') {
+        redFlags.push("公司嚴格禁止非認可關係之第三方繳款，尤其【嚴禁理財顧問代客繳款或收取現金】！");
+        overallAcceptable = false;
+      }
+
+      // 2. 遞交期限提醒
+      const deadlineText = document.getElementById('deadlineText');
+      if (identity === 'macau_id') {
+        deadlineText.innerHTML = "澳門居民之投保書必須於<strong>簽署後 14 天內</strong>遞交至新生意部，逾期須重新簽署。";
+      } else {
+        deadlineText.innerHTML = "非澳門身份證人士（國內人士/外僱/海外客）投保書必須於<strong>簽署後 7 個工作天內</strong>遞交至新生意部，逾期必須重新簽署新投保書。";
+      }
+
+      // 3. 體檢要求計算
+      const medTag = document.getElementById('medResultTag');
+      const medDetail = document.getElementById('medResultDetail');
+      const medTestItems = document.getElementById('medTestItems');
+
+      let limit = 0;
+      let medRequirementText = "NM (沒有例行驗身要求)";
+      let testsList = [];
+
+      if (productType === 'care_for_love') {
+        // 衛你所愛/自主保定期系列限額
+        if (age <= 18) {
+          limit = (advisorTier === 'prestige') ? 9600000 : (advisorTier === 'premier' ? 6400000 : 5200000);
+        } else if (age <= 45) {
+          limit = (advisorTier === 'prestige') ? 12000000 : (advisorTier === 'premier' ? 6400000 : 5200000);
+        } else if (age <= 55) {
+          limit = (advisorTier === 'prestige') ? 4800000 : (advisorTier === 'premier' ? 3600000 : 3040000);
+        } else if (age <= 65) {
+          limit = (advisorTier === 'prestige') ? 1500000 : (advisorTier === 'premier' ? 1120000 : 960000);
+        } else if (age <= 70) {
+          limit = (advisorTier === 'prestige') ? 1360000 : (advisorTier === 'premier' ? 1120000 : 960000);
+        } else {
+          limit = 0; // > 70 歲無豁免
+        }
+
+        if (sumAssured <= limit && limit > 0) {
+          medTag.innerText = "免驗身 (NM)";
+          medTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+          medDetail.innerText = `投保額 HKD ${sumAssured.toLocaleString()} 未超過該年齡與顧問職級豁免限額 (HKD ${limit.toLocaleString()})。`;
+          medTestItems.classList.add('hidden');
+        } else {
+          medTag.innerText = "須安排驗身";
+          medTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300";
+          medDetail.innerText = `投保額 HKD ${sumAssured.toLocaleString()} 已超過免驗身限額 (HKD ${limit.toLocaleString()})，必須於澳門指定化驗所體檢。`;
+          medTestItems.classList.remove('hidden');
+          medTestItems.innerHTML = `<p class="font-bold text-beige-900">體檢項目指示：</p><p>• 建議項目：ME (常規醫生驗身) ${sumAssured > 6000000 ? '+ BP1 / BP2 + 靜態心電圖 ECG + 尿液檢驗 MU' : ''}</p><p class="text-[11px] text-beige-600">* 體檢報告有效期 1 年；未經核保部要求之額外測試費用將由顧問佣金扣除。</p>`;
+        }
+      } else {
+        // 常規人壽危疾標準限額
+        if (age <= 50) limit = 8800000;
+        else if (age <= 60) limit = 4800000;
+        else if (age <= 70) limit = 1500000;
+        else limit = 0; // 71歲及以上無豁免
+
+        if (sumAssured <= limit && limit > 0) {
+          medTag.innerText = "免驗身 (NM)";
+          medTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+          medDetail.innerText = `投保額 HKD ${sumAssured.toLocaleString()} 未超過年齡標準豁免限額 (HKD ${limit.toLocaleString()})。`;
+          medTestItems.classList.add('hidden');
+        } else {
+          medTag.innerText = "須安排體檢 (Medical UW)";
+          medTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300";
+          medDetail.innerText = `投保額已超出豁免限額 (HKD ${limit.toLocaleString()})。`;
+          medTestItems.classList.remove('hidden');
+
+          let reqStr = "ME (醫生常規體檢)";
+          if (sumAssured > 24000000) {
+            reqStr += ", BP3, TMX (運動心電圖), MU, HIV (愛滋病毒抗體)";
+          } else if (sumAssured > 12000000) {
+            reqStr += ", BP2, ECG (心電圖), MU";
+          } else if (sumAssured > 8800000) {
+            reqStr += ", BP1 / BP2, ECG";
+          } else {
+            reqStr += ", BP1 (空腹血糖、總膽固醇、肝功能 II)";
+          }
+          medTestItems.innerHTML = `<p class="font-bold text-beige-900">澳門指定診所核保體檢要求：</p><p class="text-amber-900 font-semibold">• ${reqStr}</p><p class="text-[11px] text-beige-600">* 現有客戶保單若符合 6 個月制標準，且總額 <= 2,400 萬及實際年齡 <= 50，舊保額可免計入。</p>`;
+        }
+      }
+
+      // 4. 財務核保文件判定
+      const finTag = document.getElementById('finResultTag');
+      const finDetail = document.getElementById('finResultDetail');
+      const finMultiplier = document.getElementById('finMultiplierCheck');
+
+      let finDocs = [];
+      let multiplierLimit = 30;
+      if (age <= 40) multiplierLimit = (productType === 'critical_illness') ? 25 : 30;
+      else if (age <= 50) multiplierLimit = (productType === 'critical_illness') ? 20 : 25;
+      else if (age <= 55) multiplierLimit = (productType === 'critical_illness') ? 12 : 20;
+      else if (age <= 60) multiplierLimit = (productType === 'critical_illness') ? 10 : 15;
+      else if (age <= 65) multiplierLimit = (productType === 'critical_illness') ? 8 : 10;
+      else multiplierLimit = 5;
+
+      if (productType === 'critical_illness') {
+        if (sumAssured > 10000000) {
+          finDocs.push("SFQ (特別財務問卷)", "FAQ (財務分析問卷)", "固定入息及資產證明 (最近3個月工資單/2年稅單)");
+        } else if (sumAssured > 8800000) {
+          finDocs.push("FAQ (財務分析問卷)");
+        }
+      } else {
+        if (sumAssured > 24000000) {
+          finDocs.push("SFQ (特別財務問卷)", "FAQ (財務分析問卷)", "固定入息及資產證明");
+        } else if (sumAssured > 20000000) {
+          finDocs.push("SFQ (特別財務問卷)", "FAQ (財務分析問卷)");
+        } else if (sumAssured > 16000000) {
+          finDocs.push("FAQ (財務分析問卷)");
+        }
+      }
+
+      if (finDocs.length > 0) {
+        finTag.innerText = "須額外財務問卷";
+        finTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300";
+        finDetail.innerHTML = `投保額已達財務審查門檻，必須遞交：<span class="font-bold text-amber-950">${finDocs.join(' + ')}</span>。`;
+      } else {
+        finTag.innerText = "標準財務核保";
+        finTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-beige-200 text-beige-800";
+        finDetail.innerText = "投保額在免財務問卷額度之內，常規審批即可。";
+      }
+
+      // 倍數檢查
+      if (occupation === 'employed') {
+        const allowedMax = annualSalary * multiplierLimit;
+        if (sumAssured > allowedMax) {
+          finMultiplier.innerHTML = `⚠️ <strong>超出年薪倍數上限警示</strong>：該年齡組最高倍數為 <strong>${multiplierLimit} 倍</strong> (年薪 HKD ${annualSalary.toLocaleString()} 對應上限為 HKD ${allowedMax.toLocaleString()})。現投保額超出上限，需由核保部個別考慮 (IC) 或提供大量資產證明。`;
+          finMultiplier.className = "mt-2 text-xs p-2.5 bg-amber-100/70 rounded-lg border border-amber-300 text-amber-950";
+        } else {
+          finMultiplier.innerHTML = `✅ <strong>年薪倍數符合標準</strong>：該年齡組最高倍數為 <strong>${multiplierLimit} 倍</strong> (合規上限 HKD ${allowedMax.toLocaleString()})。`;
+          finMultiplier.className = "mt-2 text-xs p-2.5 bg-emerald-50 rounded-lg border border-emerald-200 text-emerald-900";
+        }
+      } else {
+        finMultiplier.innerHTML = `ℹ️ <strong>非受薪人士財務評估</strong>：最高保額受配偶/父母保額限制（兒童保額不可高於父母且兄弟姊妹須均等；主婦及退休最高不可超過配偶 100%）。`;
+        finMultiplier.className = "mt-2 text-xs p-2.5 bg-beige-50 rounded-lg border border-beige-200 text-beige-800";
+      }
+
+      // 5. 第三者付款及資金要求
+      const payTag = document.getElementById('payResultTag');
+      const payDetail = document.getElementById('payResultDetail');
+      const payDocsList = document.getElementById('payDocsList');
+
+      if (payer === 'self') {
+        payTag.innerText = "投保人本人付款";
+        payTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+        payDetail.innerText = "款項由投保人本人支付，常規存入保單。";
+        payDocsList.classList.add('hidden');
+      } else {
+        payDocsList.classList.remove('hidden');
+        if (premium < 120000) {
+          payTag.innerText = "門檻 1: < 12萬 (免第三者文件)";
+          payTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+          payDetail.innerText = "保費金額小於澳門幣 120,000 元，款項直接存入保單，無需額外遞交第三者繳費表格。";
+          payDocsList.innerHTML = `<li>常規直接扣賬或繳費收據存查</li>`;
+        } else if (premium < 500000) {
+          payTag.innerText = "門檻 2: 12萬 ~ 49.9萬 (須 SAPPA)";
+          payTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300";
+          payDetail.innerText = "保費介於 12 萬至 49 萬 9,999 元，必須嚴格遞交指定核實文件。";
+          payDocsList.innerHTML = `
+            <li><strong>保費繳付特別安排申請書 (SAPPA)</strong></li>
+            <li><strong>第三者付款人之身份證明文件副本</strong></li>
+            ${payer === 'third_company' ? '<li><strong>公司付款：必須遞交關係證明文件及董事局決議案</strong></li>' : ''}
+          `;
+        } else {
+          payTag.innerText = "門檻 3: &ge; 50萬 (加強盡職審查 EDD)";
+          payTag.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-red-100 text-red-900 border border-red-300";
+          payDetail.innerText = "保費達到或超過 50 萬元，必須啟動大額反洗錢加強盡職審查 (EDD)。";
+          payDocsList.innerHTML = `
+            <li><strong>保費繳付特別安排申請書 (SAPPA)</strong></li>
+            <li><strong>第三者付款人身份證明文件副本</strong></li>
+            <li><strong>關係證明文件 (6個月內有效)</strong></li>
+            <li><strong>《加強盡職審查表格-個人客戶 (EDD)》</strong> (若付款人為公司則填寫商業客戶版)</li>
+            ${payer === 'third_company' ? '<li><strong>有限公司之董事局決議案 (載明符合公司利益聲明)</strong></li>' : ''}
+          `;
+        }
+      }
+
+      // 6. 動態組合此案例必備清單 (Checklist)
+      checklist.push("人壽保險申請書 (投保人及 18 歲以上被保人簽署)");
+      checklist.push("利益說明文件 (BI) (打印日不得早於 FNA 簽名日，簽署日須在申請書簽署前或同日)");
+      checklist.push("財務需要及投資取向分析表格 (FNA)");
+      checklist.push("身分證/護照副本 (經 FWD 授權人士 4 步驟標準化見證：核實聲明、簽名、全名、日期)");
+
+      if (identity === 'china_id') {
+        checklist.push("《重要資料聲明-內地人士在澳門投購人壽保險產品》");
+        checklist.push("港澳通行證/護照副本 (顯示相片個人資料頁及入境蓋章頁)");
+        checklist.push("澳門入境標籤回條 (e-道入境證明)");
+        checklist.push("內地居民身份證正反面副本");
+      } else if (identity === 'blue_card_gt1' || identity === 'blue_card_lt1') {
+        checklist.push("有效澳門外地僱員身份認別證副本 (藍咭副本)");
+        checklist.push("非澳門居民投保問卷");
+        checklist.push("護照及身分證副本 (藍咭持有者無需標準化見證)");
+        if (identity === 'blue_card_lt1') checklist.push("⚠️ 藍咭期少於1年：額外附《重要資料聲明》及入境標籤");
+      } else if (identity === 'usa') {
+        checklist.push("W-9 表格 (申報為美國人/綠卡) 或 W-8BEN 表格 (具美籍特徵者附合理解釋)");
+        checklist.push("《外國帳戶稅務合規法 (FATCA) 聲明》");
+      } else if (identity === 'japan') {
+        checklist.push("書面確認聲明書：『本人確認現時沒有任何日本地址 (包括通訊、住宅及永久地址)』");
+      }
+
+      if (payer !== 'self' && premium >= 120000) {
+        checklist.push("保費繳付特別安排申請書 (SAPPA) 及付款人身分證明文件");
+        if (premium >= 500000) {
+          checklist.push("第三方關係證明文件 (如出生紙、結婚證書，有效期 6 個月)");
+          checklist.push("加強盡職審查表格 (EDD Form)");
+        }
+      }
+
+      if (finDocs.length > 0) {
+        finDocs.forEach(d => checklist.push(d));
+      }
+
+      // 渲染清單
+      const checklistEl = document.getElementById('requiredDocChecklist');
+      checklistEl.innerHTML = checklist.map((item, idx) => `
+        <li class="flex items-start gap-1.5">
+          <span class="text-beige-600 font-bold shrink-0">✓</span>
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      // 渲染 Red Flag 區塊
+      const redFlagBox = document.getElementById('redFlagBox');
+      const redFlagList = document.getElementById('redFlagList');
+      const overallBadge = document.getElementById('overallBadge');
+
+      if (redFlags.length > 0) {
+        redFlagBox.classList.remove('hidden');
+        redFlagList.innerHTML = redFlags.map(rf => `<li>${rf}</li>`).join('');
+        if (!overallAcceptable) {
+          overallBadge.innerText = "存在不合規拒保項";
+          overallBadge.className = "text-xs px-3 py-1 font-bold rounded-full bg-red-100 text-red-800 border border-red-300";
+        } else {
+          overallBadge.innerText = "須留意合規限制條件";
+          overallBadge.className = "text-xs px-3 py-1 font-bold rounded-full bg-amber-100 text-amber-900 border border-amber-300";
+        }
+      } else {
+        redFlagBox.classList.add('hidden');
+        overallBadge.innerText = "可受理投保";
+        overallBadge.className = "text-xs px-3 py-1 font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300";
+      }
+    }
+
+    // 頁面載入初始化運算
+    window.addEventListener('DOMContentLoaded', () => {
+      runAutoCheck();
+    });
+  </script>
+</body>
+</html>
