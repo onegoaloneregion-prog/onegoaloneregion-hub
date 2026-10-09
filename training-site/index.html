@@ -464,6 +464,42 @@
     <div id="page-fwd" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
         <div class="flex items-center justify-between"><button type="button" onclick="switchPage('page-home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-purple-600 font-bold text-xs sm:text-sm shadow-sm cursor-pointer">← 返回主頁</button></div>
         <div class="text-center space-y-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-orange-600 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-orange-500"></span> FWD 保障與資源智庫</div><h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">FWD 專區</h2><p class="text-xs sm:text-sm text-slate-500">涵蓋銷售話術、官方產品小冊子、客戶促銷折扣及線上培訓頻道支援</p></div>
+      <!-- FWD 大橫幅卡片：新生意、保單服務、賠償及付款指南 (點擊切換分頁) -->
+<div onclick="switchPage('page-fwd-operations')" class="p-6 rounded-3xl border-2 border-orange-300 bg-gradient-to-r from-orange-500/10 via-orange-50 to-amber-50/40 hover:border-[#E87722] hover:shadow-xl transition-all cursor-pointer group flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+    <div class="flex items-center gap-5 w-full md:w-auto">
+        <!-- 左側橙色圖示方塊 -->
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#E87722] to-amber-500 text-white flex items-center justify-center text-3xl shadow-md group-hover:scale-105 transition-transform shrink-0">
+            📑
+        </div>
+        <!-- 中間標題與標籤 -->
+        <div class="space-y-1.5 flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-[#E87722] font-bold text-[10px] border border-orange-200">
+                    FWD 營運指引
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] border border-emerald-200">
+                    行政作業專區
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold text-[10px] border border-blue-200">
+                    一站式作業
+                </span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#E87722] transition-colors">
+                新生意、保單服務、賠償及付款指南
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                涵蓋新契約遞交要點、保單售後行政變更、各類理賠手續流程與多元繳費渠道操作指引。
+            </p>
+        </div>
+    </div>
+
+    <!-- 右側按鈕 -->
+    <div class="w-full md:w-auto shrink-0">
+        <span class="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-2xl bg-gradient-to-r from-[#E87722] to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs shadow-md transition-all group-hover:translate-x-1">
+            進入服務專區 ↗
+        </span>
+    </div>
+</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div onclick="switchPage('page-fwd-scripts')" class="p-8 rounded-3xl border-2 border-sky-200 bg-sky-50/20 shadow-sm hover:shadow-lg hover:border-sky-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
@@ -476,8 +512,9 @@
             <div onclick="switchPage('page-fwd-brochures')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl">📚</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看小冊子庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">產品小冊子</h3><p class="text-xs text-slate-500 leading-relaxed">官方產品小冊子與特色簡介，包含盈聚·天下 II、尊衛您、危疾應援保等熱門計劃。</p></div>
             <div onclick="switchPage('page-fwd-promo')" class="p-8 rounded-3xl border-2 border-amber-200 bg-amber-50/20 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-3xl">🎁</div><span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看優惠專頁 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-amber-700 transition-colors">客戶折扣優惠</h3><p class="text-xs text-slate-500 leading-relaxed">即時查閱最新客戶促銷優惠，包含 2026 年第 4 季客戶保費折扣優惠及盈聚天下 II 專屬優惠。</p></div>
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
-      
-           <!-- 尊衛您旗艦指南入口卡片 -->
+       
+          
+            <!-- 尊衛您旗艦指南入口卡片 -->
             <div onclick="window.open('vprime.html', '_blank')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow">🛡️</div>
@@ -626,7 +663,119 @@
         </div>
     </div>
     </div>
+<!-- PAGE: FWD 新生意、保單服務、賠償及付款指南專頁 -->
+    <div id="page-fwd-operations" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
+        <!-- 頂部返回列 (點擊返回 FWD 專區) -->
+        <div class="flex items-center justify-between">
+            <button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-[#E87722] font-bold text-xs sm:text-sm shadow-sm transition cursor-pointer">
+                ← 返回 FWD 專區
+            </button>
+            <span class="text-xs font-bold text-[#E87722] bg-orange-50 border border-orange-200 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#E87722] animate-pulse"></span>
+                FWD 核心行政與營運指引庫
+            </span>
+        </div>
 
+        <!-- 主體白色大卡片容器 -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-orange-50 text-[#E87722] text-xs font-bold border border-orange-200">
+                    📋 Operation & Service Hub
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">新生意、保單服務、賠償及付款指南</h2>
+                <p class="text-xs sm:text-sm text-slate-500">集中查閱各項核心營運流程指引與表格資源</p>
+            </div>
+
+            <!-- 4 個卡片網格 (2x2 排列，預留位) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                
+               <!-- 卡片 1: 新生意指南 (New Business) -->
+<div onclick="window.open('fwd-new-business.html', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+    <div class="space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div class="flex items-center gap-2.5">
+                <span class="text-2xl">📝</span>
+                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">1. 新生意指南</b>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-orange-100 text-[#E87722] font-bold text-[10px]">
+                V7.0 智能導航系統
+            </span>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-xs">
+            智能核保自檢、必備文件清單 (Part 1)、非澳門居民投保 (Part 2)、第三者繳費門檻 (Part 3)、免驗身限額與收入倍數。
+        </p>
+    </div>
+    <div class="w-full py-2.5 rounded-xl bg-orange-100 hover:bg-orange-100 text-[#E87722] font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+        開啟智能核保導航系統 ↗
+    </div>
+</div>
+
+                <!-- 卡片 2: 保單服務 (Policy Servicing) -->
+                <div class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-2xl">⚙️</span>
+                                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">2. 保單服務</b>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">
+                                Policy Servicing
+                            </span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-xs">
+                            售後行政變更、更改受益人、地址電話更新、保單提款及借貸手續。（內容待更新）
+                        </p>
+                    </div>
+                    <div class="w-full py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition flex items-center justify-center gap-1.5">
+                        進入查看 ↗
+                    </div>
+                </div>
+
+                <!-- 卡片 3: 賠償指南 (Claims) -->
+                <div class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-2xl">🏥</span>
+                                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">3. 賠償指南</b>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                                Claims Guide
+                            </span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-xs">
+                            醫療住院、危疾及身故理賠程序、所需文件清單及線上索償操作。（內容待更新）
+                        </p>
+                    </div>
+                    <div class="w-full py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold transition flex items-center justify-center gap-1.5">
+                        進入查看 ↗
+                    </div>
+                </div>
+
+             <!-- 卡片 4: 付款指南 (Payment Methods) -->
+<div onclick="window.open('fwd-payment-guide.html', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+    <div class="space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div class="flex items-center gap-2.5">
+                <span class="text-2xl">💳</span>
+                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">4. 付款指南</b>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-orange-100 text-[#E87722] font-bold text-[10px]">
+                V4.0 合規速查儀表板
+            </span>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-xs">
+            四大付款原則、網銀/ATM/櫃枱/信用卡各渠道時效、支票幣別限制、專屬中銀賬號及 AML 合規文件自檢器。
+        </p>
+    </div>
+    <div class="w-full py-2.5 rounded-xl bg-orange-100 hover:bg-orange-100 text-[#E87722] font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+        開啟保費付款實用指南 ↗
+    </div>
+</div>
+
+            </div>
+        </div>
+    </div>
 <!-- PAGE: FWD 話術與培訓專區 -->
     <div id="page-fwd-scripts" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
         <div class="flex items-center justify-between">
@@ -1358,16 +1507,16 @@
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
     </div>
-    <!-- PAGE: 家居保險產品小冊子專頁 -->
+   <!-- PAGE: 家居保險產品小冊子專頁 -->
     <div id="page-gi-home" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
-        <!-- 頂部返回列 (返回一般保險主頁) -->
+        <!-- 頂部返回列 -->
         <div class="flex items-center justify-between">
             <button type="button" onclick="switchPage('page-gi')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-emerald-600 font-bold text-xs sm:text-sm shadow-sm transition cursor-pointer">
                 ← 返回一般保險
             </button>
             <span class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                MSIG 三井住友 (澳門) 官方正本
+                澳門精選家居保險庫
             </span>
         </div>
 
@@ -1378,13 +1527,14 @@
                     🏡 General Insurance · Home Protection
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900">家居保險小冊子專區</h2>
-                <p class="text-xs sm:text-sm text-slate-500">點擊以下卡片即可直接在新分頁檢視官方 Google Drive 正本小冊子文件</p>
+                <p class="text-xs sm:text-sm text-slate-500">點擊以下卡片即可在新分頁檢視官方小冊子或產品介紹詳情</p>
             </div>
 
-            <!-- 小冊子卡片網格 -->
+            <!-- 小冊子卡片網格 (左右 2 欄並排) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                <!-- 小冊子主要卡片 (請將下方網址替換為你的 Google Drive 連結) -->
-                <div onclick="window.open('https://drive.google.com/file/d/1y2V7VF69wYHXeYCCvHvkxI-3g8cpUU9I/view?usp=drive_link', '_blank')" class="p-6 rounded-2xl border-2 border-emerald-200 bg-emerald-50/20 hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+                
+                <!-- 卡片 1: MSIG 家居保險小冊子 -->
+                <div onclick="window.open('https://drive.google.com/your-msig-link', '_blank')" class="p-6 rounded-2xl border-2 border-emerald-200 bg-white hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between border-b border-emerald-100 pb-3">
                             <b class="text-slate-900 text-base group-hover:text-emerald-700 transition-colors">
@@ -1395,14 +1545,14 @@
                             </span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-xs">
-                            涵蓋高達 HK$1,000,000 家居財物意外損毀、HK$5,000,000 個人法律責任，特設網購保障、搬遷保障、精神科/爆竊受傷津貼及環保生活電器置換額外保障。
+                            涵蓋高達 HK$1,000,000 家居財物意外損毀、HK$5,000,000 個人法律責任，特設網購保障、搬遷保障、精神科/爆竊受傷津貼及環保生活電器置換額外保障[cite: 13, 21, 38]。
                         </p>
                         <div class="grid grid-cols-2 gap-2 text-[11px] pt-1 text-slate-500">
-                            <div class="bg-white p-2 rounded-lg border border-slate-100">
-                                • 適用地區：澳門住宅物業
+                            <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                • 適用地區：澳門住宅物業[cite: 11, 38]
                             </div>
-                            <div class="bg-white p-2 rounded-lg border border-slate-100">
-                                • 自選保障：樓宇全險 / 個人意外
+                            <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                • 自選保障：樓宇全險 / 個人意外[cite: 13, 21, 38]
                             </div>
                         </div>
                     </div>
@@ -1410,6 +1560,35 @@
                         📥 開啟 / 下載官方 PDF 檔 (Google Drive) ↗
                     </div>
                 </div>
+
+                <!-- 卡片 2: MIC 澳門保險家居保 -->
+                <div onclick="window.open('https://mic.com.mo/web/?id=c2', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-teal-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <b class="text-slate-900 text-base group-hover:text-teal-700 transition-colors">
+                                2. MIC 澳門保險 家居保
+                            </b>
+                            <span class="px-2 py-0.5 rounded bg-teal-100 text-teal-800 font-bold text-[10px]">
+                                官方專頁
+                            </span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-xs">
+                            澳門本地知名保險品牌。為住宅物業提供全面的家居財產全險保障、樓宇結構修復及第三者法律責任支援，理賠網絡本土化，保障實在。
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] pt-1 text-slate-500">
+                            <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                • 本地承保：澳門保險有限公司
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                • 核心特點：條款清晰 / 專屬理賠
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                        🌐 開啟 MIC 官方家居保專頁 ↗
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
