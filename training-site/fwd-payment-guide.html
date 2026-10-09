@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>澳門保單保費付款實用指南（淺橙暖色系統版）</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #fff7ed;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #fed7aa;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #fb923c;
+    }
+  </style>
+</head>
+<body class="bg-orange-50/40 text-stone-800 antialiased min-h-screen custom-scrollbar">
+
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-orange-100 shadow-sm shadow-orange-500/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/25">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-stone-900 leading-tight">澳門保單保費付款指南</h1>
+            <p class="text-xs text-orange-700/80 font-medium">系統化速查儀表板 • 官方合規版</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100/70 text-orange-800 border border-orange-200">
+            <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+            Version 4.0 準則
+          </span>
+          <a href="#doc-checker" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition shadow-sm shadow-orange-500/20">
+            <i data-lucide="file-search" class="w-3.5 h-3.5"></i>
+            合規文件自檢器
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Top Highlights Banner in Warm Light Orange -->
+    <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-orange-500/15 relative overflow-hidden">
+      <div class="absolute -right-12 -bottom-12 w-72 h-72 bg-white/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 max-w-3xl space-y-2.5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-semibold tracking-wide uppercase">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          Core Policy Rules
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-black tracking-tight">付款四大核心底線原則</h2>
+        <p class="text-orange-50 text-sm sm:text-base leading-relaxed">
+          繳付保費前必須明確身份資質與幣別限制，避免因款項被退回或延誤合規審批。
+        </p>
+      </div>
+
+      <!-- 4 Pillars Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <!-- Card 1 -->
+        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-2 bg-white text-orange-600 rounded-xl shadow-sm">
+              <i data-lucide="user-check" class="w-4 h-4"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white">付款人身份限制</h3>
+          </div>
+          <p class="text-xs text-orange-50 leading-relaxed">
+            只接受<strong>投保人</strong>、<strong>受保人</strong>或經批核第三者。⚠️ <strong>受益人繳款一律視作第三者</strong>，須辦理特別審批。
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-2 bg-white text-amber-600 rounded-xl shadow-sm">
+              <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white">幣別支付規則</h3>
+          </div>
+          <p class="text-xs text-orange-50 leading-relaxed">
+            <strong>外幣保單</strong>收保單原幣、HKD 或 MOP。<br>
+            <strong>港元保單</strong>只接受 HKD 或 MOP。匯率以銀行實際到賬日為準。
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-2 bg-white text-orange-600 rounded-xl shadow-sm">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white">處理時效標準</h3>
+          </div>
+          <p class="text-xs text-orange-50 leading-relaxed">
+            時效由客戶<strong>提交完整準確資料</strong>及<strong>款項實際到賬</strong>起，一律以<strong>工作天</strong>計算。
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-2 bg-white text-rose-500 rounded-xl shadow-sm">
+              <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white">防洗錢嚴格審核</h3>
+          </div>
+          <p class="text-xs text-orange-50 leading-relaxed">
+            任何轉賬/電匯必須附上<strong>資金來源證明</strong>；大額或特定第三者繳費須補簽 SAPPA、特別財務問卷或 EDD。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <section class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-stone-900 flex items-center gap-2">
+            <i data-lucide="credit-card" class="w-5 h-5 text-orange-500"></i>
+            各類型繳費途徑規格總覽
+          </h2>
+          <p class="text-xs text-stone-500 mt-0.5">點擊標籤進行即時過濾，快速查看支援貨幣、處理時效與規則</p>
+        </div>
+
+        <!-- Filter Buttons in warm theme -->
+        <div class="flex flex-wrap items-center gap-1.5 bg-orange-100/60 p-1.5 rounded-2xl border border-orange-200/70">
+          <button onclick="filterChannels('all')" id="btn-filter-all" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-white text-orange-600 shadow-sm transition">
+            全部途徑
+          </button>
+          <button onclick="filterChannels('online')" id="btn-filter-online" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-600 hover:text-stone-900 transition">
+            網銀 / ATM (電子)
+          </button>
+          <button onclick="filterChannels('counter')" id="btn-filter-counter" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-600 hover:text-stone-900 transition">
+            銀行 / 客服櫃枱
+          </button>
+          <button onclick="filterChannels('cheque')" id="btn-filter-cheque" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-600 hover:text-stone-900 transition">
+            支票 / 本票 / 電匯
+          </button>
+          <button onclick="filterChannels('card')" id="btn-filter-card" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-600 hover:text-stone-900 transition">
+            信用卡
+          </button>
+        </div>
+      </div>
+
+      <!-- Channels Grid -->
+      <div id="channels-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Item 1: BOCNET -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="online">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-50 text-orange-700 border border-orange-100">
+                <i data-lucide="laptop" class="w-3.5 h-3.5"></i>
+                中銀 e 網（個人）
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">個人網上繳費</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">澳門元 MOP</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">港元 HKD</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">美元 USD</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">人民幣 RMB</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>適用：<strong>新單 / 續保 / 額外投資</strong></span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>於網銀輸入保費通知書上的<strong>保單編號</strong>及<strong>應繳金額</strong>。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>繳費形式：年 / 半年 / 月</span>
+            <span class="font-bold text-orange-600">中銀澳門客戶首選</span>
+          </div>
+        </div>
+
+        <!-- Item 2: Other Online Banking -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="online">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                其他銀行網上理財
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">各大澳門銀行網銀繳付</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">僅限 澳門元 MOP</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>適用：<strong>新單 / 續保 / 額外投資</strong></span>
+              </li>
+              <li class="flex items-start gap-1.5 text-amber-800 bg-amber-50/70 p-2 rounded-xl border border-amber-100">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                <span>必須輸入印在通知書上的<strong>澳門元金額</strong>繳付。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>繳費形式：年 / 半年 / 月</span>
+            <span class="font-medium text-stone-600">其他澳門本地網銀</span>
+          </div>
+        </div>
+
+        <!-- Item 3: JETCO ATM -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="online">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
+                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                JETCO 自動櫃員機
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">銀通 ATM 機台繳費</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">僅限 澳門元 MOP</span>
+            </div>
+            <div class="mt-3.5 p-3 bg-orange-50/50 rounded-xl border border-orange-100 text-xs text-stone-700 space-y-1">
+              <div class="font-bold text-orange-900 flex items-center gap-1">
+                <span>操作步驟指南：</span>
+              </div>
+              <p class="text-[11px] leading-relaxed text-stone-600">
+                插卡輸密碼 $\rightarrow$ 選「<strong>繳費</strong>」 $\rightarrow$「<strong>其他商戶</strong>」 $\rightarrow$ 輸入商戶號碼 <strong class="text-orange-700 bg-orange-100 px-1 rounded">105</strong> $\rightarrow$ 輸入<strong>保單編號</strong> $\rightarrow$ 輸入<strong>澳門元金額</strong> $\rightarrow$ 取回收據。
+              </p>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>商戶編號：<strong>105</strong></span>
+            <span class="font-semibold text-amber-700">務必保留 ATM 收據</span>
+          </div>
+        </div>
+
+        <!-- Item 4: Bank Counter -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="counter">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                <i data-lucide="building" class="w-3.5 h-3.5"></i>
+                指定銀行分行櫃枱
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">大西洋銀行 / 澳門國際銀行</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">MOP / HKD</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">USD / RMB</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>可以<strong>現金、轉賬或支票</strong>繳付。</span>
+              </li>
+              <li class="flex items-start gap-1.5 text-amber-900 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                <span><strong>重要限制</strong>：<strong>新保單繳費</strong> 及 <strong>人民幣繳費</strong> 僅適用於<strong>澳門國際銀行</strong>。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>辦公時間：一至五 09:00-17:00</span>
+            <span class="font-medium text-stone-600">BNU / LUSO</span>
+          </div>
+        </div>
+
+        <!-- Item 5: Customer Service Centre - Cash -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="counter">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+                客戶服務中心：現金
+              </span>
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">即時處理</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">工銀大廈 15 樓櫃枱繳現</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">MOP / HKD / USD</span>
+            </div>
+            <div class="mt-3.5 p-3 bg-rose-50/70 rounded-xl border border-rose-200 text-xs text-rose-950 space-y-1.5">
+              <div class="font-bold flex items-center gap-1 text-rose-800">
+                <i data-lucide="ban" class="w-3.5 h-3.5 text-rose-600"></i>
+                <span>不接受新保單繳費！</span>
+              </div>
+              <p class="text-[11px] leading-relaxed">
+                只限<strong>續保與額外投資</strong>。過去 12 個月累積上限：<br>
+                • 每張保單：<strong>USD 15,000 / MOP 120,000</strong><br>
+                • 每位持有人總計：<strong>USD 50,000 / MOP 400,000</strong>
+              </p>
+              <p class="text-[10px] text-rose-700 italic mt-1">需出示身份證明並簽署《現金繳付保費聲明書》</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>時間：一至五 09:00-17:30</span>
+            <span class="font-bold text-rose-600">嚴格累計限額</span>
+          </div>
+        </div>
+
+        <!-- Item 6: Credit Cards -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="card">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                信用卡支付
+              </span>
+              <span class="text-xs font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded-lg">即時 / 同日</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">客務中心刷卡 & SMART 線上</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-orange-100/70 text-orange-900">VISA / MASTER / 銀聯</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1 text-rose-600 font-medium">
+                <i data-lucide="x-circle" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
+                <span>不接受萬用壽險及投資相連產品。</span>
+              </li>
+              <li class="flex items-start gap-1">
+                <i data-lucide="info" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>內地卡：<strong>只限意外、身故及醫療保</strong>。</span>
+              </li>
+              <li class="flex items-start gap-1 text-[11px]">
+                <i data-lucide="percent" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i>
+                <span>非月繳行政費：客務中心 VISA/MASTER 2.1%、銀聯 1.5%；SMART 本地卡 1.8%、外地卡 3.3%。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>單筆上限：USD 5,000</span>
+            <span class="font-medium text-stone-600">每卡上限 USD 50,000</span>
+          </div>
+        </div>
+
+        <!-- Item 7: Autopay DDA -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="online">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                自動轉賬 (DDA)
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200">生效需 2 個月</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">銀行直接扣賬授權</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">澳門元 MOP</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">港元 HKD</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>填妥《直接付款/信用咭付款授權書》交回。</span>
+              </li>
+              <li class="flex items-start gap-1.5 text-amber-900 font-medium">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5"></i>
+                <span><strong>必須預先繳交 2 個月保費</strong>以配合生效扣賬。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>處理：審批 2 個工作天</span>
+            <span class="font-medium text-orange-700">自動定期扣繳</span>
+          </div>
+        </div>
+
+        <!-- Item 8: Cheque / Cashier Order -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="cheque">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                郵遞支票 / 銀行本票 / 匯票
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">票據劃線支付</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">MOP / HKD / USD</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>抬頭：「<strong>富衛人壽保險(澳門)股份有限公司</strong>」</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>背面清楚註明<strong>保單編號</strong>，一票一單。<strong>恕不接受期票</strong>。</span>
+              </li>
+              <li class="flex items-start gap-1.5 text-orange-900 bg-orange-50 p-2 rounded-xl border border-orange-100 text-[11px]">
+                <i data-lucide="info" class="w-3.5 h-3.5 text-orange-600 shrink-0 mt-0.5"></i>
+                <span>本票/匯票須附銀行購買人存根以確認付款人身份。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>郵寄至：工銀大廈 15 樓</span>
+            <span class="font-medium text-stone-700">需留意幣別簽發地</span>
+          </div>
+        </div>
+
+        <!-- Item 9: Bank Transfer & TT -->
+        <div class="channel-card bg-white rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all flex flex-col justify-between" data-category="cheque">
+          <div>
+            <div class="flex items-start justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                銀行轉賬 / 電匯 (TT)
+              </span>
+              <span class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-lg">3 個工作天</span>
+            </div>
+            <h4 class="text-base font-bold text-stone-900">存入指定中銀收款戶口</h4>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">全外幣支援</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-600">HKD/USD/RMB/AUD/CAD/EUR/GBP/SGD</span>
+            </div>
+            <ul class="mt-3.5 text-xs text-stone-600 space-y-1.5 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5"></i>
+                <span>新保單款項交<strong>新生意部</strong>，續保款項交<strong>保單服務部</strong>。</span>
+              </li>
+              <li class="flex items-start gap-1.5 font-medium text-amber-800">
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5"></i>
+                <span>必須附有完整「資金來源證明」水單底單。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-orange-50 flex items-center justify-between text-[11px] text-stone-500">
+            <span>收款：中國銀行澳門分行</span>
+            <a href="#bank-accounts" class="font-bold text-orange-600 hover:text-orange-700 hover:underline">查看專屬賬號 $\rightarrow$</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="bg-white rounded-3xl p-6 sm:p-7 border border-orange-100 shadow-sm space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-orange-100 text-orange-700 rounded-xl">
+          <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-stone-900">支票 / 本票 / 匯票 簽發地與幣別嚴格限制</h3>
+          <p class="text-xs text-stone-500">銀行票據不能隨意跨區簽發，否則會被直接退票</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rule 1 -->
+        <div class="p-5 rounded-2xl border border-orange-100 bg-orange-50/30 hover:bg-orange-50/60 transition">
+          <div class="flex items-center gap-2 font-bold text-sm text-stone-800 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+            港元保單 / 人民幣保單 / 其他外幣保單
+          </div>
+          <ul class="text-xs text-stone-600 space-y-2">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span><strong>澳門銀行</strong>發出之 <strong>澳門元 (MOP)</strong> 支票；或</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span><strong>澳門或香港銀行</strong>發出之 <strong>港元 (HKD)</strong> 支票。</span>
+            </li>
+            <li class="flex items-start gap-2 text-rose-600 font-medium">
+              <i data-lucide="x" class="w-4 h-4 shrink-0"></i>
+              <span>不接受任何其他境外地區發出之支票。</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Rule 2 -->
+        <div class="p-5 rounded-2xl border border-orange-100 bg-orange-50/30 hover:bg-orange-50/60 transition">
+          <div class="flex items-center gap-2 font-bold text-sm text-stone-800 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            美元保單 (USD Policies)
+          </div>
+          <ul class="text-xs text-stone-600 space-y-2">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span><strong>澳門或香港銀行</strong>發出之 <strong>澳門元 (MOP) 或 港元 (HKD)</strong> 支票；或</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span><strong>香港或美國銀行</strong>發出之 <strong>美元 (USD)</strong> 支票。</span>
+            </li>
+            <li class="flex items-start gap-2 text-rose-600 font-medium">
+              <i data-lucide="x" class="w-4 h-4 shrink-0"></i>
+              <span>⚠️ <strong>不接受澳門本地銀行發出之美元支票</strong>（除非經認可特別安排）。</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="doc-checker" class="bg-gradient-to-br from-stone-900 via-stone-850 to-orange-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-stone-900/10">
+      <div class="max-w-3xl space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-amber-300">
+          <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i>
+          互動合規助手
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black">繳費文件清單自檢器 (AML Compliance Matrix)</h3>
+        <p class="text-xs sm:text-sm text-stone-300">
+          選擇你的付款金額與付款人身份，系統即時列出本次必須遞交的所有證明文件清單，杜絕資料不全被退件。
+        </p>
+      </div>
+
+      <!-- Controls -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        <div>
+          <label class="block text-xs font-medium text-stone-300 mb-1.5">繳費總金額階梯 (以 MOP 或等值外幣計)</label>
+          <select id="checker-amount" onchange="calculateRequiredDocs()" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <option value="tier1">小於 MOP 120,000</option>
+            <option value="tier2">MOP 120,000 至 &le; 400,000</option>
+            <option value="tier3">超過 MOP 400,000 至少於 500,000</option>
+            <option value="tier4">MOP 500,000 至 MOP 1,000,000</option>
+            <option value="tier5">超過 MOP 1,000,000 (超大額)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-stone-300 mb-1.5">付款人身份與繳費模式</label>
+          <select id="checker-payer" onchange="calculateRequiredDocs()" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <option value="direct">投保人 / 被保人本人 (銀行轉賬/電匯)</option>
+            <option value="cash_cs">本人親身前往客務中心繳現 (僅限續期)</option>
+            <option value="third_person">第三者個人繳款 (包括受益人)</option>
+            <option value="third_corp">第三者公司賬戶繳款 (特定公司付款人)</option>
+            <option value="unnamed_cheque">支票沒有編印付款人姓名</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="mt-6 bg-white/10 backdrop-blur rounded-2xl p-5 border border-white/15 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-4 h-4"></i>
+            你必須提交的文件組合：
+          </span>
+          <span id="checker-status-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+            常規審批
+          </span>
+        </div>
+
+        <ul id="checker-results" class="space-y-2 text-xs text-stone-100">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+
+      <!-- 7 Essential Elements info -->
+      <div class="mt-6 bg-stone-800/80 rounded-2xl p-4 border border-stone-700 text-xs space-y-2">
+        <div class="font-bold text-amber-300 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-4 h-4 text-amber-400"></i>
+          <span>什麼是「有效資金來源證明」 (Solid Payment Proof)？</span>
+        </div>
+        <p class="text-stone-300 leading-relaxed text-[11px]">
+          指銀行水單、匯款通知書、網銀轉賬截圖或本票存根正本。<strong>必須完整顯示以下要素：</strong>
+          1. 交易日期、2. 付款金額、3. 貨幣、4. 付款人戶口姓名及銀行賬號、5. 保單號碼、6. 收款人賬號及名稱、7. 資金來源地。若屬本票，必須有發票銀行蓋章及印有購買人姓名存根。
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-3xl p-6 sm:p-7 border border-orange-100 shadow-sm space-y-4">
+      <div>
+        <h3 class="text-lg font-bold text-stone-900 flex items-center gap-2">
+          <i data-lucide="users" class="w-5 h-5 text-orange-500"></i>
+          常見有效「關係證明文件」對照表
+        </h3>
+        <p class="text-xs text-stone-500 mt-0.5">第三者繳費金額達 MOP 500,000 或以上時必須提供以下法定文件之一</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-orange-100">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-orange-50/60 border-b border-orange-100 text-stone-700 font-bold uppercase tracking-wider text-[11px]">
+              <th class="py-3 px-4 w-1/4">關係類型</th>
+              <th class="py-3 px-4 w-3/4">官方認可證明文件例子</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-orange-50 text-stone-700">
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">配偶</td>
+              <td class="py-3 px-4">結婚證書；雙方身份證及戶口簿（內地適用）；含配偶姓名之台灣身份證正反面副本。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">父母 / 子女</td>
+              <td class="py-3 px-4">載有父母姓名之出生證明；戶口簿（顯示直系親屬關係）；獨生子女證；載有父母姓名之台灣身份證副本。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">兄弟姊妹</td>
+              <td class="py-3 px-4">顯示共同父母姓名之出生證明；雙方載有父母姓名之台灣身份證副本。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">祖父母 / 孫兒女</td>
+              <td class="py-3 px-4"><strong>兩份出生證明</strong>（第一份證明持有人與父母，第二份證明父母與祖父母/孫子女）。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">僱主與僱員</td>
+              <td class="py-3 px-4">HR 發出之在職證明信/系統記錄（含職位、受僱日期、雙方姓名）；僱傭合約或聘用信；薪金單；報稅表。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">獨資經營者</td>
+              <td class="py-3 px-4">商業登記資料查冊（載明獨資經營結構、負責人姓名及商號名稱）；報稅表。</td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">董事 / 持股 > 50% 公司 / 合夥人</td>
+              <td class="py-3 px-4">
+                ① 公司查冊（周年申報表）或在職證明書（非澳門公司）；<br>
+                ② <strong>董事會決議案 / 合夥授權書</strong>（須列明申請人姓名、保單編號、保額及受保人、公司承擔付款之範圍/頻率/年期，並確認交易符合公司利益）。
+              </td>
+            </tr>
+            <tr class="hover:bg-orange-50/30 transition">
+              <td class="py-3 px-4 font-bold text-stone-900">信託之財產授予人</td>
+              <td class="py-3 px-4">信託核實表格、顯示財產授予人資料之信託契約或信託協議。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="bank-accounts" class="space-y-4">
+      <div>
+        <h3 class="text-lg font-bold text-stone-900 flex items-center gap-2">
+          <i data-lucide="landmark" class="w-5 h-5 text-orange-500"></i>
+          指定中國銀行收款專戶
+        </h3>
+        <p class="text-xs text-stone-500 mt-0.5">⚠️ 以下賬戶只適用於指定轉賬/電匯。若存入非指定用途，款項將直接原路退回！</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- HKD Account -->
+        <div class="bg-gradient-to-br from-orange-50/80 to-amber-50/80 border-2 border-orange-200/90 rounded-3xl p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white tracking-wide shadow-sm">
+              港元 (HKD) 專屬賬戶
+            </span>
+            <span class="text-xs text-orange-800 font-semibold">銀行轉賬 / 電匯</span>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-orange-100 shadow-sm space-y-1.5">
+            <div class="text-[11px] text-stone-500">港元收款賬號 (HKD Account Number)</div>
+            <div class="flex items-center justify-between">
+              <span class="text-xl font-black text-stone-900 tracking-wider select-all" id="acc-hkd">182111100679646</span>
+              <button onclick="copyToClipboard('182111100679646', 'btn-copy-hkd')" id="btn-copy-hkd" class="px-3 py-1.5 text-xs font-bold bg-orange-100/80 text-orange-800 hover:bg-orange-200 rounded-xl transition flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                複製
+              </button>
+            </div>
+          </div>
+
+          <div class="text-xs text-stone-600 space-y-1">
+            <p><strong>收款銀行</strong>：中國銀行澳門分行 (Bank of China Macau Branch)</p>
+            <p><strong>銀行代碼 (SWIFT)</strong>：<code class="bg-orange-100/70 px-1.5 py-0.5 rounded font-mono text-orange-900 font-semibold">BKCHMOMXXXX</code></p>
+            <p><strong>收款人戶名</strong>：富衛人壽保險(澳門)股份有限公司</p>
+          </div>
+        </div>
+
+        <!-- Foreign Currency Account -->
+        <div class="bg-gradient-to-br from-amber-50/80 to-orange-50/80 border-2 border-amber-200/90 rounded-3xl p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-lg text-xs font-bold bg-amber-600 text-white tracking-wide shadow-sm">
+              外幣綜合賬戶 (USD / RMB / 外幣)
+            </span>
+            <span class="text-xs text-amber-800 font-semibold">轉賬 / 電匯通用</span>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-amber-100 shadow-sm space-y-1.5">
+            <div class="text-[11px] text-stone-500">外幣統一收款賬號 (USD / RMB / AUD / CAD / EUR / GBP / SGD)</div>
+            <div class="flex items-center justify-between">
+              <span class="text-xl font-black text-stone-900 tracking-wider select-all" id="acc-multi">182188100161112</span>
+              <button onclick="copyToClipboard('182188100161112', 'btn-copy-multi')" id="btn-copy-multi" class="px-3 py-1.5 text-xs font-bold bg-amber-100/80 text-amber-800 hover:bg-amber-200 rounded-xl transition flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                複製
+              </button>
+            </div>
+          </div>
+
+          <div class="text-xs text-stone-600 space-y-1">
+            <p><strong>適用幣別</strong>：美元、人民幣、澳元、加幣、歐羅、英鎊、星加坡幣</p>
+            <p><strong>銀行代碼 (SWIFT)</strong>：<code class="bg-amber-100/70 px-1.5 py-0.5 rounded font-mono text-amber-900 font-semibold">BKCHMOMXXXX</code></p>
+            <p><strong>銀行地址</strong>：澳門蘇亞利斯博士大馬路中國銀行大廈</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-3xl p-6 sm:p-7 border border-orange-100 shadow-sm space-y-4">
+      <h3 class="text-lg font-bold text-stone-900 flex items-center gap-2">
+        <i data-lucide="map-pin" class="w-5 h-5 text-orange-500"></i>
+        各服務地點、辦公及截數時間
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- CS Centre -->
+        <div class="p-4 rounded-2xl bg-orange-50/30 border border-orange-100 space-y-2">
+          <div class="font-bold text-sm text-stone-900 flex items-center gap-2">
+            <i data-lucide="building-2" class="w-4 h-4 text-orange-600"></i>
+            客戶服務中心 (工銀大廈)
+          </div>
+          <p class="text-xs text-stone-600">澳門商業大馬路 301-355 號中國工商銀行大廈 15 樓</p>
+          <div class="text-xs text-stone-500 pt-2 border-t border-orange-100">
+            <p>• 星期一至五：09:00 - 17:30</p>
+            <p>• 星期六、日及公眾假期休息</p>
+            <p class="text-emerald-700 font-medium mt-1">辦公時間內遞交當日處理並以該日為收款日</p>
+          </div>
+        </div>
+
+        <!-- Bank Counters -->
+        <div class="p-4 rounded-2xl bg-orange-50/30 border border-orange-100 space-y-2">
+          <div class="font-bold text-sm text-stone-900 flex items-center gap-2">
+            <i data-lucide="store" class="w-4 h-4 text-amber-600"></i>
+            指定銀行櫃枱 (BNU / LUSO)
+          </div>
+          <p class="text-xs text-stone-600">大西洋銀行分行 / 澳門國際銀行分行</p>
+          <div class="text-xs text-stone-500 pt-2 border-t border-orange-100">
+            <p>• 星期一至五：09:00 - 17:00</p>
+            <p>• 星期六、日及公眾假期休息</p>
+            <p class="text-orange-700 font-medium mt-1">款項到賬及文件齊備後 3 個工作天處理</p>
+          </div>
+        </div>
+
+        <!-- Electronic & SMART -->
+        <div class="p-4 rounded-2xl bg-orange-50/30 border border-orange-100 space-y-2">
+          <div class="font-bold text-sm text-stone-900 flex items-center gap-2">
+            <i data-lucide="smartphone" class="w-4 h-4 text-orange-500"></i>
+            網銀 / ATM / SMART 平台
+          </div>
+          <p class="text-xs text-stone-600">各大行網銀、JETCO ATM、SMART 線上系統</p>
+          <div class="text-xs text-stone-500 pt-2 border-t border-orange-100">
+            <p>• 依各銀行系統及平台截數時間為準</p>
+            <p>• SMART 截數前遞交當日處理，截數後或假期在下一個工作天處理</p>
+            <p class="text-orange-700 font-medium mt-1">ATM/網銀通常需時 3 個工作天更新</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-12 bg-white border-t border-orange-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-stone-500 space-y-1">
+      <p>澳門保單簡易付款指南（系統版） • 內部指引 V4.0 (2026 年 7 月生效)</p>
+      <p>所有交易、匯率及文件接納標準均以保險公司合規部門及收款銀行實際操作作最終準則。</p>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Channel Filtering Logic
+    function filterChannels(category) {
+      const cards = document.querySelectorAll('.channel-card');
+      const buttons = ['all', 'online', 'counter', 'cheque', 'card'];
+
+      buttons.forEach(btn => {
+        const el = document.getElementById('btn-filter-' + btn);
+        if (el) {
+          if (btn === category) {
+            el.className = 'px-3 py-1.5 text-xs font-bold rounded-xl bg-white text-orange-600 shadow-sm transition';
+          } else {
+            el.className = 'px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-600 hover:text-stone-900 transition';
+          }
+        }
+      });
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Copy to clipboard helper
+    function copyToClipboard(text, btnId) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById(btnId);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> 已複製`;
+        btn.classList.remove('bg-orange-100/80', 'text-orange-800', 'bg-amber-100/80', 'text-amber-800');
+        btn.classList.add('bg-stone-900', 'text-white');
+        lucide.createIcons();
+
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('bg-stone-900', 'text-white');
+          if (btnId === 'btn-copy-hkd') {
+            btn.classList.add('bg-orange-100/80', 'text-orange-800');
+          } else {
+            btn.classList.add('bg-amber-100/80', 'text-amber-800');
+          }
+          lucide.createIcons();
+        }, 1800);
+      });
+    }
+
+    // Document Matrix Calculation
+    function calculateRequiredDocs() {
+      const amount = document.getElementById('checker-amount').value;
+      const payer = document.getElementById('checker-payer').value;
+      const listEl = document.getElementById('checker-results');
+      const statusBadge = document.getElementById('checker-status-badge');
+
+      let docs = [];
+      let isHighRisk = false;
+
+      // 1. Direct payer cash in CS
+      if (payer === 'cash_cs') {
+        if (amount === 'tier4' || amount === 'tier5') {
+          listEl.innerHTML = `
+            <li class="flex items-start gap-2 text-rose-300 font-semibold p-2 bg-rose-500/20 rounded-lg">
+              <i data-lucide="ban" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+              <span>不被接納！客務中心現金 12 個月累積上限為 MOP 400,000 / USD 50,000，超出額度請使用銀行轉賬或支票。</span>
+            </li>
+          `;
+          statusBadge.innerText = '超出上限不接納';
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30';
+          lucide.createIcons();
+          return;
+        } else {
+          docs.push('《現金繳付保費聲明書》正本');
+          docs.push('付款人（投保人或受保人）身份證明文件正本');
+          if (amount === 'tier3') {
+            docs.push('特別財務問卷（保費總額超過 MOP 400,000 必須加填）');
+          }
+        }
+      } 
+      // 2. Direct payer bank transfer / TT
+      else if (payer === 'direct') {
+        docs.push('付款憑證 / 銀行轉賬存根正本（即「資金來源證明」）');
+        docs.push('憑證上必須清晰註明：保單號碼、付款用途、經紀編號');
+        if (amount === 'tier3' || amount === 'tier4' || amount === 'tier5') {
+          docs.push('《特別財務問卷》（因總額超過 MOP 400,000）');
+        }
+      }
+      // 3. Third-party Individual (including beneficiaries)
+      else if (payer === 'third_person') {
+        docs.push('《保費繳付特別安排申請書》(SAPPA)');
+        docs.push('第三者付款人身份證明文件副本');
+        docs.push('資金來源證明文件正本（顯示付款人姓名、扣款賬號等7大要素）');
+
+        if (amount === 'tier3' || amount === 'tier4' || amount === 'tier5') {
+          docs.push('《特別財務問卷》（保費總額超過 MOP 400,000）');
+        }
+
+        if (amount === 'tier4' || amount === 'tier5') {
+          docs.push('<strong>有效關係證明文件</strong>（如：結婚證書、出生證明、戶口簿等，50萬以上必備）');
+        }
+
+        if (amount === 'tier5') {
+          isHighRisk = true;
+          docs.push('<strong>《加強盡職審查表格 (EDD - 個人客戶)》</strong>（保費超出 MOP 1,000,000 必備）');
+        }
+      }
+      // 4. Third-party Corporate Account
+      else if (payer === 'third_corp') {
+        docs.push('《保費繳付特別安排申請書》(SAPPA)');
+        docs.push('授權簽署人身份證明文件副本');
+        docs.push('有效關係證明文件（公司查冊/商業登記 + 董事會決議案/合夥授權書）');
+        docs.push('公司戶口資金來源證明正本');
+
+        if (amount === 'tier3' || amount === 'tier4' || amount === 'tier5') {
+          docs.push('《特別財務問卷》（保費總額超過 MOP 400,000）');
+        }
+
+        if (amount === 'tier5') {
+          isHighRisk = true;
+          docs.push('<strong>《加強盡職審查表格 (EDD - 商業客戶)》</strong>（超出 MOP 1,000,000 必備）');
+        }
+      }
+      // 5. Unnamed Cheque
+      else if (payer === 'unnamed_cheque') {
+        docs.push('印有付款人姓名的銀行月結單（用於核實支票發出人戶口）');
+        docs.push('資金來源證明正本');
+        if (amount === 'tier3' || amount === 'tier4' || amount === 'tier5') {
+          docs.push('《特別財務問卷》（保費總額超過 MOP 400,000）');
+        }
+      }
+
+      // Render Badge
+      if (isHighRisk) {
+        statusBadge.innerText = '⚠️ 加強盡職審查 (EDD 級別)';
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30';
+      } else if (amount === 'tier4' || amount === 'tier5') {
+        statusBadge.innerText = '大額審查 (須附關係證明)';
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-400/20 text-orange-200 border border-orange-400/30';
+      } else {
+        statusBadge.innerText = '常規審批';
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30';
+      }
+
+      // Render HTML list
+      listEl.innerHTML = docs.map((doc, idx) => `
+        <li class="flex items-start gap-2.5">
+          <span class="w-5 h-5 rounded-full bg-orange-500/30 text-amber-300 border border-orange-400/40 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">${idx + 1}</span>
+          <span class="leading-relaxed">${doc}</span>
+        </li>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // Initialize the checker on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      calculateRequiredDocs();
+    });
+  </script>
+</body>
+</html>
