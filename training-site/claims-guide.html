@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>理賠營運指引查詢系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-sky-50/30 to-indigo-50/20 text-slate-800 font-sans min-h-screen">
+
+  <!-- 頂部導航欄 (多色漸變點綴、無品牌LOGO) -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-sky-500 to-emerald-400 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-100">
+          📋
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg font-bold text-slate-900 tracking-tight">理賠營運指引系統</h1>
+            <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold px-2 py-0.5 rounded-full">2023 版本</span>
+          </div>
+          <p class="text-xs text-slate-500">只供理財顧問使用 • 壽險營運部</p>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center space-x-2 text-xs">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">
+          ● 規則即時檢核
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    
+    <!-- 左側導航選單 (彩色圖標與標籤) -->
+    <aside class="lg:col-span-1 space-y-2">
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3">功能分類模組</div>
+      
+      <button onclick="switchTab('general')" id="btn-general" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600 shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+          <span>1. 一般資訊與規範</span>
+        </span>
+        <span class="text-xs opacity-60">規則</span>
+      </button>
+
+      <button onclick="switchTab('death')" id="btn-death" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+          <span>2. 死亡索償 (Death)</span>
+        </span>
+        <span class="text-xs opacity-40">身故</span>
+      </button>
+
+      <button onclick="switchTab('waiver')" id="btn-waiver" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+          <span>3. 保費豁免索償</span>
+        </span>
+        <span class="text-xs opacity-40">豁免</span>
+      </button>
+
+      <button onclick="switchTab('ci')" id="btn-ci" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <span>4. 危疾索償 (CI)</span>
+        </span>
+        <span class="text-xs opacity-40">重大</span>
+      </button>
+
+      <button onclick="switchTab('accident')" id="btn-accident" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+          <span>5. 個人意外保險索償</span>
+        </span>
+        <span class="text-xs opacity-40">意外</span>
+      </button>
+
+      <button onclick="switchTab('hospital')" id="btn-hospital" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span>6. 住院索償</span>
+        </span>
+        <span class="text-xs opacity-40">醫療</span>
+      </button>
+
+      <button onclick="switchTab('timeline')" id="btn-timeline" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+          <span>7. 審核時間指標</span>
+        </span>
+        <span class="text-xs opacity-40">時效</span>
+      </button>
+
+      <button onclick="switchTab('tax')" id="btn-tax" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm">
+        <span class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+          <span>8. FATCA & CRS 聲明</span>
+        </span>
+        <span class="text-xs opacity-40">合規</span>
+      </button>
+    </aside>
+
+    <!-- 右側主卡片區 -->
+    <section class="lg:col-span-3">
+
+      <!-- 1. 一般資訊 -->
+      <div id="tab-general" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">一般資訊 (General Information)</h2>
+            <p class="text-sm text-slate-500 mt-1">索償提交原則、費用承擔與付款幣別政策</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">基本通則</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-gradient-to-br from-indigo-50/60 to-white border border-indigo-100">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wide">申請呈交期限</span>
+            <p class="text-slate-800 font-bold mt-1 text-base">損失發生後 30 天內呈交公司</p>
+          </div>
+          <div class="p-4 rounded-xl bg-gradient-to-br from-sky-50/60 to-white border border-sky-100">
+            <span class="text-xs font-bold text-sky-600 uppercase tracking-wide">申請表簽署規則</span>
+            <p class="text-slate-700 text-sm mt-1">應由投保人簽署。若投保人與被保人相同且無法簽署，近親屬可代表填寫並說明關係（必要時需提交關係證明）。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-gradient-to-br from-emerald-50/60 to-white border border-emerald-100">
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wide">費用承擔責任</span>
+            <p class="text-slate-700 text-sm mt-1">基本索償所需費用（如主診醫生報告）由<strong>索償人負責</strong>；在生索償需經公司特許醫生體檢者由<strong>公司支付</strong>。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-gradient-to-br from-amber-50/60 to-white border border-amber-100">
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">賠償貨幣規定</span>
+            <p class="text-slate-700 text-sm mt-1">以保單貨幣支付。美元保單將以<strong>港元或澳門元</strong>支付，匯率由公司決定。</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start space-x-2">
+          <span class="text-indigo-500 font-bold text-base leading-none">ℹ</span>
+          <span><strong>審核聲明：</strong> 公司不會承擔任何賠償，除非已完成全面的調查並核實賠償。</span>
+        </div>
+      </div>
+
+      <!-- 2. 死亡索償 -->
+      <div id="tab-death" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-purple-950">死亡索償 (Death Claim)</h2>
+            <p class="text-sm text-slate-500 mt-1">基本文件要求、手續及寬限期規則</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">重大賠償</span>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center">
+            <span class="w-2 h-2 rounded-full bg-purple-600 mr-2"></span>基本必備文件 (Checklist)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700 bg-purple-50/30 p-4 rounded-xl border border-purple-100">
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>死亡索賠申請表（索償人填寫）</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>主診醫生報告（死者最後主診醫生填寫）</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>死者親屬同意（直系親屬填寫）</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>死亡證明書</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>死者身分證副本</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>受益人／索償人身分證副本及住址證明</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>保單正本</span></label>
+            <label class="flex items-center space-x-2"><input type="checkbox" class="rounded text-purple-600 focus:ring-purple-400"> <span>FATCA 及 CRS 相關聲明表格</span></label>
+          </div>
+        </div>
+
+        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 space-y-1.5">
+          <div class="font-bold text-amber-950 flex items-center">
+            <span class="mr-1.5">⚠️</span> 特殊情況附加要求：
+          </div>
+          <p>• <strong>無指定受益人或指定為個人遺產：</strong> 遺產承辦書及遺產管理人的身分證副本。</p>
+          <p>• <strong>受益人未成年且無指定受託人：</strong> 監護人證明書。</p>
+          <p>• <strong>在中國大陸身故：</strong> 省或市發放的死亡公證書及戶籍簿。</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="font-bold text-slate-800">超過 30 天利息規定</span>
+            <p class="text-slate-600 mt-1">處理超逾 30 天將由遞交日計至完成日支付利息（最長 2 年，利率由精算部公告）。</p>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="font-bold text-slate-800">World Check 查核</span>
+            <p class="text-slate-600 mt-1">支票發出前需查核受益人及投保人，有紀錄需申報 Compliance 審核。</p>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="font-bold text-slate-800">收據退回時限</span>
+            <p class="text-slate-600 mt-1">賠償付款收據發出後需於 <strong>14 天內</strong>由索償人/受益人簽署交回公司。</p>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-200 text-xs text-purple-950">
+          <strong class="font-bold">保費未繳及寬限期處理原則：</strong><br>
+          • 死亡日期發生於<strong>保單寬限期內</strong>：公司接受申請，並於賠償金中扣除當年應繳年度保費。<br>
+          • 死亡日期發生於<strong>保單寬限期後</strong>：公司<strong>不接受</strong>賠償申請。
+        </div>
+      </div>
+
+      <!-- 3. 保費豁免 -->
+      <div id="tab-waiver" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-teal-950">保費豁免索償 (Waiver of Premium)</h2>
+            <p class="text-sm text-slate-500 mt-1">文件規範與已繳保費退還程序</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">豁免核准</span>
+        </div>
+
+        <div class="bg-teal-50/40 border border-teal-100 rounded-xl p-4 text-xs text-slate-700 space-y-2">
+          <strong class="text-teal-900 text-sm block font-bold">基本文件要求：</strong>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>保費豁免索償申請表（由索償人／投保人填寫）</li>
+            <li>主診醫生報告（由被保險人的主診醫生填寫）</li>
+            <li>在生索償聲明及授權（由被保險人填寫）</li>
+            <li>連續殘疾的病假證明書的副本</li>
+            <li>被保險人及投保人身分證影本</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
+          <p>• <strong>保費退還：</strong> 退還保費豁免期間已經支付的保費給投保人。</p>
+          <p>• <strong>支票核發：</strong> World Check 系統查核收款人後，由財務部發出手寫支票。</p>
+          <p>• <strong>收據交回：</strong> 賠償付款收據發出後需於 <strong>14 天內</strong>由索償人／被保人簽署交回。</p>
+        </div>
+      </div>
+
+      <!-- 4. 危疾索償 -->
+      <div id="tab-ci" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-amber-950">危疾索償 (Critical Illness)</h2>
+            <p class="text-sm text-slate-500 mt-1">計劃變更背書、保單寬限期及核發規則</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">重大疾病</span>
+        </div>
+
+        <div class="bg-amber-50/40 border border-amber-100 rounded-xl p-4 text-xs text-slate-700 space-y-2">
+          <strong class="text-amber-900 text-sm block font-bold">基本文件要求：</strong>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>危疾保險索償申請表（由索償人／投保人填寫）</li>
+            <li>主診醫生報告（由被保險人的主診醫生填寫）</li>
+            <li>必要的病理報告、診斷檢驗報告等</li>
+            <li>被保險人及投保人身分證影本</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-orange-50/60 rounded-xl border border-orange-200 text-xs text-orange-950 space-y-1.5">
+          <strong class="font-bold text-sm block text-orange-900">計劃調整與後續背書：</strong>
+          <p>• 賠付後，獨立危疾計劃／附約將被撤消。</p>
+          <p>• 預支危疾附約：基本計劃及定期附約將按比例減少。</p>
+          <p>• 減少投保額／取消附約的背書將連同賠償信函、收據與支票交付投保人。</p>
+          <p>• 寬限期內確診扣除欠繳保費；寬限期後確診不接受申請。收據發出後 14 天內交回。</p>
+        </div>
+      </div>
+
+      <!-- 5. 個人意外保險索償 (已移除 7-Eleven) -->
+      <div id="tab-accident" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-sky-950">個人意外保險索償 (Personal Accident)</h2>
+            <p class="text-sm text-slate-500 mt-1">門診跌打單據規範與賠償交付途徑</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">輕微索償</span>
+        </div>
+
+        <div class="bg-sky-50/40 border border-sky-100 rounded-xl p-4 text-xs text-slate-700 space-y-2">
+          <strong class="text-sky-900 text-sm block font-bold">基本文件要求：</strong>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>意外賠償申請表（第一部分：被保險人/投保人填寫；第二部分：主診醫生填寫）</li>
+            <li><strong>正本收據</strong>：正本醫生收據、醫院收據、跌打收據（需明確註明診斷結果和求診日期）</li>
+            <li>有關病假證明書副本</li>
+            <li>被保險人及投保人的身分證副本</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
+          <strong class="font-bold text-slate-800">賠償支付與交付程序：</strong>
+          <p>• 賠償支票發出前需經 World Check 系統查核收款人姓名資料。</p>
+          <p>• 賠償支付將以<strong>系統支票</strong>形式發出。</p>
+          <p>• 賠償信函、賠償明細和支票由服務代理交付；如投保人要求，支票可直接交付投保人，明細副本交服務代理參考。</p>
+        </div>
+      </div>
+
+      <!-- 6. 住院索償 (已移除 7-Eleven) -->
+      <div id="tab-hospital" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-emerald-950">住院索償 (Hospitalization Claim)</h2>
+            <p class="text-sm text-slate-500 mt-1">住院收據、化驗報告與交付途徑</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">輕微索償</span>
+        </div>
+
+        <div class="bg-emerald-50/40 border border-emerald-100 rounded-xl p-4 text-xs text-slate-700 space-y-2">
+          <strong class="text-emerald-900 text-sm block font-bold">基本文件要求：</strong>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>住院賠償申請表（第一部分：被保險人/投保人填寫；第二部分：主診醫生填寫）</li>
+            <li><strong>正本收據</strong>：正本醫生收據、醫院收據</li>
+            <li>有關病假證明書的副本</li>
+            <li>病理報告、實驗室檢驗報告的副本</li>
+            <li>被保險人／投保人的身分證副本</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
+          <strong class="font-bold text-slate-800">賠償支付與交付程序：</strong>
+          <p>• 賠償支票發出前需經 World Check 系統查核收款人姓名資料。</p>
+          <p>• 賠償支付將以<strong>系統支票</strong>形式發出。</p>
+          <p>• 賠償信函、賠償明細和支票由服務代理交付；如投保人要求，支票可直接交付投保人，明細副本交服務代理參考。</p>
+        </div>
+      </div>
+
+      <!-- 7. 審核時間指標 -->
+      <div id="tab-timeline" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">理賠審核時間指標 (Turnaround Time)</h2>
+            <p class="text-sm text-slate-500 mt-1">2023年3月最新審核承諾指標</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">服務指標</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="rounded-2xl p-5 border border-sky-200 bg-gradient-to-br from-sky-50/60 to-white relative overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 bg-sky-100 text-sky-800 text-xs font-bold rounded-lg">輕微索償類別</span>
+              <span class="text-xs text-sky-600 font-semibold">快速審批</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900 mt-3">個人意外 / 住院索償</h4>
+            <div class="my-3">
+              <span class="text-4xl font-extrabold text-sky-600">5</span>
+              <span class="text-sm font-bold text-slate-600 ml-1">個工作天內完成</span>
+            </div>
+            <p class="text-xs text-slate-500 border-t border-sky-100 pt-3">
+              * 適用於不需調查／補交之個案，由收到索償文件起計。
+            </p>
+          </div>
+
+          <div class="rounded-2xl p-5 border border-purple-200 bg-gradient-to-br from-purple-50/60 to-white relative overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-lg">嚴重索償類別</span>
+              <span class="text-xs text-purple-600 font-semibold">深度審查</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900 mt-3">死亡 / 危疾 / 保費豁免索償</h4>
+            <div class="my-3">
+              <span class="text-4xl font-extrabold text-purple-600">10</span>
+              <span class="text-sm font-bold text-slate-600 ml-1">個工作天內完成</span>
+            </div>
+            <p class="text-xs text-slate-500 border-t border-purple-100 pt-3">
+              * 由收到所有要求遞交文件及完成賠償調查起計。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. FATCA / CRS -->
+      <div id="tab-tax" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-7 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">稅務聲明指引 (FATCA & CRS)</h2>
+            <p class="text-sm text-slate-500 mt-1">外國帳戶稅務合規法與自動交換財務帳戶資料</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">法律合規</span>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-4 bg-gradient-to-r from-blue-50/70 to-indigo-50/40 rounded-xl border border-blue-100">
+            <h3 class="text-sm font-bold text-blue-950 mb-2">身故賠償 FATCA 表格填寫指引</h3>
+            <div class="space-y-2 text-xs">
+              <div class="p-3 bg-white rounded-lg border border-blue-100 shadow-2xs">
+                <span class="font-bold text-slate-800">1. 申報為美國人（含美籍／綠卡）或美國公司：</span>
+                <span class="text-indigo-600 font-bold ml-1">遞交 W-9 表格</span>
+              </div>
+              <div class="p-3 bg-white rounded-lg border border-blue-100 shadow-2xs space-y-1">
+                <div class="font-bold text-slate-800">2. 申報非美國人，但具備美國身份特徵者：</div>
+                <p>• 個人：遞交 <strong class="text-indigo-600">W-8BEN 表格</strong></p>
+                <p>• 公司：遞交 <strong class="text-indigo-600">W-8BEN-E 表格</strong></p>
+                <p class="text-rose-600 font-semibold">• 必須一併遞交解釋（例如具美國地址原因；美出生者需附國務院放棄國籍證明書）。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2">
+            <h3 class="text-sm font-bold text-slate-800">自動交換財務帳戶資料 (CRS)</h3>
+            <p class="text-slate-600">• 若受益人為<strong>其他司法管轄區（澳門及美國除外）之稅務居民</strong>：填寫「<strong>個人自我證明表格</strong>」。</p>
+            <p class="text-slate-600">• <strong>實體受益人</strong>：填寫「<strong>實體自我證明表格</strong>」；如適用填寫「<strong>控權人自我證明表格</strong>」。</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- 切換邏輯 JavaScript -->
+  <script>
+    const tabStyles = {
+      general: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-600' },
+      death: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-600' },
+      waiver: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-600' },
+      ci: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-600' },
+      accident: { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-600' },
+      hospital: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-600' },
+      timeline: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-600' },
+      tax: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-600' },
+    };
+
+    function switchTab(tabId) {
+      const tabs = Object.keys(tabStyles);
+      tabs.forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        const btn = document.getElementById('btn-' + t);
+        btn.className = "w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-white hover:shadow-sm";
+      });
+
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      const style = tabStyles[tabId];
+      activeBtn.className = `w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition ${style.bg} ${style.text} border-l-4 ${style.border} shadow-sm`;
+    }
+  </script>
+</body>
+</html>
