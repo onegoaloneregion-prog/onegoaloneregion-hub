@@ -91,67 +91,227 @@
             } catch(e) { console.log("Init Error", e); }
         }
         ensureAdminExists();
+window.submitRegister = async function() {
+    var name = document.getElementById('regFullName').value.trim();
+    var code = document.getElementById('regAgentCode').value.trim();
+    var manager = document.getElementById('regManagerName').value.trim();
+    var pass = document.getElementById('regPassword').value.trim();
 
-        window.submitRegister = async function() {
-            var name = document.getElementById('regFullName').value.trim();
-            var code = document.getElementById('regAgentCode').value.trim();
-            var manager = document.getElementById('regManagerName').value.trim();
-            var pass = document.getElementById('regPassword').value.trim();
+    if (!name || !code || !manager || !pass) { 
+        alert('請完整填寫所有註冊欄位！'); 
+        return; 
+    }
 
-            if (!name || !code || !manager || !pass) { alert('請完整填寫所有註冊欄位！'); return; }
+    // 🔒 1. 取得按鈕並檢查：如果正在處理中，立即擋截
+    var regBtn = document.getElementById('regSubmitBtn');
+    if (regBtn && regBtn.disabled) return;
 
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let existUser = null;
-                querySnapshot.forEach((d) => {
-                    if (d.data().code === code) existUser = { id: d.id, ...d.data() };
-                });
+    // 🔒 2. 立即停用按鈕，並變更提示文字
+    var originalBtnText = regBtn ? regBtn.innerText : '提交註冊申請';
+    if (regBtn) {
+        regBtn.disabled = true;
+        regBtn.innerText = '處理中，請稍候...';
+    }
 
-                if (existUser) {
-                    if (existUser.status === 'pending') alert('⏳ 您的註冊申請已在審批中，請等待管理員批準！');
-                    else if (existUser.status === 'suspended') alert('❌ 此 Agent Code 目前已被停權，請聯絡管理員為您恢復權限！');
-                    else alert('此 Agent Code 已經註冊過，請直接登入！');
-                    return;
-                }
+    try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let existUser = null;
+        querySnapshot.forEach((d) => {
+            if (d.data().code === code) existUser = { id: d.id, ...d.data() };
+        });
 
-                await addDoc(collection(db, "users"), {
-                    name, code, manager, pass, status: 'pending', role: 'user', createdAt: new Date().toISOString()
-                });
-                alert('✅ 註冊申請已成功提交至雲端！請通知 Sammy 管理員進行審批。');
-                closeAuthModal();
-            } catch(e) {
-                alert('雲端連線失敗，請確保 Firebase Rules 已發佈 allow read, write: if true;');
+        if (existUser) {
+            if (existUser.status === 'pending') alert('⏳ 您的註冊申請已在審批中，請等待管理員批准！');
+            else if (existUser.status === 'suspended') alert('❌ 此 Agent Code 目前已被停權，請聯絡管理員為您恢復權限！');
+            else alert('此 Agent Code 已經註冊過，請直接登入！');
+            
+            // 遇到已存在用戶時解鎖按鈕
+            if (regBtn) {
+                regBtn.disabled = false;
+                regBtn.innerText = originalBtnText;
             }
-        };
+            return;
+        }
 
-        window.submitLogin = async function() {
-            var code = document.getElementById('loginAgentCode').value.trim();
-            var pass = document.getElementById('loginPassword').value.trim();
+        await addDoc(collection(db, "users"), {
+            name, code, manager, pass, 
+            status: 'pending', 
+            role: 'user', 
+            createdAt: new Date().toISOString()
+        });
 
-            if (!code || !pass) { alert('請完整填寫 Agent Code 與密碼！'); return; }
+        alert('✅ 註冊申請已成功提交至雲端！請通知 Sammy 管理員進行審批。');
+        closeAuthModal();
 
-            try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                let found = null;
-                querySnapshot.forEach((d) => {
-                    const u = d.data();
-                    if (u.code === code && u.pass === pass) found = { id: d.id, ...u };
-                });
+    } catch(e) {
+        alert('雲端連線失敗，請確保 Firebase Rules 已發佈 allow read, write: if true;');
+    } finally {
+        // 🔓 3. 無論成功或失敗，在最後還原按鈕狀態
+        if (regBtn) {
+            regBtn.disabled = false;
+            regBtn.innerText = originalBtnText;
+        }
+    }
+};
+window.submitLogin = async function() {
+    var code = document.getElementById('loginAgentCode').value.trim();
+    var pass = document.getElementById('loginPassword').value.trim();
 
-                if (found) {
-                    if (found.status === 'pending') { alert('⏳ 您的帳號正在等待管理員審批，請稍候！'); return; }
-                    if (found.status === 'suspended') { alert('❌ 您的帳號已被停權，請聯絡管理員為您恢復權限！'); return; }
-                    sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
-                    closeAuthModal(); updateAuthUI();
-                    showToast('🎉 歡迎回來，' + found.name + '！');
-                    if (found.role === 'admin') openAdminPanel();
-                } else {
-                    alert('登入失敗：Agent Code 或密碼錯誤！');
-                }
-            } catch(e) {
-                alert('登入連線失敗，請檢查網路。');
+    if (!code || !pass) { alert('請完整填寫 Agent Code 與密碼！'); return; }
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let found = null;
+        querySnapshot.forEach((d) => {
+            const u = d.data();
+            if (u.code === code && u.pass === pass) found = { id: d.id, ...u };
+        });
+
+        if (found) {
+            if (found.status === 'pending') { alert('⌛ 您的帳號正在等待管理員審批，請稍候！'); return; }
+            if (found.status === 'suspended') { alert('❌ 您的帳號已被停權，請聯絡管理員為您恢復權限！'); return; }
+
+            // 🔑 檢查是否需要強制更改密碼（臨時密碼登入）
+            if (found.mustChangePass === true) {
+                window.currentPendingUserId = found.id; // 記錄當前用戶的 Doc ID
+                window.currentPendingUserObj = found;
+                document.getElementById('loginFormSection').classList.add('hidden');
+                document.getElementById('forceChangePassSection').classList.remove('hidden');
+                document.getElementById('authModalTitle').innerText = "設定全新密碼";
+                document.getElementById('authModalDesc').innerText = "為了您的帳號安全，請設定一組專屬的全新密碼。";
+                return; // 🛑 阻截常規登入，必須改完密碼先放行
             }
+
+            sessionStorage.setItem('ogor_current_user', JSON.stringify(found));
+            closeAuthModal();
+            updateAuthUI();
+            showToast('🎉 歡迎回來，' + found.name + '！');
+            if (found.role === 'admin') openAdminPanel();
+        } else {
+            alert('登入失敗：Agent Code 或密碼錯誤！');
+        }
+    } catch(e) {
+        alert('登入連線失敗，請檢查網路。');
+    }
+};
+// 忘記密碼：使用者點擊後彈窗輸入 Agent Code 提交申請
+window.requestForgotPassword = async function() {
+  const code = prompt("請輸入您的 Agent Code (顧問編號)：");
+  if (!code || !code.trim()) return;
+
+  const agentCode = code.trim();
+  try {
+    const qSnapshot = await getDocs(collection(db, "users"));
+    let foundDoc = null;
+    qSnapshot.forEach((d) => {
+      if (d.data().code === agentCode) {
+        foundDoc = d;
+      }
+    });
+
+    if (!foundDoc) {
+      alert("❌ 找不到此 Agent Code，請確認輸入是否正確！");
+      return;
+    }
+
+    // 標記該帳號正在請求重設密碼
+    await updateDoc(doc(db, "users", foundDoc.id), {
+      resetRequested: true,
+      resetRequestedAt: new Date().toISOString()
+    });
+
+    alert("✅ 已提交重設密碼申請！\n請通知管理員 Sammy 為您一鍵重設臨時密碼。");
+  } catch (err) {
+    console.error(err);
+    alert("❌ 申請失敗，請檢查網路連線或聯絡管理員！");
+  }
+};
+        ;
+
+// 1. 使用者登入臨時密碼後，提交自己的全新密碼並直接進入系統
+window.submitForceChangePass = async function() {
+    const newPass = document.getElementById('newPersonalPassword').value.trim();
+    if (!newPass || newPass.length < 6) {
+        alert("密碼長度至少需要 6 個字元！");
+        return;
+    }
+
+    if (!window.currentPendingUserId || !window.currentPendingUserObj) {
+        alert("操作逾時，請重新登入！");
+        location.reload();
+        return;
+    }
+
+    try {
+        // 1. 更新 Firebase 資料庫
+        await updateDoc(doc(db, "users", window.currentPendingUserId), {
+            pass: newPass,
+            mustChangePass: false,
+            resetRequested: false
+        });
+
+        alert("🎉 新密碼已設定成功！即將為您進入系統。");
+
+        // 2. 更新暫存物件的狀態並正式寫入 sessionStorage
+        const loggedInUser = {
+            ...window.currentPendingUserObj,
+            pass: newPass,
+            mustChangePass: false,
+            resetRequested: false
         };
+        sessionStorage.setItem('ogor_current_user', JSON.stringify(loggedInUser));
+
+        // 3. 還原表單並關閉彈窗
+        document.getElementById('forceChangePassSection').classList.add('hidden');
+        document.getElementById('loginFormSection').classList.remove('hidden');
+        closeAuthModal();
+
+        // 4. 觸發系統主畫面的登入成功狀態（無縫切換，唔使 reload）
+        if (typeof updateAuthUI === 'function') updateAuthUI();
+        if (typeof showToast === 'function') showToast('🎉 歡迎回來，' + loggedInUser.name + '！');
+        if (loggedInUser.role === 'admin' && typeof openAdminPanel === 'function') openAdminPanel();
+
+    } catch (err) {
+        console.error(err);
+        alert("❌ 更新密碼失敗，請稍後再試！");
+    }
+};
+
+// 2. 自動產生「Today + 當日 MMDD」（例如今天 10月14日 就會出 Today1014）
+function getTodayTempPassword() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `Today${month}${day}`;
+}
+
+// 3. 管理員一鍵重設密碼函數（寫入 TodayMMDD 到 Firebase）
+window.adminResetPassword = async function(docId, userCode) {
+  const tempPass = getTodayTempPassword(); // 自動生成 TodayMMDD
+
+  if (!confirm(`確定要為顧問 [${userCode}] 重設密碼嗎？\n\n臨時密碼將設定為：${tempPass}\n使用者以此密碼登入後，系統會強制其輸入自己想要的新密碼。`)) {
+    return;
+  }
+
+  try {
+    // 寫入 Firebase 資料庫
+    await updateDoc(doc(db, "users", docId), {
+      pass: tempPass,
+      mustChangePass: true,   // 標記需要強制改密碼
+      resetRequested: false   // 清除重設申請狀態
+    });
+
+    alert(`✅ 重設成功！\n\n顧問編號：${userCode}\n臨時密碼：${tempPass}\n\n請將臨時密碼交給同事，提醒佢用【${tempPass}】登入。`);
+    
+    // 重新載入管理員後台清單
+    if (typeof window.renderApprovedUsers === 'function') window.renderApprovedUsers();
+    if (typeof window.renderPendingUsers === 'function') window.renderPendingUsers();
+  } catch (err) {
+    console.error(err);
+    alert("❌ 重設失敗，請檢查資料庫權限！");
+  }
+};
+
 
         window.renderPendingUsers = async function() {
             const listEl = document.getElementById('pendingUsersList');
@@ -205,18 +365,26 @@
                 }
 
                 let html = '';
-                userList.forEach(function(u) {
-                    var isSuspended = (u.status === 'suspended');
-                    var statusBadge = isSuspended ? '<span class="text-rose-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
-                    var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
-                    var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
-                    var btnClass = isSuspended ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-rose-500 hover:bg-rose-600';
+               userList.forEach(function(u) {
+    var isSuspended = (u.status === 'suspended');
+    var statusBadge = isSuspended ? '<span class="text-rose-500 font-bold">[已停權]</span>' : '<span class="text-emerald-600 font-bold">[正常]</span>';
+    var btnText = isSuspended ? '🔓 恢復權限' : '🚫 停權';
+    var btnTargetStatus = isSuspended ? 'approved' : 'suspended';
+    var btnClass = isSuspended ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-rose-500 hover:bg-rose-600';
 
-                    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
-                        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span> ' + statusBadge + '<br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
-                        '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3.5 py-1.5 ' + btnClass + ' text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer shrink-0">' + btnText + '</button>' +
-                    '</div>';
-                });
+    // 🔑 檢查是否有提交「忘記密碼」申請，若有則顯示醒目提示標籤
+    var resetBadge = u.resetRequested 
+        ? '<span class="ml-1.5 px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-[10px] animate-pulse border border-amber-300">⚠️ 申請重設密碼</span>' 
+        : '';
+
+    html += '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-2">' +
+        '<div><b>' + u.name + '</b> <span class="text-xs text-slate-500">(Code: ' + u.code + ')</span> ' + statusBadge + resetBadge + '<br><span class="text-slate-500 text-[11px]">經理: ' + u.manager + '</span></div>' +
+        '<div class="flex items-center gap-2 shrink-0">' +
+            '<button type="button" onclick="window.adminResetPassword(\'' + u.id + '\', \'' + u.code + '\')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">🔑 重設密碼</button>' +
+            '<button type="button" onclick="window.updateUserStatus(\'' + u.id + '\', \'' + btnTargetStatus + '\')" class="px-3 py-1.5 ' + btnClass + ' text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer">' + btnText + '</button>' +
+        '</div>' +
+        '</div>';
+});
                 listEl.innerHTML = html;
             } catch(e) {
                 listEl.innerHTML = '<p class="text-rose-500 text-center py-4">⚠️ 雲端讀取失敗，請檢查 Firebase 規則設定</p>';
@@ -731,26 +899,33 @@
                     </div>
                 </div>
 
-                <!-- 卡片 3: 賠償指南 (Claims) -->
-                <div class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                            <div class="flex items-center gap-2.5">
-                                <span class="text-2xl">🏥</span>
-                                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">3. 賠償指南</b>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                                Claims Guide
-                            </span>
-                        </div>
-                        <p class="text-slate-600 leading-relaxed text-xs">
-                            醫療住院、危疾及身故理賠程序、所需文件清單及線上索償操作。（內容待更新）
-                        </p>
-                    </div>
-                    <div class="w-full py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold transition flex items-center justify-center gap-1.5">
-                        進入查看 ↗
-                    </div>
-                </div>
+              <!-- 3. 賠償指南卡片 -->
+<div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+  <div>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl">🏥</span>
+        <h3 class="text-lg font-bold text-slate-800">3. 賠償指南</h3>
+      </div>
+      <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+        Claims Guide
+      </span>
+    </div>
+
+    <!-- 更新副標題描述 -->
+    <p class="text-xs text-slate-500 mt-4 leading-relaxed">
+      醫療住院、危疾及身故理賠程序、基本文件清單檢核、審核時效指標及 FATCA/CRS 稅務申報指引。
+    </p>
+  </div>
+
+  <!-- 跳轉按鈕 (支援開新分頁) -->
+  <div class="mt-6">
+    <a href="claims-guide.html" target="_blank" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100/80 active:bg-emerald-200 flex items-center justify-center space-x-1.5 transition shadow-xs">
+      <span>開啟理賠營運指引系統</span>
+      <span>↗</span>
+    </a>
+  </div>
+</div>
 
              <!-- 卡片 4: 付款指南 (Payment Methods) -->
 <div onclick="window.open('fwd-payment-guide.html', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
@@ -1503,10 +1678,122 @@
                 </div>
                 <p class="text-xs text-slate-500 leading-relaxed">單次及全年旅遊保障，涵蓋海外醫療費用、行程延誤、行李遺失及緊急救援服務。</p>
             </div>
-            <div class="p-8 rounded-3xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow space-y-4"><div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center text-3xl">🏢</div><h3 class="font-black text-slate-900 text-lg">商業綜合保險</h3><p class="text-xs text-slate-500 leading-relaxed">專為中小企而設，包含僱員補償保（勞保）、公眾責任險及店舖財物保障。</p></div>
+          <!-- 商業綜合保險卡片 -->
+          <div onclick="openCommercialModal()" class="p-6 rounded-3xl border border-slate-200 bg-white hover:border-orange-400 hover:shadow-lg transition-all cursor-pointer space-y-3 relative group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                  🏢
+                </div>
+                <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                  查看報價範本 ↗
+                </span>
+              </div>
+              <div class="mt-3">
+                <h3 class="font-black text-slate-900 text-base group-hover:text-orange-600 transition-colors">商業綜合保險</h3>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                專為中小企而設，包含僱員補償保（勞保）、公眾責任險、工程保險、招牌險及店舖火險。
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+              <span>含 4 大類報價範本</span>
+              <span class="font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md">點擊提取格式</span>
+            </div>
+          </div>
             <div onclick="switchPage('page-motor')" class="p-8 rounded-3xl border-2 border-purple-200 bg-purple-50/20 shadow-sm hover:shadow-lg hover:border-purple-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl">🚗</div><span class="text-xs font-black text-purple-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看表格庫 →</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-purple-700 transition-colors">車險</h3><p class="text-xs text-slate-500 leading-relaxed">提供第三者責任險及綜合車險（全保），確保車主與車輛獲得全面防護。</p></div>
         </div>
     </div>
+
+    <!-- 🏢 商業綜合保險報價範本 Modal -->
+<div id="commercialModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[999] hidden flex items-center justify-center p-4">
+  <div class="absolute inset-0" onclick="closeCommercialModal()"></div>
+  <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 relative border border-slate-100 my-auto z-10 max-h-[90vh] flex flex-col pointer-events-auto">
+    
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl">🏢</span>
+        <div>
+          <h3 class="text-base font-black text-slate-900">商業綜合保險 • 報價所需資料</h3>
+          <p class="text-xs text-slate-400">點擊分頁查看險種要求，可一鍵複製文字範本</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeCommercialModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm cursor-pointer">✕</button>
+    </div>
+
+    <!-- 4 個分頁切換按鈕 -->
+    <div class="flex gap-1.5 border-b border-slate-100 pt-3 pb-2 overflow-x-auto shrink-0 text-xs font-bold">
+      <button id="commTab-ec" onclick="switchCommTab('ec')" class="px-3 py-1.5 rounded-xl bg-orange-50 text-orange-600 transition cursor-pointer">1. 勞工保險</button>
+      <button id="commTab-pl" onclick="switchCommTab('pl')" class="px-3 py-1.5 rounded-xl text-slate-600 hover:bg-slate-50 transition cursor-pointer">2. 工程險 (PL/EC)</button>
+      <button id="commTab-sign" onclick="switchCommTab('sign')" class="px-3 py-1.5 rounded-xl text-slate-600 hover:bg-slate-50 transition cursor-pointer">3. 招牌險</button>
+      <button id="commTab-fire" onclick="switchCommTab('fire')" class="px-3 py-1.5 rounded-xl text-slate-600 hover:bg-slate-50 transition cursor-pointer">4. 火險</button>
+    </div>
+
+    <!-- 範本文字區 -->
+    <div class="py-4 overflow-y-auto space-y-3 text-xs flex-1">
+      <div id="commContent-ec" class="space-y-3">
+        <div class="p-3.5 bg-orange-50/50 rounded-2xl border border-orange-100 text-slate-700 font-mono whitespace-pre-wrap select-all leading-relaxed" id="text-ec">【報價勞工保險】
+公司名：
+員工人數：
+工作地點：
+每人年薪：
+職位(工種）：
+*註明是否需要外出工作：
+*註明是否要地盤工人及高空工作：
+附件：M1表</div>
+        <button onclick="copyCommText('text-ec')" class="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-xs cursor-pointer">
+          📋 複製勞工保險報價格式
+        </button>
+      </div>
+
+      <div id="commContent-pl" class="space-y-3 hidden">
+        <div class="p-3.5 bg-blue-50/50 rounded-2xl border border-blue-100 text-slate-700 font-mono whitespace-pre-wrap select-all leading-relaxed" id="text-pl">【報價險種： 工程第三者責任險(PL) / 勞工保險 (EC)】
+承建商：
+僱主/業主：
+工程期：
+工程價：
+工程地點：
+項目名稱：
+工程內容：
+第三者責任限額：
+*報價資料可再附上工程報價單及工程合約。</div>
+        <button onclick="copyCommText('text-pl')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow-xs cursor-pointer">
+          📋 複製工程險報價格式
+        </button>
+      </div>
+
+      <div id="commContent-sign" class="space-y-3 hidden">
+        <div class="p-3.5 bg-amber-50/50 rounded-2xl border border-amber-100 text-slate-700 font-mono whitespace-pre-wrap select-all leading-relaxed" id="text-sign">【招牌險請報價】
+投保人：
+工作地點：
+個數：
+發光不發光：
+尺寸：
+附件：M1 及 招牌圖片</div>
+        <button onclick="copyCommText('text-sign')" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition shadow-xs cursor-pointer">
+          📋 複製招牌險報價格式
+        </button>
+      </div>
+
+      <div id="commContent-fire" class="space-y-3 hidden">
+        <div class="p-3.5 bg-rose-50/50 rounded-2xl border border-rose-100 text-slate-700 font-mono whitespace-pre-wrap select-all leading-relaxed" id="text-fire">【火險報價】
+投保名：
+1. 公司M1表
+2. 保障貨物價值：
+3. 承保地點：
+4. 保額：</div>
+        <button onclick="copyCommText('text-fire')" class="w-full py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition shadow-xs cursor-pointer">
+          📋 複製火險報價格式
+        </button>
+      </div>
+    </div>
+
+    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 shrink-0">
+      <span>💡 點擊「複製」按鈕即可直接 WhatsApp 貼給客戶填寫</span>
+      <button onclick="closeCommercialModal()" class="text-slate-500 hover:text-slate-700 font-bold cursor-pointer">關閉</button>
+    </div>
+  </div>
+</div>
    <!-- PAGE: 家居保險產品小冊子專頁 -->
     <div id="page-gi-home" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
         <!-- 頂部返回列 -->
@@ -1710,7 +1997,13 @@
 
             <form id="loginFormSection" onsubmit="event.preventDefault(); window.submitLogin();" class="space-y-4">
                 <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">Agent Code (登入帳號)</label><input id="loginAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" inputmode="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold"></div>
-                <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">密碼</label><input id="loginPassword" type="password" required placeholder="請輸入密碼" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-orange-500 bg-slate-50 font-semibold"></div>
+               <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700">密碼</label>
+            <button type="button" onclick="window.requestForgotPassword()" class="text-xs text-orange-600 hover:underline cursor-pointer">忘記密碼？</button>
+          </div>
+          <input id="loginPassword" type="password" required placeholder="請輸入密碼" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
                 <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">立即登入</button>
                 <div class="text-center pt-2"><span class="text-xs text-slate-500">仲未有帳號？</span><button type="button" onclick="switchAuthMode('register')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">立即申請註冊</button></div>
             </form>
@@ -1721,10 +2014,22 @@
                 <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">Agent Code (將成為您的登入帳號)</label><input id="regAgentCode" type="text" required placeholder="例如: 88888" autocomplete="username" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
                 <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">直屬經理姓名</label><input id="regManagerName" type="text" required placeholder="請輸入經理姓名" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
                 <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-700">設定密碼</label><input id="regPassword" type="password" required placeholder="請設定您的登入密碼" autocomplete="new-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-orange-500 bg-slate-50"></div>
-                <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">提交註冊審批申請</button>
+                <button id="regSubmitBtn" type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">提交註冊審批申請</button>
                 <div class="text-center pt-2"><span class="text-xs text-slate-500">已經有帳號？</span><button type="button" onclick="switchAuthMode('login')" class="text-xs font-bold text-orange-600 hover:underline ml-1 cursor-pointer">返回登入</button></div>
             </form>
-
+<!-- 強制修改新密碼表單 (登入後若被重設密碼則顯示) -->
+    <form id="forceChangePassSection" onsubmit="event.preventDefault(); window.submitForceChangePass();" class="space-y-4 hidden">
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 leading-relaxed">
+        <b>⚠️ 安全提示：</b> 您的密碼已由管理員重設，請立即設定一組屬於您自己的全新密碼！
+      </div>
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-slate-700">全新密碼</label>
+        <input id="newPersonalPassword" type="password" required placeholder="請輸入 6 位或以上新密碼" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+      </div>
+      <button type="submit" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white font-black rounded-xl text-sm transition-colors shadow-md cursor-pointer">
+        確認儲存新密碼並進入系統
+      </button>
+    </form>
             <div id="adminApprovalSection" class="space-y-4 hidden max-h-[400px] overflow-y-auto">
                 <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">👑 管理員審批與權限控制台</b><button type="button" onclick="logoutAccount()" class="text-xs text-red-600 font-bold hover:underline cursor-pointer">登出管理員</button></div>
                 <div class="flex border-b border-slate-200 text-xs font-bold"><button type="button" id="tabPendingBtn" onclick="switchAdminTab('pending')" class="px-3 py-2 border-b-2 border-orange-500 text-orange-600 cursor-pointer">待審批申請</button><button type="button" id="tabApprovedBtn" onclick="switchAdminTab('approved')" class="px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">已批準用戶 (可停權/恢復)</button></div>
@@ -3525,6 +3830,42 @@ window.addEventListener('scroll', function() {
   var menu = document.getElementById('manualDropdownMenu');
   if (menu) menu.style.display = 'none';
 }, { passive: true });
+        // ====== 商業綜合保險彈窗與複製邏輯 ======
+window.openCommercialModal = function() {
+  var modal = document.getElementById('commercialModal');
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.closeCommercialModal = function() {
+  var modal = document.getElementById('commercialModal');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.switchCommTab = function(type) {
+  var tabs = ['ec', 'pl', 'sign', 'fire'];
+  tabs.forEach(function(t) {
+    var content = document.getElementById('commContent-' + t);
+    var btn = document.getElementById('commTab-' + t);
+    if (content) content.classList.add('hidden');
+    if (btn) btn.className = "px-3 py-1.5 rounded-xl text-slate-600 hover:bg-slate-50 transition cursor-pointer";
+  });
+  
+  var activeContent = document.getElementById('commContent-' + type);
+  var activeBtn = document.getElementById('commTab-' + type);
+  if (activeContent) activeContent.classList.remove('hidden');
+  if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-xl bg-orange-50 text-orange-600 font-bold transition cursor-pointer";
+};
+
+window.copyCommText = function(elementId) {
+  var el = document.getElementById(elementId);
+  if (!el) return;
+  var text = el.innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    alert("✅ 報價格式已複製到剪貼簿！可以直接發送給客戶或出單同事。");
+  }).catch(function(err) {
+    alert("已選取文字，請手動複製！");
+  });
+};
 </script>
 <!-- PAGE: 晉升制度全能導航系統分頁 -->
     <div id="page-promotion-system" class="page-view hidden py-4 px-2 sm:px-4 max-w-7xl mx-auto space-y-4">
