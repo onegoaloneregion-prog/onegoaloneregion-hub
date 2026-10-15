@@ -371,9 +371,14 @@
           <div class="space-y-6">
             <!-- Monthly Incomes -->
             <div>
-              <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-money-bill-wave text-emerald-600"></i> 每月經常性收入 (HKD)
-              </h3>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-money-bill-wave text-emerald-600"></i> 每月經常性收入 (HKD)
+                </h3>
+                <span id="incomeShareBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                  責任佔比：計算中
+                </span>
+              </div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">客戶本人月薪 (連平均佣金/雙糧折算)</label>
@@ -388,6 +393,7 @@
                     <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
                     <input type="text" inputmode="numeric" id="spouseIncome" value="" placeholder="例如：35,000" class="w-full pl-7 pr-3 py-2 border border-slate-300 rounded-xl text-sm placeholder:text-slate-400 format-currency" oninput="handleCurrencyInput(this)">
                   </div>
+                  <p class="text-[11px] text-slate-400 mt-1">配偶有收入可有效分擔家庭按揭及生活責任</p>
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">其他被動收入 (租金/股息等)</label>
@@ -516,33 +522,38 @@
                 <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold flex items-center gap-1.5">
                   <i class="fa-solid fa-earth-americas"></i> 2026/2027 世界主要升學熱門地每年費用參考 (含學費 + 住宿生活費)
                 </span>
-                <span class="text-[11px] bg-indigo-500/30 px-2 py-0.5 rounded text-indigo-200">依據最新官方平均數據</span>
+                <span class="text-[11px] bg-indigo-500/30 px-2 py-0.5 rounded text-indigo-200">依據官方最新收費核實</span>
               </div>
-              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
-                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+              <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
                   <div class="font-bold text-amber-300">🇬🇧 英國 (UK)</div>
-                  <div class="text-[11px] text-slate-300">牛津/劍橋/IC/LSE</div>
-                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 450,000 - 680,000/年</div>
+                  <div class="text-[10px] text-slate-300">牛津/劍橋/IC/LSE</div>
+                  <div class="text-xs font-extrabold mt-1 text-white">HK$ 45萬 - 68萬/年</div>
                 </div>
-                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
                   <div class="font-bold text-rose-300">🇺🇸 美國 (USA)</div>
-                  <div class="text-[11px] text-slate-300">常春藤/UC Berkeley/NYU</div>
-                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 600,000 - 880,000/年</div>
+                  <div class="text-[10px] text-slate-300">常春藤/UCB/NYU</div>
+                  <div class="text-xs font-extrabold mt-1 text-white">HK$ 60萬 - 88萬/年</div>
                 </div>
-                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
                   <div class="font-bold text-emerald-300">🇦🇺 澳洲 (AUS)</div>
-                  <div class="text-[11px] text-slate-300">墨爾本/雪梨大學/UNSW</div>
-                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 380,000 - 520,000/年</div>
+                  <div class="text-[10px] text-slate-300">墨爾本/雪梨大學</div>
+                  <div class="text-xs font-extrabold mt-1 text-white">HK$ 38萬 - 52萬/年</div>
                 </div>
-                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
                   <div class="font-bold text-sky-300">🇨🇦 加拿大 (CAN)</div>
-                  <div class="text-[11px] text-slate-300">多倫多/UBC/麥基爾</div>
-                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 320,000 - 480,000/年</div>
+                  <div class="text-[10px] text-slate-300">多倫多/UBC/麥基爾</div>
+                  <div class="text-xs font-extrabold mt-1 text-white">HK$ 32萬 - 48萬/年</div>
                 </div>
-                <div class="bg-white/10 p-2.5 rounded-lg border border-white/10 col-span-2 sm:col-span-1">
-                  <div class="font-bold text-purple-300">🇭🇰/🇸🇬 本地及亞洲</div>
-                  <div class="text-[11px] text-slate-300">港大/中大/NUS/南洋</div>
-                  <div class="text-sm font-extrabold mt-1 text-white">HK$ 150,000 - 320,000/年</div>
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
+                  <div class="font-bold text-teal-300">🇲🇴 澳門本土 (MO)</div>
+                  <div class="text-[10px] text-slate-300">澳大/科大(本地生)</div>
+                  <div class="text-xs font-extrabold mt-1 text-emerald-300">HK$ 3.8萬 - 4.5萬/年</div>
+                </div>
+                <div class="bg-white/10 p-2 rounded-lg border border-white/10">
+                  <div class="font-bold text-purple-300">🇭🇰/🇸🇬 香港及亞洲</div>
+                  <div class="text-[10px] text-slate-300">港八大(本地)/NUS</div>
+                  <div class="text-xs font-extrabold mt-1 text-white">HK$ 9萬 - 30萬/年</div>
                 </div>
               </div>
             </div>
@@ -1086,6 +1097,10 @@
   <script>
     // Global Universities tuition & living cost database (Annual in HKD equivalent for international students)
     const UNIVERSITY_DATABASE = [
+      { id: 'mo_local', name: '澳門：澳門大學 / 澳門科技大學 (澳門居民本地生基本學費)', country: 'MO', annualHKD: 42000, durationYears: 4 },
+      { id: 'mo_nonlocal', name: '澳門：澳門大學 / 澳門科技大學 (非本地生標準)', country: 'MO', annualHKD: 160000, durationYears: 4 },
+      { id: 'hk_local', name: '香港：港大 / 中大 / 科大等八大 (香港本地資助生)', country: 'HK', annualHKD: 95000, durationYears: 4 },
+      { id: 'hk_nonlocal', name: '香港：香港大學 / 中大 / 科大 (非本地/國際生)', country: 'HK', annualHKD: 280000, durationYears: 4 },
       { id: 'uk_oxbridge', name: '英國：牛津 / 劍橋大學 (Oxbridge)', country: 'UK', annualHKD: 620000, durationYears: 3 },
       { id: 'uk_g5', name: '英國：帝國理工 / LSE / UCL (G5頂尖名校)', country: 'UK', annualHKD: 550000, durationYears: 3 },
       { id: 'uk_general', name: '英國：曼徹斯特 / 愛丁堡 / 華威等名校', country: 'UK', annualHKD: 450000, durationYears: 3 },
@@ -1095,9 +1110,8 @@
       { id: 'aus_go8', name: '澳洲：墨爾本大學 / 雪梨大學 (八大名校)', country: 'AUS', annualHKD: 460000, durationYears: 3 },
       { id: 'aus_general', name: '澳洲：蒙納許 / 昆士蘭 / 新南威爾斯大學', country: 'AUS', annualHKD: 420000, durationYears: 3 },
       { id: 'can_top', name: '加拿大：多倫多大學 / UBC / 麥基爾大學', country: 'CAN', annualHKD: 380000, durationYears: 4 },
-      { id: 'hk_top3', name: '香港：香港大學 / 中大 / 科大 (本地國際生/私立)', country: 'HK', annualHKD: 220000, durationYears: 4 },
       { id: 'sg_top', name: '新加坡：國立大學 (NUS) / 南洋理工 (NTU)', country: 'SG', annualHKD: 320000, durationYears: 4 },
-      { id: 'custom', name: '自訂目標院校預算', country: 'Other', annualHKD: 400000, durationYears: 4 }
+      { id: 'custom', name: '✏️ 自訂目標院校及每年預算 (手動輸入金額)', country: 'Other', annualHKD: 400000, durationYears: 4 }
     ];
 
     // State object for children (starts empty by default for fresh fact finding)
@@ -1350,17 +1364,20 @@
         // Step 3 Education Card
         const uniOptions = UNIVERSITY_DATABASE.map(uni => `
           <option value="${uni.id}" ${child.targetUniId === uni.id ? 'selected' : ''}>
-            ${uni.name} (${fmtMoney(uni.annualHKD)}/年)
+            ${uni.name} ${uni.id !== 'custom' ? `(${fmtMoney(uni.annualHKD)}/年)` : ''}
           </option>
         `).join('');
 
         const selectedUni = UNIVERSITY_DATABASE.find(u => u.id === child.targetUniId) || UNIVERSITY_DATABASE[0];
+        const isCustom = child.targetUniId === 'custom';
+        const effectiveAnnual = isCustom ? (child.customCost !== undefined ? child.customCost : 300000) : selectedUni.annualHKD;
+        const effectiveYears = isCustom ? (child.years || 4) : selectedUni.durationYears;
         const yearsUntilCollege = Math.max(0, 18 - (child.age || 0));
         const inflationRate = parseFloat(document.getElementById('eduInflation')?.value || 4) / 100;
         
         // Future inflated cost calculation = AnnualCost * (1 + inflation)^yearsUntilCollege * durationYears
-        const annualFutureCost = selectedUni.annualHKD * Math.pow(1 + inflationRate, yearsUntilCollege);
-        const totalFutureEduCost = annualFutureCost * selectedUni.durationYears;
+        const annualFutureCost = effectiveAnnual * Math.pow(1 + inflationRate, yearsUntilCollege);
+        const totalFutureEduCost = annualFutureCost * effectiveYears;
 
         const eduCard = document.createElement('div');
         eduCard.className = 'p-4 rounded-xl border border-slate-200 bg-white shadow-sm space-y-3';
@@ -1380,18 +1397,50 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">目標志願留學校園 / 國家</label>
-              <select onchange="updateChildUni(${index}, this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+              <select onchange="updateChildUni(${index}, this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white font-medium">
                 ${uniOptions}
               </select>
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">修讀學年年期</label>
-              <div class="flex items-center gap-2 text-xs">
-                <span class="px-3 py-1.5 bg-slate-100 rounded-lg font-bold text-slate-700">${selectedUni.durationYears} 年制學士學位</span>
-                <span class="text-slate-400">目前標準每年約：${fmtMoney(selectedUni.annualHKD)}</span>
-              </div>
+              ${isCustom ? `
+                <div class="flex items-center gap-2">
+                  <select onchange="updateChildCustomYears(${index}, parseInt(this.value))" class="px-2.5 py-1.5 border border-amber-300 bg-amber-50 rounded-lg text-xs font-bold text-slate-800">
+                    <option value="1" ${effectiveYears === 1 ? 'selected' : ''}>1 年 (碩士/專科)</option>
+                    <option value="2" ${effectiveYears === 2 ? 'selected' : ''}>2 年 (副學士/碩士)</option>
+                    <option value="3" ${effectiveYears === 3 ? 'selected' : ''}>3 年制學士學位</option>
+                    <option value="4" ${effectiveYears === 4 ? 'selected' : ''}>4 年制學士學位</option>
+                    <option value="5" ${effectiveYears === 5 ? 'selected' : ''}>5 年制 (醫學/建築)</option>
+                    <option value="6" ${effectiveYears === 6 ? 'selected' : ''}>6 年制 (雙學位/長學制)</option>
+                  </select>
+                  <span class="text-[11px] text-amber-700 font-medium">自訂修讀學年</span>
+                </div>
+              ` : `
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="px-3 py-1.5 bg-slate-100 rounded-lg font-bold text-slate-700">${selectedUni.durationYears} 年制學士學位</span>
+                  <span class="text-slate-400">目前標準每年約：${fmtMoney(selectedUni.annualHKD)}</span>
+                </div>
+              `}
             </div>
           </div>
+
+          ${isCustom ? `
+            <!-- Custom Annual Cost Input -->
+            <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <label class="block text-xs font-bold text-amber-900 mb-0.5">
+                    <i class="fa-solid fa-pen-to-square mr-1 text-amber-600"></i> 請輸入自訂每年預估總費用 (學費 + 住宿生活費，HKD)
+                  </label>
+                  <span class="text-[11px] text-amber-700">可根據目標國家、寄宿中學或特殊專業（如飛行、牙醫、藝術）自訂</span>
+                </div>
+                <div class="relative w-48">
+                  <span class="absolute left-3 top-2 text-xs text-slate-400">$</span>
+                  <input type="text" inputmode="numeric" value="${Number(effectiveAnnual || 0).toLocaleString('en-US')}" placeholder="例如：350,000" class="w-full pl-7 pr-3 py-1.5 bg-white border border-amber-300 rounded-lg text-xs font-bold text-slate-800 format-currency" oninput="handleChildCustomCostInput(${index}, this)">
+                </div>
+              </div>
+            </div>
+          ` : ''}
 
           <div class="bg-indigo-50/60 p-3 rounded-lg flex items-center justify-between text-xs">
             <div>
@@ -1497,6 +1546,38 @@
 
     function updateChildUni(index, uniId) {
       childrenList[index].targetUniId = uniId;
+      if (uniId === 'custom' && !childrenList[index].customCost) {
+        childrenList[index].customCost = 300000;
+        childrenList[index].years = 4;
+      }
+      renderChildrenRows();
+      calculateAll();
+    }
+
+    function handleChildCustomCostInput(index, inputElem) {
+      const rawVal = inputElem.value.replace(/[^0-9]/g, '');
+      const numVal = rawVal === '' ? 0 : parseFloat(rawVal);
+      inputElem.value = numVal > 0 ? numVal.toLocaleString('en-US') : '';
+      childrenList[index].customCost = numVal;
+      calculateAll();
+      // Update displayed total & monthly saving in the specific card without losing input focus
+      const eduCards = document.querySelectorAll('#childrenEducationCards > div');
+      if (eduCards[index]) {
+        const child = childrenList[index];
+        const yearsUntilCollege = Math.max(0, 18 - (child.age || 0));
+        const inflationRate = parseFloat(document.getElementById('eduInflation')?.value || 4) / 100;
+        const years = child.years || 4;
+        const annualFutureCost = numVal * Math.pow(1 + inflationRate, yearsUntilCollege);
+        const totalFutureEduCost = annualFutureCost * years;
+        const totalElem = eduCards[index].querySelector('.text-base.font-extrabold');
+        const monthlyElem = eduCards[index].querySelector('.text-right .font-bold');
+        if (totalElem) totalElem.innerText = fmtMoney(totalFutureEduCost);
+        if (monthlyElem) monthlyElem.innerText = `約 ${fmtMoney(yearsUntilCollege > 0 ? totalFutureEduCost / (yearsUntilCollege * 12) : 0)} /月`;
+      }
+    }
+
+    function updateChildCustomYears(index, years) {
+      childrenList[index].years = years;
       renderChildrenRows();
       calculateAll();
     }
@@ -1591,7 +1672,28 @@
       const clientIncome = getNumericValue('clientIncome');
       const spouseIncome = getNumericValue('spouseIncome');
       const otherIncome = getNumericValue('otherIncome');
-      const totalFamilyIncome = clientIncome + spouseIncome + otherIncome;
+      const earnedIncome = clientIncome + spouseIncome;
+      const totalFamilyIncome = earnedIncome + otherIncome;
+
+      // Calculate Client's Responsibility Ratio (客戶家庭經濟責任貢獻比例)
+      // 若配偶有收入，按雙方工資佔比分擔；若未填或全由客戶支撐，則責任比例為 100%
+      let clientRatio = 1.0;
+      if (earnedIncome > 0) {
+        clientRatio = Math.max(0.2, Math.min(1.0, clientIncome / earnedIncome));
+      }
+      
+      const shareBadge = document.getElementById('incomeShareBadge');
+      if (shareBadge) {
+        if (earnedIncome > 0) {
+          const clientPct = Math.round(clientRatio * 100);
+          const spousePct = 100 - clientPct;
+          shareBadge.innerText = `經濟貢獻：客戶 ${clientPct}% / 配偶 ${spousePct}%`;
+          shareBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 font-semibold";
+        } else {
+          shareBadge.innerText = '責任佔比：待輸入收入';
+          shareBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium";
+        }
+      }
 
       // Expenses
       const expMortgage = getNumericValue('expMortgage');
@@ -1617,7 +1719,8 @@
         emergBox.innerText = fmtMoney(totalMonthlyExpense * 6);
       }
 
-      // Calculation 1: Life Protection Need
+      // Calculation 1: Life Protection Need (身故責任模型)
+      // 被動收入 (如租金/股息) 在受保人不幸離世後依然持續流入，可長期減輕家庭生活與供樓負擔
       let childUpkeepTotal = 0;
       childrenList.forEach(child => {
         const yearsToSupport = Math.max(0, 22 - (child.age || 0));
@@ -1625,15 +1728,35 @@
       });
 
       const parentSupportYears = 12;
-      const parentUpkeepTotal = expParent * 12 * parentSupportYears;
-      const totalLifeObligationNeed = mortgageDebt + otherDebt + childUpkeepTotal + parentUpkeepTotal + (totalMonthlyExpense * 12);
+      const parentUpkeepTotal = expParent * 12 * parentSupportYears; // 父母奉養通常為個人不可推卸責任
+
+      // 扣除被動收入後之淨家庭每月生活缺口 (以10年家庭重組適應期折算)
+      const familyLivingYears = 10;
+      const netMonthlyFamilyExp = Math.max(0, (expMortgage + expLiving + expChildCare) - otherIncome);
+      const familyLivingObligation = netMonthlyFamilyExp * 12 * familyLivingYears;
+
+      // 共同家庭責任 (按揭餘額 + 其他負債 + 子女撫養 + 淨家庭生活責任) 按責任比率折算
+      const sharedFamilyLiabilities = (mortgageDebt + otherDebt + childUpkeepTotal + familyLivingObligation) * clientRatio;
+      const totalLifeObligationNeed = Math.round(sharedFamilyLiabilities + parentUpkeepTotal);
       
       const existLifeCover = getNumericValue('existLifeCover');
       const lifeGap = Math.max(0, totalLifeObligationNeed - (existLifeCover + Math.max(0, liquidAsset - totalMonthlyExpense * 6)));
 
-      // Calculation 2: Critical Illness Gap
-      const annualExpense = totalMonthlyExpense * 12;
-      const suggestedCINeed = annualExpense > 0 ? (annualExpense * 3) + 300000 : 0;
+      // Calculation 2: Critical Illness Gap (危疾收入替代模型)
+      // 若客戶罹患重大疾病停工3年：
+      // - 客戶本人的薪酬中斷（損失 clientIncome * 36 個月）
+      // - 但家庭擁有的「其他被動收入」(otherIncome) 完全不依賴工作能力，在患病期間仍持續入帳
+      // - 因此客戶需要替代的真正家庭剛性缺口，應扣減被動收入帶來的現金流支援
+      let suggestedCINeed = 0;
+      const netMonthlyLivingNeedForCI = Math.max(0, totalMonthlyExpense - otherIncome);
+      if (clientIncome > 0) {
+        // 客戶停工損失 clientIncome，但家庭每月有 otherIncome 緩衝
+        // 需補充：客戶停工3年淨開支責任 + 30萬初期專項醫療療養備用金
+        const monthlyCiNeed = Math.max(0, (clientIncome * clientRatio) - (otherIncome * 0.5));
+        suggestedCINeed = Math.round((monthlyCiNeed * 12 * 3) + 300000);
+      } else if (totalMonthlyExpense > 0) {
+        suggestedCINeed = Math.round((netMonthlyLivingNeedForCI * 12 * 3 * clientRatio) + 300000);
+      }
       const existCICover = getNumericValue('existCICover');
       const ciGap = Math.max(0, suggestedCINeed - existCICover);
 
@@ -1643,13 +1766,16 @@
 
       childrenList.forEach(child => {
         const uni = UNIVERSITY_DATABASE.find(u => u.id === child.targetUniId) || UNIVERSITY_DATABASE[0];
+        const isCustom = child.targetUniId === 'custom';
+        const annualCost = isCustom ? (child.customCost !== undefined ? child.customCost : 300000) : uni.annualHKD;
+        const duration = isCustom ? (child.years || 4) : uni.durationYears;
         const yearsUntilCollege = Math.max(0, 18 - (child.age || 0));
-        const inflatedAnnual = uni.annualHKD * Math.pow(1 + eduInflationRate, yearsUntilCollege);
-        totalInflatedEducationNeed += inflatedAnnual * uni.durationYears;
+        const inflatedAnnual = annualCost * Math.pow(1 + eduInflationRate, yearsUntilCollege);
+        totalInflatedEducationNeed += inflatedAnnual * duration;
       });
 
       const existingEduFund = getNumericValue('existingEduFund');
-      const educationGap = Math.max(0, totalInflatedEducationNeed - existingEduFund);
+      const educationGap = Math.max(0, Math.round(totalInflatedEducationNeed - existingEduFund));
 
       // Calculation 4: Retirement Gap
       const retireAge = parseInt(document.getElementById('retireAge')?.value) || 60;
@@ -1657,33 +1783,37 @@
       const retireYears = Math.max(1, lifeExp - retireAge);
       const retireMonthlyExp = getNumericValue('retireMonthlyExpense');
       const otherRetireMonthlyIncome = getNumericValue('otherRetireIncome');
-      const netMonthlyRetireNeed = Math.max(0, retireMonthlyExp - otherRetireMonthlyIncome);
+      // 將現有的「被動收入 (租金/股息)」與「預計其他退休月收入」合併折算，扣減退休金庫需求
+      const effectiveRetireIncome = Math.max(otherIncome, otherRetireMonthlyIncome);
+      const netMonthlyRetireNeed = Math.max(0, retireMonthlyExp - effectiveRetireIncome);
 
       const totalRetirementNeed = netMonthlyRetireNeed * 12 * retireYears;
       const existingMPF = getNumericValue('existingMPF');
-      const retirementGap = Math.max(0, totalRetirementNeed - existingMPF);
+      const retirementGap = Math.max(0, Math.round(totalRetirementNeed - existingMPF));
 
-      // Update sidebar numbers (strictly formatted with commas)
+      // Update Live Sidebar Numbers
       const sLife = document.getElementById('sideLifeGap');
-      const sCI = document.getElementById('sideCIGap');
-      const sEdu = document.getElementById('sideEduGap');
-      const sRet = document.getElementById('sideRetireGap');
-
       if (sLife) sLife.innerText = fmtMoney(lifeGap);
+
+      const sCI = document.getElementById('sideCIGap');
       if (sCI) sCI.innerText = fmtMoney(ciGap);
+
+      const sEdu = document.getElementById('sideEduGap');
       if (sEdu) sEdu.innerText = fmtMoney(educationGap);
+
+      const sRet = document.getElementById('sideRetireGap');
       if (sRet) sRet.innerText = fmtMoney(retirementGap);
 
-      // Update Step 5 Card metrics
-      const rClient = document.getElementById('reportClientName');
-      if (rClient) rClient.innerText = clientName;
+      // Update Step 5 Report Cards
+      const reportName = document.getElementById('reportClientName');
+      if (reportName) reportName.innerText = clientName;
 
       const cLifeGap = document.getElementById('cardLifeGap');
       if (cLifeGap) cLifeGap.innerText = fmtMoney(lifeGap);
       const cLifeNeed = document.getElementById('cardLifeNeed');
       if (cLifeNeed) cLifeNeed.innerText = fmtMoney(totalLifeObligationNeed);
       const cLifeExist = document.getElementById('cardLifeExist');
-      if (cLifeExist) cLifeExist.innerText = fmtMoney(existLifeCover);
+      if (cLifeExist) cLifeExist.innerText = fmtMoney(existLifeCover + Math.max(0, liquidAsset - totalMonthlyExpense * 6));
 
       const cCIGap = document.getElementById('cardCIGap');
       if (cCIGap) cCIGap.innerText = fmtMoney(ciGap);
