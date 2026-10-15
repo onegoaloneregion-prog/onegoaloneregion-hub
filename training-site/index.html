@@ -668,6 +668,35 @@ window.adminResetPassword = async function(docId, userCode) {
         </span>
     </div>
 </div>
+        <!-- 👑 MDRT 2027 智能追數與年終花紅計算器 (FWD 專區大長條橫幅正下方) -->
+    <div class="mt-4 p-5 sm:p-6 rounded-3xl border-2 border-rose-200 bg-gradient-to-r from-rose-50/80 via-white to-orange-50/40 shadow-sm hover:shadow-md hover:border-rose-300 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-rose-400 text-white flex items-center justify-center text-2xl shadow-md shadow-rose-200 shrink-0">
+          👑
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">MDRT 2027 計算系統</h3>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200">
+              新制 26% 花紅
+            </span>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+              目標 MOP$ 425,400
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+            直入 FYC 總額與盈聚積分即時試算，結合首季早鳥倍數 (Q1)、合資格年期及活躍月份，精算出真正實質所需追數門檻！
+          </p>
+        </div>
+      </div>
+      
+      <div class="shrink-0">
+        <button type="button" onclick="window.open('mdrt-calc.html', '_blank')" class="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-xs sm:text-sm shadow-md shadow-rose-200 flex items-center justify-center gap-1.5 transition cursor-pointer">
+          <span>開啟 MDRT 追數系統</span>
+          <span class="text-xs">↗</span>
+        </button>
+      </div>
+    </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div onclick="switchPage('page-fwd-scripts')" class="p-8 rounded-3xl border-2 border-sky-200 bg-sky-50/20 shadow-sm hover:shadow-lg hover:border-sky-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
@@ -742,7 +771,7 @@ window.adminResetPassword = async function(docId, userCode) {
                 </div>
                 <div>
                     <span class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px] mb-1">專業需求分析</span>
-                    <h3 class="font-black text-slate-900 text-base group-hover:text-indigo-600 transition-colors">全方位保障缺口診斷系統</h3>
+                    <h3 class="font-black text-slate-900 text-base group-hover:text-indigo-600 transition-colors">全方位理財策劃系統</h3>
                 </div>
                 <p class="text-xs text-slate-500 leading-relaxed">科學量化家庭責任與各項保障缺口分析，點擊進入選擇專屬診斷工具。</p>
             </div>
@@ -877,6 +906,7 @@ window.adminResetPassword = async function(docId, userCode) {
         開啟智能核保導航系統 ↗
     </div>
 </div>
+                
 
                 <!-- 卡片 2: 保單服務 (Policy Servicing) -->
                 <div class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
@@ -1180,7 +1210,7 @@ window.adminResetPassword = async function(docId, userCode) {
     <div id="page-company-profile" class="page-view hidden py-6 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
         
         <!-- 頂部返回列與快速定位導覽 -->
-        <div class="sticky top-2 z-40 bg-white/95 backdrop-blur-md border border-[#E5E0D8] rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+       <div class="relative z-10 bg-white/95 backdrop-blur-md border border-[#E5E0D8] rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="flex items-center gap-3">
                 <button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#F8F6F2] hover:bg-orange-50 text-slate-700 hover:text-[#E87722] font-bold text-xs transition cursor-pointer border border-[#E5E0D8]">
                     ← 返回前頁
@@ -2561,6 +2591,15 @@ window.adminResetPassword = async function(docId, userCode) {
         function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro) {
             age = Math.min(70, Math.max(1, parseInt(age) || 30));
             payTerm = String(payTerm || '20');
+            // 🛑 核心年期年齡上限檢核：
+    // 30年繳 / 25年繳：最高投保年齡 50 歲
+    // 20年繳：最高投保年齡 55 歲
+    // 15年繳：最高投保年齡 60 歲
+    // 10年繳：最高投保年齡 70 歲
+    if ((payTerm === '30' || payTerm === '25') && age > 50) return 0;
+    if (payTerm === '20' && age > 55) return 0;
+    if (payTerm === '15' && age > 60) return 0;
+    if (payTerm === '10' && age > 70) return 0;
             rateType = (rateType === 'standard') ? 'std' : 'pref';
             gender = (gender === 'female') ? 'fem' : 'male';
             var proKey = isPro ? 'pro' : 'base';
@@ -2595,7 +2634,7 @@ window.adminResetPassword = async function(docId, userCode) {
                 unitRate = (lower === upper) ? table[lower] : table[lower] + ((age - lower) / (upper - lower)) * (table[upper] - table[lower]);
             }
 
-            // 大額折扣優惠 (按每千元投保額扣減)[cite: 3]
+            // 大額折扣優惠 (按每千元投保額扣減)
             var sizeDiscount = 0;
             if (sumInsured >= 480000) {
                 if (payTerm === '10') sizeDiscount = 10.0;
@@ -3149,9 +3188,33 @@ function updateCalcOptions() {
             payTermSelect.innerHTML = '<option value="5">5 年繳</option><option value="10">10 年繳</option><option value="15">15 年繳</option><option value="20">20 年繳</option>';
             payTermSelect.value = (prevTerm === '5' || prevTerm === '10' || prevTerm === '15' || prevTerm === '20') ? prevTerm : '20';
         } else if (isCrisis) {
-            payTermBlock.style.display = 'block';
-            payTermSelect.innerHTML = '<option value="10">10 年繳</option><option value="15">15 年繳</option><option value="20">20 年繳 (最高55歲)</option><option value="25">25 年繳 (最高50歲)</option>';
-            payTermSelect.value = (prevTerm === '10' || prevTerm === '15' || prevTerm === '20' || prevTerm === '25') ? prevTerm : '20';
+           } else if (isCrisis) {
+    payTermBlock.style.display = 'block';
+
+    // 讀取當前輸入框年齡（若未填則預設 30 歲）
+    var currentAge = parseInt(document.getElementById('calcAge') ? document.getElementById('calcAge').value : 30) || 30;
+
+    // 根據年齡動態組合選項
+    var opts = '<option value="10">10 年繳 (最高70歲)</option>';
+    if (currentAge <= 60) opts += '<option value="15">15 年繳 (最高60歲)</option>';
+    if (currentAge <= 55) opts += '<option value="20">20 年繳 (最高55歲)</option>';
+    if (currentAge <= 50) opts += '<option value="25">25 年繳 (最高50歲)</option>';
+    if (currentAge <= 50) opts += '<option value="30">30 年繳 (最高50歲)</option>';
+
+    payTermSelect.innerHTML = opts;
+
+    // 檢查原本選取的年期在當前年齡是否合資格，否則自動降級選取合法最大年期
+    var validTerms = [];
+    if (currentAge <= 50) validTerms = ['30', '25', '20', '15', '10'];
+    else if (currentAge <= 55) validTerms = ['20', '15', '10'];
+    else if (currentAge <= 60) validTerms = ['15', '10'];
+    else validTerms = ['10'];
+
+    if (validTerms.indexOf(prevTerm) !== -1) {
+      payTermSelect.value = prevTerm;
+    } else {
+      payTermSelect.value = validTerms[0]; // 自動選取合資格的年期
+    }
         } else {
             payTermBlock.style.display = 'none';
         }
@@ -3219,6 +3282,23 @@ var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pNa
         annual = calcLifePromisePremium(age, gender, payTerm, isSmk2, baseHkdSum);
         if (curr === 'USD') annual = annual / 7.8;
     } else if (isCrisis) {
+        // 🛑 檢查危疾應援保投保年齡上限限制
+        var maxAgeLimit = 70;
+        if (payTerm === '30' || payTerm === '25') maxAgeLimit = 50;
+        else if (payTerm === '20') maxAgeLimit = 55;
+        else if (payTerm === '15') maxAgeLimit = 60;
+
+        if (age > maxAgeLimit) {
+            alert('⚠️ 投保年齡限制提示：\n危疾應援保 ' + payTerm + ' 年繳款之最高投保年齡為 ' + maxAgeLimit + ' 歲。\n（當前輸入年齡：' + age + ' 歲）');
+            annual = 0;
+            // 清空或更新畫面上的保費顯示為 0 或提示文字
+            var annDisplay = document.getElementById('calcAnnualDisplay');
+            var monDisplay = document.getElementById('calcMonthlyDisplay');
+            if (annDisplay) annDisplay.innerText = '超出投保年齡';
+            if (monDisplay) monDisplay.innerText = '-';
+            return;
+        }
+
         var isPro = (p.indexOf('pro') !== -1 || pName.indexOf('升級') !== -1);
         if (typeof calcCrisisFullPremium === 'function') {
             annual = calcCrisisFullPremium(age, gender, payTerm, rateType, baseHkdSum, isPro);
@@ -3392,7 +3472,8 @@ var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pNa
         if (rateTypeCompSec) rateTypeCompSec.style.display = 'block';
 
         // 1. 各繳款年期比較卡片
-        var termList = isMyTerm ? ['5', '10', '20'] : (isLifePromise ? ['5', '10', '15', '20'] : ['10', '15', '20', '25']);
+        var defaultCrisisTerms = (age <= 50) ? ['10', '15', '20', '25', '30'] : ['10', '15', '20'];
+var termList = isMyTerm ? ['5', '10', '20'] : (isLifePromise ? ['5', '10', '15', '20'] : defaultCrisisTerms);
         var termHtml = "";
         termList.forEach(function(t) {
             var tAnn = 0;
@@ -3406,8 +3487,15 @@ var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pNa
                 if (typeof calcCrisisFullPremium === 'function') {
                     tAnn = calcCrisisFullPremium(age, gender, t, rateType, baseHkdSum, (p.indexOf('pro') !== -1));
                 } else {
-                    var factor = (t === '10') ? 1.62 : ((t === '15') ? 1.20 : ((t === '25') ? 0.88 : 1.0));
-                    tAnn = annual * (factor / ((payTerm === '10') ? 1.62 : ((payTerm === '15') ? 1.20 : ((payTerm === '25') ? 0.88 : 1.0))));
+                   var getTermFactor = function(term) {
+    if (term === '10') return 1.62;
+    if (term === '15') return 1.20;
+    if (term === '25') return 0.88;
+    if (term === '30') return 0.77;
+    return 1.0; // 預設 20 年繳
+};
+var factor = getTermFactor(t);
+tAnn = annual * (factor / getTermFactor(payTerm));
                 }
             }
             var tMon = tAnn * 0.09;
