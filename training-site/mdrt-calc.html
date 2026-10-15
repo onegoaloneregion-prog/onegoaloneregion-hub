@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MDRT 2027 智能追數與年終花紅計算系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rosepink: {
+              50: '#fff5f7',
+              100: '#ffe4e8',
+              200: '#fecdd6',
+              300: '#fda4b4',
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      background: linear-gradient(135deg, #fff5f7 0%, #fff0f3 50%, #fdf2f4 100%);
+      color: #4a373b;
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(253, 164, 180, 0.4);
+      box-shadow: 0 10px 30px -5px rgba(244, 63, 94, 0.08);
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between selection:bg-rosepink-200 selection:text-rosepink-700 min-h-screen">
+
+  <header class="bg-white/90 backdrop-blur-md border-b border-rosepink-200/70 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-3.5">
+     <!-- ONE GOAL ONE REGION 自訂圖片標誌 -->
+<div class="h-10 sm:h-12 flex items-center shrink-0">
+  <img
+    src="https://cdn.phototourl.com/member/2026-10-15-7467b98e-abdf-4d06-a08d-84b8018f9448.jpg"
+    alt="ONE GOAL ONE REGION"
+    class="h-full w-auto max-w-[200px] sm:max-w-[260px] object-contain"
+    onerror="this.onerror=null; this.src='https://placehold.co/240x60/fff5f7/e11d48?text=ONE+GOAL+ONE+REGION';"
+  >
+</div>
+        <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rosepink-500 to-rosepink-400 flex items-center justify-center text-white shadow-md shadow-rosepink-200">
+          <i class="fa-solid fa-crown text-base"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold text-gray-800 tracking-tight flex items-center gap-2">
+            MDRT 2027 智能追數系統
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rosepink-100 text-rosepink-600 border border-rosepink-200">
+              官方目標MOP$ 425,400
+            </span>
+          </h1>
+          <p class="text-xs text-rosepink-400 font-medium">直入總數快速試算</p>
+        </div>
+      </div>
+
+   <div class="flex items-center gap-2">
+        <button onclick="fillPresetData()" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-rosepink-600 bg-rosepink-50 hover:bg-rosepink-100 border border-rosepink-200 transition-all flex items-center gap-1.5 shadow-2xs">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> 載入示範數據
+        </button>
+        <button onclick="resetData()" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-gray-500 bg-white hover:bg-gray-100 border border-gray-200 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-rotate-left"></i> 重設
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl w-full mx-auto p-3 sm:p-5 space-y-4">
+
+    <!-- 1. 置頂核心看板：圖一【夥伴實質追數目標 (預設 26% 花紅倒推)】取代原本官方進度 -->
+    <div class="glass-card rounded-3xl p-5 sm:p-6 border-2 border-rosepink-200/90 relative overflow-hidden space-y-4 bg-gradient-to-br from-rosepink-50/80 via-white to-rosepink-100/50 shadow-md shadow-rosepink-100/60 text-gray-800">
+      <div class="absolute -right-6 -bottom-6 text-rosepink-200/25 text-9xl pointer-events-none select-none">
+        <i class="fa-solid fa-bullseye"></i>
+      </div>
+
+      <!-- 標頭列與自訂目標 -->
+      <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rosepink-200/70 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rosepink-500 to-rosepink-400 flex items-center justify-center text-white text-lg shadow-md shadow-rosepink-200 shrink-0">
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base sm:text-lg font-black tracking-tight text-gray-800">MDRT追數目標（預設 26% 花紅）</h3>
+              <span class="text-[11px] font-black px-2 py-0.5 rounded-full bg-rosepink-500 text-white shadow-2xs">
+                真正要追嘅 FYC
+              </span>
+              <button onclick="toggleTargetInput()" class="text-[11px] text-rosepink-500 underline hover:text-rosepink-700 ml-1">自訂官方目標</button>
+              <div id="customTargetBox" class="hidden items-center gap-1">
+                <input type="text" id="customTargetInput" value="425,400" oninput="handleTargetInput(this)" class="w-24 px-2 py-0.5 text-xs border border-rosepink-300 rounded-lg text-center font-bold text-rosepink-700 bg-white">
+              </div>
+            </div>
+            <p class="text-xs text-rosepink-600 font-medium mt-0.5">
+              因為有 26% 花紅自帶助攻，實質 FYC 門檻遠低於 42.5 萬！盈聚積分會直接優先抵扣。
+            </p>
+          </div>
+        </div>
+        <div class="sm:text-right bg-white/85 p-2.5 sm:p-3 rounded-2xl border border-rosepink-200/60 shadow-2xs self-start sm:self-auto shrink-0">
+          <span class="text-[11px] text-gray-500 block font-semibold">當前倍數下只需做 FYC：</span>
+          <span class="text-2xl sm:text-3xl font-black text-rosepink-600 tracking-tight" id="hopeTargetFycText">MOP$ 297,937</span>
+        </div>
+      </div>
+
+      <!-- 圖一核心 3 大數字比較看板 -->
+      <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        
+        <!-- 卡片 1: 實質目標 FYC 門檻 -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/95 border border-rosepink-200 space-y-1 shadow-2xs">
+          <span class="text-[11px] text-gray-500 font-bold block">① FYC 目標門檻</span>
+          <div class="text-2xl sm:text-3xl font-black text-gray-800" id="cardHopeTarget">MOP$ 297,937</div>
+          <div class="text-[11px] text-rosepink-600 font-bold" id="cardHopeDeductNotice">未計盈聚積分抵扣</div>
+        </div>
+
+        <!-- 卡片 2: 目前已有 FYC -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/95 border border-rosepink-200 space-y-1 shadow-2xs">
+          <span class="text-[11px] text-gray-500 font-bold block">② 目前已有之首年佣金 (FYC)</span>
+          <div class="text-2xl sm:text-3xl font-black text-gray-800" id="cardCurrentFyc">MOP$ 0</div>
+          <div class="text-[11px] text-gray-500 font-semibold" id="cardHopeProgressText">實質達成率: 0.0%</div>
+        </div>
+
+        <!-- 卡片 3: 仲差幾多 FYC (高亮焦點) -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-rosepink-500 to-rosepink-600 text-white space-y-1 shadow-md shadow-rosepink-200">
+          <span class="text-[11px] text-rosepink-100 font-bold block" id="hopeGapTitle">③ 🎯 實質仲差幾多 FYC 達標：</span>
+          <div class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="hopeGapAmountText">MOP$ 297,937</div>
+          <div class="text-[11px] text-rosepink-100 font-medium" id="hopeGapSubtext">用實質門檻減去已有 FYC 追數更輕鬆！</div>
+        </div>
+
+      </div>
+
+      <!-- 倒推算式與公式說明 -->
+      <div class="relative z-10 p-3 bg-white/85 rounded-2xl border border-rosepink-200/80 text-xs text-gray-700">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <div class="font-mono text-[11px] sm:text-xs">
+            <span class="font-bold text-rosepink-600">倒推算式：</span>
+            <span id="hopeFormulaDetail" class="text-gray-800 font-bold">
+              (425,400 - $0盈聚) ÷ [1 + 26% × 1.0 (早鳥) × 1.0 (年期)] = MOP$ 297,937
+            </span>
+          </div>
+          <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 self-start sm:self-auto font-bold flex items-center gap-1 shrink-0">
+            <i class="fa-solid fa-circle-check text-emerald-500"></i> 精準符合 26% 制度表
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 【雙欄排版】：左邊圖二（輸入板塊） + 右邊圖三（年終花紅官方試算），不用上下滾動 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+      
+      <!-- 【左欄】：圖二（請直接填入FYC總數） -->
+      <div class="glass-card rounded-3xl p-5 border border-rosepink-200/80 space-y-4">
+        <div class="flex items-center gap-2 pb-2.5 border-b border-rosepink-100">
+          <i class="fa-solid fa-pen-to-square text-rosepink-500 text-lg"></i>
+          <div>
+            <h2 class="text-base font-bold text-gray-800">請直接填入FYC總數</h2>
+            <p class="text-[11px] text-gray-400">鍵入數字即時自動運算</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <!-- 項目 1: FYC (使用者填寫) -->   <div class="p-3.5 rounded-2xl bg-white border-2 border-rosepink-100 hover:border-rosepink-300 transition-all space-y-1.5">
+            <label class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded-full bg-rosepink-500 text-white flex items-center justify-center text-[9px]">1</span>
+              全年首年佣金總額 (FYC)
+            </label>
+            <span class="inline-block text-[9px] bg-rosepink-50 text-rosepink-600 px-1.5 py-0.5 rounded font-bold">
+              ✓ 計 MDRT ✓ 計花紅基數
+            </span>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-xs font-bold text-gray-400 select-none pointer-events-none">MOP$</span>
+              <input type="text" inputmode="numeric" id="inputFyc" placeholder="0" oninput="handleFycChange(this)" class="w-full pl-14 pr-3 py-1.5 text-sm font-bold rounded-xl border border-rosepink-200 focus:ring-2 focus:ring-rosepink-400 focus:outline-none text-gray-800">
+            </div>
+            <p class="text-[10px] text-gray-400 leading-tight">填寫今年所有保單已賺取或預計的首年佣金總和。</p>
+          </div>
+
+
+          <!-- 項目 2: 年終花紅 (由公式自動寫入) -->
+          <div class="p-3.5 rounded-2xl bg-gradient-to-br from-rosepink-50/70 to-rosepink-100/40 border-2 border-rosepink-300 transition-all space-y-1.5 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-rosepink-800 flex items-center gap-1">
+                <span class="w-4 h-4 rounded-full bg-rosepink-600 text-white flex items-center justify-center text-[9px]">2</span>
+                年終花紅 (YEB)
+              </label>
+            </div>
+            <span class="inline-block text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-bold">
+              ✓ 由右方花紅自動算出
+            </span>
+            <div class="relative">
+              <div class="w-full px-2.5 py-1.5 text-sm font-black rounded-xl border border-rosepink-200 bg-white text-rosepink-600 shadow-2xs flex items-center justify-between">
+                <span class="text-xs font-bold text-rosepink-400">MOP$</span>
+                <span id="autoDisplayFig1Bonus" class="text-base font-extrabold">0</span>
+              </div>
+            </div>
+            <p class="text-[10px] text-rosepink-700 leading-tight">
+              ↓ 根據右方公式各項乘數精算得出，自動計入上方總累計！
+            </p>
+          </div>
+
+          <!-- 項目 3: 盈聚積分 (使用者填寫) -->
+         <div class="p-3.5 rounded-2xl bg-white border-2 border-amber-200/70 hover:border-amber-300 transition-all space-y-1.5">
+            <label class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center text-[9px]">3</span>
+              盈聚積分
+            </label>
+            <span class="inline-block text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">
+              ✓ 計 MDRT ✗ 不計花紅
+            </span>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-xs font-bold text-amber-400 select-none pointer-events-none">MOP$</span>
+              <input type="text" inputmode="numeric" id="inputExcel" placeholder="0" oninput="handleExcelChange(this)" class="w-full pl-14 pr-3 py-1.5 text-sm font-bold rounded-xl border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:outline-none text-amber-800">
+            </div>
+            <p class="text-[10px] text-amber-700/80 leading-tight">盈聚特有積分，直接抵扣 MDRT 所需目標！</p>
+          </div>
+
+        </div>
+        <!-- 輔助設定（活躍月份數） -->
+        <div class="p-3 bg-rosepink-50/60 rounded-2xl border border-rosepink-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-sliders text-rosepink-500"></i>
+            <span class="font-bold text-gray-700">花紅條件自選設定：</span>
+            <span class="text-[11px] text-gray-500">早鳥、年期及活躍月份均可直接自由自選</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-gray-700">活躍月份數：</span>
+            <select id="selectActiveMonths" onchange="recalculateAll()" class="p-1 px-2 bg-white border border-rosepink-200 rounded-lg text-xs font-bold text-rosepink-600 focus:outline-none">
+              <option value="6" selected>6 個月或以上 (100%)</option>
+              <option value="5">5 個月 (90%)</option>
+              <option value="4">4 個月 (80%)</option>
+              <option value="3">3 個月 (70%)</option>
+              <option value="2">少於 3 個月 (0%)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 【右欄】：圖三（年終獎金 YEB 官方試算與乘數拆解） -->
+      <div class="glass-card rounded-3xl p-5 border border-rosepink-200/80 space-y-4">
+        <div class="flex items-center justify-between border-b border-rosepink-100 pb-2.5 gap-2">
+          <div>
+            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
+              <i class="fa-solid fa-gift text-rosepink-500"></i> 年終獎金 (YEB) 官方試算
+            </h3>
+            <p class="text-[11px] text-gray-400">
+              公式：首年佣金 × 標準年終% × 早鳥倍數 × 年期倍數 × 活躍系數
+            </p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-[11px] text-gray-400 block font-medium">預估年終獎金：</span>
+            <span class="text-xl sm:text-2xl font-black text-rosepink-600" id="displayBonusAmount">MOP$ 0</span>
+          </div>
+        </div>
+
+        <!-- 四大乘數卡片 -->
+        <div class="grid grid-cols-2 gap-2.5 text-xs">
+          
+          <!-- 系數 1: 全年營業積分與標準% -->
+          <div class="p-3 rounded-2xl bg-white border border-rosepink-200/70 space-y-1">
+            <span class="text-[10px] text-gray-500 font-bold block">1. 官方標準年終獎金 %</span>
+            <div class="text-lg font-extrabold text-rosepink-600" id="cardStandardRate">0%</div>
+            <div class="text-[10px] text-gray-500 truncate" id="cardBusinessCredit">全年首年佣金: $0</div>
+            <span class="inline-block text-[9px] px-1.5 py-0.5 rounded bg-rosepink-50 text-rosepink-600 font-semibold" id="cardTierBadge">第五級別 (&lt;88k)</span>
+          </div>
+
+          <!-- 系數 2: 首季早鳥倍數 -->
+          <div class="p-3 rounded-2xl bg-white border border-rosepink-200/70 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-gray-500 font-bold">2. 首季早鳥倍數</span>
+              <span class="text-[11px] font-extrabold text-rosepink-600" id="earlyBirdRateText">1.0x</span>
+            </div>
+            <select id="selectEarlyBird" onchange="recalculateAll()" class="w-full p-1 text-[11px] bg-rosepink-50/70 border border-rosepink-200 rounded-lg font-bold text-gray-700 focus:outline-none">
+              <option value="1.0" selected>第三級別: &lt; 44k (1.0x)</option>
+              <option value="1.1">第二級別: 44k - 88k / 首季SVA (1.1x)</option>
+              <option value="1.2">第一級別: ≥ 88k / 首季VA (1.2x)</option>
+            </select>
+            <p class="text-[9px] text-gray-400">夥伴可自由選取早鳥級別</p>
+          </div>
+
+          <!-- 系數 3: 合資格年期倍數 -->
+          <div class="p-3 rounded-2xl bg-white border border-rosepink-200/70 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-gray-500 font-bold">3. 合資格年期倍數</span>
+              <span class="text-[11px] font-bold text-rosepink-600" id="tenureRateText">1.0x</span>
+            </div>
+            <select id="selectTenurePoints" onchange="recalculateAll()" class="w-full p-1 text-[11px] bg-rosepink-50/70 border border-rosepink-200 rounded-lg font-bold text-gray-700 focus:outline-none">
+              <option value="1.0" selected>連續5年取得: &lt; 3分 (1.0x)</option>
+              <option value="1.1">連續5年取得: 3-4分 (1.1x)</option>
+              <option value="1.3">連續5年取得: ≥ 5分 (1.3x)</option>
+            </select>
+            <p class="text-[9px] text-gray-400">百萬圓桌會=2分，卓越級=1分</p>
+          </div>
+
+          <!-- 系數 4: 活躍月份系數 -->
+          <div class="p-3 rounded-2xl bg-white border border-rosepink-200/70 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-gray-500 font-bold">4. 活躍月份系數</span>
+              <span class="text-base font-extrabold text-rosepink-600" id="cardActiveRate">100%</span>
+            </div>
+            <div id="activeBadgeNotice" class="text-[10px] p-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-center">
+              達 MDRT 自動享有 100%
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 官方花紅算式展開 -->
+        <div class="p-3 rounded-2xl bg-rosepink-50/60 border border-rosepink-200/80 space-y-1.5 text-xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-gray-700 font-bold">
+            <div class="text-[11px]">
+              <span>算式詳細展開：</span>
+              <span class="font-mono text-rosepink-700" id="formulaFullText">
+                $0 × 0% × 1.0 × 1.0 × 100%
+              </span>
+            </div>
+            <div class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 self-start sm:self-auto flex items-center gap-1 shrink-0">
+              <i class="fa-solid fa-circle-check"></i> 完美依據圖一公式計算
+            </div>
+          </div>
+
+          <div class="pt-1.5 border-t border-rosepink-100 flex flex-wrap items-center justify-between gap-1 text-[10px] text-gray-500">
+            <div class="flex items-center gap-1 text-rosepink-700 font-semibold">
+              <i class="fa-solid fa-arrow-turn-up text-rosepink-500"></i>
+              <span>計算結果已自動寫入左邊第 <strong>❷</strong> 部分</span>
+            </div>
+            <div>
+              盈聚積分：<strong id="isolatedExcelAmount" class="text-amber-700 font-bold">$0</strong> (不計入花紅，直接抵扣)
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 3. 表格部份：2027 MDRT 新制 26% 門檻對照表 (基於 425,400 倒推) -->
+    <div class="glass-card rounded-3xl p-5 sm:p-6 border border-rosepink-200/80 space-y-3 bg-white">
+      <div class="flex items-center justify-between pb-1 text-xs font-bold text-gray-700">
+        <span class="flex items-center gap-1.5 text-rosepink-700 text-sm">
+          <i class="fa-solid fa-table"></i> 2027 MDRT 新制 26% 門檻對照表
+        </span>
+        <span class="text-[11px] text-rosepink-500 font-medium">粉紅高亮為當前選擇之條件</span>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-rosepink-200/80 bg-white shadow-2xs">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-rosepink-50/80 font-bold text-gray-700 border-b border-rosepink-200/70">
+              <th class="py-3.5 px-6 w-1/5 text-center">制度</th>
+              <th class="py-3.5 px-6 w-2/5 text-center text-rosepink-600 font-bold">實質門檻 FYC</th>
+              <th class="py-3.5 px-6 w-2/5 text-left">備註與倍數組合</th>
+            </tr>
+          </thead>
+          <tbody id="tierTableBody" class="divide-y divide-rosepink-100/70 text-gray-700">
+            <!-- 由 JS 動態渲染並高亮當前級別 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. 圖一官方參考對照表 (折疊收合) -->
+    <details class="glass-card rounded-2xl p-4 border border-rosepink-200/60 text-xs text-gray-600 group">
+      <summary class="font-bold text-rosepink-700 cursor-pointer list-none flex items-center justify-between">
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-table-list text-rosepink-500"></i> 查看官方各級標準對照表（標準獎金表 / 早鳥表 / 年期表 / 活躍表）
+        </span>
+        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+      </summary>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-3 border-t border-rosepink-100">
+        <!-- 標準年終獎金表 -->
+        <div class="bg-white p-3 rounded-xl border border-rosepink-100 space-y-1.5">
+          <h4 class="font-bold text-gray-800 text-[11px] flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rosepink-500"></span> 標準年終獎金表
+          </h4>
+          <table class="w-full text-[11px] border border-gray-100">
+            <tr class="bg-gray-50 font-bold"><th class="p-1 border">級別</th><th class="p-1 border">全年營業積分</th><th class="p-1 border text-right">標準年終%</th></tr>
+            <tr class="hover:bg-rosepink-50"><td class="p-1 border">第一級別</td><td class="p-1 border">≥ 440,000</td><td class="p-1 border text-right font-bold text-rosepink-600">30%</td></tr>
+            <tr class="hover:bg-rosepink-50 bg-amber-50/50"><td class="p-1 border">第二級別</td><td class="p-1 border">250,000 – 439,999</td><td class="p-1 border text-right font-bold text-rosepink-600">26% (常用冀盼)</td></tr>
+            <tr class="hover:bg-rosepink-50"><td class="p-1 border">第三級別</td><td class="p-1 border">165,000 – 249,999</td><td class="p-1 border text-right font-bold text-rosepink-600">22%</td></tr>
+            <tr class="hover:bg-rosepink-50"><td class="p-1 border">第四級別</td><td class="p-1 border">88,000 – 164,999</td><td class="p-1 border text-right font-bold text-rosepink-600">10%</td></tr>
+            <tr class="hover:bg-rosepink-50"><td class="p-1 border">第五級別</td><td class="p-1 border">&lt; 88,000</td><td class="p-1 border text-right font-bold text-gray-400">0%</td></tr>
+          </table>
+        </div>
+
+        <!-- 早鳥倍數表 & 活躍月份表 -->
+        <div class="space-y-3">
+          <div class="bg-white p-3 rounded-xl border border-rosepink-100 space-y-1.5">
+            <h4 class="font-bold text-gray-800 text-[11px] flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rosepink-500"></span> 早鳥倍數表 (首季 Q1 積分)
+            </h4>
+            <table class="w-full text-[11px] border border-gray-100">
+              <tr class="bg-gray-50 font-bold"><th class="p-1 border">首季營業積分</th><th class="p-1 border text-right">早鳥倍數</th></tr>
+              <tr class="hover:bg-rosepink-50"><td class="p-1 border">≥ 88,000 (VA)</td><td class="p-1 border text-right font-bold text-rosepink-600">1.2</td></tr>
+              <tr class="hover:bg-rosepink-50"><td class="p-1 border">44,000 – 87,999 (SVA)</td><td class="p-1 border text-right font-bold text-rosepink-600">1.1</td></tr>
+              <tr class="hover:bg-rosepink-50"><td class="p-1 border">&lt; 44,000</td><td class="p-1 border text-right text-gray-500">1.0</td></tr>
+            </table>
+          </div>
+
+          <div class="bg-white p-3 rounded-xl border border-rosepink-100 space-y-1 text-[11px]">
+            <h4 class="font-bold text-gray-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 活躍月份重要特別條款
+            </h4>
+            <p class="text-gray-500 leading-relaxed">
+              若達<strong>百萬圓桌會 (MDRT)</strong> 或以上資格，無論活躍月份多少，活躍月份系數一律自動享有 <strong>100%</strong>。
+            </p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <footer class="py-4 text-center text-xs text-rosepink-400 border-t border-rosepink-100 bg-white/50 mt-6">
+    <div class="max-w-4xl mx-auto px-4 space-y-0.5">
+      <p class="font-semibold text-rosepink-500">MDRT 2027 業績追數器 • 2027 標準目標 MOP$ 425,400</p>
+      <p class="text-[11px] text-gray-400">數據於本機瀏覽器即時計算，精準合規。</p>
+    </div>
+  </footer>
+
+  <script>
+    // 預設 MDRT 2027 目標
+    let mdrtTarget = 425400;
+    let hasTriggeredConfetti = false;
+
+    // 新制 8 大官方對照級別數據
+    const TIER_LIST = [
+      { id: 't1', early: 1.0, tenure: 1.0, desc: '最基本（標準年終獎金26%）', baseTarget: 297937 },
+      { id: 't2', early: 1.1, tenure: 1.0, desc: '累積積分 3-4分 或 首季達SVA (x1.1)', baseTarget: 291913 },
+      { id: 't3', early: 1.0, tenure: 1.3, desc: '累積積分 >=5分(x1.3)', baseTarget: 280568 },
+      { id: 't4', early: 1.2, tenure: 1.0, desc: '首季達VA (x1.2)', baseTarget: 286128 },
+      { id: 't5', early: 1.1, tenure: 1.1, desc: '首季達SVA + 累積積分 3-4分(x1.1x1.1)', baseTarget: 285563 },
+      { id: 't6', early: 1.1, tenure: 1.3, desc: '首季達SVA + 累積積分 >=5分(x1.1x1.3)', baseTarget: 273655 },
+      { id: 't7', early: 1.2, tenure: 1.1, desc: '首季達VA + 累積積分 3-4分(x1.2x1.1)', baseTarget: 279482 },
+      { id: 't8', early: 1.2, tenure: 1.3, desc: '首季達VA + 累積積分 >=5分(x1.2x1.3)', baseTarget: 267075 }
+    ];
+
+    // 千位逗號格式化輔助
+    function formatMoney(num) {
+      if (isNaN(num) || num === null) return '0';
+      return Math.round(num).toLocaleString('en-US');
+    }
+
+    // 去除逗號轉數字
+    function cleanNumber(str) {
+      if (!str) return 0;
+      const clean = String(str).replace(/[^\d.-]/g, '');
+      return parseFloat(clean) || 0;
+    }
+
+    // 輸入框即時千位逗號處理
+    function formatInputWithCommas(inputEl) {
+      const raw = inputEl.value.replace(/[^\d]/g, '');
+      if (raw === '') {
+        inputEl.value = '';
+      } else {
+        inputEl.value = parseInt(raw, 10).toLocaleString('en-US');
+      }
+    }
+
+    function handleFycChange(inputEl) {
+      formatInputWithCommas(inputEl);
+      recalculateAll();
+    }
+
+    function handleExcelChange(inputEl) {
+      formatInputWithCommas(inputEl);
+      recalculateAll();
+    }
+
+    // 核心計算引擎
+    function recalculateAll() {
+      const totalFyc = cleanNumber(document.getElementById('inputFyc')?.value);
+      const totalExcelExtra = cleanNumber(document.getElementById('inputExcel')?.value);
+      const activeMonthsCount = parseInt(document.getElementById('selectActiveMonths')?.value, 10) || 6;
+
+      // 讀取使用者選擇的乘數
+      const earlyBirdMultiplier = parseFloat(document.getElementById('selectEarlyBird')?.value) || 1.0;
+      const tenureMultiplier = parseFloat(document.getElementById('selectTenurePoints')?.value) || 1.0;
+
+      // ============================================================
+      // 1. 官方常規試算
+      // ============================================================
+      const totalBusinessCredit = totalFyc;
+      let standardBonusRate = 0.0;
+      let tierName = '第五級別 (<88k)';
+      if (totalBusinessCredit >= 440000) {
+        standardBonusRate = 0.30;
+        tierName = '第一級別 (≥440k)';
+      } else if (totalBusinessCredit >= 250000) {
+        standardBonusRate = 0.26;
+        tierName = '第二級別 (250k-440k)';
+      } else if (totalBusinessCredit >= 165000) {
+        standardBonusRate = 0.22;
+        tierName = '第三級別 (165k-250k)';
+      } else if (totalBusinessCredit >= 88000) {
+        standardBonusRate = 0.10;
+        tierName = '第四級別 (88k-165k)';
+      } else {
+        standardBonusRate = 0.00;
+        tierName = '第五級別 (<88k)';
+      }
+
+      // 活躍月份系數判定
+      let initialActiveFactor = 1.0;
+      if (activeMonthsCount >= 6) initialActiveFactor = 1.00;
+      else if (activeMonthsCount === 5) initialActiveFactor = 0.90;
+      else if (activeMonthsCount === 4) initialActiveFactor = 0.80;
+      else if (activeMonthsCount === 3) initialActiveFactor = 0.70;
+      else initialActiveFactor = 0.00;
+
+      // 初步官方 YEB
+      let calculatedYeb = totalFyc * standardBonusRate * earlyBirdMultiplier * tenureMultiplier * initialActiveFactor;
+      let testTotalMdrt = totalFyc + calculatedYeb + totalExcelExtra;
+      let isAchievedOfficial = testTotalMdrt >= mdrtTarget && testTotalMdrt > 0;
+
+      let finalActiveFactor = initialActiveFactor;
+      const activeNoticeEl = document.getElementById('activeBadgeNotice');
+
+      if (isAchievedOfficial) {
+        finalActiveFactor = 1.0;
+        calculatedYeb = totalFyc * standardBonusRate * earlyBirdMultiplier * tenureMultiplier * finalActiveFactor;
+        activeNoticeEl.textContent = '🌟 已達 MDRT，享 100% 系數';
+        activeNoticeEl.className = 'text-[10px] p-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-center';
+      } else {
+        activeNoticeEl.textContent = `活躍 ${activeMonthsCount} 個月 (${(finalActiveFactor * 100).toFixed(0)}%)`;
+        activeNoticeEl.className = 'text-[10px] p-1 rounded-lg bg-rosepink-50 text-rosepink-700 font-semibold text-center';
+      }
+
+      const finalYebBonus = Math.round(calculatedYeb);
+      document.getElementById('autoDisplayFig1Bonus').textContent = formatMoney(finalYebBonus);
+
+      // 更新右欄官方卡片
+      document.getElementById('cardStandardRate').textContent = `${(standardBonusRate * 100).toFixed(0)}%`;
+      document.getElementById('cardBusinessCredit').textContent = `全年首年佣金: $${formatMoney(totalBusinessCredit)}`;
+      document.getElementById('cardTierBadge').textContent = tierName;
+      document.getElementById('earlyBirdRateText').textContent = `${earlyBirdMultiplier.toFixed(1)}x`;
+      document.getElementById('tenureRateText').textContent = `${tenureMultiplier.toFixed(1)}x`;
+      document.getElementById('cardActiveRate').textContent = `${(finalActiveFactor * 100).toFixed(0)}%`;
+      document.getElementById('displayBonusAmount').textContent = `MOP$ ${formatMoney(finalYebBonus)}`;
+      document.getElementById('formulaFullText').textContent = 
+        `MOP$ ${formatMoney(totalFyc)} × ${(standardBonusRate * 100).toFixed(0)}% × ${earlyBirdMultiplier.toFixed(1)} × ${tenureMultiplier.toFixed(1)} × ${(finalActiveFactor * 100).toFixed(0)}%`;
+      document.getElementById('isolatedExcelAmount').textContent = `MOP$ ${formatMoney(totalExcelExtra)}`;
+
+      // ============================================================
+      // 2. 【置頂核心】26% 花紅倒推實質所需 FYC 專區
+      //    公式：所需 FYC = (425,400 - 盈聚積分) / (1 + 26% * 早鳥 * 年期)
+      // ============================================================
+      const hopeBonusRate = 0.26;
+      const combinedMultiplier = 1 + (hopeBonusRate * earlyBirdMultiplier * tenureMultiplier);
+      const remainingTargetAfterExcel = Math.max(0, mdrtTarget - totalExcelExtra);
+      
+      const exactTargetFyc = Math.round(remainingTargetAfterExcel / combinedMultiplier);
+      const hopeGapFyc = exactTargetFyc - totalFyc;
+      const hopeProgressRatio = exactTargetFyc > 0 ? (totalFyc / exactTargetFyc) : (totalFyc > 0 ? 1 : 0);
+
+      document.getElementById('hopeTargetFycText').textContent = `MOP$ ${formatMoney(exactTargetFyc)}`;
+      document.getElementById('cardHopeTarget').textContent = `MOP$ ${formatMoney(exactTargetFyc)}`;
+      document.getElementById('cardCurrentFyc').textContent = `MOP$ ${formatMoney(totalFyc)}`;
+      document.getElementById('cardHopeProgressText').textContent = `實質達成率: ${(hopeProgressRatio * 100).toFixed(1)}%`;
+
+      if (totalExcelExtra > 0) {
+        document.getElementById('cardHopeDeductNotice').textContent = `已扣減 $${formatMoney(totalExcelExtra)} 盈聚積分`;
+      } else {
+        document.getElementById('cardHopeDeductNotice').textContent = `未計盈聚積分抵扣`;
+      }
+
+      const hopeGapTitle = document.getElementById('hopeGapTitle');
+      const hopeGapAmountText = document.getElementById('hopeGapAmountText');
+      const hopeGapSubtext = document.getElementById('hopeGapSubtext');
+
+      if (hopeGapFyc <= 0 && exactTargetFyc > 0) {
+        hopeGapTitle.textContent = '③ 🌟 預設 26% 下實質已達標！超出：';
+        hopeGapAmountText.textContent = `+ MOP$ ${formatMoney(Math.abs(hopeGapFyc))}`;
+        hopeGapSubtext.textContent = '首年佣金連同 26% 花紅已穩穩超越 MDRT 門檻！';
+
+        if (!hasTriggeredConfetti) {
+          fireCelebration();
+          hasTriggeredConfetti = true;
+        }
+      } else {
+        hasTriggeredConfetti = false;
+        hopeGapTitle.textContent = '③ 🎯 實質仲差幾多 FYC 達標：';
+        hopeGapAmountText.textContent = `MOP$ ${formatMoney(Math.max(0, hopeGapFyc))}`;
+        hopeGapSubtext.textContent = `用實質門檻 $${formatMoney(exactTargetFyc)} 減去已有 FYC 追數更輕鬆！`;
+      }
+
+      document.getElementById('hopeFormulaDetail').textContent = 
+        `(${formatMoney(mdrtTarget)} - $${formatMoney(totalExcelExtra)}盈聚) ÷ [1 + 26% × ${earlyBirdMultiplier.toFixed(1)} (早鳥) × ${tenureMultiplier.toFixed(1)} (年期)] = MOP$ ${formatMoney(exactTargetFyc)}`;
+
+      // 渲染並更新 8 大級別表，高亮最符合目前選擇的列
+      renderTierTable(earlyBirdMultiplier, tenureMultiplier, totalExcelExtra);
+    }
+
+    // 渲染制度對照表
+    function renderTierTable(currentEarly, currentTenure, excelPoints) {
+      const tbody = document.getElementById('tierTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      TIER_LIST.forEach((tier) => {
+        const isMatched = (Math.abs(tier.early - currentEarly) < 0.01) && (Math.abs(tier.tenure - currentTenure) < 0.01);
+        
+        const denom = 1 + (0.26 * tier.early * tier.tenure);
+        const remTarget = Math.max(0, mdrtTarget - excelPoints);
+        const dynamicTarget = Math.round(remTarget / denom);
+
+        const tr = document.createElement('tr');
+        if (isMatched) {
+          tr.className = 'bg-rosepink-100/70 text-rosepink-800 font-black border-l-4 border-rosepink-500';
+        } else {
+          tr.className = 'hover:bg-rosepink-50/40 transition-colors';
+        }
+
+        tr.innerHTML = `
+          <td class="py-3.5 px-6 text-center font-semibold text-gray-600 w-1/5">新制</td>
+          <td class="py-3.5 px-6 text-center font-mono text-rosepink-600 font-bold text-sm sm:text-base w-2/5">$ ${formatMoney(dynamicTarget)}</td>
+          <td class="py-3.5 px-6 text-xs sm:text-sm w-2/5">
+            <div class="flex items-center justify-between gap-3">
+              <span class="${isMatched ? 'font-black text-rosepink-800' : 'text-gray-700'}">${tier.desc}</span>
+              ${isMatched ? '<span class="shrink-0 bg-rosepink-500 text-white text-[11px] font-black px-3 py-1 rounded-full shadow-2xs">當前選取</span>' : ''}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 彩帶特效
+    function fireCelebration() {
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#fda4b4', '#fb7185', '#f43f5e', '#ffd166', '#34d399']
+        });
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#fda4b4', '#fb7185', '#f43f5e']
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#fda4b4', '#fb7185', '#f43f5e']
+          });
+        }, 200);
+      } catch (err) {
+        console.error("Confetti:", err);
+      }
+    }
+
+    // 自訂目標功能
+    function toggleTargetInput() {
+      const box = document.getElementById('customTargetBox');
+      box.classList.toggle('hidden');
+      box.classList.toggle('inline-flex');
+    }
+
+    function handleTargetInput(inputEl) {
+      formatInputWithCommas(inputEl);
+      const val = cleanNumber(inputEl.value);
+      if (val > 0) {
+        mdrtTarget = val;
+        recalculateAll();
+      }
+    }
+
+    // 載入示範數據
+    function fillPresetData() {
+      document.getElementById('inputFyc').value = '200,000';
+      document.getElementById('inputExcel').value = '30,000';
+      document.getElementById('selectEarlyBird').value = '1.1';
+      document.getElementById('selectTenurePoints').value = '1.0';
+      document.getElementById('selectActiveMonths').value = '6';
+      recalculateAll();
+    }
+
+    // 重設全部數據
+    function resetData() {
+      document.getElementById('inputFyc').value = '';
+      document.getElementById('inputExcel').value = '';
+      document.getElementById('selectEarlyBird').value = '1.0';
+      document.getElementById('selectTenurePoints').value = '1.0';
+      document.getElementById('selectActiveMonths').value = '6';
+
+      hasTriggeredConfetti = false;
+      recalculateAll();
+    }
+
+    // 頁面載入完成後啟動計算
+    window.onload = function() {
+      recalculateAll();
+    };
+  </script>
+</body>
+</html>
