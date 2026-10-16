@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FWD Macau 2026 新人收入與晉升全能導航系統</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue 3 CDN (Global Build) -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fwd: {
+              orange: '#E87722',
+              'orange-dark': '#C96214',
+              'orange-light': '#FFF5EB',
+              blue: '#002D72',
+              'blue-light': '#EBF2FC',
+              slate: '#4A5568'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    [v-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div id="app" v-cloak class="max-w-7xl mx-auto px-3 sm:px-6 py-6 space-y-6">
+
+    <header class="bg-gradient-to-r from-[#002D72] via-[#0A3D8F] to-[#E87722] rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="bg-white/20 backdrop-blur-md text-xs font-black tracking-widest px-3 py-1 rounded-full uppercase border border-white/30">
+              FWD Macau 2026
+            </span>
+            <span class="bg-amber-400 text-slate-900 text-xs font-black px-2.5 py-0.5 rounded-full shadow">
+              🔥 2026 最新 75 折晉升實施版
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold mt-2 tracking-tight">
+            富衛澳門 2026 新人收入與晉升全能導航系統
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-200 mt-1 max-w-2xl">
+            專為新入職顧問量身打造：個人各產品首年佣金試算、FLDP 2.0 獎勵、75折晉升藍圖（ASM ➔ RD）及各職級管理收益全景分析
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20">
+          <div class="text-right">
+            <div class="text-[10px] text-slate-300 font-medium">當前職級身分</div>
+            <div class="text-sm font-bold text-white">{{ userRankName }}</div>
+          </div>
+          <select 
+            v-model="userRank" 
+            class="bg-white text-slate-800 text-xs font-bold px-3 py-2 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-orange-400"
+          >
+            <option value="WMC">理財顧問 (新人 WMC)</option>
+            <option value="ASM">分組副經理 (ASM)</option>
+            <option value="UM">分組經理 (UM)</option>
+            <option value="BM">分行經理 (BM)</option>
+            <option value="AM">營業經理 (AM)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="mt-6 flex flex-wrap gap-2 pt-4 border-t border-white/15">
+        <button 
+          v-for="t in tabs" 
+          :key="t.id"
+          @click="currentTab = t.id"
+          :class="[
+            currentTab === t.id 
+              ? 'bg-fwd-orange text-white font-bold shadow-lg shadow-orange-600/30' 
+              : 'bg-white/10 hover:bg-white/20 text-white/90 font-medium',
+            'px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all duration-150 flex items-center gap-2'
+          ]"
+        >
+          <span>{{ t.icon }}</span>
+          <span>{{ t.name }}</span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- TAB 1: 收入試算 (所有計劃/年期自選) -->
+      <section v-show="currentTab === 'calculator'" class="space-y-6">
+        
+        <!-- FLDP 2.0 Plan Setting Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <span>⚡</span> 快速起動薪酬計劃 (FLDP 2.0) 參數設定
+              </h2>
+              <p class="text-xs text-slate-500">新人首 18 個月專享：每月固定津貼 (NAA) 與季度快速起動獎金 (QSB 高達 35%)</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-600">合約季度：</span>
+              <select v-model="selectedQuarter" class="text-xs border rounded-lg px-2.5 py-1.5 bg-slate-50 font-bold text-slate-800">
+                <option :value="1">第 1 季度 (首 3 個月)</option>
+                <option :value="2">第 2 季度 (追補標準 64,800 SC)</option>
+                <option :value="3">第 3 季度 (追補標準 97,200 SC)</option>
+                <option :value="4">第 4 季度 (追補標準 129,600 SC)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">每月新晉營業員津貼 (NAA)</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2.5 text-xs text-slate-400 font-bold">MOP$</span>
+                <input 
+                  type="number" 
+                  v-model.number="fldpNaa" 
+                  step="1000"
+                  class="w-full pl-14 pr-3 py-2 border rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">目前津貼：${{ formatNumber(fldpNaa) }} / 月</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">津貼評核比例 (評核乙要求)</label>
+              <div class="text-sm font-black text-slate-800 py-2">
+                {{ fldpEvaluationScale.toFixed(2) }}x 
+                <span class="text-xs font-normal text-slate-500">
+                  ({{ fldpNaa > 20000 ? '適用要求(乙)：NAA / 20,000' : '適用要求(甲)：標準門檻' }})
+                </span>
+              </div>
+              <div class="text-[11px] text-slate-400">大額津貼將按比例提升 QSB 門檻</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">個人續保率 (LIMRA 19個月)</label>
+              <div class="flex items-center gap-3">
+                <input type="range" min="60" max="100" v-model.number="personalPersistency" class="w-full accent-orange-500">
+                <span class="text-sm font-black font-mono" :class="personalPersistency >= 85 ? 'text-emerald-600' : 'text-rose-500'">
+                  {{ personalPersistency }}%
+                </span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">領取 QSB / 年終獎金要求需維持 85% 或以上</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Selector with Term Options -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <span>💼</span> 產品選擇與自選年期 (所有計劃與年期均可選)
+              </h2>
+              <p class="text-xs text-slate-500">已全面更新：僅提供現行「盈聚·天下II」，可自選危疾與各壽險之供款年期</p>
+            </div>
+            <span class="text-xs bg-orange-50 text-fwd-orange px-3 py-1 rounded-full font-bold border border-orange-200">
+              點擊卡片自選年期
+            </span>
+          </div>
+
+          <!-- Product Categories & Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+            <div 
+              v-for="p in productCatalog" 
+              :key="p.id"
+              @click="selectProduct(p)"
+              :class="[
+                selectedProduct.id === p.id 
+                  ? 'border-fwd-orange bg-orange-50/60 ring-2 ring-orange-300' 
+                  : 'border-slate-200 bg-white hover:border-slate-300',
+                'border rounded-2xl p-4 cursor-pointer transition shadow-sm relative flex flex-col justify-between'
+              ]"
+            >
+              <div>
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-md" :class="p.badgeColor">
+                    {{ p.category }}
+                  </span>
+                  <span class="text-sm font-black text-fwd-orange font-mono">
+                    {{ currentTermFyc(p) }}% FYC
+                  </span>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-sm mt-2">{{ p.name }}</h3>
+                <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">{{ p.desc }}</p>
+
+                <!-- Term Buttons (If available) -->
+                <div class="mt-3 pt-3 border-t border-slate-100">
+                  <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase">自選供款年期：</label>
+                  <div class="flex flex-wrap gap-1.5" @click.stop>
+                    <button 
+                      v-for="t in p.terms" 
+                      :key="t.label"
+                      @click="setProductTerm(p, t)"
+                      :class="[
+                        p.selectedTerm === t.label 
+                          ? 'bg-slate-900 text-white font-bold' 
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                        'px-2 py-1 rounded-lg text-xs transition'
+                      ]"
+                    >
+                      {{ t.label }} ({{ t.fyc }}%)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3 pt-2 text-[11px] text-slate-400 flex justify-between items-center">
+                <span>目前年期：<strong class="text-slate-700">{{ p.selectedTerm }}</strong></span>
+                <span v-if="selectedProduct.id === p.id" class="text-xs text-fwd-orange font-bold">✓ 已選擇</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Premium & Policy Input Panel -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <div class="lg:col-span-6 space-y-4">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>✍️</span> 擬定業務保單試算
+            </h3>
+
+            <div class="p-4 bg-orange-50/50 rounded-2xl border border-orange-100 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-700">當前試算計劃：</span>
+                <span class="text-sm font-black text-fwd-orange">
+                  {{ selectedProduct.name }} ({{ selectedProduct.selectedTerm }})
+                </span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-slate-600">
+                <span>適用首年佣金率 (FYC%)：</span>
+                <span class="font-mono font-bold text-sm text-slate-900">{{ activeProductFyc }}%</span>
+              </div>
+            </div>
+
+            <!-- Single Policy AFYP Input -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                單張保單年度化首年保費 (AFYP)：
+              </label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-2.5 text-sm font-bold text-slate-400">MOP$</span>
+                <input 
+                  type="number" 
+                  v-model.number="inputAfyp" 
+                  step="5000"
+                  class="w-full pl-16 pr-4 py-2.5 border rounded-xl font-bold text-slate-900 text-base focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div class="text-xs text-slate-500 mt-1">
+                輸入金額：<strong class="text-slate-800">${{ formatNumber(inputAfyp) }}</strong>
+              </div>
+            </div>
+
+            <!-- Number of Policies -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">擬出保單數目：</label>
+                <div class="flex items-center gap-2">
+                  <input 
+                    type="number" 
+                    v-model.number="policyCount" 
+                    min="1" 
+                    max="100"
+                    class="w-full px-3 py-2 border rounded-xl font-bold text-slate-900 text-sm focus:ring-2 focus:ring-orange-400"
+                  >
+                  <span class="text-xs text-slate-500 font-bold whitespace-nowrap">張</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">符合合資格營業員 (VA)：</label>
+                <div class="py-2 text-xs font-bold" :class="totalSc >= 66000 && policyCount >= 8 ? 'text-emerald-600' : 'text-amber-600'">
+                  <span v-if="totalSc >= 66000 && policyCount >= 8">✓ 達標 (75折 6.6萬SC + 8張單)</span>
+                  <span v-else>尚差 {{ Math.max(0, 66000 - totalSc) > 0 ? '$' + formatNumber(66000 - totalSc) + ' SC' : '' }} {{ Math.max(0, 8 - policyCount) > 0 ? Math.max(0, 8 - policyCount) + ' 張單' : '' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bonus 10% Toggle -->
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">享有額外 10% 首年佣金獎勵</span>
+                <span class="text-[11px] text-slate-500">上年度或本年已晉身為合資格營業員 (VA) 可獲加乘</span>
+              </div>
+              <input type="checkbox" v-model="hasExtraTenPercent" class="w-5 h-5 accent-orange-500 rounded cursor-pointer">
+            </div>
+          </div>
+
+          <!-- Total Calculation Results Display -->
+          <div class="lg:col-span-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 flex flex-col justify-between shadow-xl">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">試算結果彙總 (Financial Summary)</span>
+                <span class="text-xs bg-orange-500/20 text-orange-300 px-2.5 py-0.5 rounded-full font-bold border border-orange-500/30">
+                  保費總額：${{ formatNumber(totalAfyp) }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 my-5">
+                <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                  <div class="text-[11px] text-slate-400 font-medium">基本首年佣金 (FYC)</div>
+                  <div class="text-xl sm:text-2xl font-black text-amber-400 font-mono mt-0.5">
+                    ${{ formatNumber(baseFyc) }}
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-1">即等於個人營業積分 (SC)</div>
+                </div>
+
+                <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                  <div class="text-[11px] text-slate-400 font-medium">額外 10% 佣金獎勵</div>
+                  <div class="text-xl sm:text-2xl font-black font-mono mt-0.5" :class="hasExtraTenPercent ? 'text-emerald-400' : 'text-slate-500'">
+                    +${{ formatNumber(extraTenAmount) }}
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-1">{{ hasExtraTenPercent ? '已計入 (符合VA條件)' : '未勾選/未達標' }}</div>
+                </div>
+              </div>
+
+              <!-- Breakdown details list -->
+              <div class="space-y-2.5 text-xs border-t border-slate-700/60 pt-4">
+                <div class="flex justify-between items-center text-slate-300">
+                  <span>每月新晉營業員津貼 (NAA)：</span>
+                  <span class="font-bold text-white font-mono">${{ formatNumber(fldpNaa) }} / 月</span>
+                </div>
+
+                <div class="flex justify-between items-center text-slate-300">
+                  <span>季度快速起動獎金 (QSB 估算)：</span>
+                  <span class="font-bold font-mono" :class="qsbRate > 0 ? 'text-emerald-400' : 'text-slate-400'">
+                    +${{ formatNumber(qsbBonusAmount) }} ({{ (qsbRate * 100).toFixed(0) }}%)
+                  </span>
+                </div>
+
+                <div class="flex justify-between items-center text-slate-300">
+                  <span>專業年終獎金預估 (YEB 10%~30%)：</span>
+                  <span class="font-bold font-mono text-cyan-300">+${{ formatNumber(estimatedYeb) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Big Grand Total -->
+            <div class="mt-6 pt-4 border-t border-white/15 bg-white/10 -mx-6 -mb-6 p-6 rounded-b-3xl">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div>
+                  <span class="text-xs text-slate-300 font-medium block">首年度預估獲取總收益 (含佣金+津貼+獎金)：</span>
+                  <span class="text-[11px] text-orange-200">未包含直屬招募獎金與管理 Override</span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-black text-amber-300 font-mono">
+                  ${{ formatNumber(grandTotalIncome) }}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- TAB 2: 晉升藍圖 (ASM ➔ RD 全路徑，75折新修訂版) -->
+      <section v-show="currentTab === 'promotion'" class="space-y-6">
+        
+        <!-- 75% Discount Big Announcement Banner -->
+        <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 rounded-3xl p-5 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl font-black shadow-inner">
+              👍
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-black text-base sm:text-lg">2026年度晉升要求新修訂（全面實施 75 折減負方案）</h3>
+                <span class="bg-white text-orange-600 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">官方最新修訂</span>
+              </div>
+              <p class="text-xs text-orange-100 mt-1">
+                門檻全面 75 折：<strong>UM (90K)</strong> | <strong>BM (300K)</strong> | <strong>AM (0.9M / 6 VA)</strong> | <strong>AD (1.8M / 9 VA)</strong> | <strong>DD (3.2M / 14 VA)</strong> | <strong>RD (4.35M / 28 VA)</strong>！
+              </p>
+            </div>
+          </div>
+          <div class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 text-xs font-semibold whitespace-nowrap">
+            <span>合資格營業員 (VA) 同步 75 折：</span>
+            <span class="text-yellow-300 font-black font-mono text-sm block sm:inline">66,000 SC (原 88k)</span>
+          </div>
+        </div>
+
+        <!-- Career Track Switcher -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span>🎯</span> 職級晉升路徑評估與差距分析 (ASM 至 RD 全路徑)
+            </h2>
+            <p class="text-xs text-slate-500">實時核算個人業績、分行業績、團隊業績與組織人力缺口</p>
+          </div>
+          <div class="flex bg-slate-100 p-1 rounded-xl w-full sm:w-auto">
+            <button 
+              @click="careerTrack = 'team'" 
+              :class="[careerTrack === 'team' ? 'bg-white shadow text-fwd-orange font-bold' : 'text-slate-600', 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs transition']"
+            >
+              👥 團隊拓展路徑 (ASM ➔ RD)
+            </button>
+            <button 
+              @click="careerTrack = 'wm'" 
+              :class="[careerTrack === 'wm' ? 'bg-white shadow text-fwd-orange font-bold' : 'text-slate-600', 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs transition']"
+            >
+              💎 財富管理專才 (個人高產 MDRT)
+            </button>
+          </div>
+        </div>
+
+        <!-- Target Rank Selector Cards (ASM to RD) -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold text-slate-500">選擇你想衝刺的目標職級：</div>
+          
+          <!-- Team Track: ASM, UM, BM, SBM, AM, AD, DD, SDD, RD -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" v-if="careerTrack === 'team'">
+            <div 
+              v-for="r in teamRanks" 
+              :key="r.id"
+              @click="targetRank = r.id"
+              :class="[
+                targetRank === r.id 
+                  ? 'border-fwd-orange bg-orange-50/70 ring-2 ring-orange-300' 
+                  : 'border-slate-200 bg-white hover:border-orange-200',
+                'border rounded-2xl p-3.5 cursor-pointer transition shadow-sm text-center relative'
+              ]"
+            >
+              <div class="flex items-center justify-center gap-1">
+                <span class="text-xs font-bold text-slate-400">{{ r.code }}</span>
+                <span class="text-[9px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-bold">75折</span>
+              </div>
+              <div class="font-extrabold text-slate-900 text-sm mt-1">{{ r.name }}</div>
+              <div class="text-[11px] text-fwd-orange font-medium mt-1">{{ r.summary }}</div>
+              <div class="text-[10px] text-slate-400 line-through mt-0.5">{{ r.originalDesc }}</div>
+            </div>
+          </div>
+
+          <!-- WM Track: WMAM, WMM, WMSM, WMD, WMSD, WMED, WMPD -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" v-if="careerTrack === 'wm'">
+            <div 
+              v-for="r in wmRanks" 
+              :key="r.id"
+              @click="targetRank = r.id"
+              :class="[
+                targetRank === r.id 
+                  ? 'border-fwd-orange bg-orange-50/70 ring-2 ring-orange-300' 
+                  : 'border-slate-200 bg-white hover:border-orange-200',
+                'border rounded-2xl p-3.5 cursor-pointer transition shadow-sm text-center relative'
+              ]"
+            >
+              <span class="text-xs font-bold text-slate-400">{{ r.code }}</span>
+              <div class="font-extrabold text-slate-900 text-sm mt-1">{{ r.name }}</div>
+              <div class="text-[11px] text-fwd-orange font-medium mt-1">{{ r.summary }}</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">{{ r.evalPeriod }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Gap Analysis Dashboard -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Input Current Performance -->
+          <div class="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-slate-100 lg:pr-6 pb-6 lg:pb-0">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>📊</span> 輸入當前累積業績數據
+            </h3>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">過往個人累積營業積分 (Personal SC)：</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2 text-xs font-bold text-slate-400">MOP$</span>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.personalSc" 
+                  step="5000"
+                  class="w-full pl-14 pr-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div class="text-[11px] text-slate-400 mt-0.5">目前數值：${{ formatNumber(currentStats.personalSc) }} SC</div>
+            </div>
+
+            <!-- Branch SC (for BM, SBM, AM) -->
+            <div v-if="activeRankObj.reqBranchSc > 0">
+              <label class="block text-xs font-bold text-slate-700 mb-1">直屬組別/分行營業積分 (Branch SC)：</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2 text-xs font-bold text-slate-400">MOP$</span>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.branchSc" 
+                  step="10000"
+                  class="w-full pl-14 pr-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div class="text-[11px] text-slate-400 mt-0.5">目前數值：${{ formatNumber(currentStats.branchSc) }} SC</div>
+            </div>
+
+            <!-- Team SC (for AM, AD, DD, SDD, RD) -->
+            <div v-if="activeRankObj.reqTeamSc > 0">
+              <label class="block text-xs font-bold text-slate-700 mb-1">營業團隊營業積分 (Team SC)：</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2 text-xs font-bold text-slate-400">MOP$</span>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.teamSc" 
+                  step="50000"
+                  class="w-full pl-14 pr-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div class="text-[11px] text-slate-400 mt-0.5">目前數值：${{ formatNumber(currentStats.teamSc) }} SC</div>
+            </div>
+
+            <!-- Manpower inputs -->
+            <div class="grid grid-cols-2 gap-3" v-if="activeRankObj.reqVa > 0 || activeRankObj.reqTeamVa > 0">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">直屬 VA 人數：</label>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.vaCount" 
+                  min="0"
+                  class="w-full px-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div v-if="activeRankObj.reqTeamVa > 0">
+                <label class="block text-xs font-bold text-slate-700 mb-1">團隊 VA 總人數：</label>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.teamVaCount" 
+                  min="0"
+                  class="w-full px-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3" v-if="activeRankObj.reqDirectVm > 0">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">直屬 VM (合資格經理)：</label>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.vmCount" 
+                  min="0"
+                  class="w-full px-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">個人在職月數：</label>
+                <input 
+                  type="number" 
+                  v-model.number="currentStats.tenureMonths" 
+                  min="0"
+                  class="w-full px-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Gap Status & Criteria Check -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs text-slate-400 font-bold uppercase">目標評估</span>
+                <h4 class="text-lg font-black text-slate-900">
+                  衝刺目標：{{ activeRankObj.name }} ({{ activeRankObj.code }})
+                </h4>
+              </div>
+              <span 
+                :class="[isAllPromotionMet ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300', 'px-3 py-1 rounded-full text-xs font-black border']"
+              >
+                {{ isAllPromotionMet ? '🎉 恭喜！已達成所有晉升指標' : '⏳ 尚有指標待衝刺' }}
+              </span>
+            </div>
+
+            <!-- Criteria 1: Personal SC -->
+            <div class="p-3 rounded-xl border" :class="checkPersonalSc.met ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+              <div class="flex justify-between items-center text-xs sm:text-sm">
+                <span class="font-medium text-slate-700">1. 個人營業積分 (Personal SC)</span>
+                <div class="text-right">
+                  <span class="font-bold font-mono" :class="checkPersonalSc.met ? 'text-emerald-600' : 'text-slate-800'">
+                    ${{ formatNumber(currentStats.personalSc) }} / ${{ formatNumber(activeRankObj.reqSc) }}
+                  </span>
+                  <span class="text-[10px] text-slate-400 line-through block">原要求: ${{ formatNumber(activeRankObj.originalReqSc) }}</span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mt-2">
+                <div class="h-full rounded-full transition-all" :class="checkPersonalSc.met ? 'bg-emerald-500' : 'bg-orange-500'" :style="{ width: Math.min(100, (currentStats.personalSc / activeRankObj.reqSc) * 100) + '%' }"></div>
+              </div>
+              <p class="text-[11px] mt-1" :class="checkPersonalSc.met ? 'text-emerald-700' : 'text-slate-500'">
+                <span v-if="checkPersonalSc.met">✓ 個人業績已達標 (75折優惠)</span>
+                <span v-else>尚差 <strong>${{ formatNumber(activeRankObj.reqSc - currentStats.personalSc) }} SC</strong></span>
+                <span class="text-slate-400"> ({{ activeRankObj.evalPeriod }})</span>
+              </p>
+            </div>
+
+            <!-- Criteria 2: Branch SC (if applicable) -->
+            <div v-if="activeRankObj.reqBranchSc > 0" class="p-3 rounded-xl border" :class="checkBranchSc.met ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+              <div class="flex justify-between items-center text-xs sm:text-sm">
+                <span class="font-medium text-slate-700">2. 直屬組別 / 分行營業積分</span>
+                <div class="text-right">
+                  <span class="font-bold font-mono" :class="checkBranchSc.met ? 'text-emerald-600' : 'text-slate-800'">
+                    ${{ formatNumber(currentStats.branchSc) }} / ${{ formatNumber(activeRankObj.reqBranchSc) }}
+                  </span>
+                  <span class="text-[10px] text-slate-400 line-through block">原要求: ${{ formatNumber(activeRankObj.originalBranchSc) }}</span>
+                </div>
+              </div>
+              <p class="text-[11px] mt-1" :class="checkBranchSc.met ? 'text-emerald-700' : 'text-slate-500'">
+                <span v-if="checkBranchSc.met">✓ 直屬分行業績達標 (75折優惠)</span>
+                <span v-else>尚差 <strong>${{ formatNumber(activeRankObj.reqBranchSc - currentStats.branchSc) }} SC</strong></span>
+              </p>
+            </div>
+
+            <!-- Criteria 3: Team SC (for AM -> RD) -->
+            <div v-if="activeRankObj.reqTeamSc > 0" class="p-3 rounded-xl border" :class="checkTeamSc.met ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+              <div class="flex justify-between items-center text-xs sm:text-sm">
+                <span class="font-medium text-slate-700">3. 營業團隊營業積分 (Team SC)</span>
+                <div class="text-right">
+                  <span class="font-bold font-mono" :class="checkTeamSc.met ? 'text-emerald-600' : 'text-slate-800'">
+                    ${{ formatNumber(currentStats.teamSc) }} / ${{ formatNumber(activeRankObj.reqTeamSc) }}
+                  </span>
+                  <span class="text-[10px] text-slate-400 line-through block">原要求: ${{ formatNumber(activeRankObj.originalTeamSc) }}</span>
+                </div>
+              </div>
+              <p class="text-[11px] mt-1" :class="checkTeamSc.met ? 'text-emerald-700' : 'text-slate-500'">
+                <span v-if="checkTeamSc.met">✓ 營業團隊業績達標 (75折優惠)</span>
+                <span v-else>尚差 <strong>${{ formatNumber(activeRankObj.reqTeamSc - currentStats.teamSc) }} SC</strong></span>
+              </p>
+            </div>
+
+            <!-- Criteria 4: VA Manpower -->
+            <div v-if="activeRankObj.reqVa > 0 || activeRankObj.reqTeamVa > 0" class="p-3 rounded-xl border" :class="checkVa.met ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+              <div class="flex justify-between items-center text-xs sm:text-sm">
+                <span class="font-medium text-slate-700">4. 合資格營業員 (VA) 人數 (75折新修訂)</span>
+                <span class="font-bold font-mono" :class="checkVa.met ? 'text-emerald-600' : 'text-slate-800'">
+                  直屬: {{ currentStats.vaCount }} / {{ activeRankObj.reqVa }} 人
+                  <span v-if="activeRankObj.reqTeamVa > 0"> | 團隊: {{ currentStats.teamVaCount }} / {{ activeRankObj.reqTeamVa }} 人</span>
+                </span>
+              </div>
+              <p class="text-[11px] mt-1" :class="checkVa.met ? 'text-emerald-700' : 'text-slate-500'">
+                <span v-if="checkVa.met">✓ 組織人力已達標 (75折減負)</span>
+                <span v-else>尚差人力要求 ({{ activeRankObj.vaNote }})</span>
+              </p>
+            </div>
+
+            <!-- Criteria 5: VM Manager requirement -->
+            <div v-if="activeRankObj.reqDirectVm > 0" class="p-3 rounded-xl border" :class="currentStats.vmCount >= activeRankObj.reqDirectVm ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+              <div class="flex justify-between items-center text-xs sm:text-sm">
+                <span class="font-medium text-slate-700">5. 直屬合資格經理 (VM) 要求</span>
+                <span class="font-bold font-mono" :class="currentStats.vmCount >= activeRankObj.reqDirectVm ? 'text-emerald-600' : 'text-slate-800'">
+                  {{ currentStats.vmCount }} / {{ activeRankObj.reqDirectVm }} 人
+                </span>
+              </div>
+              <p class="text-[11px] mt-1" :class="currentStats.vmCount >= activeRankObj.reqDirectVm ? 'text-emerald-700' : 'text-slate-500'">
+                <span v-if="currentStats.vmCount >= activeRankObj.reqDirectVm">✓ 合資格下線領袖人數達標</span>
+                <span v-else>尚欠 <strong>{{ activeRankObj.reqDirectVm - currentStats.vmCount }} 位 VM</strong></span>
+              </p>
+            </div>
+
+            <!-- Other Rules reminder -->
+            <div class="p-3 bg-slate-50 rounded-xl text-[11px] text-slate-500 space-y-1">
+              <div><strong>最短任職要求：</strong>{{ activeRankObj.minTenure }}</div>
+              <div><strong>必修培訓課程：</strong>{{ activeRankObj.training }}</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- TAB 3: 🌟 各職級薪酬與管理收益全景 (Rank Compensation Matrix) -->
+      <section v-show="currentTab === 'rankComp'" class="space-y-6">
+        
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <span>🌟</span> 2026 各職級專屬收入結構與全獎金檢視器
+              </h2>
+              <p class="text-xs text-slate-500">點選不同職級，即時查看除個人保單佣金外，公司提供的各層 Override、招募獎金、團隊津貼、增長突破獎金等全額收益</p>
+            </div>
+          </div>
+
+          <!-- Rank Selector Tabs -->
+          <div class="flex flex-wrap gap-2 mt-4">
+            <button 
+              v-for="rk in rankList" 
+              :key="rk.id"
+              @click="selectedCompRank = rk.id"
+              :class="[
+                selectedCompRank === rk.id 
+                  ? 'bg-slate-900 text-white font-bold shadow-md' 
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                'px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5'
+              ]"
+            >
+              <span>{{ rk.icon }}</span>
+              <span>{{ rk.name }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Rank Detail & Live Simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left: Rank Feature & Benefit Breakdown -->
+          <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-5">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-extrabold text-slate-900">{{ currentRankComp.name }}</h3>
+                  <span class="text-xs bg-orange-100 text-orange-800 font-bold px-2.5 py-0.5 rounded-full">
+                    {{ currentRankComp.tag }}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">{{ currentRankComp.highlight }}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-slate-400 font-semibold block">年化管理/獎勵潛力</span>
+                <span class="text-base font-black text-fwd-orange">{{ currentRankComp.annualPotential }}</span>
+              </div>
+            </div>
+
+            <!-- Benefit Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div 
+                v-for="b in currentRankComp.benefits" 
+                :key="b.title"
+                class="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 flex flex-col justify-between"
+              >
+                <div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800">{{ b.title }}</span>
+                    <span class="text-xs font-black text-fwd-orange font-mono bg-white px-2 py-0.5 rounded border border-orange-100">
+                      {{ b.rate }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">{{ b.desc }}</p>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2 font-medium">{{ b.note }}</div>
+              </div>
+            </div>
+
+            <!-- Special Override Table (for BM, AM, DD, RD) -->
+            <div v-if="currentRankComp.overrideTable" class="p-4 bg-slate-900 text-white rounded-2xl space-y-2.5">
+              <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-2">
+                <span class="font-bold text-amber-400">官方 4 層上線佣金 (Override) 比率表</span>
+                <span class="text-slate-400 text-[10px]">依下線 SC 級別發放</span>
+              </div>
+              <div class="grid grid-cols-5 text-center text-[11px] font-bold text-slate-300 py-1 bg-white/5 rounded">
+                <div>級別</div>
+                <div>第一層 (T1)</div>
+                <div>第二層 (T2)</div>
+                <div>第三層 (T3)</div>
+                <div>第四層 (T4)</div>
+              </div>
+              <div v-for="row in currentRankComp.overrideTable" :key="row.tier" class="grid grid-cols-5 text-center text-xs py-1 text-slate-200 border-b border-white/5">
+                <div class="text-[10px] text-slate-400 font-mono">{{ row.tier }}</div>
+                <div class="font-bold text-amber-300">{{ row.t1 }}</div>
+                <div>{{ row.t2 }}</div>
+                <div>{{ row.t3 }}</div>
+                <div>{{ row.t4 }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Scenario Simulator for This Rank -->
+          <div class="lg:col-span-5 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  <span>🧮</span> {{ currentRankComp.code }} 模擬情境試算
+                </h4>
+                <span class="text-[11px] text-slate-400">快速估算月入</span>
+              </div>
+
+              <!-- Inputs -->
+              <div class="space-y-3.5 mt-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">個人每月首年佣金 (FYC)：</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs font-bold text-slate-400">MOP$</span>
+                    <input 
+                      type="number" 
+                      v-model.number="rankSim.personalFyc" 
+                      step="5000"
+                      class="w-full pl-14 pr-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                    >
+                  </div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">
+                    目前設定：<strong class="text-slate-700">${{ formatNumber(rankSim.personalFyc) }} FYC</strong>
+                  </div>
+                </div>
+
+                <!-- Downline FYC (for UM or above) -->
+                <div v-if="selectedCompRank !== 'WMC' && selectedCompRank !== 'ASM'">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">直屬下線團隊每月總 FYC：</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-xs font-bold text-slate-400">MOP$</span>
+                    <input 
+                      type="number" 
+                      v-model.number="rankSim.downlineFyc" 
+                      step="20000"
+                      class="w-full pl-14 pr-3 py-2 border rounded-xl font-bold text-slate-800 text-sm focus:ring-2 focus:ring-orange-400"
+                    >
+                  </div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">
+                    目前設定：<strong class="text-slate-700">${{ formatNumber(rankSim.downlineFyc) }} FYC</strong>
+                  </div>
+                </div>
+
+                <!-- NROR Option Toggle (For UM or above) -->
+                <div 
+                  v-if="selectedCompRank !== 'WMC' && selectedCompRank !== 'ASM'" 
+                  class="p-3.5 bg-orange-50/70 rounded-2xl border border-orange-200 space-y-3"
+                >
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <span>🌟</span> 納入直屬上線招募獎金 (NROR)
+                      </span>
+                      <span class="text-[10px] text-slate-500">直屬增聘新顧問享長達24個月獎金</span>
+                    </div>
+                    <input type="checkbox" v-model="rankSim.enableNror" class="w-5 h-5 accent-orange-500 rounded cursor-pointer">
+                  </div>
+
+                  <!-- NROR settings when enabled -->
+                  <div v-if="rankSim.enableNror" class="space-y-2.5 pt-2 border-t border-orange-100">
+                    <div>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">直屬新晉營業員每月 FYC：</label>
+                      <div class="relative">
+                        <span class="absolute left-3 top-1.5 text-xs font-bold text-slate-400">MOP$</span>
+                        <input 
+                          type="number" 
+                          v-model.number="rankSim.recruitFyc" 
+                          step="5000"
+                          class="w-full pl-14 pr-3 py-1.5 border rounded-lg font-bold text-slate-800 text-xs focus:ring-2 focus:ring-orange-400"
+                        >
+                      </div>
+                      <div class="text-[10px] text-slate-400 mt-0.5">新人：${{ formatNumber(rankSim.recruitFyc) }} FYC</div>
+                    </div>
+
+                    <div>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">招募模式：</label>
+                      <div class="grid grid-cols-2 gap-2">
+                        <button 
+                          @click="rankSim.recruitType = 'direct'"
+                          :class="[rankSim.recruitType === 'direct' ? 'bg-orange-500 text-white font-bold' : 'bg-white text-slate-700', 'px-2 py-1.5 text-xs rounded-lg border border-orange-200 transition']"
+                        >
+                          直接招募 (20%)
+                        </button>
+                        <button 
+                          @click="rankSim.recruitType = 'referral'"
+                          :class="[rankSim.recruitType === 'referral' ? 'bg-orange-500 text-white font-bold' : 'bg-white text-slate-700', 'px-2 py-1.5 text-xs rounded-lg border border-orange-200 transition']"
+                        >
+                          下線轉介 (5%分成)
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Calculation Output Box -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
+              <div class="text-xs text-slate-500 font-medium">預計月度實收總額 (不含年終獎)：</div>
+              <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+                MOP ${{ formatNumber(simulatedRankMonthlyTotal) }}
+              </div>
+
+              <div class="space-y-1.5 text-xs border-t border-slate-200 pt-2 text-slate-600">
+                <div class="flex justify-between">
+                  <span>個人佣金：</span>
+                  <span class="font-bold text-slate-800 font-mono">${{ formatNumber(rankSim.personalFyc) }}</span>
+                </div>
+                <div v-if="simulatedOverride > 0" class="flex justify-between text-emerald-600">
+                  <span>管理 Override 收入：</span>
+                  <span class="font-bold font-mono">+${{ formatNumber(simulatedOverride) }}</span>
+                </div>
+                <div v-if="rankSim.enableNror && simulatedNrorAmount > 0" class="flex justify-between text-teal-600">
+                  <span>直屬招募獎金 (NROR)：</span>
+                  <span class="font-bold font-mono">+${{ formatNumber(simulatedNrorAmount) }}</span>
+                </div>
+                <div v-if="simulatedAllowance > 0" class="flex justify-between text-blue-600">
+                  <span>津貼 (MAA / MRA / NAA)：</span>
+                  <span class="font-bold font-mono">+${{ formatNumber(simulatedAllowance) }}</span>
+                </div>
+              </div>
+
+              <div class="text-[10px] text-slate-400 mt-2">
+                ※ 此處僅估算月度常規款項，未包含每年12月發放之高達 30% 年終獎金 (YEB)、每年2月發放之團隊業績增長獎金 (AGB) 及單次晉升獎金。
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- TAB 4: 合資格評核 (VA / SVA 75折安全線) -->
+      <section v-show="currentTab === 'assessment'" class="space-y-6">
+        
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between border-b pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span>🛡️</span> 新人合資格營業員 (VA) 評核檢測器
+                </h2>
+                <span class="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded font-bold">75折門檻實施中</span>
+              </div>
+              <p class="text-xs text-slate-500">每年年底進行評核。達到 VA 資格是晉升經理、領取額外10%獎勵及保住合約的核心防線</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-full font-medium hidden sm:inline-block">
+              2名 SVA = 1名 VA
+            </span>
+          </div>
+
+          <!-- VA 75 Discount Banner -->
+          <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">🎉</span>
+              <div>
+                <strong class="text-emerald-800">2026年 VA 考核標準享 75 折大優惠：</strong>
+                <span class="text-emerald-700">由原先的 88,000 SC 直接 75 折降至 <strong>66,000 SC</strong>（只需簽發 8 張新單保單）即可成為合資格營業員 (VA)！</span>
+              </div>
+            </div>
+            <span class="text-emerald-600 font-bold hidden md:inline">減負 22,000 SC</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            
+            <!-- Standard VA (Option 1) -->
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 relative flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-lg">常規路線 1 (75折)</span>
+                  <span class="text-xs text-slate-400">標準 VA</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">合資格營業員 (VA) - 要求 (I)</h3>
+                <ul class="text-xs text-slate-600 space-y-2">
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 個人營業積分: <strong class="text-emerald-600 text-sm">66,000 SC</strong> <span class="text-[10px] text-slate-400 line-through">(原88,000)</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 新生意人壽保單: <strong>不少於 8 張</strong>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 個人續保率: <strong>75% 或以上</strong>
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t text-[11px] text-slate-400">最受新人推薦的起步達標路線</div>
+            </div>
+
+            <!-- High SC VA (Option 2) -->
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 relative flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg">高產大單路線</span>
+                  <span class="text-xs text-slate-400">免單數要求</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">合資格營業員 (VA) - 要求 (II)</h3>
+                <ul class="text-xs text-slate-600 space-y-2">
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 個人營業積分: <strong class="text-blue-600 text-sm">127,500 SC</strong>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 新生意保單數目: <strong>無限制 (N/A)</strong>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 個人續保率: <strong>75% 或以上</strong>
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t text-[11px] text-slate-400">適合專攻高淨值大額儲蓄保單之顧問</div>
+            </div>
+
+            <!-- Semi-VA (SVA) -->
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 relative flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 bg-slate-200 text-slate-800 text-xs font-bold rounded-lg">基本防禦線</span>
+                  <span class="text-xs text-slate-400">半合資格 SVA</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">半合資格營業員 (SVA)</h3>
+                <ul class="text-xs text-slate-600 space-y-2">
+                  <li class="flex items-center gap-2">
+                    <span class="text-amber-600 font-bold">✓</span> 個人營業積分: <strong class="text-amber-600 text-sm">33,000 SC</strong>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-slate-400 font-bold">•</span> 新生意人壽保單: <strong>N/A</strong>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span> 個人續保率: <strong>75% 或以上</strong>
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t text-[11px] text-slate-400">2 名 SVA 在上線經理考核中折算為 1 名 VA</div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 5: 產品一覽與佣金制度總表 -->
+      <section v-show="currentTab === 'products'" class="space-y-6">
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b pb-4">
+            <span>📑</span> 2026 富衛澳門核心人壽與醫療保險佣金率總參照表
+          </h2>
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 font-bold">
+                  <th class="p-3 rounded-l-lg">產品名稱</th>
+                  <th class="p-3">險種分類</th>
+                  <th class="p-3">供款年期</th>
+                  <th class="p-3 text-right">第 1 年 (FYC%)</th>
+                  <th class="p-3 text-right">第 2 年</th>
+                  <th class="p-3 text-right rounded-r-lg">第 3 年起 / 備註</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr v-for="r in fullProductList" :key="r.name + r.term" class="hover:bg-slate-50 transition">
+                  <td class="p-3 font-bold text-slate-900">{{ r.name }}</td>
+                  <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px]" :class="r.badgeColor">{{ r.cat }}</span></td>
+                  <td class="p-3 font-mono font-medium">{{ r.term }}</td>
+                  <td class="p-3 text-right font-bold text-fwd-orange font-mono text-sm">{{ r.y1 }}%</td>
+                  <td class="p-3 text-right font-mono">{{ r.y2 }}%</td>
+                  <td class="p-3 text-right text-slate-500">{{ r.y3plus }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: 🏆 2026 榮譽與獎勵表彰 (獎勵計劃) -->
+      <section v-show="currentTab === 'incentives'" class="space-y-6">
+        
+        <!-- Header Banner -->
+        <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 rounded-3xl p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-white/20 backdrop-blur-md text-xs font-black px-3 py-1 rounded-full uppercase border border-white/30">
+                2026 富衛澳門官方榮譽殿堂
+              </span>
+              <span class="bg-yellow-300 text-slate-900 text-xs font-black px-2.5 py-0.5 rounded-full shadow">
+                現金獎金 • 國際舞台 • 專屬禮遇
+              </span>
+            </div>
+            <h2 class="text-2xl font-black mt-2 tracking-tight">2026 年度營業員與經理獎勵競賽總覽</h2>
+            <p class="text-xs text-orange-100 mt-1 max-w-2xl">
+              專為新晉與現職顧問量身打造：新人 FOCUS 成長階梯、營業會現金大獎、增員精英考試贊助及 2026 MDRT / IDA 業界最高榮譽
+            </p>
+          </div>
+          <div class="flex gap-2 text-center">
+            <div class="bg-black/20 backdrop-blur-md p-3 rounded-2xl border border-white/20 min-w-[110px]">
+              <div class="text-[10px] text-orange-200">營業會尊貴會最高獎金</div>
+              <div class="text-lg font-black text-yellow-300 font-mono">MOP $3,000</div>
+            </div>
+            <div class="bg-black/20 backdrop-blur-md p-3 rounded-2xl border border-white/20 min-w-[110px]">
+              <div class="text-[10px] text-orange-200">2026 MDRT 門檻</div>
+              <div class="text-lg font-black text-yellow-300 font-mono">MOP $425,400</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. 新人起步三大榮譽 (FOCUS 30 / 90 / 180) -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between border-b pb-3 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span>🌱</span> 新人專屬起步成就 (入職首 1~6 個月)
+              </h3>
+              <p class="text-xs text-slate-500">專為入職前5年內壽險推銷工作不多於12個月之新晉顧問而設</p>
+            </div>
+            <span class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded-full border border-emerald-200">每月結算</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- FOCUS 30 -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-orange-50/50 to-white border border-orange-200 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-orange-600 bg-orange-100 px-2 py-0.5 rounded-md">首 1 個月</span>
+                  <span class="text-lg">🖋️</span>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm mt-2">FOCUS 30 - 捷足先登開單賞</h4>
+                <div class="text-xs text-slate-600 mt-2 space-y-1">
+                  <div><strong>業績門檻：</strong>完成 <strong class="text-orange-600">1 張</strong> 新人壽保單</div>
+                  <div><strong>計算週期：</strong>加入首 1 個月內</div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-orange-100 text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span>🎁 獎勵：</span>
+                <span class="text-orange-600">印有個人名字紀念筆 1 支</span>
+              </div>
+            </div>
+
+            <!-- FOCUS 90 -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/50 to-white border border-amber-200 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">首 3 個月</span>
+                  <span class="text-lg">🚀</span>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm mt-2">FOCUS 90 - 飛躍新星獎</h4>
+                <div class="text-xs text-slate-600 mt-2 space-y-1">
+                  <div><strong>業績門檻：</strong><strong class="text-amber-700">MOP $33,000 SC</strong> 及 <strong class="text-amber-700">4 張</strong> 新人壽保單</div>
+                  <div><strong>計算週期：</strong>加入首 3 個月</div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-amber-100 text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span>🎁 獎勵：</span>
+                <span class="text-amber-700">全公司官方表彰電郵</span>
+              </div>
+            </div>
+
+            <!-- FOCUS 180 -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-rose-50/50 to-white border border-rose-200 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md">首 6 個月</span>
+                  <span class="text-lg">🥂</span>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm mt-2">FOCUS 180 - 新星匯聚獎</h4>
+                <div class="text-xs text-slate-600 mt-2 space-y-1">
+                  <div><strong>業績門檻：</strong><strong class="text-rose-700">MOP $66,000 SC</strong> (達標即晉升 ASM 75折門檻)</div>
+                  <div><strong>計算週期：</strong>加入首 6 個月</div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-rose-100 text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span>🎁 獎勵：</span>
+                <span class="text-rose-700">表彰電郵 + 獲邀出席專屬交流聚會</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 營業會 (Agency Club) 現金獎勵 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between border-b pb-3 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span>🎖️</span> 2026 年度營業會 (Agency Club) 會籍與現金獎勵
+              </h3>
+              <p class="text-xs text-slate-500">計算時間：2026年1月1日至12月31日 | 服務未滿12個月按比例調整 (最低不低於25%)</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-bold">個人續保率需達 85%</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- 進士會 -->
+            <div class="border rounded-2xl p-4 bg-slate-50/70 border-slate-200 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">銅級榮譽</span>
+                  <span class="text-sm font-black text-slate-800 font-mono">12 張單</span>
+                </div>
+                <h4 class="text-lg font-black text-slate-900 mt-1.5">進士會</h4>
+                <div class="mt-2 space-y-1 text-xs text-slate-600">
+                  <div>個人營業積分 (SC)：<strong class="text-slate-900 font-mono">MOP $165,000</strong></div>
+                  <div>新生意保單：<strong class="text-slate-900 font-mono">不少於 12 張</strong></div>
+                  <div>個人續保率：<strong class="text-emerald-600 font-mono">85% 或以上</strong></div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200">
+                <div class="text-[11px] text-slate-500">專屬獎賞：</div>
+                <div class="text-xs font-bold text-fwd-orange mt-1">
+                  💰 現金獎 MOP $500 • 獎狀 • 獲邀參加周年頒獎禮 • 報紙刊登照片 • 名片標誌
+                </div>
+              </div>
+            </div>
+
+            <!-- 優越會 -->
+            <div class="border rounded-2xl p-4 bg-amber-50/40 border-amber-200 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">銀級榮譽</span>
+                  <span class="text-sm font-black text-slate-800 font-mono">12 張單</span>
+                </div>
+                <h4 class="text-lg font-black text-slate-900 mt-1.5">優越會</h4>
+                <div class="mt-2 space-y-1 text-xs text-slate-600">
+                  <div>個人營業積分 (SC)：<strong class="text-slate-900 font-mono">MOP $250,000</strong></div>
+                  <div>新生意保單：<strong class="text-slate-900 font-mono">不少於 12 張</strong></div>
+                  <div>個人續保率：<strong class="text-emerald-600 font-mono">85% 或以上</strong></div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-amber-200">
+                <div class="text-[11px] text-slate-500">專屬獎賞：</div>
+                <div class="text-xs font-bold text-amber-700 mt-1">
+                  💰 現金獎 MOP $1,200 • 獲贈獎牌 • 獲邀周年頒獎禮 • 報紙刊登照片 • 名片標誌
+                </div>
+              </div>
+            </div>
+
+            <!-- 尊貴會 -->
+            <div class="border-2 border-fwd-orange rounded-2xl p-4 bg-orange-50/50 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-white bg-fwd-orange px-2 py-0.5 rounded">金級榮譽</span>
+                  <span class="text-sm font-black text-fwd-orange font-mono">12 張單</span>
+                </div>
+                <h4 class="text-lg font-black text-slate-900 mt-1.5">尊貴會</h4>
+                <div class="mt-2 space-y-1 text-xs text-slate-600">
+                  <div>個人營業積分 (SC)：<strong class="text-fwd-orange font-mono font-bold">MOP $440,000</strong></div>
+                  <div>新生意保單：<strong class="text-slate-900 font-mono">不少於 12 張</strong></div>
+                  <div>個人續保率：<strong class="text-emerald-600 font-mono">85% 或以上</strong></div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-orange-200">
+                <div class="text-[11px] text-slate-500">專屬獎賞：</div>
+                <div class="text-xs font-black text-fwd-orange mt-1">
+                  💰 現金獎 MOP $3,000 • 獲贈獎牌 • 獲邀周年頒獎禮 • 報紙刊登照片 • 名片標誌
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 特色成就俱樂部與增員精英會 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 增員精英會 -->
+          <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between border-b pb-2.5">
+              <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <span>🤝</span> 增員精英會 (招募與考試贊助)
+              </h4>
+              <span class="text-[11px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">招募回饋</span>
+            </div>
+            <p class="text-xs text-slate-600">由 2026年1月1日或入職日起至12月31日，直屬招募或轉介新顧問享專屬贊助：</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <div class="font-bold text-slate-800">增員精英會</div>
+                <div class="text-slate-500 text-[11px] mt-0.5">招募/轉介 2 名新顧問</div>
+                <div class="text-emerald-700 font-bold mt-1 text-[11px]">贊助每位新顧問 IIQE 卷一及卷三考試費 MOP $300</div>
+              </div>
+              <div class="p-3 bg-orange-50/60 rounded-xl border border-orange-200">
+                <div class="font-bold text-fwd-orange">卓越增員精英會</div>
+                <div class="text-slate-500 text-[11px] mt-0.5">招募/轉介 6 名新顧問</div>
+                <div class="text-fwd-orange font-bold mt-1 text-[11px]">考試費贊助 MOP $300 + 優先預留 2027 招募活動名額</div>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400">※ 考試費實報實銷，核實後直接發放至出糧戶口。</div>
+          </div>
+
+          <!-- 馬拉松會 & 超級動力會 -->
+          <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between border-b pb-2.5">
+              <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <span>🏃</span> 馬拉松會 & 超級動力會
+              </h4>
+              <span class="text-[11px] bg-rose-50 text-rose-700 font-bold px-2 py-0.5 rounded">單量競賽</span>
+            </div>
+            <div class="space-y-2 text-xs">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
+                <div>
+                  <div class="font-bold text-slate-900">馬拉松會 (百張單傳奇)</div>
+                  <div class="text-slate-500 text-[11px]">全年累積 100 張新人壽保單 + 續保率 85%</div>
+                </div>
+                <div class="text-right text-[11px] font-bold text-rose-600">
+                  獲贈獎牌 • 報紙刊登
+                </div>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
+                <div>
+                  <div class="font-bold text-slate-900">超級動力會 (半年結算)</div>
+                  <div class="text-slate-500 text-[11px]">每半年完成 18 張新人壽保單</div>
+                </div>
+                <div class="text-right text-[11px] font-bold text-amber-600">
+                  專屬活動 • 抽獎券
+                </div>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
+                <div>
+                  <div class="font-bold text-slate-900">卓越級營業員</div>
+                  <div class="text-slate-500 text-[11px]">全年達 MOP $140,000 SC</div>
+                </div>
+                <div class="text-right text-[11px] font-bold text-emerald-600">
+                  提高豁免驗身限額 • 行政優越服務
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 業界最高殿堂：2026 MDRT & 國際龍獎 IDA 澳門幣標準 -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700 pb-3">
+            <div>
+              <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">World-Class Prestige</span>
+              <h3 class="text-lg font-black text-white flex items-center gap-2">
+                <span>🌐</span> 2026 百萬圓桌 (MDRT) 澳門官方業績標準
+              </h3>
+            </div>
+            <span class="text-xs bg-amber-400/20 text-amber-300 font-bold px-3 py-1 rounded-full border border-amber-400/30">
+              至少 50% 來自風險保障類產品
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-amber-400 font-bold">MDRT 標準會員</div>
+                <div class="text-2xl font-black text-white font-mono mt-1">MOP $425,400</div>
+                <div class="text-[11px] text-slate-400 mt-1">或首年保費 MOP $1,701,600</div>
+              </div>
+              <div class="text-[11px] text-slate-300 mt-3 pt-2 border-t border-white/10">
+                FWD MDRT 專屬建議書封面、贊助出席海外會議、報紙榮譽刊登
+              </div>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-cyan-400 font-bold">COT 內閣會員 (3倍 MDRT)</div>
+                <div class="text-2xl font-black text-cyan-300 font-mono mt-1">MOP $1,276,200</div>
+                <div class="text-[11px] text-slate-400 mt-1">或首年保費 MOP $5,104,800</div>
+              </div>
+              <div class="text-[11px] text-slate-300 mt-3 pt-2 border-t border-white/10">
+                尊貴國際大會禮遇、晉升「財富管理執行總監」專業資格條件
+              </div>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-rose-400 font-bold">TOT 頂尖會員 (6倍 MDRT)</div>
+                <div class="text-2xl font-black text-rose-300 font-mono mt-1">MOP $2,552,400</div>
+                <div class="text-[11px] text-slate-400 mt-1">或首年保費 MOP $10,209,600</div>
+              </div>
+              <div class="text-[11px] text-slate-300 mt-3 pt-2 border-t border-white/10">
+                全球壽險頂尖殿堂禮遇、晉升「財富管理首席總監」專業資格條件
+              </div>
+            </div>
+          </div>
+
+          <!-- 國際龍獎 IDA & 保協傑出新星獎 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+            <div class="p-3 bg-white/5 rounded-xl border border-white/10">
+              <div class="font-bold text-amber-300">🐉 2026 國際龍獎 (IDA) 傑出業務獎</div>
+              <div class="text-slate-300 mt-1">
+                <strong>銅龍：</strong>FYC MOP $320,000 + 36 張單<br>
+                <strong>銀龍：</strong>FYC MOP $960,000 + 36 張單<br>
+                <strong>金龍：</strong>FYC MOP $1,920,000 + 36 張單
+              </div>
+            </div>
+            <div class="p-3 bg-white/5 rounded-xl border border-white/10">
+              <div class="font-bold text-cyan-300">🌟 保協傑出新星獎 (LUAHK) - 新人專屬</div>
+              <div class="text-slate-300 mt-1">
+                入職首半年至一年內、業績達標獲公司贊助申請費：<br>
+                <strong>銅獎：</strong>HK $60,000 FYC + 8 張單<br>
+                <strong>銀獎：</strong>HK $120,000 FYC + 10 張單<br>
+                <strong>金獎：</strong>HK $240,000 FYC + 12 張單
+              </div>
+            </div>
+          </div>
+
+          <!-- 年終最佳新晉營業員現金獎 -->
+          <div class="p-3.5 bg-white/10 rounded-2xl border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">🏆</span>
+              <span><strong>全年最佳新晉營業員 (業績/保單量)：</strong>周年頒獎禮頒發獎盃，冠軍現金獎 <strong>MOP $1,000</strong>、亞軍 <strong>$800</strong>、季軍 <strong>$500</strong></span>
+            </div>
+            <span class="text-amber-300 font-bold whitespace-nowrap">報紙刊登照片表彰</span>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200">
+      <p>富衛人壽保險 (澳門) 有限公司 • 2026 新人收入與晉升全能導航系統</p>
+      <p class="mt-1">此工具依據富衛澳門官方公布之《2026 營業員薪酬制度》、《2026 營業職級晉升及評核制度（75折修訂版）》及《佣金制度表》建構</p>
+    </footer>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed, reactive } = Vue;
+
+    const app = createApp({
+      setup() {
+        // Active Navigation Tab
+        const currentTab = ref('calculator');
+        const tabs = [
+          { id: 'calculator', name: '收入試算 (所有計劃/年期)', icon: '💰' },
+          { id: 'promotion', name: '晉升藍圖 (ASM➔RD 75折)', icon: '🚀' },
+          { id: 'rankComp', name: '🌟 各職級薪酬與管理收益全景', icon: '🌟' },
+          { id: 'assessment', name: '合資格評核 (VA)', icon: '🛡️' },
+          { id: 'products', name: '熱門產品佣金總表', icon: '📑' },
+          { id: 'incentives', name: '🏆 2026 榮譽與獎勵表彰', icon: '🏆' }
+        ];
+
+        // User Identity
+        const userRank = ref('WMC');
+        const userRankName = computed(() => {
+          const names = {
+            'WMC': '理財顧問 (新人 WMC)',
+            'ASM': '分組副經理 (ASM)',
+            'UM': '分組經理 (UM)',
+            'BM': '分行經理 (BM)',
+            'AM': '營業經理 (AM)'
+          };
+          return names[userRank.value] || '理財顧問';
+        });
+
+        // Helper: Number formatter with commas
+        const formatNumber = (val) => {
+          if (val === undefined || val === null || isNaN(val)) return '0';
+          const rounded = Math.round(Number(val));
+          return rounded.toLocaleString('en-US');
+        };
+
+        // --- TAB 1: Products Database with selectable terms ---
+        const productCatalog = reactive([
+          {
+            id: 'crisis',
+            name: '危疾應援保 / 升級版',
+            category: '個人危疾',
+            badgeColor: 'bg-rose-100 text-rose-800',
+            desc: '全方位多重重疾保障，支援 10/15/20/25/30 年供款',
+            selectedTerm: '20年繳',
+            terms: [
+              { label: '10年繳', fyc: 30.0 },
+              { label: '15年繳', fyc: 40.0 },
+              { label: '20年繳', fyc: 50.0 },
+              { label: '25年繳', fyc: 52.0 },
+              { label: '30年繳', fyc: 53.0 }
+            ]
+          },
+          {
+            id: 'maxfocus2',
+            name: '盈聚·天下II 保險計劃',
+            category: '終身壽險/儲蓄',
+            badgeColor: 'bg-amber-100 text-amber-800',
+            desc: '旗艦財富傳承，支援 躉繳/2/3/5/10 年繳',
+            selectedTerm: '5年繳',
+            terms: [
+              { label: '躉繳', fyc: 3.0 },
+              { label: '2年繳', fyc: 7.0 },
+              { label: '3年繳', fyc: 11.0 },
+              { label: '5年繳', fyc: 27.5 },
+              { label: '10年繳', fyc: 35.0 }
+            ]
+          },
+          {
+            id: 'vfamily',
+            name: '醫家保醫療計劃 (0-74歲)',
+            category: '個人醫療',
+            badgeColor: 'bg-emerald-100 text-emerald-800',
+            desc: '靈活醫療守護與子女家庭加添選項',
+            selectedTerm: '每年供款',
+            terms: [
+              { label: '每年供款', fyc: 27.0 }
+            ]
+          },
+          {
+            id: 'lifepromise',
+            name: '衛你所愛壽險計劃',
+            category: '終身壽險',
+            badgeColor: 'bg-blue-100 text-blue-800',
+            desc: '多元保障供款年期靈活配置',
+            selectedTerm: '20年繳',
+            terms: [
+              { label: '5年繳', fyc: 22.5 },
+              { label: '10年繳', fyc: 31.5 },
+              { label: '15年繳', fyc: 40.5 },
+              { label: '20年繳', fyc: 50.0 }
+            ]
+          },
+          {
+            id: 'vprime',
+            name: '尊衛您 (寰譽版) 醫療計劃',
+            category: '高端醫療',
+            badgeColor: 'bg-purple-100 text-purple-800',
+            desc: '尊貴醫療保障，終身保額無上限',
+            selectedTerm: '每年供款',
+            terms: [
+              { label: '每年供款', fyc: 25.0 }
+            ]
+          },
+          {
+            id: 'noble_term',
+            name: '承譽定期壽險',
+            category: '定期壽險',
+            badgeColor: 'bg-slate-100 text-slate-800',
+            desc: '純保障高槓桿定期人壽計劃',
+            selectedTerm: '20年期',
+            terms: [
+              { label: '10年期', fyc: 41.9 },
+              { label: '20年期', fyc: 41.9 }
+            ]
+          }
+        ]);
+
+        const selectedProduct = ref(productCatalog[0]);
+
+        const selectProduct = (p) => {
+          selectedProduct.value = p;
+        };
+
+        const setProductTerm = (p, t) => {
+          p.selectedTerm = t.label;
+          selectedProduct.value = p;
+        };
+
+        const currentTermFyc = (p) => {
+          const match = p.terms.find(t => t.label === p.selectedTerm);
+          return match ? match.fyc : p.terms[0].fyc;
+        };
+
+        const activeProductFyc = computed(() => {
+          return currentTermFyc(selectedProduct.value);
+        });
+
+        // Interactive Input Variables
+        const inputAfyp = ref(80000);
+        const policyCount = ref(3);
+        const fldpNaa = ref(15000);
+        const selectedQuarter = ref(1);
+        const personalPersistency = ref(92);
+        const hasExtraTenPercent = ref(true);
+
+        // FLDP Scale calculation
+        const fldpEvaluationScale = computed(() => {
+          if (fldpNaa.value <= 20000) return 1.0;
+          return fldpNaa.value / 20000;
+        });
+
+        // Totals
+        const totalAfyp = computed(() => (inputAfyp.value || 0) * (policyCount.value || 1));
+        const baseFyc = computed(() => totalAfyp.value * (activeProductFyc.value / 100));
+        const totalSc = computed(() => baseFyc.value);
+
+        const extraTenAmount = computed(() => {
+          return hasExtraTenPercent.value ? baseFyc.value * 0.10 : 0;
+        });
+
+        // QSB Bonus Rate & Amount
+        const qsbRate = computed(() => {
+          if (personalPersistency.value < 85) return 0;
+          const sc = totalSc.value;
+          const scale = fldpEvaluationScale.value;
+          if (sc >= 60000 * scale) return 0.35;
+          if (sc >= 40500 * scale) return 0.25;
+          if (sc >= 27000 * scale) return 0.15;
+          return 0;
+        });
+
+        const qsbBonusAmount = computed(() => baseFyc.value * qsbRate.value);
+
+        // YEB Bonus Estimate
+        const estimatedYeb = computed(() => {
+          if (personalPersistency.value < 85) return 0;
+          const sc = totalSc.value;
+          let rate = 0;
+          if (sc >= 440000) rate = 0.30;
+          else if (sc >= 250000) rate = 0.26;
+          else if (sc >= 165000) rate = 0.22;
+          else if (sc >= 88000) rate = 0.10;
+          return baseFyc.value * rate;
+        });
+
+        const grandTotalIncome = computed(() => {
+          return baseFyc.value + extraTenAmount.value + (fldpNaa.value * 12) + qsbBonusAmount.value + estimatedYeb.value;
+        });
+
+        // --- TAB 2: Promotion Roadmap (ASM to RD - 2026 75% Discount) ---
+        const careerTrack = ref('team');
+        const targetRank = ref('ASM');
+
+        const teamRanks = [
+          {
+            id: 'ASM',
+            code: 'ASM',
+            name: '分組副經理',
+            summary: '6個月達 6.6萬 SC (75折)',
+            originalDesc: '原要求: 88,000 SC',
+            reqSc: 66000,
+            originalReqSc: 88000,
+            reqVa: 0,
+            reqTeamVa: 0,
+            reqBranchSc: 0,
+            originalBranchSc: 0,
+            reqTeamSc: 0,
+            originalTeamSc: 0,
+            reqDirectVm: 0,
+            evalPeriod: '過往 6 個月個人業績 (75折: 66,000 SC)',
+            minTenure: '合約生效滿 3 個月後方可遞表',
+            vaNote: '無需下線人員',
+            training: 'FOCUS 180 (第一階段) 或 EENP'
+          },
+          {
+            id: 'UM',
+            code: 'UM',
+            name: '分組經理',
+            summary: '9萬 SC + 1+1 位 VA (75折)',
+            originalDesc: '原要求: 120,000 SC',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 1, // 1+1
+            reqTeamVa: 0,
+            reqBranchSc: 0,
+            originalBranchSc: 0,
+            reqTeamSc: 0,
+            originalTeamSc: 0,
+            reqDirectVm: 0,
+            evalPeriod: '過往 12 個月個人業績 (75折: 90,000 SC)',
+            minTenure: '最近職級生效滿 3 個月',
+            vaNote: '1位合資格營業員 (即 1+1 經理本人+1位下線)',
+            training: '新晉營業領袖必修課程'
+          },
+          {
+            id: 'BM',
+            code: 'BM',
+            name: '分行經理',
+            summary: '組別 30萬 SC + 1+2 位 VA (75折)',
+            originalDesc: '原要求: 400,000 SC',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2, // 1+2
+            reqTeamVa: 0,
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 0,
+            originalTeamSc: 0,
+            reqDirectVm: 0,
+            evalPeriod: '過往 12 個月組別業績 (75折: 300,000 SC)',
+            minTenure: '最近職級滿 3 個月',
+            vaNote: '1+2 位 VA (經理本人 + 2位下線 VA)',
+            training: '新晉營業領袖必修課程'
+          },
+          {
+            id: 'SBM',
+            code: 'SBM',
+            name: '資深分行經理',
+            summary: '直屬分行 45萬 SC + 4位 VA (75折)',
+            originalDesc: '原要求: 600,000 SC',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 4,
+            reqTeamVa: 0,
+            reqBranchSc: 450000,
+            originalBranchSc: 600000,
+            reqTeamSc: 0,
+            originalTeamSc: 0,
+            reqDirectVm: 0,
+            evalPeriod: '過往 12 個月直屬分行業績',
+            minTenure: '在職分行經理達 3 個月',
+            vaNote: '直屬分行 4 位 VA (包括經理本人)',
+            training: '在職分行經理合格'
+          },
+          {
+            id: 'AM',
+            code: 'AM',
+            name: '營業經理',
+            summary: '直屬30萬 + 團隊0.9M SC + 6位VA (75折)',
+            originalDesc: '原要求: 1.2M SC + 8位 VA',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2,
+            reqTeamVa: 6, // 6人
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 900000, // 0.9M
+            originalTeamSc: 1200000,
+            reqDirectVm: 1, // 1 VM
+            evalPeriod: '過往 12 個月業績 (團隊 0.9M SC)',
+            minTenure: '在職 BM/SBM 滿 6 個月',
+            vaNote: '直屬 1+2位VA，營業團隊 6 位VA，直屬下線 VM 1人',
+            training: '營業團隊領袖深造訓'
+          },
+          {
+            id: 'AD',
+            code: 'AD',
+            name: '營業總監',
+            summary: '團隊 1.8M SC + 9位VA + 1位VM (75折)',
+            originalDesc: '原要求: 2.4M SC + 12位 VA',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2,
+            reqTeamVa: 9, // 9人
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 1800000, // 1.8M
+            originalTeamSc: 2400000,
+            reqDirectVm: 1,
+            evalPeriod: '過往 12 個月團隊業績 (團隊 1.8M SC)',
+            minTenure: '在職 AM 滿 6 個月',
+            vaNote: '團隊 9 位VA，直屬下線 VM 1人',
+            training: '高級總監策劃領導營'
+          },
+          {
+            id: 'DD',
+            code: 'DD',
+            name: '分區總監',
+            summary: '團隊 3.2M SC + 14位VA + 2位VM (75折)',
+            originalDesc: '原要求: 4.3M SC + 18位 VA',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2,
+            reqTeamVa: 14, // 14人
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 3200000, // 3.2M
+            originalTeamSc: 4300000,
+            reqDirectVm: 2,
+            evalPeriod: '過往 12 個月團隊業績 (團隊 3.2M SC)',
+            minTenure: '在職 AD 滿 6 個月',
+            vaNote: '團隊 14 位VA，直屬下線 VM 2人',
+            training: '區域發展策略論壇'
+          },
+          {
+            id: 'SDD',
+            code: 'SDD',
+            name: '資深分區總監',
+            summary: '團隊 3.6M SC + 20位VA + 2位VM (75折)',
+            originalDesc: '原要求: 4.8M SC + 27位 VA',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2,
+            reqTeamVa: 20,
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 3600000,
+            originalTeamSc: 4800000,
+            reqDirectVm: 2,
+            evalPeriod: '過往 12 個月團隊業績',
+            minTenure: '在職 DD 滿 6 個月',
+            vaNote: '團隊 20 位VA，直屬 VM 2人',
+            training: '總裁領袖圓桌會議'
+          },
+          {
+            id: 'RD',
+            code: 'RD',
+            name: '區域總監',
+            summary: '團隊 4.35M SC + 28位VA + 3位VM (75折)',
+            originalDesc: '原要求: 5.8M SC + 36位 VA',
+            reqSc: 90000,
+            originalReqSc: 120000,
+            reqVa: 2,
+            reqTeamVa: 28, // 28人
+            reqBranchSc: 300000,
+            originalBranchSc: 400000,
+            reqTeamSc: 4350000, // 4.35M
+            originalTeamSc: 5800000,
+            reqDirectVm: 3, // 3 VM
+            evalPeriod: '過往 12 個月團隊業績 (團隊 4.35M SC)',
+            minTenure: '在職 DD/SDD 滿 1 年',
+            vaNote: '直屬 3 位 VM，團隊 28 位 VA',
+            training: '須經公司行政總裁批核'
+          }
+        ];
+
+        const wmRanks = [
+          { id: 'WMAM', code: 'WMAM', name: '財富管理助理經理', summary: '180,000 SC + 12張單', reqSc: 180000, evalPeriod: '過往12個月個人業績' },
+          { id: 'WMM', code: 'WMM', name: '財富管理經理', summary: '240,000 SC + 12張單', reqSc: 240000, evalPeriod: '過往12個月個人業績' },
+          { id: 'WMSM', code: 'WMSM', name: '財富管理高級經理', summary: '360,000 SC + 12張單', reqSc: 360000, evalPeriod: '過往12個月個人業績' },
+          { id: 'WMD', code: 'WMD', name: '財富管理總監', summary: '480,000 SC 或 MDRT資格', reqSc: 480000, evalPeriod: '2026 MDRT 業績標準' }
+        ];
+
+        const currentStats = reactive({
+          personalSc: 55000,
+          branchSc: 220000,
+          teamSc: 650000,
+          vaCount: 1,
+          teamVaCount: 4,
+          vmCount: 1,
+          tenureMonths: 8
+        });
+
+        const activeRankObj = computed(() => {
+          const list = careerTrack.value === 'team' ? teamRanks : wmRanks;
+          return list.find(r => r.id === targetRank.value) || list[0];
+        });
+
+        // Gap Checks
+        const checkPersonalSc = computed(() => {
+          const req = activeRankObj.value.reqSc || 0;
+          return { met: currentStats.personalSc >= req, diff: Math.max(0, req - currentStats.personalSc) };
+        });
+
+        const checkBranchSc = computed(() => {
+          const req = activeRankObj.value.reqBranchSc || 0;
+          if (req === 0) return { met: true, diff: 0 };
+          return { met: currentStats.branchSc >= req, diff: Math.max(0, req - currentStats.branchSc) };
+        });
+
+        const checkTeamSc = computed(() => {
+          const req = activeRankObj.value.reqTeamSc || 0;
+          if (req === 0) return { met: true, diff: 0 };
+          return { met: currentStats.teamSc >= req, diff: Math.max(0, req - currentStats.teamSc) };
+        });
+
+        const checkVa = computed(() => {
+          const r = activeRankObj.value;
+          const directMet = currentStats.vaCount >= (r.reqVa || 0);
+          const teamMet = currentStats.teamVaCount >= (r.reqTeamVa || 0);
+          return { met: directMet && teamMet };
+        });
+
+        const isAllPromotionMet = computed(() => {
+          return checkPersonalSc.value.met && checkBranchSc.value.met && checkTeamSc.value.met && checkVa.value.met;
+        });
+
+        // --- TAB 3: Rank Compensation Matrix Data ---
+        const selectedCompRank = ref('UM');
+
+        const rankList = [
+          { id: 'WMC', name: '理財顧問 (新人)', icon: '🌱' },
+          { id: 'ASM', name: '分組副經理', icon: '🥉' },
+          { id: 'UM', name: '分組經理', icon: '🥈' },
+          { id: 'BM', name: '分行經理 / SBM', icon: '🥇' },
+          { id: 'AM', name: '營業經理 / AD', icon: '👑' }
+        ];
+
+        const rankCompData = {
+          'WMC': {
+            code: 'WMC',
+            name: '理財顧問 (新人 WMC)',
+            tag: '基石起步',
+            highlight: '享有 FLDP 2.0 專屬高額津貼與季度起動獎金。',
+            annualPotential: '年入約 MOP $30萬 ~ $60萬+',
+            benefits: [
+              { title: '新晉津貼 (NAA)', rate: '每月高達 $20,000+', desc: '為期最長 18 個合約月份的穩定生活津貼。', note: '每月按期發放' },
+              { title: '快速起動獎金 (QSB)', rate: '15% ~ 35%', desc: '按季度 FYC 比例發放，業績達標可得最高 35% 額外加碼。', note: '每季末結算' },
+              { title: '新客戶獎金 (NCB)', rate: '10% (最高 $10萬)', desc: '第 24 個月達成 48 位新客戶且 SC≥48萬者專享。', note: '第 30 個月發放' },
+              { title: '招募介紹獎金 (NRRB)', rate: '7.5% ~ 15%', desc: '推薦新人入行，享有其首 24 個月 FYC 之指定比例。', note: '長達 24 個月' }
+            ]
+          },
+          'ASM': {
+            code: 'ASM',
+            name: '分組副經理 (ASM)',
+            tag: '管理儲備',
+            highlight: '6 個月達成 6.6 萬 SC (75折) 即晉升，晉升經理之關鍵跳板。',
+            annualPotential: '年入約 MOP $45萬 ~ $80萬+',
+            benefits: [
+              { title: '個人保單首年佣金', rate: '最高 53% FYC', desc: '個人直接銷售所獲取之保單佣金收入。', note: '按月出糧' },
+              { title: 'FLDP 2.0 專屬延續', rate: '津貼 + QSB', desc: '在 FLDP 期內晉升仍繼續保留 NAA 津貼及 QSB 權益。', note: '滿 18 個月轉專業制度' },
+              { title: '合資格營業員加乘', rate: '+10% FYC', desc: '成為 VA 即解鎖翌年或本年中所有指定年繳保單額外 10% 佣金。', note: '全年持續受惠' },
+              { title: '招募介紹獎金 (NRRB)', rate: '7.5% ~ 15%', desc: '下線或轉介新顧問，享受其首 24 個月首年佣金分成。', note: '被動收入起步' }
+            ]
+          },
+          'UM': {
+            code: 'UM',
+            name: '分組經理 (UM)',
+            tag: '基層管理領袖',
+            highlight: '首個享有「下線上線佣金 (Override)」的管理職級，開始建立個人團隊被動收入。',
+            annualPotential: '年入約 MOP $60萬 ~ $150萬+',
+            benefits: [
+              { title: '下線常規上線佣金 (Override)', rate: '7.0%', desc: '全組下線營業員所得 FYC 之 7% 每月額外進賬。', note: '每月隨糧發放' },
+              { title: '額外上線佣金 (Additional Override)', rate: '+7.0%', desc: '首 12 個月內晉升 UM 者，可連續 24 個月獲發下線 FYC 額外 7%！', note: '為期 24 個月' },
+              { title: '直屬上線招募獎金 (NROR)', rate: '10% ~ 20%', desc: '直屬增聘新人的首 24 個月內，最高可獲其佣金的 20% 上線獎金。', note: '每月發放 (扣除轉介)' },
+              { title: '專業年終獎金 (YEB)', rate: '10% ~ 30%', desc: '個人首年佣金 × 標準獎金% × 早鳥倍數(1.2) × 年期倍數(1.3)。', note: '每年 12 月結算' }
+            ]
+          },
+          'BM': {
+            code: 'BM',
+            name: '分行經理 / 資深分行經理 (BM / SBM)',
+            tag: '中堅營業領袖',
+            highlight: '正式開啟 4 層深度 Override 架構（第1層高達 28%），享有分行續保獎金與團隊增長獎金。',
+            annualPotential: '年入約 MOP $100萬 ~ $250萬+',
+            benefits: [
+              { title: '四層上線佣金 (T1~T4 Override)', rate: 'T1: 28% | T2: 12%', desc: '下線第一層最高享 28% FYC，第二層享 12%，第三層 5%，第四層 2%。', note: '每月按層級結算' },
+              { title: '直屬分行續保獎金 (Conservation)', rate: '7.5% ~ 15%', desc: '分行續保率達 80%~84.9% 享 7.5%，達 85% 或以上享 15% 續保佣金加碼。', note: '穩定被動金流' },
+              { title: '晉升表現獎金 (PPB)', rate: '每月高達 $7,000', desc: '直屬下線晉升 BM，每月獲發 $7,000，最長發放 18 個月 (總額達 $126,000)。', note: '為期 18 個月' },
+              { title: '團隊業績增長獎金 (AGB)', rate: '0.48% ~ 4.4%+', desc: '分行營業積分對比去年增長，於翌年 2 月領取整筆年度大紅包。', note: '每年 2 月單筆發放' }
+            ],
+            overrideTable: [
+              { tier: '第 1 級別 (SC ≥ 8.8萬)', t1: '28%', t2: '12%', t3: '5%', t4: '2%' },
+              { tier: '第 2 級別 (SC 4.4萬-8.8萬)', t1: '15%', t2: '6%', t3: '2.5%', t4: '1%' },
+              { tier: '第 3 級別 (SC < 4.4萬)', t1: '5%', t2: '0%', t3: '0%', t4: '0%' }
+            ]
+          },
+          'AM': {
+            code: 'AM',
+            name: '營業經理 / 營業總監 (AM / AD)',
+            tag: '高級營運總監',
+            highlight: '統率整個營業團隊，享有每月營業團隊津貼 (MAA)，培育經理每月享額外晉升獎金。',
+            annualPotential: '年入約 MOP $180萬 ~ $400萬+',
+            benefits: [
+              { title: '四層團隊上線佣金 (Override)', rate: 'T1: 28% | T2: 12%', desc: '營業團隊下線第一至第四層全覆蓋，管理收益規模幾何倍增。', note: '每月出糧發放' },
+              { title: '每月營業團隊津貼 (MAA)', rate: '每月高達 $34,000+', desc: '依合資格經理 (VM) 及新晉升經理倍數計算日常營運津貼。', note: '由公司授權管理發放' },
+              { title: '下線晉升表現獎金 (PPB)', rate: '每月 $12,000~$18,000', desc: '培育直屬經理晉升 AM/AD，連續 24 個月每月發放高達 $18,000。', note: '為期 24 個月' },
+              { title: '團隊增長突破獎金 (AGB)', rate: '3.0% ~ 5.2%', desc: '團隊業績突破要求時，享全團隊首年佣金 3.5% 之整筆鉅額獎勵。', note: '翌年 2 月發放' }
+            ],
+            overrideTable: [
+              { tier: '第 1 級別 (SC ≥ 8.8萬)', t1: '28%', t2: '12%', t3: '5%', t4: '2%' },
+              { tier: '第 2 級別 (SC 4.4萬-8.8萬)', t1: '15%', t2: '6%', t3: '2.5%', t4: '1%' },
+              { tier: '第 3 級別 (SC < 4.4萬)', t1: '5%', t2: '0%', t3: '0%', t4: '0%' }
+            ]
+          },
+          'DD': {
+            code: 'DD',
+            name: '分區總監 / 資深分區總監 (DD / SDD)',
+            tag: '區域統帥',
+            highlight: '第一層 Override 升至 30%，續保獎金升至 20%，培育下線總監月領 $22,000 晉升獎。',
+            annualPotential: '年入約 MOP $300萬 ~ $700萬+',
+            benefits: [
+              { title: '升級四層 Override', rate: 'T1: 30% | T2: 13%', desc: '第一層佣金率全面升至 30%，第二層 13%，擴大管理槓桿。', note: '每月結算' },
+              { title: '直屬分行續保獎金加碼', rate: '10% ~ 20%', desc: '續保率達 85% 或以上，直接領取直屬分行續保佣金的 20%！', note: '每月入賬' },
+              { title: '分區總監晉升獎金 (PPB)', rate: '每月 $22,000', desc: '培育下線晉升分區總監，享有連續 24 個月每月 $22,000 (總額 $52.8萬)。', note: '為期 24 個月' },
+              { title: '營業團隊津貼 (MAA)', rate: '每月高達 $34,000+', desc: '依合資格經理 (VM) 人數與新晉升領袖發放。', note: '營運管理支持' }
+            ],
+            overrideTable: [
+              { tier: '第 1 級別 (SC ≥ 8.8萬)', t1: '30%', t2: '13%', t3: '5%', t4: '2%' },
+              { tier: '第 2 級別 (SC 4.4萬-8.8萬)', t1: '15%', t2: '6%', t3: '2.5%', t4: '1%' },
+              { tier: '第 3 級別 (SC < 4.4萬)', t1: '5%', t2: '0%', t3: '0%', t4: '0%' }
+            ]
+          },
+          'RD': {
+            code: 'RD',
+            name: '區域總監 (Regional Director) (RD)',
+            tag: '巔峰總舵領航者',
+            highlight: '享受頂級每月區域津貼 (MRA 高達 $90,000+/月)，以及家族團隊高達 8.0% 之團隊增長獎金！',
+            annualPotential: '年入約 MOP $500萬 ~ $1,500萬+',
+            benefits: [
+              { title: '頂級四層 Override', rate: 'T1: 30% | T2: 13%', desc: '享有區域轄下龐大顧問網絡之多層穩定被動收入分配。', note: '每月結算' },
+              { title: '每月區域津貼 (MRA)', rate: '每月高達 $90,000+', desc: '結合 VA 人數津貼 (最高 $25,000) + VM 經理津貼 (最高 $65,000) × 1.1。', note: '按月發放' },
+              { title: '新分拆區域持續 Override', rate: '完全保留', desc: '轄下經理分拆成立新區域，依舊獲發該分拆區域所有營業員之上線佣金！', note: '長期收益保障' },
+              { title: '團隊增長突破獎 (AGB)', rate: '4.5% ~ 8.0%', desc: '大型區域團隊首年佣金之 5%~8% 單筆發放，年度獎金動輒數百萬。', note: '每年 2 月單筆巨獻' }
+            ],
+            overrideTable: [
+              { tier: '第 1 級別 (SC ≥ 8.8萬)', t1: '30%', t2: '13%', t3: '5%', t4: '2%' },
+              { tier: '第 2 級別 (SC 4.4萬-8.8萬)', t1: '15%', t2: '6%', t3: '2.5%', t4: '1%' },
+              { tier: '第 3 級別 (SC < 4.4萬)', t1: '5%', t2: '0%', t3: '0%', t4: '0%' }
+            ]
+          }
+        };
+
+        const currentRankComp = computed(() => {
+          return rankCompData[selectedCompRank.value] || rankCompData['UM'];
+        });
+
+        // Scenario Simulator reactive state
+        const rankSim = reactive({
+          personalFyc: 40000,
+          downlineFyc: 250000,
+          enableNror: true,
+          recruitFyc: 30000,
+          recruitType: 'direct' // 'direct' (20%) or 'referral' (5%)
+        });
+
+        const simulatedOverride = computed(() => {
+          const rk = selectedCompRank.value;
+          const dfyc = rankSim.downlineFyc || 0;
+          if (rk === 'WMC' || rk === 'ASM') return 0;
+          if (rk === 'UM') return dfyc * 0.14; // 7% standard + 7% additional
+          if (rk === 'BM') return dfyc * 0.28; // T1 rate
+          if (rk === 'AM') return dfyc * 0.28;
+          if (rk === 'DD' || rk === 'RD') return dfyc * 0.30;
+          return 0;
+        });
+
+        const simulatedNrorAmount = computed(() => {
+          if (!rankSim.enableNror) return 0;
+          const rfyc = rankSim.recruitFyc || 0;
+          const rate = rankSim.recruitType === 'direct' ? 0.20 : 0.05;
+          return rfyc * rate;
+        });
+
+        const simulatedAllowance = computed(() => {
+          const rk = selectedCompRank.value;
+          if (rk === 'WMC') return fldpNaa.value;
+          if (rk === 'AM') return 16000; // MAA sample
+          if (rk === 'DD') return 20000;
+          if (rk === 'RD') return 45000; // MRA sample
+          return 0;
+        });
+
+        const simulatedRankMonthlyTotal = computed(() => {
+          return (rankSim.personalFyc || 0) + simulatedOverride.value + simulatedNrorAmount.value + simulatedAllowance.value;
+        });
+
+        // Full Product Catalog list for Tab 5
+        const fullProductList = [
+          { name: '危疾應援保 / 升級版 (HKN/HKF)', cat: '個人危疾', term: '10年繳', y1: 30.0, y2: 5.0, y3plus: '3% (第3年) / 3% (第4-5年)', badgeColor: 'bg-rose-100 text-rose-800' },
+          { name: '危疾應援保 / 升級版 (HKN/HKF)', cat: '個人危疾', term: '15年繳', y1: 40.0, y2: 10.0, y3plus: '4% (第3年) / 3% (第4-5年)', badgeColor: 'bg-rose-100 text-rose-800' },
+          { name: '危疾應援保 / 升級版 (HKN/HKF)', cat: '個人危疾', term: '20年繳', y1: 50.0, y2: 9.0, y3plus: '18% (第3年) / 5% (第4-7年)', badgeColor: 'bg-rose-100 text-rose-800' },
+          { name: '危疾應援保 / 升級版 (HKN/HKF)', cat: '個人危疾', term: '25年繳', y1: 52.0, y2: 9.0, y3plus: '20% (第3年) / 5% (第4-7年)', badgeColor: 'bg-rose-100 text-rose-800' },
+          { name: '危疾應援保 / 升級版 (HKN/HKF)', cat: '個人危疾', term: '30年繳', y1: 53.0, y2: 9.0, y3plus: '22% (第3年) / 5% (第4-7年)', badgeColor: 'bg-rose-100 text-rose-800' },
+          { name: '盈聚·天下II 保險計劃 (GFC/GFB)', cat: '終身壽險/儲蓄', term: '躉繳', y1: 3.0, y2: 0, y3plus: '年長佣金調整適用', badgeColor: 'bg-amber-100 text-amber-800' },
+          { name: '盈聚·天下II 保險計劃 (GFC/GFB)', cat: '終身壽險/儲蓄', term: '2年繳', y1: 7.0, y2: 0, y3plus: '年長佣金調整適用', badgeColor: 'bg-amber-100 text-amber-800' },
+          { name: '盈聚·天下II 保險計劃 (GFC/GFB)', cat: '終身壽險/儲蓄', term: '3年繳', y1: 11.0, y2: 0, y3plus: '年長佣金調整適用', badgeColor: 'bg-amber-100 text-amber-800' },
+          { name: '盈聚·天下II 保險計劃 (GFC/GFB)', cat: '終身壽險/儲蓄', term: '5年繳', y1: 27.5, y2: 5.0, y3plus: '2.0% (第3-5年)', badgeColor: 'bg-amber-100 text-amber-800' },
+          { name: '盈聚·天下II 保險計劃 (GFC/GFB)', cat: '終身壽險/儲蓄', term: '10年繳', y1: 35.0, y2: 10.0, y3plus: '3.0% (第3-6年)', badgeColor: 'bg-amber-100 text-amber-800' },
+          { name: '醫家保醫療計劃 (HVS9)', cat: '個人醫療', term: '年繳 (0-74歲)', y1: 27.0, y2: 22.0, y3plus: '15% (第3-10年) / 10% (11-15年)', badgeColor: 'bg-emerald-100 text-emerald-800' },
+          { name: '尊衛您 (寰譽版) 醫療 (HVS8)', cat: '高端醫療', term: '年繳 (1-81歲)', y1: 25.0, y2: 15.0, y3plus: '20% (第3-10年) / 10% (11年+)', badgeColor: 'bg-purple-100 text-purple-800' },
+          { name: '更衛您 (優越版) 醫療 (HVS3)', cat: '個人醫療', term: '年繳 (1-81歲)', y1: 22.0, y2: 18.0, y3plus: '18% (第2年+)', badgeColor: 'bg-emerald-100 text-emerald-800' },
+          { name: '衛你所愛壽險計劃 (HLW/ULW)', cat: '終身壽險', term: '20年繳', y1: 50.0, y2: 13.0, y3plus: '4.0% (第3-4年) / 1.5% (第5年)', badgeColor: 'bg-blue-100 text-blue-800' },
+          { name: '承譽定期壽險 (UHN)', cat: '定期壽險', term: '20年期', y1: 41.9, y2: 30.0, y3plus: '1.5% (第3-5年)', badgeColor: 'bg-slate-100 text-slate-800' }
+        ];
+
+        return {
+          currentTab,
+          tabs,
+          userRank,
+          userRankName,
+          formatNumber,
+          productCatalog,
+          selectedProduct,
+          selectProduct,
+          setProductTerm,
+          currentTermFyc,
+          activeProductFyc,
+          inputAfyp,
+          policyCount,
+          fldpNaa,
+          selectedQuarter,
+          personalPersistency,
+          hasExtraTenPercent,
+          fldpEvaluationScale,
+          totalAfyp,
+          baseFyc,
+          totalSc,
+          extraTenAmount,
+          qsbRate,
+          qsbBonusAmount,
+          estimatedYeb,
+          grandTotalIncome,
+          careerTrack,
+          targetRank,
+          teamRanks,
+          wmRanks,
+          currentStats,
+          activeRankObj,
+          checkPersonalSc,
+          checkBranchSc,
+          checkTeamSc,
+          checkVa,
+          isAllPromotionMet,
+          selectedCompRank,
+          rankList,
+          currentRankComp,
+          rankSim,
+          simulatedOverride,
+          simulatedNrorAmount,
+          simulatedAllowance,
+          simulatedRankMonthlyTotal,
+          fullProductList
+        };
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>
