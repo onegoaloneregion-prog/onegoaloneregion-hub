@@ -548,7 +548,7 @@ window.adminResetPassword = async function(docId, userCode) {
                 <div class="lg:col-span-4 space-y-5 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm border-b pb-3 flex items-center gap-2"><span>⚙️</span> 選擇條件</h3>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcansurance">易衛您</option><option value="myterm">自主保定期保障計劃 (MyTerm)</option><option value="lifepromise">衛你所愛壽險計劃 (Life Promise)</option></select></div>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">投保年齡 (下次生日 0-80歲)</label><input id="calcAge" type="number" value="30" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
+                  <div><label id="ageLabel" class="block text-xs font-bold text-slate-600 mb-1.5">投保年齡 (下次生日 <span id="ageRangeNotice">0-80歲</span>)</label><input id="calcAge" type="number" value="30" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">性別</label><select id="calcGender" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="female" selected>女性</option><option value="male">男性</option></select></div>
                     <div id="payTermBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">繳費年期</label><select id="calcPayTerm" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="10">10年繳 (最高70歲)</option><option value="15">15年繳 (最高60歲)</option><option value="20" selected>20年繳 (最高55歲)</option><option value="25">25年繳 (最高50歲)</option><option value="30">30年繳 (最高50歲)</option></select></div>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">保單貨幣</label><select id="calcCurrency" onchange="handleCurrencyChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="HKD" selected>港幣 HKD</option><option value="USD">美元 USD</option></select></div>
@@ -3183,6 +3183,34 @@ function updateCalcOptions() {
     var isMyTerm = (p.indexOf('term') !== -1 || pText.indexOf('自主保') !== -1);
     var isLifePromise = (p.indexOf('life') !== -1 || p.indexOf('promise') !== -1 || pText.indexOf('衛你所愛') !== -1);
     var isMedical = !isCrisis && !isMyTerm && !isLifePromise;
+    // 動態切換投保年齡限制與標籤提示 (自主保 19-61歲 / 危疾 0-70歲 / 其他 0-80歲)
+    var ageEl = document.getElementById('calcAge');
+    var ageLabelEl = document.querySelector('label[for="calcAge"]') || document.getElementById('ageLabel') || (ageEl ? ageEl.previousElementSibling : null);
+    var currentAgeVal = parseInt(ageEl ? ageEl.value : 30) || 30;
+
+    if (isMyTerm) {
+        // 自主保 (MyTerm)：官方規定 19 - 61 歲 (下次生日)
+        if (ageLabelEl) ageLabelEl.innerText = '投保年齡 (下次生日 19-61歲)';
+        if (ageEl) {
+            ageEl.min = '19';
+            ageEl.max = '61';
+            if (currentAgeVal < 19) ageEl.value = 19;
+            else if (currentAgeVal > 61) ageEl.value = 61;
+        }
+    } else if (isCrisis) {
+        // 危疾應援保：0 - 70 歲 (10年繳最高70歲)
+        if (ageLabelEl) ageLabelEl.innerText = '投保年齡 (下次生日 0-70歲)';
+        if (ageEl) {
+            ageEl.min = '0';
+            ageEl.max = '70';
+        }
+    } else {
+        if (ageLabelEl) ageLabelEl.innerText = '投保年齡 (下次生日 0-80歲)';
+        if (ageEl) {
+            ageEl.min = '0';
+            ageEl.max = '80';
+        }
+    }
 
     // 1. 投保額區塊 (醫療險隱藏投保額；危疾/壽險顯示)
     var sumBlock = document.getElementById('crisisSumBlock') || (document.getElementById('calcSumInsured') ? document.getElementById('calcSumInsured').closest('div') : null);
@@ -3299,7 +3327,31 @@ function updateCalcOptions() {
             payTermBlock.style.display = 'none';
         }
     }
+// 動態更新不同產品的最低投保額提示與預設保額
+    var currEl = document.getElementById('calcCurrency');
+    var curr = currEl ? currEl.value : 'HKD';
+    var minSumEl = document.getElementById('minSumLabel');
+    var sumEl = document.getElementById('calcSumInsured');
 
+    if (isMyTerm) {
+        // 自主保 (MyTerm)：港幣最低 75 萬，美元最低 93,750
+        if (minSumEl) {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $93,750' : '最低 $750,000';
+        }
+        if (sumEl) {
+            var val = parseFloat(String(sumEl.value).replace(/[^0-9.]/g, '')) || 0;
+            if (curr === 'HKD' && val < 750000) {
+                sumEl.value = '750,000';
+            } else if (curr === 'USD' && val < 93750) {
+                sumEl.value = '93,750';
+            }
+        }
+    } else if (isCrisis) {
+        // 危疾應援保：港幣最低 12 萬，美元最低 15,000
+        if (minSumEl) {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $15,000' : '最低 $120,000';
+        }
+    }
     runPremiumQuery();
 }
 
@@ -3341,12 +3393,7 @@ function runPremiumQuery() {
     if (document.getElementById('currLabel')) {
         document.getElementById('currLabel').innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
     }
-// 動態更新投保額最低門檻提示 (美元 $15,000 / 港幣 $120,000)
-    var minSumText = (curr === 'USD') ? '最低 $15,000' : '最低 $120,000';
-    var sumLabelEl = document.getElementById('sumInsuredLabel') || document.querySelector('label[for="calcSumInsured"]');
-    if (sumLabelEl) {
-        sumLabelEl.innerText = '投保額 (' + (curr === 'USD' ? '美元 USD · ' : '港幣 HKD · ') + minSumText + ')';
-    }
+
     var baseHkdSum = (curr === 'USD') ? (sumInsured * 7.8) : sumInsured;
     var annual = 0;
 
@@ -3358,6 +3405,17 @@ function runPremiumQuery() {
     var isFamily = (p.indexOf('family') !== -1 || pName.indexOf('醫家保') !== -1);
    var isCare = (p.indexOf('care') !== -1 || p.indexOf('hvs5') !== -1);
 var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pName.indexOf('易衛您') !== -1);
+    // 依據產品動態更新最低投保額標籤
+    var minSumEl = document.getElementById('minSumLabel');
+    if (minSumEl) {
+        if (isMyTerm) {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $93,750' : '最低 $750,000';
+        } else if (isLifePromise) {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $30,000' : '最低 $240,000';
+        } else {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $15,000' : '最低 $120,000';
+        }
+    }
     if (isMyTerm) {
         var isSmk = (rateType === 'standard');
         annual = calcMyTermPremium(age, gender, payTerm, isSmk, baseHkdSum);
@@ -3741,20 +3799,38 @@ function handleCurrencyChange() {
         currLabelEl.innerText = (curr === 'USD') ? '美元 USD' : '港幣 HKD';
     }
 
-    // 2. 更新最低投保額提示 (美元 USD 最低 $15,000 / 港幣 HKD 最低 $120,000)
+   // 判斷當前是否為自主保
+    var pEl = document.getElementById('calcProduct');
+    var pVal = (pEl ? pEl.value : '').toLowerCase().trim();
+    var pText = (pEl && pEl.selectedIndex >= 0) ? pEl.options[pEl.selectedIndex].text : '';
+    var isMyTerm = (pVal.indexOf('term') !== -1 || pText.indexOf('自主保') !== -1);
+
+    // 2. 更新最低投保額提示 (自主保：港幣 75 萬 / 美元 93,750；其他：港幣 12 萬 / 美元 15,000)
     var minSumEl = document.getElementById('minSumLabel');
     if (minSumEl) {
-        minSumEl.innerText = (curr === 'USD') ? '最低 $15,000' : '最低 $120,000';
+        if (isMyTerm) {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $93,750' : '最低 $750,000';
+        } else {
+            minSumEl.innerText = (curr === 'USD') ? '最低 $15,000' : '最低 $120,000';
+        }
     }
 
-    // 3. 自動調整預設保額 (切換美金時若保額過大或過小，可自動調整或保持使用者輸入)
+    // 3. 自動調整預設保額
     var sumEl = document.getElementById('calcSumInsured');
     if (sumEl) {
         var currentVal = parseFloat(String(sumEl.value).replace(/[^0-9.]/g, '')) || 0;
-        if (curr === 'USD' && currentVal === 500000) {
-            sumEl.value = '50,000';
-        } else if (curr === 'HKD' && currentVal === 50000) {
-            sumEl.value = '500,000';
+        if (isMyTerm) {
+            if (curr === 'USD' && (currentVal === 750000 || currentVal === 500000)) {
+                sumEl.value = '93,750';
+            } else if (curr === 'HKD' && (currentVal === 93750 || currentVal === 50000)) {
+                sumEl.value = '750,000';
+            }
+        } else {
+            if (curr === 'USD' && currentVal === 500000) {
+                sumEl.value = '50,000';
+            } else if (curr === 'HKD' && currentVal === 50000) {
+                sumEl.value = '500,000';
+            }
         }
     }
 
@@ -3858,17 +3934,17 @@ function getAiKnowledgeResponse(query) {
     if (q.indexOf('盈聚') !== -1 || q.indexOf('gfd') !== -1 || q.indexOf('天下') !== -1 || q.indexOf('儲蓄') !== -1 || q.indexOf('預繳') !== -1 || q.indexOf('特色') !== -1 || q.indexOf('獎賞') !== -1) {
         return "💎 <b>【盈聚·天下 II 核心亮點與四大保證獎賞】</b><br><br>• <b>回本提早：</b>歸原紅利提早至第 2 年公佈；紅利鎖定最早第 9 年可靈活行使。<br>• <b>四大保證獎賞：</b>初生嬰兒獎賞、傑出表現獎賞（學業優秀）、享悅人生獎賞（結婚/置業）及長壽獎賞。<br>• <b>極高預繳利率：</b>美元保單預繳享高達 5% 保證年利率，總保費折扣優惠高達 75.4%！<br>• <b>富傳家選項：</b>無限次更換受保人與設立第二受保人，財富跨代滾存！";
     }
-    if (q.indexOf('危疾') !== -1 || q.indexOf('點賠') !== -1 || q.indexOf('理賠') !== -1 || q.indexOf('應援保') !== -1 || q.indexOf('癌') !== -1 || q.indexOf('中風') !== -1) {
-        return "❤️‍🩹 <b>【危疾理賠機制與應援保核心賣點】</b><br><br>1️⃣ <b>點樣賠？（一筆過現金）：</b>只要專科醫生確診符合保單定義之危疾，即時支取 100% 現金賠償，不限用途（填補停工收入、自費標靶藥、私家護工）。<br>2️⃣ <b>富衛《危疾應援保》王牌優勢：</b><br>• <b>首15年加碼：</b>額外獲贈 75% 保額！<br>• <b>多重守護：</b>高達 7 次指定危疾多重保障（涵蓋癌/心/中風及腦退化等）。<br>• <b>供款安全網：</b>累計賠償達 100% 原有保額後，<b>即時豁免後續所有未繳保費</b>，保障終身有效！";
+   // 🌟 1. 優先判斷：尊衛您 16 種危疾豁免自付費（防止被底下的「危疾」關鍵字攔截）
+    if ((q.indexOf('尊衛您') !== -1 || q.indexOf('自付') !== -1 || q.indexOf('豁免') !== -1) && (q.indexOf('16') !== -1 || q.indexOf('危疾') !== -1)) {
+        return `🛡️ <b>【尊衛您（寰譽版）16 種指定危疾全數豁免自付費】</b><br><br>受保人若確診指定危疾（包括指定癌症、心臟病、中風等 16 種重症），因該危疾接受醫療服務時，<b>自付費將直接降為 $0（全數豁免）</b>！<br><br>🎯 <b>自付費選項與實戰：</b><br>• 設 6 種自付費選項（$0 / $16,000 / $25,000 / $50,000 / $100,000 / $250,000）。<br>• 客人多選 $16,000 或 $25,000 降低保費，遇大病即啟動豁免機制；保單生效滿2年後，於指定年齡（50-80歲）更可<b>免核保降低/免除自付費</b>一次！`;
     }
+
+    // 2. 危疾應援保核心賣點
+    if (q.indexOf('危疾') !== -1 || q.indexOf('點賠') !== -1 || q.indexOf('理賠') !== -1 || q.indexOf('應援保') !== -1 || q.indexOf('癌') !== -1 || q.indexOf('中風') !== -1) {
+        return "💖 <b>【危疾理賠機制與應援保核心賣點】</b><br><br>1️⃣ <b>點樣賠？（一筆過現金）：</b>只要專科醫生確診符合保單定義之危疾，即時支取 100% 現金賠償，不限用途（填補停工收入、自費標靶藥、私家護工）。<br>2️⃣ <b>富衛《危疾應援保》王牌優勢：</b><br>• 首15年加碼：額外獲贈 75% 保額！<br>• 多重守護：高達 7 次指定危疾多重保障（涵蓋癌/心/中風及腦退化等）。<br>• 供款安全網：累計賠償達 100% 原有保額後，即時豁免後續所有未繳保費，保障終身有效！";
+    }
+
     if (q.indexOf('醫療') !== -1 || q.indexOf('醫保') !== -1 || q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1 || q.indexOf('醫家保') !== -1 || q.indexOf('自付費') !== -1) {
-        if (q.indexOf('自付費') !== -1 || q.indexOf('豁免') !== -1 || q.indexOf('16種') !== -1) {
-            return `💡 <b>【尊衛您（寰譽版）16 種指定危疾全數豁免自付費】</b><br><br>
-受保人若確診指定危疾（包括指定癌症、心臟病、中風等 16 種重症），因該危疾接受醫療服務時，<b>自付費將直接降為 $0（全數豁免）</b>！<br><br>
-🎯 <b>自付費選項與實戰：</b><br>
-• 設 6 種自付費選項（$0 / $16,000 / $25,000 / $50,000 / $100,000 / $250,000）。<br>
-• 客人多選 $16,000 或 $25,000 降低保費，遇大病即啟動豁免機制；保單生效滿2年後，於指定年齡（50-80歲）更可<b>免核保降低/免除自付費</b>一次！`;
-        }
         if (q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1) {
             return `🩺 <b>【富衛頂級醫療旗艦 · 尊衛您（寰譽版）核心優勢】</b><br><br>
 1️⃣ <b>超高保額 · 無終身限額：</b><br>
