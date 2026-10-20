@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>保單服務營運指引檢索系統 v2.0</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              300: '#7cc5fb',
+              400: '#38a8f8',
+              500: '#0e8ce9',
+              600: '#0270c7',
+              700: '#0359a1',
+              800: '#074c84',
+              900: '#0c3f6e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f8fe;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #bae0fd;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7cc5fb;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <header class="bg-gradient-to-r from-sky-600 via-sky-500 to-brand-500 text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center font-black text-xl tracking-wider text-white shadow-inner">
+          <i class="fa-solid fa-book-bookmark text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold tracking-tight">保單服務營運指引</h1>
+            <span class="bg-white/25 text-white text-xs px-2 py-0.5 rounded-full font-medium">版本 2.0 (2025年10月)</span>
+          </div>
+          <p class="text-xs text-sky-100">壽險營運部 • 內部理財顧問專用操作檢索系統 (純指引內容無虛構)</p>
+        </div>
+      </div>
+
+      <!-- Quick Action / Hotline -->
+      <div class="flex items-center gap-3 text-xs">
+        <span class="bg-sky-700/60 px-3 py-1.5 rounded-lg border border-sky-400/30 flex items-center gap-1.5">
+          <i class="fa-solid fa-phone"></i> 客戶服務熱線: (853) 8988 6060
+        </span>
+        <span class="hidden sm:inline-flex bg-sky-700/60 px-3 py-1.5 rounded-lg border border-sky-400/30 items-center gap-1.5">
+          <i class="fa-solid fa-fax"></i> 投連傳真: (853) 8988 6100
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+    <!-- Notice / Breadcrumb Alert -->
+    <div class="mb-6 bg-sky-50 border-l-4 border-sky-400 p-3.5 rounded-r-xl text-xs text-sky-800 flex items-center justify-between shadow-sm">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-sky-600 text-sm"></i>
+        <span><strong>指引嚴格提示：</strong>版本 2.0 重點更新了「更改保單合約內容申請書 (額外儲蓄/轉撥、更改付款方式、更改權益人、保費儲備戶口)」與「投資相連計劃 (新增額外保費、更改付款方式)」之最新付款及審查規定。</span>
+      </div>
+      <span class="hidden md:inline-block font-medium text-sky-700 bg-sky-100/70 px-2.5 py-1 rounded-md">
+        營運地點: 澳門工商銀行大廈 12 樓
+      </span>
+    </div>
+
+    <!-- Search & Quick Filters -->
+    <div class="bg-white rounded-2xl shadow-sm border border-sky-100 p-4 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        <!-- Search Input -->
+        <div class="md:col-span-5 relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-sky-400 text-sm"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="搜尋業務名稱、條款、表格編號、處理天數 (例如: 提款, 復保, 120000, 7天)..." 
+            class="w-full pl-10 pr-4 py-2 text-sm bg-sky-50/50 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:bg-white text-slate-800 placeholder-slate-400 transition"
+            oninput="filterCards()"
+          >
+        </div>
+
+        <!-- Section Filter -->
+        <div class="md:col-span-4">
+          <select 
+            id="categoryFilter" 
+            class="w-full py-2 px-3 text-sm bg-sky-50/50 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 font-medium cursor-pointer"
+            onchange="filterCards()"
+          >
+            <option value="all">全目錄分類 (全部顯示)</option>
+            <option value="part1">第一部分: 更改保單合約內容 (傳統/儲蓄)</option>
+            <option value="part2">第二部分: 投資相連計劃服務 (ILP)</option>
+            <option value="part3">第三部分: 終止保單合約 (退保)</option>
+            <option value="part4">第四部分: 客戶各類通知書一覽</option>
+            <option value="part5">第五部分: 繳付保費安排與合規審查</option>
+            <option value="part6to9">第六~九部分: 一站式 / FATCA / CRS / 衛e道</option>
+            <option value="forms">附件指南: 8大申請表格 & A~G通知書對照</option>
+          </select>
+        </div>
+
+        <!-- Compliance Quick Toggles -->
+        <div class="md:col-span-3 flex items-center justify-end gap-2 text-xs">
+          <button onclick="quickFilterTag('大額審查')" class="px-2.5 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 rounded-lg font-semibold transition border border-sky-200">
+            <i class="fa-solid fa-shield-halved mr-1"></i>MOP12萬審查
+          </button>
+          <button onclick="quickFilterTag('即日服務')" class="px-2.5 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg font-semibold transition border border-blue-200">
+            <i class="fa-solid fa-bolt mr-1"></i>一站式即日
+          </button>
+          <button onclick="resetFilters()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition" title="重置過濾">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Category Pills -->
+      <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-sky-50 text-xs">
+        <span class="text-slate-400 self-center mr-1">熱門關鍵字:</span>
+        <button onclick="setSearchTerm('增加投保額')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">增加投保額</button>
+        <button onclick="setSearchTerm('保單貸款')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">保單貸款(6%)</button>
+        <button onclick="setSearchTerm('更改保單權益人')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">更改保單權益人</button>
+        <button onclick="setSearchTerm('保費儲備戶口')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">保費儲備戶口(PDA)</button>
+        <button onclick="setSearchTerm('第三者繳費')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">第三者繳費(SAPPA)</button>
+        <button onclick="setSearchTerm('自動轉賬')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">自動轉賬扣賬日</button>
+        <button onclick="setSearchTerm('投資選擇轉換')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-700">投資轉換/調配</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-6">
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">即日辦理 (3:00pm前)</div>
+        <div class="text-base font-bold text-sky-900">一站式櫃台</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">地址/受益人/&lt;5萬提款/貸款</div>
+      </div>
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">3 個工作天</div>
+        <div class="text-base font-bold text-sky-900">基本資料維護</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">改地址/電話/更改受益人</div>
+      </div>
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">5 個工作天</div>
+        <div class="text-base font-bold text-sky-900">繳費與常規維護</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">更改付款方式/額外儲蓄/補發保單</div>
+      </div>
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">7 個工作天</div>
+        <div class="text-base font-bold text-sky-900">多數保單變更</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">增減保額/附約/改權益人/提款</div>
+      </div>
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">8~10 個工作天</div>
+        <div class="text-base font-bold text-sky-900">基金交易與儲蓄</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">投連轉換(8天)/增加定期儲蓄(10天)</div>
+      </div>
+      <div class="bg-gradient-to-br from-white to-sky-50 border border-sky-200 rounded-xl p-3 text-center shadow-sm">
+        <div class="text-[11px] text-sky-600 font-semibold mb-0.5">14 個工作天</div>
+        <div class="text-base font-bold text-sky-900">終止退保支票</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">終止合約/發出退保支票</div>
+      </div>
+    </div>
+
+    <section class="mb-8 bg-sky-50/70 border border-sky-200 rounded-2xl p-4 sm:p-5 shadow-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </span>
+        <h2 class="text-base font-bold text-sky-900">防洗黑錢 (AML) 及付款關鍵合規紅線 (全指引通用要求)</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs">
+          <div class="font-bold text-sky-800 flex items-center gap-1.5 mb-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 等於或超過 MOP 120,000 元
+          </div>
+          <p class="text-slate-600 leading-relaxed mb-2">
+            存入（額外儲蓄、轉撥保費、保費儲備戶口、投連額外投資）或提取保單價值達此金額時，<strong>必須聲明</strong>：
+          </p>
+          <ul class="list-disc pl-4 text-slate-700 space-y-0.5">
+            <li>現職公司名稱、任職年期、職位、月薪</li>
+            <li>新增/存入/提取原因及目的</li>
+            <li><strong>資金來源</strong> 及 <strong>財富來源</strong></li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs">
+          <div class="font-bold text-sky-800 flex items-center gap-1.5 mb-1.5">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span> 中銀/Jetco 繳費 &gt;= MOP 120,000
+          </div>
+          <p class="text-slate-600 leading-relaxed mb-2">
+            經中國銀行或 Jetco 繳費（含 ATM 或網銀）等值或超過 MOP 120,000，必須提交<strong>有效付款證明</strong>確認付款人身份，須包含：
+          </p>
+          <ol class="list-decimal pl-4 text-slate-700 space-y-0.5">
+            <li>付款人全名</li>
+            <li>付款貨幣</li>
+            <li>付款金額</li>
+            <li>交易日期（須與公司收到之款項一致）</li>
+          </ol>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs">
+          <div class="font-bold text-sky-800 flex items-center gap-1.5 mb-1.5">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span> 第三者繳費 (SAPPA) 及百萬審查
+          </div>
+          <ul class="list-disc pl-4 text-slate-700 space-y-1">
+            <li><strong>一般規定：</strong>保單繳款人僅限權益人、被保人或受益人。任何第三者繳費必須填寫《保費繳付特別安排申請書》(SAPPA) + 身份證明文件。</li>
+            <li><strong>公司繳費：</strong>任何金額均須每次連同付款遞交關係證明文件。</li>
+            <li><strong>加強審查 (EDD)：</strong>超過 <strong>MOP 1,000,000 / HKD 1,000,000 / USD 125,000</strong>，必須額外遞交關係證明 + 《加強盡職審查表格-個人/商業客戶》。</li>
+            <li><strong>嚴格禁令：</strong>公司不接受理財顧問（不論級別）以任何形式代客繳款。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-sm font-bold text-slate-700 flex items-center gap-2">
+        <span>作業指引條目清單</span>
+        <span id="resultsCount" class="bg-sky-100 text-sky-800 px-2.5 py-0.5 rounded-full text-xs font-semibold">共 38 個項目</span>
+      </div>
+      <div class="text-xs text-slate-400">
+        點擊各卡片查看詳細手續、必備文件與批註送遞規則
+      </div>
+    </div>
+
+    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+      <!-- Item 1.1.1: 增加投保額 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="增加投保額 首個保單年度 銷售說明 7天 附件1 甲部1.1 乙部 FNA">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">1.1.1 更改基本計劃</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">增加投保額 (首年內申請)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            個別計劃可於<strong>首個保單年度內</strong>申請增加基本計劃投保額。生效日將<strong>追溯至保單生效日</strong>。需繳付保費差額及利息（如適用），按新投保指引審核。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-file-pen text-sky-600"></i> 所需文件與程序：
+            </div>
+            <div>• 填寫「更改保單合約內容申請書」(附件1) <strong>甲部1.1 及 乙部個人資料</strong></div>
+            <div>• 遞交及簽署根據新投保額訂明之銷售說明文件</div>
+            <div>• 繳付保單生效日至下次保費到期日的保費或相關利息</div>
+            <div>• 每次增加須重新填寫及遞交「財務需要及投資取向分析表格」(FNA)</div>
+            <div class="text-amber-800">• <strong>海外人士：</strong>全套入境證明；<strong>內地人士：</strong>全套入境證明 +「重要資料聲明-內地人士在澳門投購人壽保險產品表格」</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>文件送遞: 批註及副本內部遞送至顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 7 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 1.1.2: 減少投保額 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="減少投保額 部分退保 現金價值 盈聚未來 MaxFocus 智盈匯聚 7天 附件1">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">1.1.2 更改基本計劃</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">減少投保額 (部分退保)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            可在任何保費到期日前申請，須符合最低投保額和保費要求。若冷靜期內減少，須遞交及簽署新說明的銷售文件。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-file-pen text-sky-600"></i> 所需文件與程序：
+            </div>
+            <div>• 填寫「更改保單合約內容申請書」更改附約欄，填寫計劃名稱、原有保障額及新保障額</div>
+            <div>• 若有部分現金價值退回：必須同時遞交身份證或護照副本辦理發出支票</div>
+            <div class="bg-white p-2 rounded border border-sky-200 text-sky-900 mt-1">
+              <strong>💡 經驗小錦囊 (MaxFocus / Wealth ICON)：</strong><br>
+              若未能確定新名義金額，可於甲部 6.2 註明：<br>
+              <em>「減低名義金額以提取保單部分退保價值約港幣/美元 XXXX」</em>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件或支票內部遞送至顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 8 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 1.1.3 & 1.1.4: 愛升息定期儲蓄保費增減 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="愛升息 增加定期儲蓄 減少定期儲蓄 最低定期儲蓄 最低目標保費 附件1 甲部1.1">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">1.1.3 & 1.1.4 愛升息專項</span>
+            <span class="badge bg-slate-100 text-slate-700">下次到期日生效</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">愛升息保險計劃 - 增/減定期儲蓄保費</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            填寫申請書甲部 1.1 及 1.3 新投保額。增加時須交 FNA；內地人士須全套入境證明+重要資料聲明表格。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-2.5 text-xs text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900 mb-1">最低定期儲蓄保費要求：</div>
+            <div class="grid grid-cols-3 gap-1 text-[11px] bg-white p-1.5 rounded border border-sky-100 text-center mb-2">
+              <div>年供: USD 300 / HKD 2,400</div>
+              <div>半年: USD 150 / HKD 1,200</div>
+              <div>月供: USD 25 / HKD 200</div>
+            </div>
+            <div class="font-semibold text-sky-900 mb-1">最低目標保費要求：</div>
+            <div class="grid grid-cols-3 gap-1 text-[11px] bg-white p-1.5 rounded border border-sky-100 text-center">
+              <div>年供: USD 600 / HKD 4,800</div>
+              <div>半年: USD 300 / HKD 2,400</div>
+              <div>月供: USD 50 / HKD 400</div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件及副本內部遞送至顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 9-10 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 1.1.5 & 1.1.6: 一般產品定期儲蓄保費增減 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="增加定期儲蓄 減少定期儲蓄 10天 5天 IFS-MP 附件1">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">1.1.5 & 1.1.6 儲蓄保費</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">增10天 / 減5天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">一般計劃 - 增/減定期儲蓄保費額</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            申請獲批後於下次保費到期日生效。須符合個別產品最低定期儲蓄保費要求。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>表格：</strong>填寫「更改保單合約內容申請書」甲部 1.1，於 1.3 註明新保費額</div>
+            <div>• <strong>增加時要求：</strong>須填寫及遞交 FNA；內地人士須簽署及遞交「IFS-MP 表格」</div>
+            <div>• <strong>行政時間：</strong>增加儲蓄約需 <strong>10個工作天</strong>；減少儲蓄約需 <strong>5個工作天</strong></div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件內部遞送至理財顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 10-11 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 1.2: 新購及更改附約 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="新購附約 更改附約 刪除附約 追溯期 6個星期 7天 附件1 甲部1.1 乙部">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">1.2 & 1.3 附約服務</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">新購、更改及刪除附約 (Riders)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            新購附約根據保單日期在遞交月份生效（有不保/加費按最後遞交月生效）。追溯期不能超過3個月。刪除附約於下次到期日生效。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>增加保障：</strong>填甲部 1.1 及 <strong>乙部個人資料（簽署後6星期有效）</strong> + FNA</div>
+            <div>• <strong>共同簽署：</strong>若被保人年滿18歲且與權益人不同，被保人須共同簽署</div>
+            <div>• <strong>月供注意：</strong>月供保單須繳交當月保費，否則於下次轉賬日扣除</div>
+            <div>• <strong>身份證明：</strong>海外人士需簽署時身處澳門證明；內地人士交全套入境證明+重要資料聲明</div>
+            <div>• <strong>減少/刪除附約：</strong>只須填寫甲部 1.1；冷靜期內刪減須重簽銷售說明文件</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註、新條款及副本內部遞送至顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 12-13 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 2: 定期壽險轉換為終生壽險 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="定期壽險轉換 終生壽險 轉換期 剩餘保費 直接扣賬 7天 附件1 甲部2">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">2. 計劃轉換</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">定期壽險轉換為終生壽險計劃</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            定期計劃可於轉換期內轉換。若全數轉換，舊約終止日須與新約生效日相同；若部分轉換，剩餘投保額須符合最低要求。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>表格：</strong>填寫申請書甲部 2（須填出生地點、國籍、職業及行業、舊約剩餘保額）</div>
+            <div>• <strong>投保文件：</strong>FNA、新銷售說明文件、保險利益說明書、權益人身份證及3個月住址證明</div>
+            <div>• <strong>繳費規定：</strong>轉月供須交2個月保費+直接扣賬授權書；轉年/半年供須繳首期保費</div>
+            <div>• <strong>剩餘保費：</strong>可要求退回或轉至新單；若全額轉換則以支票發還</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件、新保單及副本內部遞送</span>
+          <span class="text-sky-600 font-medium">指引第 14 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 3: 保單復保 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="保單復保 失效 12個月 墊繳 貸款 更改佣金代理權 7天 附件1 乙部 復保申請書">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">3. 復保 (傳統)</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">保單復保 (傳統壽險)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            失效保單可於<strong>首個未繳保費到期日起計 12 個月內</strong>申請復保。若原保單有不保事項/加費或超免驗身限額可能需自費體檢。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>途徑：</strong>填寫申請書甲部及乙部個人資料，或簽署「保單復保申請書」附帶之復保聲明</div>
+            <div class="font-semibold text-sky-900">• 必須同時繳清：</div>
+            <div class="pl-2">1) 全數未繳保費</div>
+            <div class="pl-2">2) 額外2個月保費(月供) 或 一期保費(年/半年供)</div>
+            <div class="pl-2">3) 保單借貸及利息 + 自動墊付保費貸款及利息(如適用)</div>
+            <div class="text-blue-800">• <strong>代理權規定：</strong>若收妥申請時保單已終止超過3個月，新顧問可選擇更改佣金代理權</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶，副本內部送顧問</span>
+          <span class="text-sky-600 font-medium">指引第 15 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 4: 額外儲蓄保費 / 轉撥保費 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="額外儲蓄保費 轉撥保費 萬用壽險 大額審查 大額保費問卷 5天 附件1 甲部4 SAPPA">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">4. 儲蓄與轉撥</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">5 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">額外儲蓄保費 / 轉撥保費</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            個別萬用壽險可申請（轉撥保費豁免手續費，顧問無佣金）。設最高/最低限額及每週年存款次數限制。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>表格：</strong>填寫「更改保單合約內容申請書」甲部 4 + FNA 表格</div>
+            <div class="text-amber-800 font-semibold">• <strong>&gt;= MOP 120,000：</strong>需聲明現職公司、年期、職位、月薪、目的、資金及財富來源</div>
+            <div class="text-red-800 font-semibold">• <strong>&gt; USD 50,000 / HKD 400,000：</strong>填寫大額保費問卷及財務分析表格</div>
+            <div>• <strong>第三者付款：</strong>須填 SAPPA + 身份證明；逾百萬須關係證明及加強盡職審查 (EDD)</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶，副本發理財顧問</span>
+          <span class="text-sky-600 font-medium">指引第 16-17 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 5: 更改付款方式 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="更改付款方式 繳費模式 年供改月供 直接付款授權書 5天 附件1 甲部5 附件4">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">5. 更改付款方式</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">5 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">更改付款方式 (繳費模式轉換)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            更改付款方式的生效日期<strong>必須為下次保費到期日</strong>。更改為月供必須填寫並遞交「直接付款授權書」。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-2 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900">模式轉換須繳付保費差額規則表：</div>
+            <div class="bg-white rounded border border-sky-200 overflow-hidden text-[11px]">
+              <div class="grid grid-cols-2 bg-sky-100/60 p-1 font-bold text-sky-900">
+                <div>轉換方向</div>
+                <div>須繳付保費</div>
+              </div>
+              <div class="grid grid-cols-2 p-1 border-t border-slate-100">
+                <div>年供 / 半年供 ➔ 月供</div>
+                <div class="font-semibold text-blue-700">2 個月保費</div>
+              </div>
+              <div class="grid grid-cols-2 p-1 border-t border-slate-100 bg-slate-50/50">
+                <div>年供 ➔ 半年供</div>
+                <div class="font-semibold text-blue-700">半年保費</div>
+              </div>
+              <div class="grid grid-cols-2 p-1 border-t border-slate-100">
+                <div>半年供 / 月供 ➔ 年供</div>
+                <div>查閱保單資料</div>
+              </div>
+              <div class="grid grid-cols-2 p-1 border-t border-slate-100 bg-slate-50/50">
+                <div>月供 ➔ 半年供</div>
+                <div>查閱保單資料</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶，副本發顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 18 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 6: 更改地址/電話/電郵 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="更改地址 電話 電郵 住址證明 稅務居民 FATCA 網上保單服務 3天 即日 附件1 甲部8 衛e道">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">6. 客戶資料變更</span>
+            <div class="flex gap-1">
+              <span class="badge bg-sky-100 text-sky-700">3 個工作天</span>
+              <span class="badge bg-blue-100 text-blue-800">一站式即日</span>
+            </div>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">更改地址 / 電話號碼 / 電郵地址</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            支援紙本申請、網上保單服務（www.fwd.com.mo）或理財顧問透過「衛e道」提交。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>住址證明：</strong>更改住宅地址須交<strong>最近3個月住址證明</strong>（如稅單、現金分享通知信、水電單、銀行月結單）+ 身份證副本</div>
+            <div>• <strong>海外稅籍：</strong>若為澳門及美國以外稅務居民，須遞交「個人自我證明表格」</div>
+            <div>• <strong>美國人：</strong>須申報 FATCA 並遞交 W-9 或 W-8BEN 表格</div>
+            <div class="bg-white p-2 rounded border border-sky-200 text-sky-900">
+              <strong>💡 經驗小錦囊：</strong>若有多份保單，只會更改申請書上填寫之保單號碼，未填寫之保單將<strong>不會更改</strong>。
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶新地址，副本發顧問</span>
+          <span class="text-sky-600 font-medium">指引第 19 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 7: 更改保單權益人 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="更改保單權益人 轉讓 新投保人 遺產承辦書 直系親屬 7天 附件5">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">7. 保單所有權</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">更改保單權益人 (Transfer of Ownership)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            保單權益人與新權益人雙方均須填寫專用申請書（附件5），<strong>新權益人年齡必須滿 18 歲以上</strong>。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>新權益人必備：</strong>身份證/護照副本 + 最近3個月住址證明</div>
+            <div>• <strong>非直系親屬：</strong>非父母、子女或配偶，<strong>必須書面解釋原因</strong>並由新舊雙方簽署</div>
+            <div>• <strong>身故承辦：</strong>若原保單權益人已身故，<strong>必須遞交遺產承辦書</strong></div>
+            <div>• <strong>公司/父母豁免：</strong>公司需交商業登記證明；父母且有父母豁免附約須填寫「父母保障(保費豁免)申請書」</div>
+            <div>• <strong>自動轉賬重置：</strong>若現有轉賬戶口非新權益人或被保人持有，須重新填表更改付款</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件及副本內部遞送至顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 20 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 8: 更改保單受益人 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="更改保單受益人 撤銷 托管人 非親屬 3天 即日 附件1 甲部9">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">8. 受益人變更</span>
+            <div class="flex gap-1">
+              <span class="badge bg-sky-100 text-sky-700">3 個工作天</span>
+              <span class="badge bg-blue-100 text-blue-800">一站式即日</span>
+            </div>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">更改保單受益人</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            填寫「更改保單合約內容申請書」甲部 9.1-9.6。<strong>此部分一經填寫，所有現行受益人將自動被撤銷</strong>。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>必填資料：</strong>姓名、身份證明文件號碼、與被保人關係、性別及分配百分率</div>
+            <div>• <strong>未滿18歲：</strong>若受益人未滿18歲，必須提供<strong>托管人資料</strong>（姓名、證件號、與被保人關係）</div>
+            <div>• <strong>非親屬關係：</strong>如朋友、東主等，投保人<strong>必須以書面解釋理由並簽署聲明</strong></div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶，副本內部發顧問</span>
+          <span class="text-sky-600 font-medium">指引第 21 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 8.1: 保單價值提款申請 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="保單價值提款 紅利 現金票券 電匯 TT 大額審查 7天 即日 附件1 甲部6">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">8.1 價值提款</span>
+            <div class="flex gap-1">
+              <span class="badge bg-sky-100 text-sky-700">7 個工作天</span>
+              <span class="badge bg-blue-100 text-blue-800">&lt;5萬即日</span>
+            </div>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">保單價值提款申請 (紅利/票券/保費儲備)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            顧問可於 AES 系統查閱價值。填寫申請書甲部 6.1 至 6.2，附上身份證明文件。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>用途指定：</strong>所提款項可用作繳付保費或償還貸款（須註明單號及金額）</div>
+            <div class="text-amber-800 font-semibold">• <strong>&gt;= MOP 120,000：</strong>申請書須聲明現職公司、年期、職位、月薪、提取原因、資金及財富來源</div>
+            <div class="bg-white p-2 rounded border border-sky-200 text-sky-900">
+              <strong>💡 電匯 (TT) 領取錦囊：</strong><br>
+              於 6.2 註明「電匯/TT」，列明銀行全名、地區、分行、地址、SWIFT Code、貨幣、持有人及電話。手續費於提取額中扣除；電匯亦須補充上述任職與財富來源資料。
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>領取方式: 顧問轉交支票 或 客戶親臨客服中心/郵寄</span>
+          <span class="text-sky-600 font-medium">指引第 21-22 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 8.2: 保單貸款 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="保單貸款 利息6% 最高貸款額 7天 即日 附件1 甲部6.1">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">8.2 保單融資</span>
+            <div class="flex gap-1">
+              <span class="badge bg-sky-100 text-sky-700">7 個工作天</span>
+              <span class="badge bg-blue-100 text-blue-800">&lt;5萬即日</span>
+            </div>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">保單貸款 (Policy Loan - 現行年利率 6%)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            填寫申請書甲部 6.1 至 6.2。選取貸款項目並遞交身份證明。理財顧問可於 AES 查詢最高貸款額。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>金額填寫：</strong>可填具體金額，或直接填寫「最高貸款額」或 "Maximum Loan"</div>
+            <div>• <strong>必須申報：</strong>貸款原因、投保人現職公司、任職年期、職位、月薪、提取原因、資金及財富來源</div>
+            <div>• <strong>警告：</strong>現行貸款年利率為 <strong>6%</strong>。若借貸本息等於或超過保單現金價值，保單將自動終止。</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>領取: 顧問轉交支票 / 客戶親臨客服中心 / 郵寄</span>
+          <span class="text-sky-600 font-medium">指引第 23 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 9: 保單假期 / 保費假期 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="保單假期 保費假期 盈聚非凡 盈聚世代 5天 附件1 甲部7">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">9. 供款管理</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">5 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">保單假期 / 保費假期 (申請或取消)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            填寫申請書甲部 7 選擇「申請」或「取消」，<strong>於下個保費到期日生效</strong>。假期內費用由保單戶口扣除，結存為零時保單失效。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-2.5 text-xs text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900 mb-1">「盈聚非凡」及「盈聚世代」假期規則：</div>
+            <p class="text-[11px] text-slate-600 mb-2">第1保單年度起，可於保單週年日前 60 個曆日內申請暫停繳費：</p>
+            <div class="bg-white rounded border border-sky-200 text-[11px] overflow-hidden">
+              <div class="grid grid-cols-3 bg-sky-100/60 p-1 font-bold text-sky-900">
+                <div>供款年期</div>
+                <div>最高總假期</div>
+                <div>確診受保疾病後</div>
+              </div>
+              <div class="grid grid-cols-3 p-1 border-t border-slate-100">
+                <div>5 年期</div>
+                <div class="font-semibold text-blue-700">2 年</div>
+                <div class="font-semibold text-amber-700">3 年</div>
+              </div>
+              <div class="grid grid-cols-3 p-1 border-t border-slate-100 bg-slate-50">
+                <div>10 年期</div>
+                <div class="font-semibold text-blue-700">4 年</div>
+                <div class="font-semibold text-amber-700">5 年</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 確認信郵寄客戶通訊地址</span>
+          <span class="text-sky-600 font-medium">指引第 23-24 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.7: 保費儲備戶口 (PDA) -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="保費儲備戶口 PDA 年供 提早提取手續費 2年保費 7天 附件7">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.7 保費儲備</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">保費儲備戶口 (PDA 運作新規)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            <strong>只適用於年供保單</strong>。積存保費日息複利生息。<strong>提早提取必須全額提取，不可部分提取</strong>。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>存入限制：</strong>最低存款額為 <strong>2年之應繳保費</strong>；每週年最多存3次，每次最低 MOP 3,000</div>
+            <div>• <strong>總額上限：</strong>不可超過 20年保費 或 餘下供款期應繳保費（取較少者）</div>
+            <div>• <strong>大額審查：</strong>&gt;= MOP 120,000 須填財富來源；&gt; USD 50,000 / HKD 400,000 填大額問卷</div>
+            <div class="font-semibold text-slate-700 pt-1">提早提取行政費用率：</div>
+            <div class="grid grid-cols-4 gap-1 text-[10px] text-center bg-white p-1 rounded border border-sky-100">
+              <div class="p-1">&lt;1年: <span class="font-bold text-red-600">3.5%</span></div>
+              <div class="p-1">1~2年: <span class="font-bold text-amber-600">2.5%</span></div>
+              <div class="p-1">2~3年: <span class="font-bold text-yellow-600">1.5%</span></div>
+              <div class="p-1">&gt;=3年: <span class="font-bold text-green-600">0%</span></div>
+            </div>
+            <div class="text-[11px] text-slate-500">*如因賠償或被保人身故終止，不徵收行政費。身故結餘付予投保人或遺產承繼人。</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>表格: 遞交「保費儲備戶口運作規章」(附件7)</span>
+          <span class="text-sky-600 font-medium">指引第 29-30, 90 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.1 & 10.2: 遺失補發保單與重發年結 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="遺失補發保單 重發年結 費用MOP100 複印保單 5天 附件1 甲部10.7 10.8">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.1 & 10.2 文件繕發</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">5 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">遺失及補發保單 / 重發年結通知書</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            補發保單後原有保單將被視為無效。理財顧問遞送過程遺失亦須書面聲明並補辦。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-2 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>補發保單手續費：</strong>繳交 <strong>澳門幣 100 元 (MOP 100)</strong></div>
+            <div>• <strong>表格：</strong>填寫申請書甲部 10.7 選擇「複印保單」並選送遞方式</div>
+            <div>• <strong>理財顧問遺失：</strong>顧問須書面聲明已遺失保單並申請重新繕發，同樣收費 MOP 100</div>
+            <div>• <strong>重發年結：</strong>於甲部 10.8 其他事項註明「重發年結通知書」</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 新繕發保單及年結副本發顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 25-26 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.3 & 10.4: 減免附加保費及減額付清 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="減免附加保費 不保事項 減額付清保險 7天 5天 附件1 甲部10.4">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.3 & 10.4 核保與結清</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7天 / 5天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">減免附加費/不保事項 & 減額付清</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            職業減費須轉職低風險12個月後；醫療減免於風險消失後申請（醫療檢查費由客人自理）。減免生效日為下次到期日。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>減額付清門檻：</strong>保單現金價值須超過 <strong>USD 500 或 HKD 4,000</strong></div>
+            <div>• <strong>不可逆警告：</strong><strong>申請減額付清後將不能申請復效，且所有附約會被即時取消</strong></div>
+            <div>• <strong>表格：</strong>減免附加保費填甲部 10.4 及乙部（7個工作天）；減額付清填甲部 10.4（5個工作天）</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註文件及副本內部送顧問辦公室</span>
+          <span class="text-sky-600 font-medium">指引第 26-27 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.5 & 10.6: 更改紅利及現金票券分派方式 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="更改紅利分派 更改現金票券 積存生息 繳清額外保險 支票發還 7天 附件1 甲部10.1 10.2">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.5 & 10.6 紅利與票券</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">更改紅利 / 現金票券分派方式</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            可於保單年度內更改，適用於日後分派。填寫申請書甲部 10.1 (紅利) 或 10.2 (票券) + 身份證明副本。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>改為現金方式：</strong>所有積存紅利/票券將以支票派發；紅利購買之繳清額外保險將取消並退回現金價值</div>
+            <div>• <strong>日後自動發放：</strong>其後每年派發時將於週年日自動以支票派發（票券會先扣除保單債務）</div>
+            <div>• <strong>存回保單規則：</strong>若欲將已發出現金存回保單生息，<strong>須於支票發出日起 1 個月內退回支票</strong>並申請改為「積存生息」，逾期或收取利息</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 顧問遞交內部送辦公室 / 客戶遞交致電中心領取</span>
+          <span class="text-sky-600 font-medium">指引第 27-28 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.8 ~ 10.12: 各項個人身份及核保資料修正 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="戒煙 重新釐定保費率 更改職業類別 更改年齡性別 更改姓名 改名契 修改身份證 7天 附件1 甲部10.5 10.6 10.8">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.8~10.12 個人資料修正</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">戒煙費率 / 轉職 / 年齡性別 / 姓名證件修正</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            保障合約精準度，避免索償時發生爭議。均填寫申請書甲部相應欄位或 10.8 其他事項。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>戒煙調低保費 (10.8)：</strong>連續停止吸煙 12 個月（非醫療原因），填甲部 10.6 及乙部</div>
+            <div>• <strong>下調職業風險 (10.9)：</strong>轉至低風險工作超過 12 個月，填甲部 10.5 及乙部</div>
+            <div>• <strong>年齡/性別錯誤 (10.10)：</strong>交出生證明或身份證副本；保費調高須補交累計差額及利息，調低退還差額</div>
+            <div>• <strong>改名 (10.11)：</strong>婚姻改名交結婚證書；其他原因交<strong>法律認可改名契</strong>；美國人須 FATCA</div>
+            <div>• <strong>改身份證號碼 (10.12)：</strong>交新證件副本；非澳美稅務居民交「個人自我證明表格」</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註、更新保單資料頁或確認信內部發顧問</span>
+          <span class="text-sky-600 font-medium">指引第 31-33 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 10.13: 自動轉賬申請細則 (傳統 vs 投連) -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="自動轉賬 傳統保單 投資保單 中銀 大西洋銀行 建設銀行 扣賬日 3次失敗 附件4">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">10.13 自動轉賬</span>
+            <span class="badge bg-slate-100 text-slate-700">每月固定扣賬</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">自動轉賬申請 (傳統保單 vs 投資保單)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            不同保單類型適用銀行及扣賬日期有嚴格限制。每期自動轉賬最多扣除兩期保費。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-2 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="bg-white p-2 rounded border border-sky-200">
+              <span class="font-bold text-sky-900">傳統保單：</span>
+              <ul class="list-disc pl-4 mt-0.5 space-y-0.5">
+                <li><strong>銀行限制：</strong><strong>只能使用中國銀行 (澳門分行)(BOC)</strong></li>
+                <li><strong>扣賬日：</strong><strong>每月 3 號 或 18 號</strong> (未選則預設為 3 號)</li>
+                <li><strong>結算貨幣：</strong>以直接扣賬授權書上幣值結算</li>
+                <li class="text-red-700"><strong>三次扣數失敗：</strong>中銀將自動取消轉賬，須重新填表</li>
+              </ul>
+            </div>
+            <div class="bg-white p-2 rounded border border-sky-200">
+              <span class="font-bold text-sky-900">投資相連保單 (ILP)：</span>
+              <ul class="list-disc pl-4 mt-0.5 space-y-0.5">
+                <li><strong>銀行選擇：</strong>大西洋銀行 (BNU) 或 中國建設銀行澳門分行 (CCBM)</li>
+                <li><strong>扣賬日：</strong><strong>每月 25 號</strong>；結算貨幣均以<strong>港幣 (HKD)</strong> 結算</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>表格: 銀行專用「直接扣賬授權書」(附件4)</span>
+          <span class="text-sky-600 font-medium">指引第 34, 76-79 頁</span>
+        </div>
+      </div>
+
+      <!-- Item 11 & 12: 委任後備權益人與更改簽署式樣 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part1" data-tags="委任後備權益人 後續被保人 更改簽署式樣 客戶中心親臨 5天 附件6 附件8">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">11 & 12 權益人與簽署</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">5 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">委任後備權益人 / 更改簽署式樣</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            委任後備權益人適用於<strong>保單繕發時被保人未滿 18 歲</strong>（盈聚未來卓越版除外）。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>後備權益人 (附件6)：</strong>填寫姓名、身份證/護照號、年齡及與被保人關係（5個工作天完成）</div>
+            <div>• <strong>變更被保人/後續被保人 (附件8)：</strong>新擬定被保人需核保健康聲明；變更後附約即時終止不可再加</div>
+            <div>• <strong>更改簽署式樣：</strong>於甲部 10.8 簽署新式樣，並於第8頁簽署舊式樣</div>
+            <div class="text-sky-800 bg-white p-1.5 rounded border border-sky-200">
+              <strong>忘記舊簽署：</strong>客戶可攜身份證明<strong>親臨客戶服務中心</strong>，由授權職員核實身份協助辦理。
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>送遞: 批註內部送顧問 / 簽署確認信郵寄客戶</span>
+          <span class="text-sky-600 font-medium">指引第 34-35 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 2: 投資相連 (ILP) 增減定期與額外投資 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part2" data-tags="投資相連 定期投資保費 新增額外投資保費 暫停定期 衍生工具 RPQ FNA IFS 7天 附件2 第3 5項">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第二部分 投連保費</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">ILP - 定期/額外投資保費 (新增/更改/暫停)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            填寫「投資相連計劃服務申請書」(附件2)。新定期於下次到期日生效；暫停定期投資保費請於新保費填寫 "0"。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>合規套件：</strong>每份增投申請<strong>必須附帶</strong>：IFS and AD、FNA 及 <strong>RPQ (有效期一年)</strong></div>
+            <div>• <strong>基金分配：</strong>每項投資選擇<strong>最少 10% 且須為 10% 倍數</strong>，總和等於 100%</div>
+            <div>• <strong>衍生工具基金：</strong>若涉及衍生工具基金且 RPQ 過期或風險錯配，<strong>公司將直接拒絕申請</strong></div>
+            <div class="text-amber-800 font-semibold">• <strong>&gt;= MOP 120,000：</strong>須聲明現職公司、年期、職位、月薪、資金及財富來源</div>
+            <div>• <strong>查閱時間：</strong>新購額外投資於收妥後第4至7工作天可於 AES 查看；支票付款需核實款項（第7至9工作天）</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>傳真遞交: (853) 8988 6100 | 確認信發客戶及顧問</span>
+          <span class="text-sky-600 font-medium">指引第 36-39 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 2: 投資選擇轉換與未來調配 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part2" data-tags="投資選擇轉換 未來供款調配 截止下午四時 8天 7天 附件2 第1 2項">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第二部分 基金交易</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">轉換8天 / 調配7天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">ILP - 投資選擇轉換 (Switching) & 未來供款調配</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            保單週年內可免費轉換/調配特定次數。轉出最低金額現為 USD 125。轉入最少分配 10% 且為 10% 倍數。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="bg-white p-2 rounded border border-sky-200 text-sky-900">
+              <strong>⏰ 下午 4:00 截單關鍵：</strong><br>
+              若於工作天<strong>下午 4:00 或之前收妥</strong>，即日處理並於下一交易日執行；若在下午 4:00 後收妥，順延至下個工作天處理及轉出。
+            </div>
+            <div>• <strong>交易完成：</strong>若計劃每個工作天均有交易，轉換一般於 <strong>8 個工作天內</strong> 完成</div>
+            <div>• <strong>超風險聲明：</strong>非衍生工具基金若高於 RPQ 風險，投保人須在申請書免責聲明項確認為獨立決定</div>
+            <div>• <strong>未來供款調配：</strong>基本計劃與定期投資附約將一併調配（約需 7 個工作天）</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>支援渠道: 亦可經客戶網上服務 (E-Service) 辦理</span>
+          <span class="text-sky-600 font-medium">指引第 39-41 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 2: 暫停保費/假期、部分提取與投連復保 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part2" data-tags="暫停保費 投連保費假期 愛豐裕 愛豐彩 投資選擇提取 投連復保 7天 5天 附件2 乙部">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第二部分 提取與假期</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">7 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">ILP - 暫停保費、部分提取及保單復保</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            暫停保費須符合最低結餘要求；部分提取依下午4時截單時間處理（約需7工作天）；復保須12個月內提出。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>暫停保費/假期：</strong>「愛豐裕」及「愛豐彩」最初供款期後可申請，費用從累積戶口扣除；取銷月繳須補 DDA</div>
+            <div>• <strong>投資提取：</strong>附身份證明；&gt;= MOP 120,000 須填寫任職及財富來源資料</div>
+            <div>• <strong>投連復保 (乙部)：</strong>填寫「保單復保及健康問卷」；<strong>若有除父母豁免外之附約，須填附件1之乙部</strong></div>
+            <div>• <strong>復保款項：</strong>補齊欠繳保費 + 額外2個月(月供)或一期(年供) + 退還因欠費終止時所得金額</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>更改付款方式: ILP需時5個工作天 (DDA設置需時2個月)</span>
+          <span class="text-sky-600 font-medium">指引第 41-43 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 3: 終止保單合約申請 (退保) -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part3" data-tags="終止保單合約 退保 承讓人 退保支票 14個工作天 轉撥額外保費 附件3">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第三部分 終止保單</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">14 個工作天</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">終止保單合約申請書 (退保 / Surrender)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            <strong>只接受『終止保單合約申請書』(附件3) 正本</strong>，其他方式概不受理。每份保單必須個別填寫一張。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>必備文件：</strong>身份證/護照副本；若有保單承讓人，<strong>必須遞交承讓人書面同意</strong></div>
+            <div>• <strong>理財顧問通知：</strong>收到退保申請後，公司會<strong>即時向顧問及其直屬經理發出 SMS 短訊</strong></div>
+            <div>• <strong>退保支票遞送：</strong>若無特別指示，14個工作天內經顧問轉交或致電客戶親臨領取/郵寄</div>
+            <div class="bg-white p-2 rounded border border-sky-200 text-sky-900">
+              <strong>💡 轉撥額外儲蓄錦囊：</strong><br>
+              若轉至其他保單作為額外保費，須清楚註明指示。若收款保單為「愛升息」或「好息簡」，將視為「轉撥額外儲蓄保費」並<strong>豁免手續費</strong>（顧問無佣金）。
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>注意: 退保保單絕無法復保，請審慎提醒客戶</span>
+          <span class="text-sky-600 font-medium">指引第 44, 74 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 4: 客戶通知書全覽 (A~G) -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part4" data-tags="保費到期通知書 保費待繳通知書 55天短訊 退回自動轉賬 自動貸款墊付 APL 年結 期滿通知書 附件A B C D E F G">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第四部分 客戶通知書</span>
+            <span class="badge bg-slate-100 text-slate-700">營運機制</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">客戶各類通知書機制一覽 (保費/年結/期滿)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            涵蓋繳費提醒、逾期追討、自動貸款墊繳 (APL 6%) 及週年報告等各類通知時效。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>保費到期 (附件A)：</strong>年/半年供於<strong>到期日前約 30 日</strong>郵寄，須於30日內繳交（<strong>月供不發</strong>）</div>
+            <div>• <strong>保費待繳 (附件B1/B2)：</strong>逾30日未繳發出；<strong>逾55日未繳發 SMS 給理財顧問跟進</strong></div>
+            <div>• <strong>自動貸款墊付保費 (APL 6% / 附件C)：</strong>寬限期後未繳且有現金價值時自動執行，直至價值為零</div>
+            <div>• <strong>年結通知書 (附件E1/E2)：</strong>週年日後 7 個工作天內郵寄（萬用壽險於4月份派息率公佈後發出）</div>
+            <div>• <strong>期滿利益 (附件F/G)：</strong>期滿前 30 日郵寄。提取期滿款項須填寫 10.8 聲明任職及財富來源</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>AES 系統: 理財顧問可隨時於 AES 查閱上述所有通知書</span>
+          <span class="text-sky-600 font-medium">指引第 45-49 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 5: 繳付保費渠道與上限 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part5" data-tags="繳付保費安排 現金上限 20000 支票 網銀 商戶編號105 ATM 第三者關係">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第五部分 繳費渠道</span>
+            <span class="badge bg-slate-100 text-slate-700">常規與限制</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">繳付保費安排與合法途徑</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            繳款人必須為保單權益人、被保人或受益人。盡可能以單一張支票或單筆存款繳付一份保單。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>現金繳費：</strong>親臨客服部辦理，<strong>每份保單每日上限為 MOP 20,000 元</strong></div>
+            <div>• <strong>個人支票：</strong>劃線支票抬頭註明「富衛人壽保險(澳門)股份有限公司」，背頁寫單號及用途</div>
+            <div>• <strong>ATM (JETCO)：</strong>商戶編號輸入 <strong>105</strong>，輸入8/10位單號，均以<strong>澳門幣</strong>結算</div>
+            <div>• <strong>網上銀行：</strong>透過中國銀行個人網銀（www.bocmacau.com）繳費</div>
+            <div>• <strong>銀行櫃台/電匯：</strong>大西洋銀行各分行或中銀指定賬號（須填寫「保費繳付聲明書」）</div>
+            <div class="text-[11px] text-sky-800 pt-1"><strong>合資格第三者繳費關係：</strong>配偶、父母/子女/祖父母/孫子女、配偶之父母/女婿/媳婦、僱主/僱員、獨資東主/合夥人/董事</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>匯率查詢熱線: (853) 8988 6128</span>
+          <span class="text-sky-600 font-medium">指引第 50-51 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 6: 一站式客戶服務 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part6to9" data-tags="一站式 即日服務 截止3點 更改地址 更改受益人 更改付款 提款少於5萬 貸款少於5萬">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第六部分 櫃台快線</span>
+            <span class="badge bg-blue-600 text-white font-bold">即日完成 (Same Day)</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">「一站式」客戶服務 (即日保單服務)</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            客戶親臨客戶服務中心辦理，專員收取齊備文件後即日處理並<strong>即時收取確認通知</strong>。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-2 text-slate-700 border border-sky-100/70 mb-3">
+            <div class="font-semibold text-sky-900">涵蓋之 5 大即日服務清單：</div>
+            <div class="grid grid-cols-2 gap-1.5 bg-white p-2 rounded border border-sky-200">
+              <div class="flex items-center gap-1.5"><i class="fa-solid fa-check text-sky-600"></i> 更改地址</div>
+              <div class="flex items-center gap-1.5"><i class="fa-solid fa-check text-sky-600"></i> 更改受益人</div>
+              <div class="flex items-center gap-1.5"><i class="fa-solid fa-check text-sky-600"></i> 更改付款方式#</div>
+              <div class="flex items-center gap-1.5"><i class="fa-solid fa-check text-sky-600"></i> 提取紅利/票券 (&lt;5萬)</div>
+              <div class="flex items-center gap-1.5 col-span-2"><i class="fa-solid fa-check text-sky-600"></i> 申請保單貸款 (金額少於 MOP 50,000)</div>
+            </div>
+            <div class="text-[11px] text-amber-800">
+              <strong>關鍵截單時間：</strong>每日 <strong>3:00pm 截止</strong>。3:00pm 後遞交的即日申請將於翌日早上發出。<br>
+              <em>#若更改付款方式涉及即時保費繳付，客人需於至少一天前繳付相關款項。</em>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>地點: 澳門工商銀行大廈 12 樓</span>
+          <span class="text-sky-600 font-medium">指引第 52 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 7 & 8: FATCA 及 CRS 稅務合規 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part6to9" data-tags="FATCA 美國稅務 W9 W8BEN CRS 自動交換財務帳戶 個人自我證明 機構身份聲明">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第七 & 八部分 國際稅務</span>
+            <span class="badge bg-slate-100 text-slate-700">法定合規聲明</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">外國帳戶稅務合規 (FATCA) 與 CRS 聲明</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            嚴格申報客戶稅籍，若擁有美國特徵或非澳美稅籍，須提交指定聲明及表格。資料有變須於<strong>30日內通知</strong>。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 border border-sky-100/70 mb-3">
+            <div>• <strong>美國人/公司 (FATCA)：</strong>美國公民/綠卡/註冊實體遞交 <strong>W-9 表格</strong>；公司客戶須交「FATCA 機構身份聲明書」</div>
+            <div>• <strong>擁有美國特徵但非美籍：</strong>須遞交 <strong>W-8BEN 表格 (公司 W-8BEN-E)</strong> 及書面解釋（美籍出生須附放棄國籍證明）</div>
+            <div>• <strong>拒絕申報後果：</strong>若有美國特徵且不願填報或簽署，<strong>公司將不接受投保/服務申請</strong></div>
+            <div>• <strong>CRS (第八部分)：</strong>若為澳門及美國以外稅務居民，填寫「個人自我證明表格」；機構客戶填「實體自我證明表格」/「控權人自我證明表格」</div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>通報機關: 澳門特別行政區財政局 / IRS</span>
+          <span class="text-sky-600 font-medium">指引第 53-54 頁</span>
+        </div>
+      </div>
+
+      <!-- Part 9: 「衛e道」移動營運 -->
+      <div class="guide-card bg-white rounded-2xl border border-sky-100 p-5 shadow-xs hover:shadow-md transition hover:border-sky-300 flex flex-col justify-between"
+           data-category="part6to9" data-tags="衛e道 電子保單確認 更改客戶資料 短訊授權 手機驗證 澳門">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <span class="badge bg-sky-100 text-sky-800">第九部分 電子工具</span>
+            <span class="badge bg-blue-50 text-blue-700 border border-blue-200">即時提交</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base mb-1.5">「衛e道 - 澳門」線上提交功能</h3>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            理財顧問可透過「衛e道」行動應用提交申請及隨時追蹤審批進度。
+          </p>
+
+          <div class="bg-sky-50/60 rounded-xl p-3 text-xs space-y-2 text-slate-700 border border-sky-100/70 mb-3">
+            <div>
+              <span class="font-bold text-sky-900">1. 電子保單確認：</span>
+              <p class="text-slate-600 mt-0.5">可自行再次發送保單確認至客戶手機。權益人收到短訊後點擊網頁完成確認程序。</p>
+            </div>
+            <div>
+              <span class="font-bold text-sky-900">2. 更改客戶資料功能：</span>
+              <p class="text-slate-600 mt-0.5">協助客戶提交更改<strong>地址、電郵地址、使用「電子通訊文件」狀況</strong>。保單持有人依短訊輸入出生日期確認身份並授權變更。</p>
+            </div>
+            <div class="text-[11px] text-amber-800 bg-amber-50 p-1.5 rounded border border-amber-200">
+              <strong>⚠️ 必要條件：</strong>若系統內無保單持有人手提電話號碼紀錄作短訊驗證，將無法處理「衛e道」申請。
+            </div>
+          </div>
+        </div>
+        <div class="pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
+          <span>適用對象: 澳門理財顧問</span>
+          <span class="text-sky-600 font-medium">指引第 55 頁</span>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="mt-12 bg-white rounded-2xl border border-sky-200 p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-sm">
+          <i class="fa-solid fa-folder-open"></i>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">指引附件表格與客戶通知書速查總覽</h2>
+          <p class="text-xs text-slate-500">嚴格對應指引文件內 8 大申請表格及 7 類通知書樣本頁碼</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <!-- Application Forms 1-8 -->
+        <div class="bg-sky-50/50 rounded-xl p-4 border border-sky-100">
+          <h4 class="font-bold text-sky-900 mb-2.5 pb-1 border-b border-sky-200 flex items-center justify-between">
+            <span>業務申請表格 (附件 1 至 8)</span>
+            <span class="text-[10px] font-normal text-sky-600">填寫必備</span>
+          </h4>
+          <ul class="space-y-2 text-slate-700">
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 1:</strong>「更改保單合約內容申請書」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.56 (共10頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 2:</strong>「投資相連計劃服務申請書」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.66 (共8頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 3:</strong>「終止保單合約申請書」(退保專用正本)</div>
+              <span class="badge bg-sky-100 text-sky-800">P.74 (共2頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 4:</strong>「直接扣賬授權書」(中銀港幣/中銀葡幣/BNU/CCBM)</div>
+              <span class="badge bg-sky-100 text-sky-800">P.76-79</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 5:</strong>「更改保單權益人申請書」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.80 (共6頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 6:</strong>「委任後備權益人表格」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.86 (共4頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 7:</strong>「保費儲備戶口運作規章聲明書」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.90 (共3頁)</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-sky-100/60">
+              <div><strong>附件 8:</strong>「變更被保人/指定後續被保人申請書」</div>
+              <span class="badge bg-sky-100 text-sky-800">P.93 (共4頁)</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Notices A-G -->
+        <div class="bg-blue-50/40 rounded-xl p-4 border border-blue-100">
+          <h4 class="font-bold text-sky-900 mb-2.5 pb-1 border-b border-sky-200 flex items-center justify-between">
+            <span>客戶通知書樣本書 (附件 A 至 G)</span>
+            <span class="text-[10px] font-normal text-sky-600">AES 可查閱</span>
+          </h4>
+          <ul class="space-y-2 text-slate-700">
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 A:</strong>「保費到期通知書」(年供/半年供提前30日發出)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.97</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 B1 & B2:</strong>「保費待繳通知書」(B1月供扣款失敗 / B2年供半年供逾30日)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.99, 100</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 C:</strong>「自動貸款墊付保費通知書」(首次執行 APL 6% 時發出)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.101</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 D1 & D2:</strong>「保單復保通知書」/「保單自動終止通知書」</div>
+              <span class="badge bg-blue-100 text-blue-800">P.103, 107</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 E1 & E2:</strong>「年結通知書」/「保單報告」(投連專用)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.108, 114</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 F:</strong>「保單期滿通知書」(期滿前約30日發出)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.115</span>
+            </li>
+            <li class="flex items-start justify-between bg-white p-2 rounded border border-blue-100/60">
+              <div><strong>附件 G:</strong>「附約期滿通知書」(附約期滿前約30日發出)</div>
+              <span class="badge bg-blue-100 text-blue-800">P.117</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty state message -->
+    <div id="noResultsMessage" class="hidden text-center py-16">
+      <div class="w-16 h-16 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+        <i class="fa-solid fa-file-circle-question"></i>
+      </div>
+      <h3 class="text-base font-bold text-slate-700">找不到相符的營運指引條目</h3>
+      <p class="text-xs text-slate-400 mt-1">請嘗試縮短關鍵字或點擊重置過濾條件</p>
+      <button onclick="resetFilters()" class="mt-3 px-4 py-2 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-600 transition">
+        重設所有搜尋條件
+      </button>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-sky-100 py-6 mt-12 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+      <div>
+        <p class="font-bold text-slate-700">壽險營運部</p>
+        <p class="text-slate-400 mt-0.5">澳門工商銀行大廈 12 樓 | 辦公時間：星期一至五 9:00am - 5:30pm</p>
+      </div>
+      <div class="text-slate-400">
+        指引版本日期：2025年10月 (v2.0 Final) | 本系統內容純提取自指引手冊
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterCards() {
+      const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const cards = document.querySelectorAll('.guide-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        const cardTags = (card.getAttribute('data-tags') || '').toLowerCase();
+        const textContent = card.innerText.toLowerCase();
+
+        const matchesCat = (category === 'all') || (cardCat === category);
+        const matchesSearch = !searchTerm || cardTags.includes(searchTerm) || textContent.includes(searchTerm);
+
+        if (matchesCat && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('resultsCount').innerText = `共 ${visibleCount} 個項目`;
+      const noResults = document.getElementById('noResultsMessage');
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    function setSearchTerm(term) {
+      document.getElementById('searchInput').value = term;
+      filterCards();
+    }
+
+    function quickFilterTag(tag) {
+      document.getElementById('categoryFilter').value = 'all';
+      document.getElementById('searchInput').value = tag;
+      filterCards();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoryFilter').value = 'all';
+      filterCards();
+    }
+
+    window.onload = function() {
+      filterCards();
+    };
+  </script>
+</body>
+</html>
