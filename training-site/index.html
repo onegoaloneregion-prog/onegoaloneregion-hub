@@ -2257,6 +2257,38 @@ window.adminResetPassword = async function(docId, userCode) {
         function goToLoginFromLock() { closeLockModal(); openAuthModal('login'); }
         function openAuthModal(mode) { var user = getCurrentUser(); if (user && user.role === 'admin') { openAdminPanel(); return; } document.getElementById('authModal').classList.remove('hidden'); switchAuthMode(mode); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+        // 全域登出函數
+window.logoutAccount = function() {
+    // 1. 清除登入狀態
+    sessionStorage.removeItem('ogor_current_user');
+    localStorage.removeItem('ogor_current_user');
+    
+    // 2. 關閉彈窗
+    var authModal = document.getElementById('authModal');
+    if (authModal) authModal.classList.add('hidden');
+    
+    // 3. 返回首頁（防止畫面變白）
+    if (typeof switchPage === 'function') {
+        switchPage('page-home');
+    } else {
+        var home = document.getElementById('page-home');
+        if (home) home.classList.remove('hidden');
+    }
+    
+    // 4. 更新右上角 UI（變返未登入按鈕）
+    if (typeof updateAuthUI === 'function') {
+        updateAuthUI();
+    }
+    
+    // 5. 提示訊息
+    if (typeof showToast === 'function') {
+        showToast('已成功登出系統');
+    }
+};
+
+function logoutAccount() {
+    window.logoutAccount();
+}
        // 醫家保版本選擇彈窗控制
 function openVfamilySelectorModal() {
     var modal = document.getElementById('vfamilySelectorModal');
