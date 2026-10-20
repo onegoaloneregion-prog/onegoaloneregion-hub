@@ -725,7 +725,7 @@ window.adminResetPassword = async function(docId, userCode) {
             </div>
 
             <!-- 醫家保家庭保障指南入口卡片 -->
-            <div onclick="window.open('vfamily.html', '_blank')" class="p-6 rounded-3xl border-2 border-emerald-200 bg-emerald-50/40 shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all cursor-pointer space-y-3 relative group">
+           <div onclick="openVfamilySelectorModal()" class="p-6 rounded-3xl border-2 border-emerald-200 bg-emerald-50/40 shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all cursor-pointer space-y-3 relative group">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl shadow">👨‍👩‍👧‍👦</div>
                     <span class="text-xs font-black text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟指南 ↗</span>
@@ -882,100 +882,113 @@ window.adminResetPassword = async function(docId, userCode) {
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900">新生意、保單服務、賠償及付款指南</h2>
                 <p class="text-xs sm:text-sm text-slate-500">集中查閱各項核心營運流程指引與表格資源</p>
             </div>
+<!-- 4 個卡片容器：兩兩並排 (Grid 2x2) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mt-6">
 
-            <!-- 4 個卡片網格 (2x2 排列，預留位) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                
-               <!-- 卡片 1: 新生意指南 (New Business) -->
-<div onclick="window.open('fwd-new-business.html', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
-    <div class="space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div class="flex items-center gap-2.5">
-                <span class="text-2xl">📝</span>
-                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">1. 新生意指南</b>
-            </div>
-            <span class="px-2 py-0.5 rounded bg-orange-100 text-[#E87722] font-bold text-[10px]">
-                V7.0 智能導航系統
-            </span>
+  <!-- 1. 新生意指南 -->
+  <div class="border border-slate-200/90 hover:border-amber-400 bg-white rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group">
+    <div>
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">📝</span>
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">1. 新生意指南</h3>
         </div>
-        <p class="text-slate-600 leading-relaxed text-xs">
-            智能核保自檢、必備文件清單 (Part 1)、非澳門居民投保 (Part 2)、第三者繳費門檻 (Part 3)、免驗身限額與收入倍數。
-        </p>
-    </div>
-    <div class="w-full py-2.5 rounded-xl bg-orange-100 hover:bg-orange-100 text-[#E87722] font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-        開啟智能核保導航系統 ↗
-    </div>
-</div>
-                
-
-                <!-- 卡片 2: 保單服務 (Policy Servicing) -->
-                <div class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                            <div class="flex items-center gap-2.5">
-                                <span class="text-2xl">⚙️</span>
-                                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">2. 保單服務</b>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">
-                                Policy Servicing
-                            </span>
-                        </div>
-                        <p class="text-slate-600 leading-relaxed text-xs">
-                            售後行政變更、更改受益人、地址電話更新、保單提款及借貸手續。（內容待更新）
-                        </p>
-                    </div>
-                    <div class="w-full py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition flex items-center justify-center gap-1.5">
-                        進入查看 ↗
-                    </div>
-                </div>
-
-              <!-- 3. 賠償指南卡片 -->
-<div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
-  <div>
-    <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <span class="text-2xl">🏥</span>
-        <h3 class="text-lg font-bold text-slate-800">3. 賠償指南</h3>
+        <span class="bg-amber-100/70 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-amber-200/80">
+          V7.0 智能導航系統
+        </span>
       </div>
-      <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-        Claims Guide
-      </span>
+      <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+        智能核保自檢、必備文件清單 (Part 1)、非澳門居民投保 (Part 2)、第三者繳費門檻 (Part 3)、免驗身限額與收入倍數。
+      </p>
     </div>
-
-    <!-- 更新副標題描述 -->
-    <p class="text-xs text-slate-500 mt-4 leading-relaxed">
-      醫療住院、危疾及身故理賠程序、基本文件清單檢核、審核時效指標及 FATCA/CRS 稅務申報指引。
-    </p>
-  </div>
-
-  <!-- 跳轉按鈕 (支援開新分頁) -->
-  <div class="mt-6">
-    <a href="claims-guide.html" target="_blank" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100/80 active:bg-emerald-200 flex items-center justify-center space-x-1.5 transition shadow-xs">
-      <span>開啟理賠營運指引系統</span>
-      <span>↗</span>
+    <a 
+      href="new_business.html" 
+      target="_blank" 
+      class="w-full inline-flex items-center justify-center gap-1.5 bg-[#FFF3E8] hover:bg-[#E87722] text-[#D96611] hover:text-white text-xs font-bold py-3 rounded-2xl transition-all shadow-sm"
+    >
+      <span>開啟智能核保導航系統</span>
+      <span class="text-sm">&nearr;</span>
     </a>
   </div>
-</div>
 
-             <!-- 卡片 4: 付款指南 (Payment Methods) -->
-<div onclick="window.open('fwd-payment-guide.html', '_blank')" class="p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-[#E87722] hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between space-y-4">
-    <div class="space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div class="flex items-center gap-2.5">
-                <span class="text-2xl">💳</span>
-                <b class="text-slate-900 text-base group-hover:text-[#E87722] transition-colors">4. 付款指南</b>
-            </div>
-            <span class="px-2 py-0.5 rounded bg-orange-100 text-[#E87722] font-bold text-[10px]">
-                V4.0 合規速查儀表板
-            </span>
+  <!-- 2. 保單服務 -->
+  <div class="border border-slate-200/90 hover:border-blue-400 bg-white rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group">
+    <div>
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">⚙️</span>
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">2. 保單服務</h3>
         </div>
-        <p class="text-slate-600 leading-relaxed text-xs">
-            四大付款原則、網銀/ATM/櫃枱/信用卡各渠道時效、支票幣別限制、專屬中銀賬號及 AML 合規文件自檢器。
-        </p>
+        <span class="bg-blue-50 text-blue-700 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-blue-100">
+          Policy Servicing
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+        售後行政變更、更改受益人、地址電話更新、保單提款及借貸手續。
+      </p>
     </div>
-    <div class="w-full py-2.5 rounded-xl bg-orange-100 hover:bg-orange-100 text-[#E87722] font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-        開啟保費付款實用指南 ↗
+    <a 
+      href="policy_servicing.html" 
+      target="_blank" 
+      class="w-full inline-flex items-center justify-center gap-1.5 bg-blue-50/80 hover:bg-blue-600 text-blue-700 hover:text-white text-xs font-bold py-3 rounded-2xl transition-all shadow-sm"
+    >
+      <span>進入查看</span>
+      <span class="text-sm">&nearr;</span>
+    </a>
+  </div>
+
+  <!-- 3. 賠償指南 -->
+  <div class="border border-slate-200/90 hover:border-emerald-400 bg-white rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group">
+    <div>
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🏥</span>
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">3. 賠償指南</h3>
+        </div>
+        <span class="bg-emerald-50 text-emerald-700 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-emerald-100">
+          Claims Guide
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+        醫療住院、危疾及身故理賠程序、基本文件清單檢核、審核時效指標及 FATCA/CRS 稅務申報指引。
+      </p>
     </div>
+    <a 
+      href="claims.html" 
+      target="_blank" 
+      class="w-full inline-flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-xs font-bold py-3 rounded-2xl border border-emerald-200 hover:border-emerald-600 transition-all shadow-sm"
+    >
+      <span>開啟理賠營運指引系統</span>
+      <span class="text-sm">&nearr;</span>
+    </a>
+  </div>
+
+  <!-- 4. 付款指南 -->
+  <div class="border border-slate-200/90 hover:border-amber-400 bg-white rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group">
+    <div>
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">💳</span>
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">4. 付款指南</h3>
+        </div>
+        <span class="bg-amber-100/70 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-amber-200/80">
+          V4.0 合規速查儀表板
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+        四大付款原則、網銀/ATM/櫃枱/信用卡各渠道時效、支票幣別限制、專屬中銀賬號及 AML 合規文件自檢器。
+      </p>
+    </div>
+    <a 
+      href="payment.html" 
+      target="_blank" 
+      class="w-full inline-flex items-center justify-center gap-1.5 bg-[#FFF3E8] hover:bg-[#E87722] text-[#D96611] hover:text-white text-xs font-bold py-3 rounded-2xl transition-all shadow-sm"
+    >
+      <span>開啟保費付款實用指南</span>
+      <span class="text-sm">&nearr;</span>
+    </a>
+  </div>
+
 </div>
 
             </div>
@@ -1073,6 +1086,47 @@ window.adminResetPassword = async function(docId, userCode) {
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900">盈聚天下 II 資源專區</h2>
                 <p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 試算表及配置文件</p>
             </div>
+
+            <!-- 🌟 盈聚·天下 II 專用系統導航卡片 (方案A 獨立分頁) -->
+<div class="mb-6 bg-gradient-to-r from-orange-50/80 via-white to-amber-50/60 border-2 border-orange-200 hover:border-orange-400 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 group cursor-pointer" onclick="window.open('maxfocus2.html', '_blank')">
+  
+  <div class="flex items-start sm:items-center gap-4">
+    <!-- 圖一橙色盾牌圖示 -->
+    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/20 flex-shrink-0 group-hover:scale-105 transition-transform">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+      </svg>
+    </div>
+
+    <!-- 標題、標籤與副標題 -->
+    <div class="space-y-1.5">
+      <div class="flex flex-wrap items-center gap-2">
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+          盈聚 · 天下 II 保險計劃
+        </h3>
+        <span class="bg-amber-100/80 text-amber-900 text-xs font-bold px-3 py-0.5 rounded-full border border-amber-200/80 flex items-center gap-1">
+          <span>✨</span> MaxFocus Legacy II
+        </span>
+      </div>
+      <p class="text-xs sm:text-sm font-semibold text-orange-600 flex items-center gap-1.5">
+        <span>💎</span> 旗艦多元儲蓄與跨代傳承專用系統
+      </p>
+    </div>
+  </div>
+
+  <!-- 右側開啟按鈕 -->
+  <div class="w-full md:w-auto flex-shrink-0">
+    <button 
+      type="button" 
+      onclick="event.stopPropagation(); window.open('maxfocus2.html', '_blank')" 
+      class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#E87722] to-[#D96611] hover:from-[#D96611] hover:to-[#B85307] text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-2xl shadow-md shadow-orange-600/20 hover:shadow-lg transition-all"
+    >
+      <span>開啟系統</span>
+      <span class="text-sm">&nearr;</span>
+    </button>
+  </div>
+
+</div>
 
             <!-- 兩個 Google Drive 卡片網格 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2201,6 +2255,25 @@ window.adminResetPassword = async function(docId, userCode) {
         function goToLoginFromLock() { closeLockModal(); openAuthModal('login'); }
         function openAuthModal(mode) { var user = getCurrentUser(); if (user && user.role === 'admin') { openAdminPanel(); return; } document.getElementById('authModal').classList.remove('hidden'); switchAuthMode(mode); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+       // 醫家保版本選擇彈窗控制
+function openVfamilySelectorModal() {
+    var modal = document.getElementById('vfamilySelectorModal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeVfamilySelectorModal() {
+    var modal = document.getElementById('vfamilySelectorModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function launchVfamily(version) {
+    closeVfamilySelectorModal();
+    if (version === 'simple') {
+        window.open('vfamily.html', '_blank'); // 開啟簡易版
+    } else if (version === 'pro') {
+        window.open('vfamily_pro.html', '_blank'); // 開啟詳盡版
+    }
+}
         function switchAuthMode(mode) {
             var loginSec = document.getElementById('loginFormSection'); var regSec = document.getElementById('registerFormSection'); var adminSec = document.getElementById('adminApprovalSection');
             loginSec.classList.add('hidden'); regSec.classList.add('hidden'); adminSec.classList.add('hidden');
@@ -2213,12 +2286,38 @@ window.adminResetPassword = async function(docId, userCode) {
             if (tab === 'pending') { pendingBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; approvedBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; pendingSec.classList.remove('hidden'); approvedSec.classList.add('hidden'); if(window.renderPendingUsers) window.renderPendingUsers(); }
             else { approvedBtn.className = 'px-3 py-2 border-b-2 border-orange-500 text-orange-600 font-bold cursor-pointer'; pendingBtn.className = 'px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold cursor-pointer'; approvedSec.classList.remove('hidden'); pendingSec.classList.add('hidden'); if(window.renderApprovedUsers) window.renderApprovedUsers(); }
         }
-        function logoutAccount() { sessionStorage.removeItem('ogor_current_user'); updateAuthUI(); closeAuthModal(); showToast('已安全登出系統'); switchPage('page-home'); }
-        function switchPage(pageId, scrollToId) {
-            var views = document.querySelectorAll('.page-view'); for (var i = 0; i < views.length; i++) { views[i].classList.add('hidden'); }
-            var targetPage = document.getElementById(pageId); if (targetPage) targetPage.classList.remove('hidden');
-            if (scrollToId) { setTimeout(function() { var el = document.querySelector(scrollToId); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+       function switchPage(pageId, scrollToId) {
+    // 🔒 1. 登入權限檢查：保費計算器必須登入
+    var currentUser = sessionStorage.getItem('ogor_current_user');
+    var isCalcPage = (pageId === 'page-calc' || pageId === 'page-calculator' || pageId === 'calc' || (pageId && pageId.indexOf('calc') !== -1));
+
+    if (isCalcPage && !currentUser) {
+        showToast('🔒 保費計算器僅供會員使用，請先登入！');
+        if (typeof openAuthModal === 'function') {
+            openAuthModal('login');
+        } else if (typeof showAuthModal === 'function') {
+            showAuthModal();
         }
+        return; // 終止跳轉，未登入唔畀入
+    }
+
+    // 2. 原本的頁面切換邏輯
+    var views = document.querySelectorAll('.page-view'); 
+    for (var i = 0; i < views.length; i++) { 
+        views[i].classList.add('hidden'); 
+    }
+    var targetPage = document.getElementById(pageId); 
+    if (targetPage) targetPage.classList.remove('hidden');
+    
+    if (scrollToId) { 
+        setTimeout(function() { 
+            var el = document.querySelector(scrollToId); 
+            if (el) el.scrollIntoView({ behavior: 'smooth' }); 
+        }, 100); 
+    } else { 
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    }
+}
         
         function showToast(msg) { 
             var toast = document.getElementById('copyToast'); 
@@ -4160,6 +4259,65 @@ window.copyCommText = function(elementId) {
     <!-- 內嵌晉升系統獨立頁面 -->
     <div class="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200" style="height: 85vh;">
         <iframe src="promotion_system.html" class="w-full h-full border-0"></iframe>
+    </div>
+</div>
+    <!-- 醫家保版本選擇彈窗 -->
+<div id="vfamilySelectorModal" class="hidden fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        
+        <!-- 關閉按鈕 -->
+        <button type="button" onclick="closeVfamilySelectorModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+            ✕
+        </button>
+
+        <!-- 頂部標題 -->
+        <div class="text-center mb-6">
+            <span class="bg-emerald-50 text-emerald-700 text-xs font-black px-3 py-1 rounded-full border border-emerald-200">
+                家庭醫療首選
+            </span>
+            <h3 class="text-xl font-extrabold text-slate-900 mt-2">請選擇「醫家保」系統版本</h3>
+            <p class="text-xs text-slate-500 mt-1">請選擇你要開啟的展示或試算版本</p>
+        </div>
+
+        <!-- 兩個卡片選項 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- 卡片 1：簡易版 -->
+            <div onclick="launchVfamily('simple')" class="group border-2 border-emerald-200 hover:border-emerald-500 bg-emerald-50/30 hover:bg-emerald-50 rounded-2xl p-4 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-xl mb-3 shadow-sm">
+                        ⚡
+                    </div>
+                    <div class="font-bold text-slate-900 text-base">簡易版系統</div>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                        原有系統，快速掌握核心特色與男女保費快查。
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-emerald-100 flex items-center justify-between text-xs font-bold text-emerald-700">
+                    <span>開啟簡易版</span>
+                    <span>&nearr;</span>
+                </div>
+            </div>
+
+            <!-- 卡片 2：詳盡版 -->
+            <div onclick="launchVfamily('pro')" class="group border-2 border-blue-200 hover:border-blue-500 bg-blue-50/30 hover:bg-blue-50 rounded-2xl p-4 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl mb-3 shadow-sm">
+                        📊
+                    </div>
+                    <div class="font-bold text-slate-900 text-base">詳盡版系統</div>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                        深度分析版，包含條款細節與全面規劃功能。
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-100 flex items-center justify-between text-xs font-bold text-blue-700">
+                    <span>開啟詳盡版</span>
+                    <span>&nearr;</span>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 </body>
