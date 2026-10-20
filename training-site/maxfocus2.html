@@ -1,0 +1,1408 @@
+<!-- STREAMING_CHUNK:Configuring document head, styling, and dependencies -->
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盈聚．天下 II 保險計劃 - 專業銷售與尊尚客戶提案系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f8fafc;
+    }
+    .theme-orange { color: #E87722; }
+    .bg-theme-orange { background-color: #E87722; }
+    .border-theme-orange { border-color: #E87722; }
+    .theme-gradient { background: linear-gradient(135deg, #E87722 0%, #D45B0E 100%); }
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08);
+    }
+    .tab-active {
+      border-bottom: 3px solid #E87722;
+      color: #E87722;
+      font-weight: 700;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background-color: white !important; font-size: 11px; }
+      .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
+
+  <!-- STREAMING_CHUNK:Rendering navigation bar with new SVG emblem -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+      <div class="flex items-center space-x-3.5">
+        <!-- 替換原有字眼為尊尚財富傳承徽章圖案 (Shield & Legacy Tree SVG) -->
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400 flex items-center justify-center text-white shadow-md shadow-orange-500/20">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8"/>
+            <path d="M9 12l3-3 3 3"/>
+            <circle cx="12" cy="7" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-none">盈聚．天下 II 保險計劃</h1>
+            <span class="text-[11px] px-2.5 py-0.5 bg-amber-100/80 text-amber-900 font-bold rounded-full border border-amber-200 flex items-center">
+              <i data-lucide="sparkles" class="w-3 h-3 mr-1 text-amber-600"></i> MaxFocus Legacy II
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1 flex items-center">
+            <i data-lucide="gem" class="w-3.5 h-3.5 mr-1 text-orange-500"></i> 旗艦多元儲蓄與跨代傳承專用系統
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <i data-lucide="badge-check" class="w-4 h-4 mr-1.5 text-emerald-600"></i> 2026年Q4最新客戶特惠已套用
+        </span>
+        <button onclick="window.print()" class="inline-flex items-center px-3.5 py-1.5 border border-slate-300 text-xs sm:text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition">
+          <i data-lucide="printer" class="w-4 h-4 mr-1.5 text-slate-600"></i> 列印 / 導出建議書
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STREAMING_CHUNK:Rendering main container and tab buttons -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- 標籤頁選項卡 (加強圖案與標籤色彩) -->
+    <div class="flex border-b border-slate-200 mb-6 bg-white rounded-t-xl px-4 pt-2 shadow-sm no-print overflow-x-auto">
+      <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center tab-active whitespace-nowrap">
+        <span class="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center mr-2 text-orange-600">
+          <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+        </span>
+        智能報價與優惠精算
+      </button>
+      <button onclick="switchTab('projection')" id="tab-projection" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center whitespace-nowrap">
+        <span class="w-6 h-6 rounded-md bg-blue-100 flex items-center justify-center mr-2 text-blue-600">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+        </span>
+        官方精確回報投影 (IRR & 現金價值)
+      </button>
+      <button onclick="switchTab('milestones')" id="tab-milestones" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center whitespace-nowrap">
+        <span class="w-6 h-6 rounded-md bg-purple-100 flex items-center justify-center mr-2 text-purple-600">
+          <i data-lucide="award" class="w-3.5 h-3.5"></i>
+        </span>
+        四大里程碑保證獎賞
+      </button>
+      <button onclick="switchTab('legacy')" id="tab-legacy" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center whitespace-nowrap">
+        <span class="w-6 h-6 rounded-md bg-emerald-100 flex items-center justify-center mr-2 text-emerald-600">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+        </span>
+        富傳家與失去行為能力保障
+      </button>
+      <button onclick="switchTab('comparison')" id="tab-comparison" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center whitespace-nowrap">
+        <span class="w-6 h-6 rounded-md bg-amber-100 flex items-center justify-center mr-2 text-amber-600">
+          <i data-lucide="scale" class="w-3.5 h-3.5"></i>
+        </span>
+        同業主流旗艦橫向比較
+      </button>
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Module 1 - Calculator & Pricing Engine with visuals -->
+    <div id="content-calculator" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- 左側配置欄 -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+          <h2 class="text-base font-bold text-slate-900 border-l-4 border-theme-orange pl-2.5 flex items-center justify-between">
+            <span class="flex items-center">
+              <i data-lucide="sliders" class="w-4 h-4 mr-1.5 text-orange-500"></i> 客戶與投保選項
+            </span>
+            <span class="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded">免體檢 / 免驗身</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">客戶尊稱 / 姓名</label>
+            <div class="relative">
+              <input type="text" id="clientName" value="陳先生 (Valued Client)" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 focus:outline-none">
+              <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">被保人年齡</label>
+              <div class="relative">
+                <input type="number" id="insuredAge" value="20" min="1" max="80" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 focus:outline-none font-mono">
+                <i data-lucide="calendar" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+              </div>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">下次生日年齡</span>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">保單貨幣</label>
+              <!-- 依指示只保留美元 (USD) -->
+              <div class="w-full px-3 py-2 border border-slate-200 bg-slate-50 rounded-lg text-sm font-bold text-slate-800 flex items-center justify-between">
+                <span class="flex items-center">
+                  <span class="w-4 h-4 rounded-full bg-emerald-600 text-white text-[10px] flex items-center justify-center font-bold mr-1.5">$</span>
+                  美元 (USD)
+                </span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-slate-200 text-slate-600 rounded">固定</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">保費繳付年期</label>
+            <div class="grid grid-cols-5 gap-1.5" id="payPeriodBtns">
+              <button type="button" onclick="setPayPeriod(1)" class="pp-btn py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-orange-500 text-slate-700 transition">整付</button>
+              <button type="button" onclick="setPayPeriod(2)" class="pp-btn py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-orange-500 text-slate-700 transition">2年</button>
+              <button type="button" onclick="setPayPeriod(3)" class="pp-btn py-2 text-xs font-semibold rounded-lg border-2 border-theme-orange bg-orange-50 text-orange-700 transition">3年</button>
+              <button type="button" onclick="setPayPeriod(5)" class="pp-btn py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-orange-500 text-slate-700 transition">5年</button>
+              <button type="button" onclick="setPayPeriod(10)" class="pp-btn py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-orange-500 text-slate-700 transition">10年</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs font-semibold text-slate-600">
+                每期名義金額 / 每年保費 (USD)
+              </label>
+              <span id="minPremiumNotice" class="text-[11px] text-orange-600 font-bold"></span>
+            </div>
+            <!-- 輸入保費處即時千位逗號處理 -->
+            <div class="relative rounded-lg shadow-sm">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 font-bold font-mono">$</span>
+              <input type="text" id="annualPremium" value="100,000" oninput="handlePremiumInput(this)" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-base font-extrabold text-slate-900 focus:ring-1 focus:ring-orange-500 focus:outline-none font-mono">
+            </div>
+
+            <!-- 最低金額防呆警報條 (錯誤時顯示) -->
+            <div id="minErrorAlert" class="hidden mt-2 p-2.5 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2 text-red-700 text-xs">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5"></i>
+              <div id="minErrorMessage" class="leading-tight font-medium">低於法定最低投保額度！</div>
+            </div>
+
+            <!-- 快捷保費按鈕 -->
+            <div class="flex flex-wrap gap-1.5 mt-2.5" id="fastPremiumButtons">
+              <!-- 動態產生符合門檻的按鈕 -->
+            </div>
+          </div>
+
+          <!-- 預繳優惠 (PDA) 選項 -->
+          <div id="pdaSection" class="p-3.5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-orange-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="enablePDA" class="text-xs font-bold text-orange-950 flex items-center cursor-pointer">
+                <input type="checkbox" id="enablePDA" checked onchange="calculateAll()" class="w-4 h-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500 mr-2">
+                行使一筆過預繳優惠 (PDA)
+              </label>
+              <span class="text-[10px] px-2 py-0.5 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded font-extrabold flex items-center shadow-xs">
+                <i data-lucide="sparkle" class="w-2.5 h-2.5 mr-1"></i> 保證 5.0% p.a.
+              </span>
+            </div>
+            <p class="text-[11px] text-orange-900 leading-relaxed">
+              適用於美元保單（2、3或5年期無附約）。首期保費扣減當期保費折扣，預繳保費儲備金享 <strong>5.0% 保證年利率</strong> 逐年扣抵未來保費，進一步大幅壓低首日總投入資金！
+            </p>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100">
+            <button onclick="calculateAll()" class="w-full py-2.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold text-sm rounded-lg shadow-md shadow-orange-500/20 transition flex items-center justify-center">
+              <i data-lucide="refresh-cw" class="w-4 h-4 mr-1.5"></i> 立即更新報價
+            </button>
+          </div>
+        </div>
+
+        <!-- 中間與右側: 報價統計與明細表 -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- 統計卡片組 (所有數字強制千分位格式化，加入生動微插圖圖案) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover relative overflow-hidden">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center mb-2">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs text-slate-500 font-medium">應繳總保費 (名義總額)</div>
+              <div class="text-lg font-bold text-slate-900 font-mono mt-0.5" id="cardNominalTotal">$0</div>
+              <div class="text-[11px] text-slate-400 mt-1" id="cardPayYearsInfo">-</div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-orange-200 bg-orange-50/40 shadow-sm card-hover relative overflow-hidden">
+              <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mb-2">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs text-orange-700 font-semibold">2026 Q4保費折扣</div>
+              <div class="text-lg font-bold text-orange-600 font-mono mt-0.5" id="cardDiscountAmount">-$0</div>
+              <div class="text-[11px] text-orange-600 mt-1" id="cardDiscountRate">-</div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm card-hover relative overflow-hidden">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
+                <i data-lucide="percent" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs text-emerald-800 font-semibold">預繳利息增值扣減 (5%)</div>
+              <div class="text-lg font-bold text-emerald-700 font-mono mt-0.5" id="cardPdaInterest">-$0</div>
+              <div class="text-[11px] text-emerald-600 mt-1" id="cardPdaDesc">-</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 rounded-xl text-white shadow-md card-hover relative overflow-hidden">
+              <div class="w-8 h-8 rounded-lg bg-white/10 text-amber-400 flex items-center justify-center mb-2">
+                <i data-lucide="wallet" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs text-orange-300 font-medium">實際首日總支出金額</div>
+              <div class="text-xl font-extrabold text-white font-mono mt-0.5" id="cardActualPayment">$0</div>
+              <div class="text-[11px] text-slate-300 mt-1">總節省比率：<span id="cardTotalSavingsRate" class="text-orange-400 font-bold">0.00%</span></div>
+            </div>
+
+          </div>
+
+          <!-- 折扣與付款方案明細清單 -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+              <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center text-orange-600">
+                  <i data-lucide="receipt" class="w-3.5 h-3.5"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-800">2026年第4季優惠與實繳保費明細表</h3>
+              </div>
+              <span class="text-xs bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded font-mono font-semibold flex items-center">
+                <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5 mr-1 text-slate-500"></i> USD
+              </span>
+            </div>
+            <div class="p-5 overflow-x-auto">
+              <table class="w-full text-xs sm:text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 text-slate-400 font-normal text-left">
+                    <th class="pb-2">付款階段 / 項目</th>
+                    <th class="pb-2">名義應繳保費</th>
+                    <th class="pb-2">保費折扣優惠 / 預繳利息折減</th>
+                    <th class="pb-2 text-right">實繳金額 (USD)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700 font-mono" id="breakdownTableBody">
+                  <!-- 動態生成明細 -->
+                </tbody>
+              </table>
+
+              <!-- 提示小註解 -->
+              <div class="mt-4 p-3 bg-slate-50 rounded-lg text-[11px] text-slate-500 space-y-1 border border-slate-100">
+                <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>保費折扣活動期</strong>：2026年10月1日至12月31日（保單需於2027年3月31日或之前繕發）。</p>
+                <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>預繳 5.0% 保證優惠年利率</strong>：推廣期至2026年10月31日，保單需於2026年11月30日前繕發，一筆過預繳金額須於合資格保單發出日起計31日內收妥。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 客戶核心權益摘要卡 (帶視覺圖示) -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+              <i data-lucide="shield-check" class="w-4 h-4 text-orange-600 mr-1.5"></i> 本單隨附之核心人壽與家庭保障
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 card-hover">
+                <div class="flex items-center space-x-2 mb-1.5">
+                  <div class="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center">
+                    <i data-lucide="umbrella" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-slate-600 font-semibold">首10年「護家保」意外身故</span>
+                </div>
+                <span class="text-sm font-bold text-slate-900 block font-mono" id="familyAccidentCap">$200,000 USD</span>
+                <span class="text-[11px] text-slate-500 leading-normal mt-1 block">已繳總保費之200%（以最高限額為準），被保人及直屬家庭成員（配偶/子女）同享額外保障。</span>
+              </div>
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 card-hover">
+                <div class="flex items-center space-x-2 mb-1.5">
+                  <div class="w-6 h-6 rounded-md bg-orange-100 text-orange-700 flex items-center justify-center">
+                    <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-slate-600 font-semibold">身故保證賠償底線</span>
+                </div>
+                <span class="text-sm font-bold text-slate-900 block font-mono">100% 已繳保費總額</span>
+                <span class="text-[11px] text-slate-500 leading-normal mt-1 block">或（保證現金價值 + 歸原紅利面值 + 特別紅利面值）之較高者。</span>
+              </div>
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 card-hover">
+                <div class="flex items-center space-x-2 mb-1.5">
+                  <div class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                    <i data-lucide="heart-handshake" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-slate-600 font-semibold">核保與健康審查</span>
+                </div>
+                <span class="text-sm font-bold text-emerald-600 block">完全毋須健康核保 / 驗身</span>
+                <span class="text-[11px] text-slate-500 leading-normal mt-1 block">基本計劃免醫療體檢，投保手續輕鬆簡便。</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Module 2 - Accurate Projections with 5-Period Benchmark -->
+    <div id="content-projection" class="tab-content hidden space-y-6">
+      
+      <!-- 頂部指標看板 (加裝裝飾圖樣) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-slate-500 font-medium">預期總回本期 (非保證)</span>
+            <div class="w-6 h-6 rounded bg-orange-50 text-orange-600 flex items-center justify-center">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-orange-600 font-mono" id="metricBreakevenExp">第 6 年</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">總現金價值 ≥ 繳付保費總額</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-slate-500 font-medium">保證回本期</span>
+            <div class="w-6 h-6 rounded bg-blue-50 text-blue-600 flex items-center justify-center">
+              <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-slate-800 font-mono" id="metricBreakevenGtd">第 17 年</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">保證現金價值 ≥ 繳付保費總額</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-slate-500 font-medium">第 20 年預期總 IRR</span>
+            <div class="w-6 h-6 rounded bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-emerald-600 font-mono" id="metricIrr20">6.01%</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">長線預期總內部回報率達 6.50%</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-slate-500 font-medium">紅利鎖定最早可行使</span>
+            <div class="w-6 h-6 rounded bg-purple-50 text-purple-600 flex items-center justify-center">
+              <i data-lucide="key" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-blue-600 font-mono">第 9 年起</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">每年鎖定高達 70%，累積無上限</div>
+        </div>
+
+      </div>
+
+      <!-- 圖表分析 -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 flex items-center">
+              <i data-lucide="line-chart" class="w-4 h-4 mr-2 text-orange-500"></i> 現金價值與財富增長軌跡投影 (USD)
+            </h3>
+            <p class="text-xs text-slate-500">對比已繳保費總額、保證現金價值與預期總現金價值（保證+歸原紅利+特別紅利）</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs bg-slate-50 p-2 rounded-lg border border-slate-100">
+            <span class="inline-flex items-center"><span class="w-3 h-3 bg-slate-300 rounded-sm mr-1.5"></span> 已繳總保費</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-sm mr-1.5"></span> 保證現金價值</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 bg-theme-orange rounded-sm mr-1.5"></span> 預期總現金價值</span>
+          </div>
+        </div>
+        <div class="h-80 w-full">
+          <canvas id="cashValueChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 現金價值詳細年期表 -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center text-orange-600">
+              <i data-lucide="table" class="w-3.5 h-3.5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-800">各主要保單年度退保價值與身故權益清單</h3>
+              <span class="text-xs text-slate-500">數據已按本單已繳保費總額比例精算，所有金額均以千分位逗號格式化</span>
+            </div>
+          </div>
+          <span class="text-xs bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded font-mono font-semibold">USD</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs sm:text-sm text-left">
+            <thead class="bg-slate-100 text-slate-600 border-b border-slate-200">
+              <tr>
+                <th class="py-2.5 px-3">保單年度完結</th>
+                <th class="py-2.5 px-3">被保人年齡</th>
+                <th class="py-2.5 px-3">已繳保費總額</th>
+                <th class="py-2.5 px-3">保證現金價值 (A)</th>
+                <th class="py-2.5 px-3 text-orange-600">歸原紅利現金價值 (B)</th>
+                <th class="py-2.5 px-3 text-orange-600">特別紅利現金價值 (C)</th>
+                <th class="py-2.5 px-3 font-bold text-slate-900 bg-orange-50/50">預期總退保價值 (A+B+C)</th>
+                <th class="py-2.5 px-3 font-bold text-slate-800">身故權益總額</th>
+                <th class="py-2.5 px-3 text-right">回本倍數</th>
+              </tr>
+            </thead>
+            <tbody id="projectionTableBody" class="divide-y divide-slate-100 font-mono">
+              <!-- 動態生成數據行 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Module 3 - Four Guaranteed Milestone Awards with rich artwork -->
+    <div id="content-milestones" class="tab-content hidden space-y-6">
+      
+      <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-amber-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
+        <div class="relative z-10 flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-black flex items-center">
+              <i data-lucide="crown" class="w-6 h-6 mr-2 text-amber-200"></i> 市場罕有．四大里程碑保證現金獎賞
+            </h2>
+            <p class="text-xs text-orange-100 mt-1.5">獨立於保單現金價值，額外派發現金慶祝人生大事，不影響名義金額與長線紅利滾存！</p>
+          </div>
+          <span class="hidden sm:inline-flex items-center px-3.5 py-1.5 bg-white/20 rounded-full text-xs font-bold backdrop-blur-md shadow-inner">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5 text-amber-200"></i> 最高可獲逾 HK$113,000+
+          </span>
+        </div>
+        <!-- 裝飾背景光暈圖 -->
+        <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- 獎賞 1: 享悅人生獎賞 (附圖標裝飾) -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover relative">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 flex items-center">
+              <i data-lucide="sparkles" class="w-3 h-3 mr-1 text-amber-600"></i> 市場罕有
+            </span>
+            <span class="text-xs text-slate-400">生效滿1年後起</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">享悅人生獎賞 (最高 HK$12,000)</h3>
+              <p class="text-[11px] text-slate-400">見證並嘉許人生各大新起點</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">被保人達成下列人生重要大事，每項可獲支付 <strong>HK$3,000</strong>，最高獲取4次（總額 HK$12,000）：</p>
+          <ul class="text-xs text-slate-700 space-y-2 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+            <li class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+              <span class="flex items-center"><i data-lucide="heart-handshake" class="w-4 h-4 text-pink-500 mr-2"></i> 1. 被保人合法註冊婚姻</span>
+              <span class="font-bold text-amber-700 font-mono">HK$3,000</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+              <span class="flex items-center"><i data-lucide="users" class="w-4 h-4 text-blue-500 mr-2"></i> 2. 被保人合法途徑領養子女</span>
+              <span class="font-bold text-amber-700 font-mono">HK$3,000</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+              <span class="flex items-center"><i data-lucide="home" class="w-4 h-4 text-emerald-500 mr-2"></i> 3. 被保人買入住宅物業（置業安居）</span>
+              <span class="font-bold text-amber-700 font-mono">HK$3,000</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="flex items-center"><i data-lucide="briefcase" class="w-4 h-4 text-indigo-500 mr-2"></i> 4. 大學或高教學位畢業後1年內受聘全職工作</span>
+              <span class="font-bold text-amber-700 font-mono">HK$3,000</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 獎賞 2: 長壽獎賞 -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover relative">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-900 border border-blue-200 flex items-center">
+              <i data-lucide="heart" class="w-3 h-3 mr-1 text-red-500"></i> 肯定豐盛人生
+            </span>
+            <span class="text-xs text-slate-400">80歲或第10週年</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="cake" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">長壽獎賞 (保證 HK$10,000)</h3>
+              <p class="text-[11px] text-slate-400">肯定被保人精彩壽辰心意金</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">肯定被保人精彩豐盛人生，達到指定年歲即領取保證心意金：</p>
+          <div class="bg-slate-50 p-3.5 rounded-xl text-xs space-y-2 border border-slate-100">
+            <p class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-emerald-600 mr-1.5 flex-shrink-0"></i> <strong>發放條件</strong>：被保人年齡滿 <strong>80歲</strong>（下次生日年齡）或 <strong>第10個保單週年日後</strong>（以較後者為準）。</p>
+            <p class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-emerald-600 mr-1.5 flex-shrink-0"></i> 緊接其後的保單週年日自動以現金支付 <strong>HK$10,000</strong>（或等值澳門元）。</p>
+            <p class="text-slate-400 text-[11px]">*每份保單支付一次為限。</p>
+          </div>
+        </div>
+
+        <!-- 獎賞 3: 初生嬰兒獎賞 -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover relative">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-purple-100 text-purple-900 border border-purple-200 flex items-center">
+              <i data-lucide="baby" class="w-3 h-3 mr-1 text-purple-600"></i> 三代同堂．家族共享
+            </span>
+            <span class="text-xs text-slate-400">等候期僅10個月</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="party-popper" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">初生嬰兒獎賞 (高達 HK$60,000)</h3>
+              <p class="text-[11px] text-slate-400">打破業界常規！子孫出生皆可享</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">打破業界常規！不僅親生子女，連<strong>親生孫子女出世</strong>亦可索償！</p>
+          <div class="bg-slate-50 p-3.5 rounded-xl text-xs space-y-2 border border-slate-100">
+            <p class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+              <span>每名嬰兒派發金額</span>
+              <span class="font-bold text-purple-700 font-mono">HK$20,000</span>
+            </p>
+            <p class="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
+              <span>升級最高索償次數</span>
+              <span class="font-bold text-purple-700 font-mono">最多 3 次 (總額高達 HK$60,000)</span>
+            </p>
+            <p class="text-slate-500 text-[11px] leading-relaxed">
+              <strong>家族疊加示範</strong>：若夫妻雙方及雙方父母共持有4份保單，一名新生兒 Jacky 出生，全家合共可獲高達 <strong>HK$120,000</strong> 獎賞！
+            </p>
+          </div>
+        </div>
+
+        <!-- 獎賞 4: 傑出表現獎 -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover relative">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-200 flex items-center">
+              <i data-lucide="graduation-cap" class="w-3 h-3 mr-1 text-emerald-600"></i> 優化升級．無須轉名
+            </span>
+            <span class="text-xs text-slate-400">小學至全球名校學士</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="medal" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">傑出表現獎 (高達 HK$31,000)</h3>
+              <p class="text-[11px] text-slate-400">表彰下一代追求卓越成就</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">原被保人或成功索償初生嬰兒獎之子女/孫子女均合資格，<strong>無須先轉名為被保人</strong>！</p>
+          <div class="bg-slate-50 p-3.5 rounded-xl text-xs space-y-2 font-mono border border-slate-100">
+            <div class="flex justify-between border-b border-slate-200/60 pb-1">
+              <span class="font-sans">小學全級前10名 / 校際個人冠軍</span>
+              <span class="font-bold text-emerald-700">HK$1,000</span>
+            </div>
+            <div class="flex justify-between border-b border-slate-200/60 pb-1">
+              <span class="font-sans">全球首10位大學全日制學士錄取</span>
+              <span class="font-bold text-emerald-700">HK$30,000</span>
+            </div>
+            <div class="flex justify-between border-b border-slate-200/60 pb-1">
+              <span class="font-sans">IELTS 8分+ / TOEFL 110分+ / IBDP 41分+</span>
+              <span class="font-bold text-emerald-700">HK$5,000</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-sans">高考600分+ / GCE A-level 2A*1A / SAT 1400+</span>
+              <span class="font-bold text-emerald-700">HK$5,000</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Module 4 - Smart Legacy & Incapacity Benefit -->
+    <div id="content-legacy" class="tab-content hidden space-y-6">
+      
+      <!-- 富傳家選項展示 -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div>
+            <span class="px-2.5 py-0.5 bg-orange-100 text-orange-800 text-xs font-bold rounded-md flex items-center w-max">
+              <i data-lucide="git-branch" class="w-3.5 h-3.5 mr-1 text-orange-600"></i> 前瞻性遺產規劃
+            </span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1">「富傳家選項」Smart Legacy Option</h3>
+          </div>
+          <span class="text-xs text-slate-500 mt-2 sm:mt-0 flex items-center">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1 text-emerald-600"></i> 傳承無間斷．告別遺產承辦法律繁瑣
+          </span>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          客戶可在生前預先設定：若被保人不幸身故，保單無須立刻終止賠付，而是依照客戶意願按百分比（如 25%、50% 等，總和 100%）<strong>自動分拆為多份指定新保單</strong>，並為每份保單指定<strong>最多 3 位順位後續被保人</strong>。
+        </p>
+
+        <!-- 傳承流程架構圖展示 (豐富色彩與圖形) -->
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-center font-bold text-sm text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center justify-center">
+            <i data-lucide="workflow" class="w-4 h-4 mr-1.5 text-orange-500"></i> 原有保單（權益人兼被保人：George）身故時之自動執行架構
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center text-xs">
+            
+            <div class="bg-white p-3.5 rounded-xl border-2 border-orange-400 shadow-sm card-hover">
+              <div class="w-7 h-7 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="font-bold text-orange-600 mb-1">指定新保單 (1) [25%]</div>
+              <p class="text-slate-500 mb-2">第1順位新被保人：妻子 Helen<br>第2順位：兒子 Tommy</p>
+              <span class="inline-block px-2 py-0.5 bg-orange-100 text-orange-800 text-[10px] rounded font-semibold">保單延續累積財富</span>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-xl border-2 border-orange-400 shadow-sm card-hover">
+              <div class="w-7 h-7 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="font-bold text-orange-600 mb-1">指定新保單 (2) [25%]</div>
+              <p class="text-slate-500 mb-2">第1順位新被保人：兒子 Tommy<br>第2順位：孫兒 (Tommy子)</p>
+              <span class="inline-block px-2 py-0.5 bg-orange-100 text-orange-800 text-[10px] rounded font-semibold">世代財富無縫承傳</span>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-xl border border-blue-300 shadow-sm card-hover">
+              <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-1.5">
+                <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="font-bold text-blue-700 mb-1">受益人：母親 [25%]</div>
+              <p class="text-slate-500 mb-2">選擇定額分期領取身故賠償</p>
+              <span class="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] rounded font-semibold">自製穩定孝親長糧</span>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-xl border border-emerald-300 shadow-sm card-hover">
+              <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-1.5">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="font-bold text-emerald-700 mb-1">受益人：父親 [25%]</div>
+              <p class="text-slate-500 mb-2">選擇每年遞增分期領取身故賠償</p>
+              <span class="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] rounded font-semibold">抗通脹退休生活費</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 失去行為能力權益 (Incapacity Benefit) -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0">
+            <i data-lucide="shield-alert" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">失去行為能力權益（預設指定代領人）</h3>
+            <p class="text-xs text-slate-500">預先防範無行為能力時保單資產被凍結的法律困境</p>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          保單權益人可預先指定一名年滿 19 歲的家庭成員（配偶、父母、子女、兄弟姊妹等），並自訂提取百分比（<strong>10% 至 100%</strong>）。一旦確診 7 大受保疾病，指定人士即可代為提取現金價值，省卻申請法定監護令或繁複司法程序：
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-center">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">1. 精神上無行為能力</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">2. 末期疾病 (壽命&lt;12月)</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">3. 昏迷 (維持系統96hr+)</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">4. 不能獨立生活 (3項日常)</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">5. 植物人</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">6. 嚴重頭部創傷</div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-medium">7. 兩肢或以上癱瘓</div>
+          <div class="p-3 bg-orange-50 rounded-xl border border-orange-200 text-orange-800 font-bold flex items-center justify-center">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1 text-orange-600"></i> 完全毋須任何費用
+          </div>
+        </div>
+      </div>
+
+      <!-- 8種貨幣轉換與保單分拆 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 card-hover">
+          <h4 class="text-sm font-bold text-slate-900 flex items-center">
+            <div class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center mr-2">
+              <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+            </div>
+            保單貨幣轉換選項 (第3週年起)
+          </h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            自第3個保單週年日起，每個年度可行使1次，自由在 <strong>美元、港元、人民幣、英鎊、歐元、加元、澳元、新加坡元</strong> 8大主流貨幣間切換，無縫配合子女海外留學、移居或退休生活。
+          </p>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 card-hover">
+          <h4 class="text-sm font-bold text-slate-900 flex items-center">
+            <div class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center mr-2">
+              <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
+            </div>
+            保單分拆選項 (第3週年起)
+          </h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            自第3個保單週年日起，每年可行使1次，無限次分拆。分拆後每張保單簽發日跟隨原保單，分拆保單無須重新等待3年即可再次行使轉換或分拆，資產配置極富彈性。
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Module 5 - Market Comparison -->
+    <div id="content-comparison" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800 flex items-center">
+              <i data-lucide="award" class="w-4 h-4 mr-1.5 text-orange-500"></i> 盈聚．天下 II VS 澳門同業主流分紅儲蓄計劃優勢橫向評測
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">根據市場公開之產品指引及建議書數據整理比較</p>
+          </div>
+          <span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded font-bold">市場領先優勢</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-600">
+              <tr class="border-b border-slate-200">
+                <th class="py-3 px-3">產品指標</th>
+                <th class="py-3 px-3 bg-orange-50 font-bold text-orange-900 border-x border-orange-200">盈聚．天下 II</th>
+                <th class="py-3 px-3">友X 環X盈活</th>
+                <th class="py-3 px-3">保X 信X明天</th>
+                <th class="py-3 px-3">宏X 家傳承</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">保單貨幣種類</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-orange-700 border-x border-orange-200">8 種 (美/港/人/鎊/歐/澳/加/星)</td>
+                <td class="py-2.5 px-3">僅 2 種 (港澳/美)</td>
+                <td class="py-2.5 px-3">6 種</td>
+                <td class="py-2.5 px-3">7 種</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">首公佈歸原紅利年份</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-emerald-700 border-x border-orange-200">第 2 個週年日起 (提早一年)</td>
+                <td class="py-2.5 px-3">第 3 個週年日起</td>
+                <td class="py-2.5 px-3">第 3 個週年日起</td>
+                <td class="py-2.5 px-3">只設終期紅利</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">紅利鎖定最早行使期</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-emerald-700 border-x border-orange-200">第 9 個保單週年日起 (行業極早)</td>
+                <td class="py-2.5 px-3">第 15 個週年日起</td>
+                <td class="py-2.5 px-3">第 10 個週年日起</td>
+                <td class="py-2.5 px-3">第 10 個週年日起</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">身故時保單分拆傳承</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-orange-700 border-x border-orange-200">富傳家：無分拆數量上限 + 最多3位順位</td>
+                <td class="py-2.5 px-3">最多分拆2份保單 (無順位)</td>
+                <td class="py-2.5 px-3">不支援</td>
+                <td class="py-2.5 px-3">最多5份保單 (無順位)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">家庭意外身故額外保障</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-orange-700 border-x border-orange-200">首10年 200% 保費 (包含配偶/子女)</td>
+                <td class="py-2.5 px-3">首1年 100% 保費</td>
+                <td class="py-2.5 px-3">首5年 100% 保費</td>
+                <td class="py-2.5 px-3">首5年 100% 保費</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">人生里程碑保證獎賞</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-orange-700 border-x border-orange-200">享悅人生 + 長壽 + 初生嬰兒(3次) + 傑出表現</td>
+                <td class="py-2.5 px-3">僅限學術成績獎</td>
+                <td class="py-2.5 px-3">僅限學術優異獎</td>
+                <td class="py-2.5 px-3">無</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-semibold">失去行為能力預設代領</td>
+                <td class="py-2.5 px-3 bg-orange-50/50 font-bold text-orange-700 border-x border-orange-200">支援 (涵蓋7大精神及身體疾病)</td>
+                <td class="py-2.5 px-3">支援</td>
+                <td class="py-2.5 px-3">支援</td>
+                <td class="py-2.5 px-3">支援</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- STREAMING_CHUNK:Rendering print footer -->
+  <footer class="max-w-7xl mx-auto px-6 py-4 text-center text-xs text-slate-400 border-t border-slate-200 mt-8">
+    <p>盈聚．天下 II 保險計劃 (MaxFocus Legacy II Insurance Plan)</p>
+    <p class="mt-1 text-[10px]">此報價及演示系統僅作客戶參考及銷售解說之用，所有保單條款、紅利分紅比率及保證權益概以正式發出之保單合約及建議書（Proposal）為準。</p>
+  </footer>
+
+  <!-- STREAMING_CHUNK:JavaScript state definitions and comprehensive benchmark database -->
+  <script>
+    let currentPayPeriod = 3; // 預設 3 年繳
+    const currentCurrency = 'USD'; // 固定為美元
+    let chartInstance = null;
+
+    // 官方 5 個年期（整付、2年、3年、5年、10年）精確基準資料庫
+    // 依據官方利益說明書（總繳保費 300,000 美元基準），計算出各年度各項價值相對於總繳保費的精確比率
+    const officialBenchmarks = {
+      1: { // 整付 (1年) - 來源：PolicyIllustration_MaxFocus Legacy II Insurance Plan.pdf (整付 $300,000)
+        totalTargetPremium: 300000,
+        breakevenExp: 4,
+        breakevenGtd: 16,
+        irrData: { 5: 2.51, 10: 5.00, 20: 6.15, 30: 6.50 },
+        dataPoints: [
+          [1,  1.0, 180000/300000, 0,            0,             180000/300000, 300000/300000],
+          [2,  1.0, 187200/300000, 4200/300000,   0,             191400/300000, 300000/300000],
+          [3,  1.0, 193356/300000, 12633/300000,  59400/300000,  265389/300000, 300000/300000],
+          [4,  1.0, 226839/300000, 21134/300000,  62400/300000,  310373/300000, 310373/300000],
+          [5,  1.0, 234588/300000, 29703/300000,  75300/300000,  339591/300000, 339591/300000],
+          [10, 1.0, 241014/300000, 73588/300000,  174000/300000, 488602/300000, 488602/300000],
+          [15, 1.0, 290565/300000, 119256/300000, 259800/300000, 669621/300000, 669621/300000],
+          [20, 1.0, 301692/300000, 166781/300000, 521400/300000, 989873/300000, 989873/300000],
+          [25, 1.0, 304506/300000, 216237/300000, 927300/300000, 1448043/300000, 1448043/300000],
+          [30, 1.0, 318531/300000, 267704/300000, 1417500/300000, 2003735/300000, 2003735/300000]
+        ]
+      },
+      2: { // 2年繳 - 來源：FWD_SI_M52VQA9XX9G80447.pdf (每年 $150,000, 總繳 $300,000)
+        totalTargetPremium: 300000,
+        breakevenExp: 5,
+        breakevenGtd: 16,
+        irrData: { 5: 1.00, 10: 4.30, 20: 6.08, 30: 6.50 },
+        dataPoints: [
+          [1,  0.5, 75000/300000,  0,             0,             75000/300000,  150000/300000],
+          [2,  1.0, 150000/300000, 4200/300000,   0,             154200/300000, 300000/300000],
+          [3,  1.0, 174750/300000, 12633/300000,  48000/300000,  235383/300000, 300000/300000],
+          [4,  1.0, 184500/300000, 21134/300000,  57000/300000,  262634/300000, 300000/300000],
+          [5,  1.0, 194250/300000, 29703/300000,  89850/300000,  313803/300000, 313803/300000],
+          [10, 1.0, 218139/300000, 73588/300000,  155850/300000, 447577/300000, 447577/300000],
+          [15, 1.0, 277281/300000, 119256/300000, 246900/300000, 643437/300000, 643437/300000],
+          [20, 1.0, 302349/300000, 166781/300000, 479700/300000, 948830/300000, 948830/300000],
+          [25, 1.0, 308946/300000, 216237/300000, 828750/300000, 1353933/300000, 1353933/300000],
+          [30, 1.0, 318214/300000, 267704/300000, 1337700/300000, 1923618/300000, 1923618/300000]
+        ]
+      },
+      3: { // 3年繳 - 來源：FWD_SI_M52VQA9XX9G80447 (1).pdf (每年 $100,000, 總繳 $300,000)
+        totalTargetPremium: 300000,
+        breakevenExp: 6,
+        breakevenGtd: 17,
+        irrData: { 5: -6.00, 10: 3.88, 20: 6.01, 30: 6.50 },
+        dataPoints: [
+          [1,  0.333333, 0,             0,             0,              0,             100000/300000],
+          [2,  0.666667, 0,             0,             0,              0,             200000/300000],
+          [3,  1.0,      0,             0,             0,              0,             300000/300000],
+          [4,  1.0,      48412/300000,  8400/300000,   129100/300000,  185912/300000, 300000/300000],
+          [5,  1.0,      88031/300000,  16867/300000,  129600/300000,  234498/300000, 300000/300000],
+          [10, 1.0,      205802/300000, 60230/300000,  156800/300000,  422832/300000, 422832/300000],
+          [15, 1.0,      266079/300000, 105355/300000, 223800/300000,  595234/300000, 595234/300000],
+          [20, 1.0,      301715/300000, 152315/300000, 456300/300000,  910330/300000, 910330/300000],
+          [25, 1.0,      308186/300000, 201183/300000, 765800/300000,  1275169/300000, 1275169/300000],
+          [30, 1.0,      316978/300000, 252038/300000, 1296600/300000, 1865616/300000, 1865616/300000]
+        ]
+      },
+      5: { // 5年繳 - 來源：FWD_SI_M52VQA9XX9G80447 (2).pdf (每年 $60,000, 總繳 $300,000)
+        totalTargetPremium: 300000,
+        breakevenExp: 6,
+        breakevenGtd: 17,
+        irrData: { 5: -16.9, 10: 3.53, 20: 6.00, 30: 6.50 },
+        dataPoints: [
+          [1,  0.2, 0,             0,             0,             0,             60000/300000],
+          [2,  0.4, 0,             1440/300000,   0,             1440/300000,   120000/300000],
+          [3,  0.6, 16033/300000,  8651/300000,   52560/300000,  77244/300000,  180000/300000],
+          [4,  0.8, 45015/300000,  15920/300000,  55500/300000,  116436/300000, 240000/300000],
+          [5,  1.0, 85098/300000,  23248/300000,  70020/300000,  178366/300000, 300000/300000],
+          [10, 1.0, 189311/300000, 60773/300000,  146340/300000, 396425/300000, 396425/300000],
+          [15, 1.0, 234778/300000, 99824/300000,  232440/300000, 567042/300000, 567042/300000],
+          [20, 1.0, 300824/300000, 140462/300000, 417900/300000, 859186/300000, 859186/300000],
+          [25, 1.0, 303469/300000, 182752/300000, 795720/300000, 1281941/300000, 1281941/300000],
+          [30, 1.0, 310791/300000, 226760/300000, 1218840/300000, 1756392/300000, 1756392/300000]
+        ]
+      },
+      10: { // 10年繳 - 來源：PolicyIllustration_MaxFocus Legacy II Insurance Plan 2.pdf (每年 $30,000, 總繳 $300,000)
+        totalTargetPremium: 300000,
+        breakevenExp: 9,
+        breakevenGtd: 24,
+        irrData: { 5: -22.0, 10: 1.26, 20: 5.77, 30: 6.15 },
+        dataPoints: [
+          [1,  0.1, 0,             0,             0,             0,             30000/300000],
+          [2,  0.2, 0,             570/300000,    0,             570/300000,    60000/300000],
+          [3,  0.3, 8016/300000,   6274/300000,   12780/300000,  27071/300000,  90000/300000],
+          [4,  0.4, 22507/300000,  12024/300000,  14100/300000,  48632/300000,  120000/300000],
+          [5,  0.5, 41934/300000,  15900/300000,  17820/300000,  75654/300000,  150000/300000],
+          [10, 1.0, 169980/300000, 47504/300000,  104130/300000, 321614/300000, 321614/300000],
+          [15, 1.0, 217915/300000, 78395/300000,  171450/300000, 467761/300000, 467761/300000],
+          [20, 1.0, 258867/300000, 110541/300000, 355620/300000, 725028/300000, 725028/300000],
+          [25, 1.0, 302469/300000, 143994/300000, 535230/300000, 981693/300000, 981693/300000],
+          [30, 1.0, 309814/300000, 178806/300000, 905940/300000, 1394560/300000, 1394560/300000]
+        ]
+      }
+    };
+
+    // 官方產品指引規定：最低名義金額／最低年繳保費 (新生意申請時 - 美元)
+    const officialMinPremiumsUSD = {
+      1: 20000,
+      2: 10000,
+      3: 6700,
+      5: 4000,
+      10: 2000
+    };
+
+    // 格式化數字為千分位逗號字串
+    function formatWithCommas(num) {
+      if (isNaN(num) || num === null || num === undefined) return '0';
+      return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // 格式化金額包含美元符號
+    function formatMoney(num) {
+      return `$${formatWithCommas(num)}`;
+    }
+
+    // STREAMING_CHUNK:Handling live comma input for premium field
+    function handlePremiumInput(input) {
+      const cursorPosition = input.selectionStart;
+      const rawTextBeforeCursor = input.value.substring(0, cursorPosition);
+      const digitsBeforeCursor = rawTextBeforeCursor.replace(/\D/g, '').length;
+
+      const cleanDigits = input.value.replace(/\D/g, '');
+
+      if (!cleanDigits) {
+        input.value = '';
+        calculateAll();
+        return;
+      }
+
+      const formatted = cleanDigits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      input.value = formatted;
+
+      let newCursorPos = 0;
+      let digitsCounted = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) {
+          digitsCounted++;
+        }
+        if (digitsCounted === digitsBeforeCursor) {
+          newCursorPos = i + 1;
+          break;
+        }
+      }
+      input.setSelectionRange(newCursorPos, newCursorPos);
+
+      calculateAll();
+    }
+
+    // STREAMING_CHUNK:Initializing application on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initChart();
+      updateFastPremiumButtons();
+      calculateAll();
+    });
+
+    // 切換選項卡
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+      document.getElementById('tab-' + tabId).classList.add('tab-active');
+      document.getElementById('content-' + tabId).classList.remove('hidden');
+
+      if (tabId === 'projection' && chartInstance) {
+        chartInstance.resize();
+      }
+    }
+
+    // 設定年期
+    function setPayPeriod(period) {
+      currentPayPeriod = period;
+      const btns = document.querySelectorAll('#payPeriodBtns button');
+      btns.forEach(btn => {
+        btn.className = 'pp-btn py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-orange-500 text-slate-700 transition';
+      });
+      event.target.className = 'pp-btn py-2 text-xs font-semibold rounded-lg border-2 border-theme-orange bg-orange-50 text-orange-700 transition';
+
+      // 檢查 PDA 適用性（僅 2, 3, 5 年期支援）
+      const pdaSection = document.getElementById('pdaSection');
+      if ([2, 3, 5].includes(period)) {
+        pdaSection.classList.remove('hidden');
+      } else {
+        pdaSection.classList.add('hidden');
+        document.getElementById('enablePDA').checked = false;
+      }
+
+      updateFastPremiumButtons();
+      calculateAll();
+    }
+
+    // 動態更新快捷按鈕以符合當前年期最低額
+    function updateFastPremiumButtons() {
+      const minVal = getMinPremium();
+      const container = document.getElementById('fastPremiumButtons');
+      container.innerHTML = '';
+
+      let steps = [minVal, minVal * 2, 50000, 100000, 300000];
+      // 去重且排序
+      steps = Array.from(new Set(steps)).filter(s => s >= minVal).sort((a,b) => a - b);
+
+      steps.forEach(amt => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'text-xs px-2.5 py-1 bg-slate-100 hover:bg-orange-100 hover:text-orange-700 rounded-md text-slate-600 font-mono transition';
+        btn.innerText = formatMoney(amt);
+        btn.onclick = () => {
+          const input = document.getElementById('annualPremium');
+          input.value = formatWithCommas(amt);
+          calculateAll();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // 取得當前年期的最低投保金額 (USD)
+    function getMinPremium() {
+      return officialMinPremiumsUSD[currentPayPeriod] || 10000;
+    }
+
+    // STREAMING_CHUNK:Executing core calculation with validation and discount rules
+    function calculateAll() {
+      const annualPremInput = document.getElementById('annualPremium');
+      const rawVal = annualPremInput.value.replace(/,/g, '');
+      const annualPrem = parseFloat(rawVal) || 0;
+      const isPDA = document.getElementById('enablePDA').checked;
+      const minRequired = getMinPremium();
+
+      // 顯示最低門檻文字 (千位逗號)
+      document.getElementById('minPremiumNotice').innerText = `最低投保門檻: ${formatMoney(minRequired)}`;
+
+      // 驗證是否達到最低投保金額
+      const minErrorAlert = document.getElementById('minErrorAlert');
+      const minErrorMessage = document.getElementById('minErrorMessage');
+
+      if (annualPrem < minRequired) {
+        minErrorAlert.classList.remove('hidden');
+        minErrorMessage.innerHTML = `輸入金額 <strong>${formatMoney(annualPrem)}</strong> 低於本計劃 ${currentPayPeriod === 1 ? '整付' : currentPayPeriod + '年期'}之官方最低門檻 <strong>${formatMoney(minRequired)}</strong>，無法出單！請調整保費。`;
+        annualPremInput.classList.add('border-red-500', 'bg-red-50');
+
+        document.getElementById('cardNominalTotal').innerText = '$0';
+        document.getElementById('cardPayYearsInfo').innerText = '未達最低投保門檻';
+        document.getElementById('cardDiscountAmount').innerText = '-$0';
+        document.getElementById('cardDiscountRate').innerText = '不可投保';
+        document.getElementById('cardPdaInterest').innerText = '-$0';
+        document.getElementById('cardPdaDesc').innerText = '無有效計算';
+        document.getElementById('cardActualPayment').innerText = '$0';
+        document.getElementById('cardTotalSavingsRate').innerText = '0.00%';
+        document.getElementById('familyAccidentCap').innerText = '$0';
+
+        document.getElementById('breakdownTableBody').innerHTML = `
+          <tr>
+            <td colspan="4" class="py-6 text-center text-red-500 font-bold">
+              請輸入不低於最低門檻 ${formatMoney(minRequired)} 之保費以產生報價明細
+            </td>
+          </tr>
+        `;
+        document.getElementById('projectionTableBody').innerHTML = `
+          <tr>
+            <td colspan="9" class="py-6 text-center text-slate-400">
+              未達最低投保額度，暫無回報數據
+            </td>
+          </tr>
+        `;
+        if (chartInstance) {
+          chartInstance.data.labels = [];
+          chartInstance.data.datasets.forEach(ds => ds.data = []);
+          chartInstance.update();
+        }
+        return;
+      }
+
+      minErrorAlert.classList.add('hidden');
+      annualPremInput.classList.remove('border-red-500', 'bg-red-50');
+
+      // 1. 計算保費折扣 (2026 Q4 Flash Report 政策)
+      let d1 = 0; // 首年折扣率
+      let d2 = 0; // 第二年折扣率
+
+      if (currentPayPeriod === 1) { // 整付
+        if (annualPrem < 100000) d1 = 0.02;
+        else if (annualPrem < 300000) d1 = 0.03;
+        else if (annualPrem < 500000) d1 = 0.04;
+        else if (annualPrem < 1000000) d1 = 0.05;
+        else if (annualPrem < 2000000) d1 = 0.06;
+        else d1 = 0.07;
+      } else if (currentPayPeriod === 2) { // 2年繳
+        if (annualPrem < 50000) d1 = 0.04;
+        else if (annualPrem < 100000) d1 = 0.06;
+        else if (annualPrem < 250000) d1 = 0.10;
+        else d1 = 0.12;
+      } else if (currentPayPeriod === 3) { // 3年繳（Q4特惠大幅提升）
+        if (annualPrem < 50000) d1 = 0.25;
+        else if (annualPrem < 100000) d1 = 0.30;
+        else d1 = 0.35;
+      } else if (currentPayPeriod === 5 || currentPayPeriod === 10) { // 5年或10年繳
+        if (annualPrem < 10000) { d1 = 0.08; d2 = 0; }
+        else if (annualPrem < 30000) { d1 = 0.10; d2 = 0.04; }
+        else if (annualPrem < 50000) { d1 = 0.10; d2 = 0.10; }
+        else if (annualPrem < 100000) { d1 = 0.10; d2 = 0.16; }
+        else if (annualPrem < 200000) { d1 = 0.10; d2 = 0.18; }
+        else if (annualPrem < 500000) { d1 = 0.10; d2 = 0.20; }
+        else { d1 = 0.10; d2 = 0.21; }
+      }
+
+      const totalNominal = annualPrem * currentPayPeriod;
+
+      // 各年保費與折扣計算
+      let yearPremiums = [];
+      let totalDiscount = 0;
+
+      for (let y = 1; y <= currentPayPeriod; y++) {
+        let discRate = (y === 1) ? d1 : (y === 2 ? d2 : 0);
+        let discAmt = annualPrem * discRate;
+        totalDiscount += discAmt;
+        yearPremiums.push({
+          year: y,
+          nominal: annualPrem,
+          discRate: discRate,
+          discAmt: discAmt,
+          net: annualPrem - discAmt
+        });
+      }
+
+      // 2. 預繳 (PDA) 5.0% 保證優惠年利率精算
+      let pdaDepositNeeded = 0;
+      let pdaInterestSaved = 0;
+
+      if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
+        for (let y = 2; y <= currentPayPeriod; y++) {
+          let dueAmount = yearPremiums[y - 1].net;
+          let presentValue = dueAmount / Math.pow(1 + 0.05, y - 1);
+          pdaDepositNeeded += presentValue;
+          pdaInterestSaved += (dueAmount - presentValue);
+        }
+      }
+
+      // 實際首日總付出金額
+      let actualFirstDayPayment = 0;
+      if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
+        actualFirstDayPayment = yearPremiums[0].net + pdaDepositNeeded;
+      } else {
+        actualFirstDayPayment = totalNominal - totalDiscount;
+      }
+
+      const totalSavingsAmt = totalDiscount + pdaInterestSaved;
+      const totalSavingsRate = totalNominal > 0 ? ((totalSavingsAmt / totalNominal) * 100).toFixed(2) : 0;
+
+      // 更新看板數據
+      document.getElementById('cardNominalTotal').innerText = formatMoney(totalNominal);
+      document.getElementById('cardPayYearsInfo').innerText = `${currentPayPeriod === 1 ? '整付' : currentPayPeriod + '年供款期'} | 每期 ${formatMoney(annualPrem)}`;
+      
+      document.getElementById('cardDiscountAmount').innerText = '-' + formatMoney(totalDiscount);
+      let discDesc = `首年享 ${(d1 * 100).toFixed(0)}% 折扣`;
+      if (d2 > 0) discDesc += `，次年享 ${(d2 * 100).toFixed(0)}%`;
+      document.getElementById('cardDiscountRate').innerText = discDesc;
+
+      document.getElementById('cardPdaInterest').innerText = isPDA ? ('-' + formatMoney(pdaInterestSaved)) : '$0';
+      document.getElementById('cardPdaDesc').innerText = isPDA ? '按 5.0% p.a. 保證年利率滾存' : '未選擇預繳利率優惠';
+
+      document.getElementById('cardActualPayment').innerText = formatMoney(actualFirstDayPayment);
+      document.getElementById('cardTotalSavingsRate').innerText = totalSavingsRate + '%';
+
+      // 意外身故限額 (上限 200,000 美元)
+      const familyMax = 200000;
+      const calculatedFamilyCover = Math.min(totalNominal * 2, familyMax);
+      document.getElementById('familyAccidentCap').innerText = formatMoney(calculatedFamilyCover);
+
+      // 渲染明細清單表格
+      renderBreakdownTable(yearPremiums, isPDA, pdaDepositNeeded, pdaInterestSaved, actualFirstDayPayment);
+
+      // 更新投影圖表與詳細退保價值表
+      updateProjectionSection(totalNominal);
+    }
+
+    // STREAMING_CHUNK:Rendering breakdown table with formatted currency
+    function renderBreakdownTable(yearPrems, isPDA, pdaDeposit, pdaSaved, totalPay) {
+      const tbody = document.getElementById('breakdownTableBody');
+      tbody.innerHTML = '';
+
+      if (currentPayPeriod === 1) { // 整付
+        const y1 = yearPrems[0];
+        tbody.innerHTML = `
+          <tr class="hover:bg-slate-50">
+            <td class="py-2.5 font-medium">一次性整付保費</td>
+            <td>${formatMoney(y1.nominal)}</td>
+            <td class="text-orange-600 font-semibold">享 ${(y1.discRate * 100).toFixed(0)}% 躉繳保費折扣 (-${formatMoney(y1.discAmt)})</td>
+            <td class="text-right font-bold text-slate-900">${formatMoney(y1.net)}</td>
+          </tr>
+          <tr class="border-t-2 border-slate-300 bg-slate-50 text-slate-900 font-bold">
+            <td class="py-3">【總付出金額】</td>
+            <td>${formatMoney(y1.nominal)}</td>
+            <td class="text-orange-600 font-bold">總共節省 ${formatMoney(y1.discAmt)}</td>
+            <td class="text-right text-base text-theme-orange">${formatMoney(totalPay)}</td>
+          </tr>
+        `;
+        return;
+      }
+
+      // 多年期情況
+      const y1 = yearPrems[0];
+      tbody.innerHTML += `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2.5 font-medium">第 1 年首期保費</td>
+          <td>${formatMoney(y1.nominal)}</td>
+          <td class="text-orange-600 font-semibold">享 ${(y1.discRate * 100).toFixed(0)}% 首年保費折扣 (-${formatMoney(y1.discAmt)})</td>
+          <td class="text-right font-bold text-slate-900">${formatMoney(y1.net)}</td>
+        </tr>
+      `;
+
+      if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 bg-emerald-50/20">
+            <td class="py-2.5 font-medium text-emerald-900">
+              第 2 至 ${currentPayPeriod} 年預繳保費儲備金 (PDA)
+              <span class="block text-[11px] text-emerald-600">享 5.0% p.a. 保證年利率滾存生息以扣付往後保費</span>
+            </td>
+            <td>${formatMoney(y1.nominal * (currentPayPeriod - 1))}</td>
+            <td class="text-emerald-700 font-semibold">
+              ${yearPrems[1]?.discRate > 0 ? `第2年享 ${(yearPrems[1].discRate * 100).toFixed(0)}% 折扣 + ` : ''}
+              5.0% 預繳利息增值省下 ${formatMoney(pdaSaved)}
+            </td>
+            <td class="text-right font-bold text-emerald-700">${formatMoney(pdaDeposit)}</td>
+          </tr>
+        `;
+      } else {
+        for (let i = 1; i < yearPrems.length; i++) {
+          const yp = yearPrems[i];
+          tbody.innerHTML += `
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 font-medium">第 ${yp.year} 年保費</td>
+              <td>${formatMoney(yp.nominal)}</td>
+              <td class="${yp.discAmt > 0 ? 'text-orange-600 font-semibold' : 'text-slate-400'}">
+                ${yp.discAmt > 0 ? `享 ${(yp.discRate * 100).toFixed(0)}% 折扣 (-${formatMoney(yp.discAmt)})` : '無折扣'}
+              </td>
+              <td class="text-right font-bold text-slate-900">${formatMoney(yp.net)}</td>
+            </tr>
+          `;
+        }
+      }
+
+      tbody.innerHTML += `
+        <tr class="border-t-2 border-slate-300 bg-slate-50 text-slate-900 font-bold">
+          <td class="py-3">【總付出金額】</td>
+          <td>${formatMoney(yearPrems[0].nominal * currentPayPeriod)}</td>
+          <td class="text-orange-600 font-bold">總共節省 ${formatMoney((yearPrems[0].nominal * currentPayPeriod) - totalPay)}</td>
+          <td class="text-right text-base text-theme-orange">${formatMoney(totalPay)}</td>
+        </tr>
+      `;
+    }
+
+    // STREAMING_CHUNK:Updating projections table and chart with precise benchmarks
+    function updateProjectionSection(totalNominal) {
+      const cfg = officialBenchmarks[currentPayPeriod] || officialBenchmarks[3];
+
+      document.getElementById('metricBreakevenExp').innerText = `第 ${cfg.breakevenExp} 年`;
+      document.getElementById('metricBreakevenGtd').innerText = `第 ${cfg.breakevenGtd} 年`;
+      document.getElementById('metricIrr20').innerText = `${cfg.irrData[20]}%`;
+
+      const startAge = parseInt(document.getElementById('insuredAge').value) || 20;
+
+      const labels = cfg.dataPoints.map(row => `第${row[0]}年(@${startAge + row[0]})`);
+      const paidData = cfg.dataPoints.map(row => Math.round(totalNominal * row[1]));
+      const gtdData = cfg.dataPoints.map(row => Math.round(totalNominal * row[2]));
+      const expTotalData = cfg.dataPoints.map(row => Math.round(totalNominal * row[5]));
+
+      if (chartInstance) {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = paidData;
+        chartInstance.data.datasets[1].data = gtdData;
+        chartInstance.data.datasets[2].data = expTotalData;
+        chartInstance.update();
+      }
+
+      const pBody = document.getElementById('projectionTableBody');
+      pBody.innerHTML = '';
+
+      cfg.dataPoints.forEach(row => {
+        const year = row[0];
+        const age = startAge + year;
+        const paid = Math.round(totalNominal * row[1]);
+        const gtd = Math.round(totalNominal * row[2]);
+        const rbCash = Math.round(totalNominal * row[3]);
+        const tbCash = Math.round(totalNominal * row[4]);
+        const totalSurrender = Math.round(totalNominal * row[5]);
+        const deathBenefit = Math.round(totalNominal * row[6]);
+        const multiple = (totalSurrender / totalNominal).toFixed(2);
+
+        pBody.innerHTML += `
+          <tr class="hover:bg-orange-50/50 transition">
+            <td class="py-2.5 px-3 font-semibold text-slate-800">第 ${year} 年</td>
+            <td class="py-2.5 px-3 text-slate-600">${age} 歲</td>
+            <td class="py-2.5 px-3 text-slate-500">${formatMoney(paid)}</td>
+            <td class="py-2.5 px-3 text-blue-700 font-medium">${formatMoney(gtd)}</td>
+            <td class="py-2.5 px-3 text-orange-600">${formatMoney(rbCash)}</td>
+            <td class="py-2.5 px-3 text-orange-600">${formatMoney(tbCash)}</td>
+            <td class="py-2.5 px-3 font-extrabold text-slate-900 bg-orange-50/40">${formatMoney(totalSurrender)}</td>
+            <td class="py-2.5 px-3 font-medium text-slate-800">${formatMoney(deathBenefit)}</td>
+            <td class="py-2.5 px-3 text-right font-bold ${multiple >= 1.0 ? 'text-emerald-600' : 'text-slate-400'}">${multiple}x</td>
+          </tr>
+        `;
+      });
+    }
+
+    // STREAMING_CHUNK:Configuring Chart.js with responsive tooltip formatters
+    function initChart() {
+      const ctx = document.getElementById('cashValueChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: '已繳總保費',
+              data: [],
+              borderColor: '#94a3b8',
+              backgroundColor: '#94a3b8',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: '保證現金價值',
+              data: [],
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.08)',
+              borderWidth: 2.5,
+              fill: false,
+              tension: 0.2
+            },
+            {
+              label: '預期總現金價值 (非保證)',
+              data: [],
+              borderColor: '#E87722',
+              backgroundColor: 'rgba(232, 119, 34, 0.12)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${formatMoney(context.raw)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  if (value >= 1000000) return '$' + (value / 1000000).toFixed(1) + 'M';
+                  if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'k';
+                  return '$' + value;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
