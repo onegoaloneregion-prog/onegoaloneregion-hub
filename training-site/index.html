@@ -2117,7 +2117,7 @@ window.adminResetPassword = async function(docId, userCode) {
       </button>
     </form>
             <div id="adminApprovalSection" class="space-y-4 hidden max-h-[400px] overflow-y-auto">
-                <div class="flex items-center justify-between border-b pb-2"><b class="text-slate-900 text-sm">👑 管理員審批與權限控制台</b><button type="button" onclick="logoutAccount()" class="text-xs text-red-600 font-bold hover:underline cursor-pointer">登出管理員</button></div>
+               <button type="button" onclick="sessionStorage.removeItem('ogor_current_user'); document.getElementById('authModal').classList.add('hidden'); switchPage('page-home'); updateAuthUI(); showToast('已成功登出');" class="text-xs text-red-600 font-bold hover:underline cursor-pointer">登出管理員</button>
                 <div class="flex border-b border-slate-200 text-xs font-bold"><button type="button" id="tabPendingBtn" onclick="switchAdminTab('pending')" class="px-3 py-2 border-b-2 border-orange-500 text-orange-600 cursor-pointer">待審批申請</button><button type="button" id="tabApprovedBtn" onclick="switchAdminTab('approved')" class="px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">已批準用戶 (可停權/恢復)</button></div>
                 <div id="pendingUsersList" class="space-y-2 text-xs"><p class="text-slate-400 text-center py-4">暫無待審批的新用戶</p></div>
                 <div id="approvedUsersList" class="space-y-2 text-xs hidden"><p class="text-slate-400 text-center py-4">暫無已批準的用戶</p></div>
@@ -3586,11 +3586,14 @@ annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     var genderName = (gender === 'male' || gender === '男') ? '男性' : '女性';
     var titleText = age + ' 歲 · ' + pName + ' (' + genderName + ' · ' + currUnit + ')';
 
-    document.querySelectorAll('*').forEach(function(node) {
-        if (node.children.length === 0 && (node.innerText.trim() === '--' || node.innerText.indexOf('歲 · ') !== -1)) {
+  document.querySelectorAll('*').forEach(function(node) {
+    if (node.children && node.children.length === 0 && typeof node.innerText === 'string') {
+        var text = node.innerText.trim();
+        if (text === '--' || text.indexOf('歲 · ') !== -1) {
             node.innerText = titleText;
         }
-    });
+    }
+});
 
     var fmtAnnual = (typeof formatMoney === 'function') ? formatMoney(annual) : annual.toFixed(2);
     var fmtMonthly = (typeof formatMoney === 'function') ? formatMoney(monthly) : monthly.toFixed(2);
