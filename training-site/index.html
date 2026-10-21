@@ -2299,7 +2299,24 @@ window.logoutAccount = function() {
 function logoutAccount() {
     window.logoutAccount();
 }
-       // 醫家保版本選擇彈窗控制
+     
+        // 手冊導覽下拉選單開關控制
+function toggleManualMenu(event) {
+    if (event) event.stopPropagation();
+    var menu = document.getElementById('manualDropdownMenu');
+    if (menu) {
+        menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+    }
+}
+
+// 點擊頁面其他任意空白地方時自動收起下拉選單
+document.addEventListener('click', function(e) {
+    var wrapper = document.getElementById('manualNavWrapper');
+    var menu = document.getElementById('manualDropdownMenu');
+    if (wrapper && menu && !wrapper.contains(e.target)) {
+        menu.style.display = 'none';
+    }
+});// 醫家保版本選擇彈窗控制
 function openVfamilySelectorModal() {
     var modal = document.getElementById('vfamilySelectorModal');
     if (modal) modal.classList.remove('hidden');
