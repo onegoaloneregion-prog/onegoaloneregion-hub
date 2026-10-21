@@ -2332,20 +2332,9 @@ function closeVcanSelectorModal() {
 function selectVcanVersion(version) {
     closeVcanSelectorModal();
     if (version === 'simple') {
-        // 開啟簡易版（若有獨立 html 如 vcan.html 或跳轉 SPA 計算器）
-        if (typeof switchPage === 'function') {
-            switchPage('page-calc');
-            var sel = document.getElementById('calcProductSelect') || document.getElementById('productSelect');
-            if (sel) {
-                sel.value = '易衛您';
-                if (typeof runPremiumQuery === 'function') runPremiumQuery();
-            }
-        } else {
-            window.open('vcan.html', '_blank');
-        }
+        window.open('vcan.html', '_blank'); // 開啟簡易版
     } else if (version === 'pro') {
-        // 開啟詳盡版
-        window.open('vcan_pro.html', '_blank');
+        window.open('vcan_pro.html', '_blank'); // 開啟詳盡版
     }
 }
         function switchAuthMode(mode) {
