@@ -111,21 +111,21 @@
       </div>
     </section>
 
-    <!-- 頂部宣傳橫幅 (螢幕顯示) -->
-    <div class="relative bg-gradient-to-r from-fwd-navy via-slate-900 to-fwd-lightnavy rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden no-print">
-      <div class="relative z-10 max-w-3xl space-y-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-bold tracking-wide uppercase">
-          🛡️ 富衛澳門旗艦危疾旗艦方案 · 敢至係人生
-        </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-          全方位應援人生重要戰役 · 最高原有投保額 <span class="text-orange-400 font-mono">1,467%</span> 頂級防護
-        </h2>
-        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-          首創不孕症治療、家庭成員「家添守護」免核保保障、深切治療部生活守護、試驗性藥物實報實銷及 3 大疾病持續生活現金。結合保證現金價值與非保證特別紅利，既保健康，亦固資產！
-        </p>
-      </div>
-      <div class="absolute -right-8 -bottom-10 w-72 h-72 rounded-full bg-fwd-orange/15 blur-3xl pointer-events-none"></div>
+  <!-- 修改後：文字容器放寬，並加上 whitespace-nowrap 防斷行 -->
+<div class="relative bg-gradient-to-r from-fwd-navy via-slate-900 to-fwd-lightnavy rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden no-print">
+  <div class="relative z-10 max-w-5xl space-y-2">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-bold tracking-wide uppercase">
+      🛡️ 富衛澳門旗艦危疾旗艦方案 · 敢至係人生
     </div>
+    <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight leading-snug">
+      全方位應援人生重要戰役 · 最高原有投保額 <span class="text-orange-400 font-mono">1,467%</span> <span class="whitespace-nowrap">頂級防護</span>
+    </h2>
+    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+      首創不孕症治療、家庭成員「家添守護」免核保保障、深切治療部生活守護、試驗性藥物實報實銷及 3 大疾病持續生活現金。結合保證現金價值與非保證特別紅利，既保健康，亦固資產！
+    </p>
+  </div>
+  <div class="absolute -right-8 -bottom-10 w-72 h-72 rounded-full bg-fwd-orange/15 blur-3xl pointer-events-none"></div>
+</div>
 
     <!-- 專屬顧問與客戶資訊輸入區 (灰色提示字 placeholder) -->
     <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 no-print">
