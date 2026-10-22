@@ -424,13 +424,30 @@ window.adminResetPassword = async function(docId, userCode) {
                 </button>
 
                 <div class="flex shrink-0 items-center space-x-3 lg:space-x-4 text-xs sm:text-sm font-bold">
-                 <!-- 公司簡介 (直按切換，取消下拉選單) -->
-        <button type="button"
-                onclick="switchPage('page-company-profile')"
-                class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 inline-flex items-center gap-1 tracking-normal whitespace-nowrap shrink-0">
-            <span>🏢</span>
-            <span>公司簡介</span>
-        </button>
+                    <!-- 手冊導覽 (直接點擊彈出 · 擺脫 overflow-y 裁切 · 100% 點擊即出) -->
+                    <div class="py-1 shrink-0 inline-flex items-center" id="manualNavWrapper">
+                        <button type="button" 
+                                id="manualNavTriggerBtn"
+                                onclick="handleManualNavClick(event)" 
+                                class="bg-transparent border-0 text-[#E87722] hover:opacity-80 font-bold text-xs sm:text-sm cursor-pointer outline-none p-0 inline-flex items-center gap-1 tracking-normal whitespace-nowrap">
+                            <span>手冊導覽</span>
+                            <span class="text-[10px] opacity-70">▼</span>
+                        </button>
+
+                        <!-- 浮動下拉卡片 (使用 fixed 脫離頂部橫條的 overflow 遮擋) -->
+                        <div id="manualDropdownMenu" style="display: none;" class="fixed bg-white border border-slate-200 rounded-2xl shadow-2xl p-2 z-[9999999] w-48 text-xs sm:text-sm space-y-1">
+                        <button type="button"
+        onclick="document.getElementById('manualDropdownMenu').style.display='none'; switchPage('page-company-profile');"
+        class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-[#E87722] transition-colors cursor-pointer">
+    <span>🏢</span> <span>公司簡介</span>
+</button>
+                            <button type="button" 
+                                   onclick="document.getElementById('manualDropdownMenu').style.display='none'; switchPage('page-promotion-system');"
+                                    class="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-bold cursor-pointer">
+                                <span>🚀</span> 晉升制度 (2026 導航)
+                            </button>
+                        </div>
+                    </div>
 
                     <button type="button" onclick="window.open('10life.html', '_blank')" class="text-amber-500 hover:opacity-80 cursor-pointer font-bold inline-flex items-center gap-1 shrink-0">
                         <span>10Life</span>
@@ -680,41 +697,6 @@ window.adminResetPassword = async function(docId, userCode) {
         </button>
       </div>
     </div>
-<!-- 晉升制度 (2026 導航) 入口大卡片 -->
-        <div onclick="switchPage('page-promotion-system')" class="p-6 rounded-3xl border-2 border-purple-200 bg-gradient-to-r from-purple-500/10 via-purple-50 to-indigo-50/40 hover:border-purple-400 transition-all cursor-pointer shadow-sm hover:shadow-lg group">
-            <div class="flex items-center gap-5 w-full md:w-auto">
-                <!-- 左側紫色圖示方塊 -->
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center text-3xl shadow-md group-hover:scale-105 transition-transform shrink-0">
-                    🚀
-                </div>
-                <!-- 中間標題與標籤 -->
-                <div class="space-y-1.5 flex-1">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold text-[10px] border border-purple-200">
-                            團隊發展
-                        </span>
-                        <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px] border border-indigo-200">
-                            職涯規劃
-                        </span>
-                        <span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px] border border-rose-200">
-                            2026 導航
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-black text-slate-900 group-hover:text-purple-600 transition-colors">
-                            晉升制度與發展路徑 (Career Progression)
-                        </h3>
-                        <span class="inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all group-hover:shadow-md shrink-0">
-    進入專區 ↗
-</span>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        清晰晉升指標、職級要求、業績考核與團隊管理津貼架構全覽。
-                    </p>
-                </div>
-            </div>
-        </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div onclick="switchPage('page-fwd-scripts')" class="p-8 rounded-3xl border-2 border-sky-200 bg-sky-50/20 shadow-sm hover:shadow-lg hover:border-sky-400 transition-all cursor-pointer space-y-4 relative group">
                 <div class="flex items-center justify-between">
@@ -1037,35 +1019,16 @@ window.adminResetPassword = async function(docId, userCode) {
                 <p class="text-xs sm:text-sm text-slate-500">點擊以下項目即可直接在新分頁檢視官方 Google Drive 話術與培訓 PDF 文件</p>
             </div>
             
-          <div id="fwdScriptsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <!-- 1. 實戰攻略手冊 (天藍色系) -->
-            <div onclick="window.open('https://drive.google.com/file/d/1cZ116CjSDE1g_IZx4K_cubtp51x2EMET/view?usp=sharing', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group">
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <b class="text-slate-900 text-sm group-hover:text-sky-600 transition-colors">1. 實戰攻略手冊</b>
-                        <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">實戰手冊</span>
+            <div id="fwdScriptsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div onclick="window.open('https://drive.google.com/file/d/1cZ116CjSDE1g_IZx4K_cubtp51x2EMET/view?usp=sharing', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all cursor-pointer group">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between border-b pb-2">
+                            <b class="text-slate-900 text-sm group-hover:text-sky-700 transition-colors">1. 實戰攻略手冊</b>
+                            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">實戰手冊</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">常見客戶抗拒應對、產品概念拆解。</p>
                     </div>
-                    <p class="text-slate-600 leading-relaxed">常見客戶抗拒應對、產品概念拆解。</p>
-                </div>
-                <div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1 shadow-sm">
-                    📖 開啟 / 下載官方 PDF 檔
-                </div>
-            </div>
-
-            <!-- 2. 現場保險話術教練 (相同風格 · 專屬科技紫/靛藍色系) -->
-            <div onclick="window.open('ai_coach.html', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-indigo-400 hover:shadow-md transition-all cursor-pointer group">
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <b class="text-slate-900 text-sm group-hover:text-indigo-600 transition-colors flex items-center gap-1.5">
-                            <span>🪄</span>
-                            <span>2. 現場保險話術教練 (即時救兵)</span>
-                        </b>
-                        <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">Gemini 3 Flash</span>
-                    </div>
-                    <p class="text-slate-600 leading-relaxed">無論個客講「公司有包醫療」定「回報太低」，話畀 AI 知客人性格，即時生成對位化解話術！</p>
-                </div>
-                <div class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-colors flex items-center justify-center gap-1 shadow-sm">
-                    ⚡ 啟動 AI 話術教練 ↗
+                    <div class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
                 </div>
             </div>
         </div>
@@ -2336,24 +2299,7 @@ window.logoutAccount = function() {
 function logoutAccount() {
     window.logoutAccount();
 }
-     
-        // 手冊導覽下拉選單開關控制
-function toggleManualMenu(event) {
-    if (event) event.stopPropagation();
-    var menu = document.getElementById('manualDropdownMenu');
-    if (menu) {
-        menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
-    }
-}
-
-// 點擊頁面其他任意空白地方時自動收起下拉選單
-document.addEventListener('click', function(e) {
-    var wrapper = document.getElementById('manualNavWrapper');
-    var menu = document.getElementById('manualDropdownMenu');
-    if (wrapper && menu && !wrapper.contains(e.target)) {
-        menu.style.display = 'none';
-    }
-});// 醫家保版本選擇彈窗控制
+       // 醫家保版本選擇彈窗控制
 function openVfamilySelectorModal() {
     var modal = document.getElementById('vfamilySelectorModal');
     if (modal) modal.classList.remove('hidden');
