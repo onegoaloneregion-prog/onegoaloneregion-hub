@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGOR 團隊專屬 - 16型人格保險理財攻心秘笈系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for visual icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            },
+            analyst: '#8b5cf6', // NT 紫色
+            diplomat: '#10b981', // NF 綠色
+            sentinel: '#3b82f6', // SJ 藍色
+            explorer: '#f59e0b', // SP 橙黃
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.04);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.18);
+      border-radius: 9999px;
+    }
+    .type-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .type-card:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('lookup')">
+        <!-- OGOR Emblem Badge (Tech Blue-Violet Gradient) -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-400 flex items-center justify-center text-white font-black shadow-lg shadow-indigo-500/25 border border-indigo-400/40">
+          <span class="text-xs font-black tracking-tighter">OGOR</span>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-white leading-tight tracking-tight flex items-center gap-1.5">
+            OGOR <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs px-2 py-0.5 rounded-full font-bold">保險理財攻心系統</span>
+          </h1>
+          <p class="text-[11px] text-slate-400">專為前線理財顧問打造 · 識客識心 · 瞬速逼單</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center space-x-1 sm:space-x-2">
+        <button id="nav-btn-lookup" onclick="switchView('lookup')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-indigo-300 bg-slate-800 border border-indigo-500/30 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-crosshairs"></i>
+          <span class="hidden sm:inline">30秒眼神測客</span>
+        </button>
+        <button id="nav-btn-library" onclick="switchView('library')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-address-book"></i>
+          <span class="hidden sm:inline">16型保險秘笈庫</span>
+        </button>
+        <button id="nav-btn-ai" onclick="switchView('ai')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>OGOR AI 教練</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: 30-Second Fast Client Profiler (LOOKUP) -->
+    <!-- ========================================== -->
+    <section id="view-lookup" class="space-y-6">
+      <!-- Banner / Tips -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-5 sm:p-7 text-white shadow-xl relative overflow-hidden border border-indigo-500/20">
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl text-indigo-400">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+        <div class="relative z-10 max-w-2xl">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-1.5 bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs px-2.5 py-0.5 rounded-full font-bold">
+              <i class="fa-solid fa-award text-indigo-300"></i> OGOR MDRT 保險實戰特訓
+            </span>
+            <span class="text-xs text-slate-400">見面首 2 分鐘識破心理防線</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black mb-2 text-white">保險面談 30 秒推測法：佢最怕咩？買邊種價值？</h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            同客傾計、食飯或做保單檢視時，留意對方談吐習慣同決策焦點。點選下列 4 個特徵，系統即時提供對準該人格的保險切入點、禁忌踩雷區、同埋促單殺手鐧！
+          </p>
+        </div>
+      </div>
+
+      <!-- Profiler Matrix -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- Dimension 1: E vs I -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:border-indigo-400 transition-colors flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">維度 1：談吐熱情度</span>
+              <span id="badge-ei" class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">外向 (E)</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">主動分享定謹慎防備？</h3>
+            <p class="text-xs text-slate-500 mb-4">客人傾保險時習慣滔滔不絕定答覆極簡？</p>
+          </div>
+          <div class="space-y-2">
+            <button type="button" onclick="setDimension('ei', 'E')" id="btn-E" class="w-full text-left p-3 rounded-xl border border-indigo-500 bg-indigo-50/70 font-medium text-sm text-slate-900 flex items-start gap-2.5 transition-all shadow-sm">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">E</span>
+              <div>
+                <div class="font-bold text-slate-900">E 外向型</div>
+                <div class="text-xs text-slate-500 mt-0.5">主動講家庭/工作近況、笑聲爽朗、鍾意互動與即場討論</div>
+              </div>
+            </button>
+            <button type="button" onclick="setDimension('ei', 'I')" id="btn-I" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-medium text-sm text-slate-700 flex items-start gap-2.5 transition-all">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs shrink-0 mt-0.5">I</span>
+              <div>
+                <div class="font-bold text-slate-900">I 內向型</div>
+                <div class="text-xs text-slate-500 mt-0.5">保持距離、話少沉思、抗拒太熱情過界、需要消化空間</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dimension 2: S vs N -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:border-indigo-400 transition-colors flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">維度 2：關注焦點</span>
+              <span id="badge-sn" class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">實感 (S)</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">睇實質保額定長遠藍圖？</h3>
+            <p class="text-xs text-slate-500 mb-4">客人問具體受保疾病定問人生財富願景？</p>
+          </div>
+          <div class="space-y-2">
+            <button type="button" onclick="setDimension('sn', 'S')" id="btn-S" class="w-full text-left p-3 rounded-xl border border-indigo-500 bg-indigo-50/70 font-medium text-sm text-slate-900 flex items-start gap-2.5 transition-all shadow-sm">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">S</span>
+              <div>
+                <div class="font-bold text-slate-900">S 實感型</div>
+                <div class="text-xs text-slate-500 mt-0.5">問實質保費、醫療賠幾多%、理賠步驟、等候期等具體細節</div>
+              </div>
+            </button>
+            <button type="button" onclick="setDimension('sn', 'N')" id="btn-N" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-medium text-sm text-slate-700 flex items-start gap-2.5 transition-all">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs shrink-0 mt-0.5">N</span>
+              <div>
+                <div class="font-bold text-slate-900">N 直覺型</div>
+                <div class="text-xs text-slate-500 mt-0.5">重視財富傳承、資產配置大格局、未來 20 年生活理念與通脹</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dimension 3: T vs F -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:border-indigo-400 transition-colors flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">維度 3：買保險動機</span>
+              <span id="badge-tf" class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">理性 (T)</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">計 IRR 槓桿定為屋企人買安心？</h3>
+            <p class="text-xs text-slate-500 mb-4">客人重視槓桿率/性價比定重視家庭責任？</p>
+          </div>
+          <div class="space-y-2">
+            <button type="button" onclick="setDimension('tf', 'T')" id="btn-T" class="w-full text-left p-3 rounded-xl border border-indigo-500 bg-indigo-50/70 font-medium text-sm text-slate-900 flex items-start gap-2.5 transition-all shadow-sm">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">T</span>
+              <div>
+                <div class="font-bold text-slate-900">T 思考型 (理性)</div>
+                <div class="text-xs text-slate-500 mt-0.5">拿計算機計IRR、比較各間公司槓桿率、講究邏輯回報無情感</div>
+              </div>
+            </button>
+            <button type="button" onclick="setDimension('tf', 'F')" id="btn-F" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-medium text-sm text-slate-700 flex items-start gap-2.5 transition-all">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs shrink-0 mt-0.5">F</span>
+              <div>
+                <div class="font-bold text-slate-900">F 情感型 (感性)</div>
+                <div class="text-xs text-slate-500 mt-0.5">心繫子女父母、易受真實理賠故事感動、買你的誠意與人品</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dimension 4: J vs P -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:border-indigo-400 transition-colors flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">維度 4：落單簽紙風格</span>
+              <span id="badge-jp" class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">判斷 (J)</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">有規劃即做定拖延看感覺？</h3>
+            <p class="text-xs text-slate-500 mb-4">客人重視明確交付期定想隨時保留彈性？</p>
+          </div>
+          <div class="space-y-2">
+            <button type="button" onclick="setDimension('jp', 'J')" id="btn-J" class="w-full text-left p-3 rounded-xl border border-indigo-500 bg-indigo-50/70 font-medium text-sm text-slate-900 flex items-start gap-2.5 transition-all shadow-sm">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">J</span>
+              <div>
+                <div class="font-bold text-slate-900">J 判斷型 (條理)</div>
+                <div class="text-xs text-slate-500 mt-0.5">守時、討厭手續混亂、要明確保單流程、預設好目標就要落實</div>
+              </div>
+            </button>
+            <button type="button" onclick="setDimension('jp', 'P')" id="btn-P" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-medium text-sm text-slate-700 flex items-start gap-2.5 transition-all">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs shrink-0 mt-0.5">P</span>
+              <div>
+                <div class="font-bold text-slate-900">P 感知型 (彈性)</div>
+                <div class="text-xs text-slate-500 mt-0.5">唔願被長年期綁死、鍾意彈性提取或隨時可停、難以即日簽掣</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Profile Result Output Card -->
+      <div id="profiler-result-card" class="bg-white rounded-2xl border-2 border-slate-900 shadow-xl overflow-hidden transition-all">
+        <!-- Result Header -->
+        <div id="result-header" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 px-6 py-5 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-500/20">
+          <div class="flex items-center gap-4">
+            <div id="result-badge-code" class="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-black tracking-wider shadow-lg border border-indigo-400/40">
+              ESTJ
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 id="result-type-name" class="text-2xl font-black text-white">總經理 (ESTJ)</h3>
+                <span id="result-role-tag" class="bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs px-2.5 py-0.5 rounded-full font-bold">守護者陣營 (SJ)</span>
+              </div>
+              <p id="result-type-desc" class="text-slate-300 text-xs sm:text-sm mt-1">務實、講求秩序與效率的直接決策者</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="copyCheatSheet()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-indigo-500/30 text-xs font-bold transition-all flex items-center gap-1.5">
+              <i class="fa-regular fa-copy"></i>
+              <span>複製保險話術卡</span>
+            </button>
+            <button onclick="sendToAIHelper()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-black shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>OGOR AI 專屬拆解</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Strategy Content Body -->
+        <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- Col 1: Customer Psyche & Don'ts -->
+          <div class="space-y-5">
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+              <div class="flex items-center gap-2 text-slate-900 font-bold text-sm mb-2">
+                <i class="fa-solid fa-bullseye text-indigo-600"></i>
+                <span>客人保險核心買點 (心動開關)</span>
+              </div>
+              <p id="tactics-driver" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                重視具體成效、往績回報率、流程清晰同專業可靠度。討厭空談。
+              </p>
+            </div>
+
+            <div class="bg-rose-50 rounded-xl p-4 border border-rose-200/80">
+              <div class="flex items-center gap-2 text-rose-700 font-bold text-sm mb-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>保險踩雷即死禁忌 (千祈咪犯)</span>
+              </div>
+              <p id="tactics-taboo" class="text-xs sm:text-sm text-rose-800 leading-relaxed font-medium">
+                遲到、說話含糊其辭、吹大誇張、唔守規矩、或者畀佢覺得你唔尊重佢嘅時間。
+              </p>
+            </div>
+
+            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200/80">
+              <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-2">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>OGOR 臨門一腳逼單法 (Close 簽掣)</span>
+              </div>
+              <p id="tactics-closing" class="text-xs sm:text-sm text-emerald-900 leading-relaxed font-medium">
+                展示清楚的執行時程表（Timeline），提供兩個預設好的方案畀佢揀，強調「即時啟動可最快見效」。
+              </p>
+            </div>
+          </div>
+
+          <!-- Col 2: Golden Scripts -->
+          <div class="lg:col-span-2 space-y-5">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-600 uppercase flex items-center gap-1.5">
+                  <i class="fa-solid fa-comments text-indigo-600"></i> 對位推薦保險開場白 (First Touch 破冰)
+                </span>
+                <button onclick="copyText('script-opening')" class="text-xs text-indigo-600 hover:text-indigo-700 font-bold">複製話術</button>
+              </div>
+              <div id="script-opening" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 select-all leading-relaxed">
+                ...
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-600 uppercase flex items-center gap-1.5">
+                  <i class="fa-solid fa-shield-halved text-blue-600"></i> 保險常見拒絕「對位化解話術」
+                </span>
+                <button onclick="copyText('script-objection')" class="text-xs text-indigo-600 hover:text-indigo-700 font-bold">複製話術</button>
+              </div>
+              <div id="script-objection" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 select-all leading-relaxed">
+                ...
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-600 uppercase flex items-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-emerald-600"></i> 會後追單 WhatsApp / WeChat 範本
+                </span>
+                <button onclick="copyText('script-whatsapp')" class="text-xs text-indigo-600 hover:text-indigo-700 font-bold">複製訊息</button>
+              </div>
+              <div id="script-whatsapp" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 select-all font-mono leading-relaxed">
+                ...
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: 16 Personality Complete Sales Library -->
+    <!-- ========================================== -->
+    <section id="view-library" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">OGOR 16型人格保險攻心大全庫</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">點擊任何人格卡片，即刻調閱危疾、醫療、儲蓄傳承對位話術</p>
+        </div>
+        <!-- Group filter tabs -->
+        <div class="inline-flex p-1 bg-slate-200/80 rounded-xl text-xs font-bold">
+          <button onclick="filterGroup('ALL')" id="filter-all" class="px-3 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm transition-all">全部 16 型</button>
+          <button onclick="filterGroup('NT')" id="filter-nt" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">分析家 (NT)</button>
+          <button onclick="filterGroup('NF')" id="filter-nf" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">外交家 (NF)</button>
+          <button onclick="filterGroup('SJ')" id="filter-sj" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">守護者 (SJ)</button>
+          <button onclick="filterGroup('SP')" id="filter-sp" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">探險家 (SP)</button>
+        </div>
+      </div>
+
+      <!-- Personality Cards Grid -->
+      <div id="personality-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Rendered by JavaScript dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: Gemini AI Real-time Sales Coach -->
+    <!-- ========================================== -->
+    <section id="view-ai" class="hidden space-y-6">
+      <!-- AI Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-indigo-500/20">
+        <div>
+          <span class="inline-flex items-center gap-1.5 bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 text-xs px-2.5 py-0.5 rounded-full font-bold mb-2">
+            <i class="fa-solid fa-sparkles text-indigo-300"></i> OGOR AI 保險談判督導 · Gemini 3 Flash
+          </span>
+          <h2 class="text-xl sm:text-2xl font-black">現場保險話術教練 (即時救兵)</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+            無論個客講「我公司有包醫療」、「保險回報太低」、「供20年太長」定「同另一半傾下先」，話畀 AI 知客人嘅性格，AI 即時幫你生出對位化解話術！
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="text-right hidden sm:block">
+            <div class="text-xs text-indigo-300/80 font-medium">當前鎖定客人類型</div>
+            <div id="ai-active-type" class="text-lg font-black text-indigo-300">ESTJ (總經理)</div>
+          </div>
+          <button onclick="switchView('lookup')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-indigo-500/30 text-xs font-bold">
+            變更人格
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Input Form -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-question text-indigo-600"></i>
+            <span>輸入保險銷售現場情境</span>
+          </h3>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">目標客人類型</label>
+            <select id="ai-select-mbti" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <!-- Filled by JS -->
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">推廣緊邊種保險 / 理財方案？</label>
+            <select id="ai-input-product" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+              <option value="多重保障危疾保險 (Critical Illness)">多重保障危疾保險 (Critical Illness)</option>
+              <option value="高端全數賠償醫療保險 (High-End Medical)">高端全數賠償醫療保險 (High-End Medical)</option>
+              <option value="多元貨幣儲蓄傳承保障 (Wealth Succession)">多元貨幣儲蓄傳承保障 (Wealth Succession)</option>
+              <option value="家庭核心人壽保障 (Family Income Protection)">家庭核心人壽保障 (Income Protection)</option>
+              <option value="大額保費融資與財富信託 (Premium Financing)">大額保費融資與財富信託 (Financing)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">客人講咗句咩說話？(保險抗拒藉口)</label>
+            <textarea id="ai-input-objection" rows="3" placeholder="例如：「我買夠喇」、「我公司已經有團體醫療包曬」、「買股票回報高好多過你哋」、「廿年太長唔知世界會變成點」" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">我有仔有女，第時老咗仔女會照顧我，使乜買保險。</textarea>
+          </div>
+
+          <!-- Quick presets buttons + Chen Yi-Chun 168 Library Button -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-slate-600">⚡ 常用保險拒絕藉口：</label>
+              <button type="button" onclick="open168Modal()" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold border border-indigo-200 flex items-center gap-1 transition-all">
+                <i class="fa-solid fa-book-bookmark text-indigo-600"></i>
+                <span>陳亦純《168個理由》全庫</span>
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="setAiObjection('你份計劃書啲非保證紅利寫到咁高，但到時派唔足咪得個桔？根本無保證。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">紅利非保證未反映</button>
+              <button type="button" onclick="setAiObjection('買儲蓄險頭嗰幾年根本拎唔返啲錢，退保蝕大本，中途急用點算？鎖死曬啲資金。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">頭幾年退保無錢拎</button>
+              <button type="button" onclick="setAiObjection('我啲錢寧願擺喺銀行做定期收息或者放活期，隨時拎得又保本，點解要擺入保險公司？')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">不如放銀行定存穩陣</button>
+              <button type="button" onclick="setAiObjection('我而家手頭好緊，根本無多餘錢買保險，負擔唔起。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">無錢負擔唔起</button>
+              <button type="button" onclick="setAiObjection('我最近plan緊買樓，要儲首期，所有資金都要留返用嚟上車。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">想買樓留首期</button>
+              <button type="button" onclick="setAiObjection('我啱啱先買咗樓供緊按揭，每個月開支好大，等供完層樓再諗。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">啱啱買咗樓</button>
+              <button type="button" onclick="setAiObjection('我真係覺得自己無咩需要買保險，一直以嚟都好順利。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">覺得無需要</button>
+              <button type="button" onclick="setAiObjection('身邊啲人同朋友成日話保險都係呃人嘅，買嗰陣好聽，賠嗰陣就推三推四。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">啲人話保險呃人</button>
+              <button type="button" onclick="setAiObjection('我公司醫療福利已經包得好足，唔使再自己買。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">公司有包</button>
+              <button type="button" onclick="setAiObjection('買股票同買樓回報高好多，買儲蓄險綁死嚿錢好唔抵。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">不如炒股</button>
+              <button type="button" onclick="setAiObjection('我返去同老婆/老公商量下先，唔急。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">問另一半</button>
+              <button type="button" onclick="setAiObjection('我份人好健康，平時做開運動，用唔著危疾。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">我好健康</button>
+              <button type="button" onclick="setAiObjection('保費要供 20 年太長喇，中途有事斷供點算？')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">供廿年太長</button>
+              <button type="button" onclick="setAiObjection('我想再睇多兩間公司嘅計劃比較下先決定。')" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-900 text-slate-700 rounded-lg">再比下先</button>
+            </div>
+          </div>
+
+          <button id="ai-generate-btn" type="button" onclick="generateAiTactics()" class="w-full py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black rounded-xl shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>生成 OGOR 破冰話術</span>
+          </button>
+        </div>
+
+        <!-- AI Output Display -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+                <span>OGOR 專屬保險攻心方案</span>
+              </h3>
+              <span id="ai-status-indicator" class="text-xs text-slate-400 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 準備就緒
+              </span>
+            </div>
+
+            <!-- Loader / Placeholder / Content -->
+            <div id="ai-loading-box" class="hidden py-12 flex flex-col items-center justify-center text-center">
+              <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-3"></div>
+              <p class="text-sm font-bold text-slate-800">OGOR AI 正在針對該人格解構心理防線...</p>
+              <p class="text-xs text-slate-400 mt-1">調用陳亦純大師心法與百萬圓桌 (MDRT) 實戰句型中</p>
+            </div>
+
+            <div id="ai-response-box" class="space-y-4">
+              <!-- Initial Welcome Prompt -->
+              <div class="bg-indigo-50/70 border border-indigo-200/60 rounded-xl p-5 text-slate-700 text-sm">
+                <h4 class="font-bold text-indigo-950 mb-2 flex items-center gap-2">
+                  <i class="fa-solid fa-award text-indigo-600"></i> OGOR 團隊保險成交心法
+                </h4>
+                <p class="leading-relaxed">
+                  客人話「我唔需要保險」或者「我有公司醫療」，從來唔係終點，而係真正成交嘅起點：<br>
+                  • <b>面對 NT 型（高管/專業人士）</b>：切忌講病痛有幾慘，要用「資產隔離、醫療通脹指數、被動入息替代」的金融邏輯說服；<br>
+                  • <b>面對 NF/SJ 型（家庭支柱）</b>：用「愛與責任、免留負擔畀下一代、守護家庭尊嚴」觸發情感共鳴。<br><br>
+                  請喺左邊選擇人格及客人嘅拒絕藉口，點擊「生成 OGOR 破冰話術」，AI 即刻為你的團隊前線度身訂造！
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 mt-4">
+            <span>提點：可直接按複製發送 WhatsApp 訊息或現場照讀</span>
+            <button onclick="copyAiResponse()" id="btn-copy-ai" class="text-indigo-700 hover:text-indigo-800 font-bold hidden flex items-center gap-1">
+              <i class="fa-regular fa-copy"></i> 複製全部話術
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-xs sm:text-sm font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 border border-indigo-500/30">
+    <i class="fa-solid fa-circle-check text-indigo-400"></i>
+    <span id="toast-text">已成功複製話術！</span>
+  </div>
+
+  <!-- Modal: Chen Yi-Chun 168 Reasons Library -->
+  <div id="modal-168" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 transition-all">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 sm:p-5 text-white flex items-center justify-between border-b border-indigo-500/20">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600/80 flex items-center justify-center text-indigo-200 font-bold border border-indigo-400/30">
+            <i class="fa-solid fa-book-bookmark text-sm"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+              陳亦純《要買保險的168個理由》
+              <span class="text-xs bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded border border-indigo-400/30">全庫速查</span>
+            </h3>
+            <p class="text-[11px] text-slate-300">保險大師經典反對問題破譯 · 點擊即可即時帶入 AI 教練</p>
+          </div>
+        </div>
+        <button type="button" onclick="close168Modal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Search & Category Filters -->
+      <div class="p-3 sm:p-4 bg-slate-50 border-b border-slate-200 space-y-2.5">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+          <input type="text" id="search-168" oninput="filter168Reasons()" placeholder="搜尋客人的藉口關鍵字（例：投資、通脹、太太、沒錢、有錢、健保、等一陣...）" class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <!-- Category Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs custom-scrollbar">
+          <button type="button" onclick="set168Category('ALL')" id="cat-btn-ALL" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold shrink-0 transition-all">全部章節</button>
+          <button type="button" onclick="set168Category('理念篇')" id="cat-btn-理念篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第一章：理念認知</button>
+          <button type="button" onclick="set168Category('迷思篇')" id="cat-btn-迷思篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第二章：常見迷思</button>
+          <button type="button" onclick="set168Category('抉擇篇')" id="cat-btn-抉擇篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第三章：猶豫拖延</button>
+          <button type="button" onclick="set168Category('家庭篇')" id="cat-btn-家庭篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第四章：配偶與家庭</button>
+          <button type="button" onclick="set168Category('養老篇')" id="cat-btn-養老篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第五章：退休與養老</button>
+          <button type="button" onclick="set168Category('醫療篇')" id="cat-btn-醫療篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第六章：醫療健康</button>
+          <button type="button" onclick="set168Category('富人篇')" id="cat-btn-富人篇" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all">第七章：頂級富人VIP</button>
+        </div>
+      </div>
+
+      <!-- Reasons List Container -->
+      <div id="list-168" class="p-3 sm:p-4 overflow-y-auto space-y-2 flex-1 custom-scrollbar">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+        <span>選取後將直接填入「客人反對藉口」，並可用 AI 針對該 MBTI 即時破解</span>
+        <button type="button" onclick="close168Modal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition-all">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* 16 MBTI Insurance & Wealth Tactical Database for OGOR Team */
+    const MBTI_SALES_DB = {
+      // 1. NT 陣營 (分析家)
+      "INTJ": {
+        code: "INTJ",
+        name: "建築師",
+        roleGroup: "NT",
+        roleGroupName: "分析家陣營 (理性架構師)",
+        tagline: "注重資產頂層架構、一眼看透漏洞、極重視槓桿與確定性的精明買家",
+        driver: "關心「資產隔離」、「保費槓桿比 (IRR)」、「極端風險對沖」。只信數據白紙黑字與條款，極度抗拒廢話與感性推銷。",
+        taboo: "講「買個安心啦」、「幫幫我手啦」等情感勒索；或者條款計算出現低級邏輯錯誤。",
+        closing: "擺出確定性與對沖終局：「既然你算得出極端情況下醫療支出會打亂整個資產配置，呢份對沖方案今日啟動，就係最有效鎖定確定性嘅工具。我哋今日完成意向確認。」",
+        opening: "「陳生你好，知道你時間好寶貴。今日我準備咗一張 1 頁紙的架構對比表，直接用數據剖析：點樣用 10% 的流動性，為你鎖死未來 30 年 1,000 萬的極端醫療風險敞口。」",
+        objection: "客：「我自己做開美股指數同加密貨幣，回報高過你份保險好多。」\n應對：「完全同意！保險從來唔係用嚟同股票比回報，佢嘅定位係『資產防守層』。試諗下如果市場大跌市碰巧需要 200 萬緊急醫療金，你係想被迫低位斬倉股票，定係用保險公司筆錢全數埋單？保險就係保護你高回報資產嘅安全氣袋。」",
+        whatsapp: "陳生你好，剛才提到的《極端風險對沖推算模型》及免稅傳承條款要點已整理好。你可按個人節奏參閱，有任何架構問題隨時討論。"
+      },
+      "INTP": {
+        code: "INTP",
+        name: "邏輯學家",
+        roleGroup: "NT",
+        roleGroupName: "分析家陣營 (條款研究狂)",
+        tagline: "刨根問底、鑽研細微條款與不保事項的冷靜學者型客戶",
+        driver: "想搞清楚「精算原理」、「理賠定義嘅灰色地帶」、「同市面競品的細微條款差異」。重視客觀真理與透明度。",
+        taboo: "催促他「大把人都係咁買啦」、含糊解答他的不保事項提問、過度包裝行銷術語。",
+        closing: "以客觀邏輯終結推演：「所有精算條款同細則你都推導過無漏洞。既然邏輯成立，今天提交預核保，鎖定現在最健康狀態的標準保費是唯一最優解。」",
+        opening: "「林生，今天不講傳統推銷。這份高端醫療保險的核心精髓在於其『無分項全數賠償』與『亞洲/全球醫療網絡』的底層機制，我想同你純技術分析下。」",
+        objection: "客：「我仲想睇埋另外兩間公司的保單條款細則先。」\n應對：「太好喇！我最欣賞識睇條款嘅人。這份是我整理的市場 3 大頂級方案條款逐條對照表，包括不保事項同癌症標靶藥理賠限制我都標明咗，你睇呢幾行核心精算差異。」",
+        whatsapp: "林生，保單條款原文第 14 條關於重症定義及跨國醫療理賠指引已發到郵箱。你可以睇睇第 8 頁邏輯流程，期待下次深入探討。"
+      },
+      "ENTJ": {
+        code: "ENTJ",
+        name: "指揮官",
+        roleGroup: "NT",
+        roleGroupName: "分析家陣營 (霸氣決策者)",
+        tagline: "雷厲風行、只看大局與掌控權、要求效率與結果的企業家/高管",
+        driver: "關心「點樣幫我保護家族資產」、「點樣用最短時間完成傳承」、「點樣令我掌握主導權」。重視強者之間的合作。",
+        taboo: "說話婆媽、猶豫不決、拿著厚厚幾十頁計劃書逐行讀、講浪費時間的客套話。",
+        closing: "給他最直接的高效決策：「張總，醫療同信託架構已為你精算好，核保專屬通道已就緒。只要你點頭簽名，聽朝 9 點我直接為你團隊啟動備案。」",
+        opening: "「張總你好，開門見山：今日我用 10 分鐘，幫你解決三個核心問題：第一，突發健康危機如何完全不影響公司現金流；第二，資產如何合法代代傳承。」",
+        objection: "客：「我太忙，遲啲得閒再搞啦。」\n應對：「張總，你時間最值錢！這件事越拖，你的年齡同健康核保成本就越高。今天只需 15 分鐘電子簽署，所有繁瑣背調同跟進我同 OGOR 團隊全權搞掂，直接替你省下時間。」",
+        whatsapp: "張總，執行方案已精簡為 1 頁備忘錄。核保尊享名額我已先替你的家族鎖定，今日 18:00 前電子簽字便可確保進度無阻。"
+      },
+      "ENTP": {
+        code: "ENTP",
+        name: "辯論家",
+        roleGroup: "NT",
+        roleGroupName: "分析家陣營 (破局創新者)",
+        tagline: "思維極快、反傳統、熱愛尋找漏洞與全新財富打法的新貴",
+        driver: "喜歡「最新一代多元貨幣資產架構」、「保費融資槓桿套利」、「一般人唔識嘅傳承破局法」。討厭老套說教。",
+        taboo: "照本宣科念公司口號、試圖在辯論上強行壓制他、告訴他「全世界都買呢份」。",
+        closing: "挑起他領先同行的優越感：「這套多元貨幣轉換加分拆保單的新玩法，市場上 90% 的人都未搞清楚。你要唔要做圈子入面第一個佈局嘅人？」",
+        opening: "「王生，傳統果套買死一張單供一世的模式已經過時。今日想同你分享一個市場最新、可以隨時切換 9 種主流貨幣嘅靈活財富對沖玩法。」",
+        objection: "客：「保險公司咁多限制，不如我自己去海外開戶買國債啦。」\n應對：「問得好犀利！但自己買國債解決唔到『身故即時變現無遺產稅』同『免受債權追索』這兩個維度。這份架構正正將國債收益同保險的信託屬性結合，你睇呢個套利空間點樣運作？」",
+        whatsapp: "王生，頭先你提出那個海外資產轉換點子好有啟發！我剛把那個點子整合進第 3 頁信託方案，有冇興趣睇下這個客製化的新藍圖？"
+      },
+
+      // 2. NF 陣營 (外交家)
+      "INFJ": {
+        code: "INFJ",
+        name: "提倡者",
+        roleGroup: "NF",
+        roleGroupName: "外交家陣營 (靈魂守護者)",
+        tagline: "直覺極準、極重隱私與內在理念、將保險視為對家人終極承諾的智者",
+        driver: "重視信任感、對家人的深厚承諾、以及保險帶來的「心靈平安與尊嚴」。痛恨功利硬銷與虛偽套路。",
+        taboo: "瘋狂強調賺幾多錢、逼迫他即場表態、打探過多私人隱私、違反誠信的承諾。",
+        closing: "訴諸初心與愛：「這份保單唔係一個冷冰冰的數字，而係你對最愛的人一份長遠的守護承諾。就算將來發生咩事，這份愛永遠喺度。我哋一齊為家人完成這份心意。」",
+        opening: "「李小姐你好，我一直好欣賞你對屋企人的細心照顧。今日我想探討的，是如何在最不可預測的風雨中，為你和家人築起一道最堅固的心靈避風港。」",
+        objection: "客：「我總覺得好似仲未係最適合嘅時候，想再諗諗...」\n應對：「我完全感受得到你的慎重。因為這是一份關乎家庭未來的長遠承諾，謹慎是絕對正確的。不如我哋退後一步，先釐清邊一部分最讓你感到未有足夠安全感？」",
+        whatsapp: "李小姐，慢慢考慮不必有壓力。為你的家庭初心護航是我最大的責任，這份整理希望有助你靜心梳理解構，有任何想法隨時同我傾。"
+      },
+      "INFP": {
+        code: "INFP",
+        name: "調停者",
+        roleGroup: "NF",
+        roleGroupName: "外交家陣營 (溫柔守護者)",
+        tagline: "善良敏感、易被真誠故事打動、極度需要被理解與安全感的善良客戶",
+        driver: "被溫柔體貼的服務打動，渴望生病時能體面求醫不連累任何人。痛恨高壓威逼與金錢銅臭味。",
+        taboo: "大聲喧嘩逼單、「今天唔買聽日加價」的壓迫感、冷嘲熱諷其不懂理財。",
+        closing: "給予無條件的陪伴與安全感：「陳小姐，唔使擔心未來手續複雜，從入醫院到索償每一張單據，我同 OGOR 團隊都會全程陪住你處理，你只要專心休養。」",
+        opening: "「陳小姐你好，放鬆傾下計就好。今天最重要係睇下點樣為你量身打造一份無負擔的保障，等你可以更安心追求自己鍾意嘅生活。」",
+        objection: "客：「我好怕簽完之後每個月供款會有壓力，自己會後悔...」\n應對：「你嘅擔心非常合理！我哋做理財規劃最重要係『舒服』。我們將保費控制在每年收入的 8% 內，完全唔影響你日常生活，而且有 21 日冷靜期，隨時可以調整。」",
+        whatsapp: "陳小姐，今天跟你傾偈好開心，很佩服你為屋企默默付出咁多。資料慢慢睇，隨時有任何疑問我都喺度支持你。"
+      },
+      "ENFJ": {
+        code: "ENFJ",
+        name: "主人公",
+        roleGroup: "NF",
+        roleGroupName: "外交家陣營 (博愛領袖)",
+        tagline: "富有感染力、把照顧身邊所有人視為己任的家庭/團隊核心",
+        driver: "希望為所有人創造幸福，重視「如何照顧老人家、如何為仔女儲好教育基金、如何不成為任何人的負擔」。",
+        taboo: "表現出自私功利、冷漠無視其家人的真正需要、挑撥其與家人的財務關係。",
+        closing: "賦予責任的崇高感：「當你今日簽咗這份保障，你等於為全家人起咗個保護罩。第時無論順流逆流，仔女同父母都會感激你今日這份遠見同擔當。」",
+        opening: "「黃校長/總監，好高興認識你！我知道你一向是全家人同團隊的主心骨，今日呢個方案，就是為了在你照顧所有人的同時，先照顧好你自己。」",
+        objection: "客：「我想留多啲錢先幫仔女買，我自己果份遲啲先。」\n應對：「黃生，你真係無時無刻都將屋企人擺第一位！但你正是這部印鈔機。只有印鈔機買足保障，仔女的未來先有真正保障。愛仔女的第一步，是確保你自己絕不倒下。」",
+        whatsapp: "黃總監，感謝你的正能量！為你全家定制的保障防護網已整理妥當，隨時等候你的指示，為最親愛的家人落實這份守護。"
+      },
+      "ENFP": {
+        code: "ENFP",
+        name: "競選者",
+        roleGroup: "NF",
+        roleGroupName: "外交家陣營 (自由追夢者)",
+        tagline: "充滿熱情、嚮往精彩人生、討厭被傳統框架和繁文縟節束縛的理想派",
+        driver: "被「財富自由」、「環遊世界醫療特權」、「提早退休環球旅居」等美好願景吸引。只要感覺對了，成交極快！",
+        taboo: "用 50 頁死板的字眼、無休止的精算細節澆熄他的興奮感；展現出冷冰冰的苦瓜臉。",
+        closing: "點燃自由的渴望：「想像一下 10 年後你每年自動有一筆被動美金入息，去到邊玩到邊都唔使憂醫療費！不如今日就為你嘅自由人生開啟這扇門！」",
+        opening: "「Mary！終於見到你！我今日帶咗個超級靈活、專為鍾意周圍飛同追求自由生活嘅人設計的環球方案，聽完你一定會心動！」",
+        objection: "客：「哇真係好正，但我依家想投資搞新 project，怕綁死資金。」\n應對：「哈哈我明，你咁有衝勁！正因如此，呢個計劃有『高級保單提取彈性』，你想衝事業隨時抽資金出嚟，平時就自動滾存，幫你兼顧夢想同安全網！」",
+        whatsapp: "Mary！今日傾完我滿腦子都係你未來的精彩藍圖！自由人壽與環球醫療重點已整理好，趁住呢股衝勁，今個禮拜一齊搞掂佢！🚀"
+      },
+
+      // 3. SJ 陣營 (守護者)
+      "ISTJ": {
+        code: "ISTJ",
+        name: "物流師",
+        roleGroup: "SJ",
+        roleGroupName: "守護者陣營 (合規磐石)",
+        tagline: "一絲不苟、遵從程序、重視白紙黑字合約條款與信譽評級的穩健買家",
+        driver: "求絕對的穩健、安全、合規。重視保險公司的歷史長短、標普評級、保證現金價值比例，討厭任何投機成分。",
+        taboo: "遲到一分鐘、回答問題模稜兩可、給予口頭保證但合約上沒有寫明、推廣高風險投機產品。",
+        closing: "強調白紙黑字與確定性：「這份儲蓄/醫療計劃在合約第 4 條明確列明所有條款，保險公司擁有過百年國際評級。今天按既定程序遞交，即可按時生效。」",
+        opening: "「何生你好，我準備了兩份正式文件：第一份是保險公司的官方標準條款明細，第二份是按你年齡嚴格核算的一覽表，我們一條條核對。」",
+        objection: "客：「條款細則好長，我要返去由頭到尾逐條睇清楚先。」\n應對：「非常支持！合約就係要睇清楚先簽。我已經幫你用螢光筆標註了最核心的 5 處保障權益同等候期定義，你可以重點審閱，週四我再同你覆核。」",
+        whatsapp: "何生，按今日會面約定，附件為正式建議書電子版及條款第 1 至 8 條對照表。如審閱後無修訂，週五可按原定計劃落實手續。"
+      },
+      "ISFJ": {
+        code: "ISFJ",
+        name: "守衛者",
+        roleGroup: "SJ",
+        roleGroupName: "守護者陣營 (默默守護者)",
+        tagline: "溫和低調、全心全意為家庭付出、最怕突發疾病拖垮家人的傳統暖心人",
+        driver: "為仔女提供最好的醫療、為伴侶減輕負擔、不連累家庭儲蓄。重視親友的真實口碑與理賠見證。",
+        taboo: "給他壓迫感逼他做決定、推崇激進冒險的產品、表現出自傲傲慢。",
+        closing: "以愛之名給予安心感：「梁太，這份全包醫保就等於你為仔女同先生親手撐起的一把雨傘。今日落實咗佢，就算出面幾大風雨，屋企人都安枕無憂。」",
+        opening: "「梁太你好，知道你平時打理屋企事事親力親為，今日呢套安排就是為了幫你減輕肩上的負擔，萬一有事都唔使動用全家的血汗錢。」",
+        objection: "客：「我個人生病無所謂，但每個月又要拿一筆錢出嚟供保險...」\n應對：「梁太你真係處處都為屋企著想！正正就係因為想慳錢，一場大病可能用去幾十萬，保險就係用最少嘅錢，保護你辛苦為屋企存低嘅積蓄。」",
+        whatsapp: "梁太你好，今日為你家庭構想的醫療保障細節已整理妥當，文字清晰簡單。希望能為你和家人添一份安心，隨時歡迎你同我傾。"
+      },
+      "ESTJ": {
+        code: "ESTJ",
+        name: "總經理",
+        roleGroup: "SJ",
+        roleGroupName: "守護者陣營 (效率主管)",
+        tagline: "講求秩序、效率至上、實事求是的組織者與執行狂",
+        driver: "明確的 ROI（投資回報率）、流程化、組織效率、準時交付。重視權威與實證案例。",
+        taboo: "藉口多、說話兜圈子、邏輯鬆散、挑戰他的權威流程。",
+        closing: "提供標準執行里程碑：「合約流程分 3 步走，若今天確認，週三審批完成，下週正式上線，完全符合進度表。」",
+        opening: "「陳生你好！知道你時間寶貴，我今日準備咗個 10 分鐘嘅重點分析，直接睇下呢個方案如何喺 3 個月內幫你達成目標。」",
+        objection: "客：「我需要睇到實質同行落地案例。」\n應對：「完全合理！請睇呢份同業 Top 3 企業的落實報告，數據顯示 90 天內錯誤率降低 42%，證明模式完全成熟可行。」",
+        whatsapp: "陳生，重點總結及下一步流程圖已發到你郵箱。若確認無誤，明天可即時行程序，方便我預備文件畀你過目嗎？"
+      },
+      "ESFJ": {
+        code: "ESFJ",
+        name: "執政官",
+        roleGroup: "SJ",
+        roleGroupName: "守護者陣營 (社交大家長)",
+        tagline: "重視人情味、熱心社交、深受身邊親友意見影響的體貼型客戶",
+        driver: "「身邊朋友買緊邊款」、「專業醫生推薦邊款」、「親友真實理賠經驗」。極重視關係良好與團隊口碑。",
+        taboo: "冷酷無理、讓他覺得買這份保險會被身邊人笑、忽視他對親友圈子的熱心。",
+        closing: "運用同儕共鳴與認同：「Amy姐，其實你圈子入面好幾位朋友同專業人士都已經做咗呢份規劃，大家都讚服務好，你絕對要一齊享受這份保障！」",
+        opening: "「Amy姐！每次見到你都咁熱情照顧大家！今日呢個家庭醫療網絡方案，身邊好多朋友全家都已經加保咗，口碑非常好！」",
+        objection: "客：「我未見身邊有好多親戚買呢種喎...」\n應對：「因為這款是剛升級的高端尊享系列！張醫生同陳太上個禮拜先幫全家搞掂，大家都話私家醫院全數賠償先係真正省心，我帶你睇睇大家的真實反饋！」",
+        whatsapp: "Amy姐，今日見到你真係好開心！剛才提到張太她們都在用的高端醫療資料已整理好，隨時等你一齊加入我們這個大家庭！"
+      },
+
+      // 4. SP 陣營 (探險家)
+      "ISTP": {
+        code: "ISTP",
+        name: "鑑賞家",
+        roleGroup: "SP",
+        roleGroupName: "探險家陣營 (硬核實踐派)",
+        tagline: "話少、講求實用功能、只看這份保險到底賠唔賠得到錢的冷靜買家",
+        driver: "功能性、理賠速度、不廢話的免找數出院服務。討厭理論高調與感情說教，只在乎「點賠法、賠幾多」。",
+        taboo: "講人生大道理、用感性催淚故事逼他買單、浪費時間做無意義社交。",
+        closing: "直接交給他看功能與手續：「理賠流程只需手機 App 拍照上傳，出院免找數直接由公司過數。功能講完，手續 5 分鐘搞掂。」",
+        opening: "「劉生，唔講多餘嘢。部機點樣運作，份保單點樣賠，你直接睇這張 1 頁理賠流程圖。」",
+        objection: "客：「買咁多保險無用啦，到頭來咪又係呢度唔賠果度唔賠。」\n應對：「你講得好啱，坊間傳統舊保單確實多限制！所以我們這份是『無細項全數賠償』，只要醫生證明合情合理，全單過數。這裏是去年真實理賠核准數據 98.6%，看數據最客觀。」",
+        whatsapp: "劉生，App 智能理賠手續清單與條款規格已整理好。有用沒用你一眼睇得出，有需要隨時搵我。"
+      },
+      "ISFP": {
+        code: "ISFP",
+        name: "探險家",
+        roleGroup: "SP",
+        roleGroupName: "探險家陣營 (品味隨心派)",
+        tagline: "隨和低調、注重直覺美感與舒適度、討厭沉重長年期承諾的自由靈魂",
+        driver: "感覺舒服、顧問無壓力、保費彈性高。討厭被強迫簽署 30 年不能更改的沉重合約。",
+        taboo: "咄咄逼人逼他簽字、給予壓迫性冷場、用恐懼行銷（如展示恐怖疾病相片）嚇他。",
+        closing: "給予極大自主權：「如果這份計劃令你覺得舒服同安心，不如先用一個月幾百蚊的彈性安排開始，隨時由你話事。」",
+        opening: "「Wing，慢慢睇唔好急。今天最重要係傾下點樣畀你生活過得更放鬆，完全無任何簽單壓力。」",
+        objection: "客：「我覺得依家生活幾好，唔想諗咁長遠咁沉重嘅事...」\n應對：「我好明白！活在當下先最重要。正正因為唔想將來因為突發事情打亂你依家咁開心的生活，這份小保障就係保護緊你當下的自由自在。」",
+        whatsapp: "Wing，今天謝謝你的時間。為你精選的靈活方案已發到你手機，沒有壓力，慢慢睇，祝你有個美好週末！"
+      },
+      "ESTP": {
+        code: "ESTP",
+        name: "企業家",
+        roleGroup: "SP",
+        roleGroupName: "探險家陣營 (即戰力先鋒)",
+        tagline: "敢博敢賺、活在聚光燈下、追求立竿見影的利益與尊貴面子的行動派",
+        driver: "高槓桿、專屬特權、尊貴 VIP 醫療綠色通道、即時生效的快感。喜歡當機立斷與面子。",
+        taboo: "慢吞吞、過多繁文縟節、婆媽計較小數點、讓他覺得丟臉無面子。",
+        closing: "點燃勝負欲與面子：「這個 VIP 全球免找數醫療通道全港得限定配額，辦妥咗今晚開始你出入私家醫院如入無人之境，爽快搞掂佢！」",
+        opening: "「Tiger哥！今日呢個好嘢絕對啱你脾氣：即刻落場、即刻見效，極高槓桿，無任何拖泥帶水！」",
+        objection: "客：「保險啲息咁慢，我做單生意翻幾倍啦。」\n應對：「Tiger哥，你做生意賺大錢個個都知！但正因如此，萬一生病你要調動 200 萬現金去醫病，不如用保險公司幾千蚊槓桿 1,000 萬出嚟埋單。你啲錢繼續留喺生意場幫你翻幾倍，這先叫最高明的資金運用！」",
+        whatsapp: "Tiger哥！嗰個 VIP 醫療尊享通道配額我用個人信用幫你霸住到今晚 8 點。一句講曬，要的話即刻通知我幫你鎖死！"
+      },
+      "ESFP": {
+        code: "ESFP",
+        name: "表演者",
+        roleGroup: "SP",
+        roleGroupName: "探險家陣營 (派對熱力焦點)",
+        tagline: "熱愛生活、隨性熱情、最重視當下快樂與現場愉悅氛圍的樂天派",
+        driver: "開心、有趣、身邊朋友都讚好、買完之後能無憂無慮享受生活。容易受現場熱烈氣氛感染而成交。",
+        taboo: "過於嚴肅死板、精算枯燥公式、把氣氛搞得像告別式一樣沉重。",
+        closing: "推動開心無憂的決定：「人生最緊要玩得盡興、無憂無慮！搞掂咗這份保障，以後去旅行、玩極限運動都完全無後顧之憂，今日搞掂佢今晚慶祝！」",
+        opening: "「Candy！你今日成個人好有活力呀！我剛好有個超貼心、連旅行玩樂都全包的醫療新方案，一定要第一時間同你分享！」",
+        objection: "客：「哎呀，我驚我買咗返去無耐就無恆心供落去...」\n應對：「哈哈我明你怕煩！所以我們有自動轉賬同專屬年度體檢獎賞，每年仲有健康優惠券，供保險之餘仲可以賺禮品，包你年年都記得！」",
+        whatsapp: "Candy！今日同你傾真係太好笑太開心啦！為你整理好這份開心無憂保障，隨時通知我，我帶香檳嚟搵你落實！🥂"
+      }
+    };
+
+    /* State Variables */
+    let currentDimensions = { ei: 'E', sn: 'S', tf: 'T', jp: 'J' };
+    let currentActiveCode = "ESTJ";
+    let lastAiResponseText = "";
+    let current168Filter = 'ALL';
+
+    const CHEN_168_REASONS = [
+      // 第一章 理念篇
+      { id: 1, cat: "理念篇", num: "001", title: "不會有事的，過一陣子再說", quote: "唔會有事嘅，過多一排先再傾啦。", insight: "以為風險有預告期，缺乏危機緊迫感" },
+      { id: 6, cat: "理念篇", num: "006", title: "保險都是騙人的", quote: "身邊啲人同朋友成日話保險都係呃人嘅，買嗰陣好聽，賠嗰陣就推三推四。", insight: "曾有負面理賠耳聞，缺乏對保單合約法律約束力的認知" },
+      { id: 8, cat: "理念篇", num: "008", title: "我不要保險", quote: "我真係覺得自己無咩需要買保險，一直以嚟都好順利。", insight: "直覺性抗拒推銷，未意識到保險本質是金錢轉移" },
+      { id: 9, cat: "理念篇", num: "009", title: "我對保險沒興趣", quote: "我對保險無乜興趣，唔好浪費時間傾呢啲。", insight: "將保險當作一般消費品，不知其為防守工具" },
+      { id: 11, cat: "理念篇", num: "011", title: "保險期間太長了", quote: "保費要供 20 年太長喇，中途有事斷供點算？", insight: "害怕長遠財務枷鎖，未理解分期付款創造即時大額保障槓桿" },
+      { id: 12, cat: "理念篇", num: "012", title: "一張薄薄的紙就要收這麼多錢", quote: "一張薄薄嘅紙同合約，每年就要收我幾萬蚊？", insight: "只見紙張成本，未見背後數以百萬計的信用兌現承諾" },
+      { id: 14, cat: "理念篇", num: "014", title: "我不知道怎麼買，太複雜", quote: "我想再睇多兩間公司嘅計劃比較下先決定。", insight: "資訊超載帶來選擇障礙，需要清晰的三階梯架構化繁為簡" },
+
+      // 第二章 迷思篇
+      { id: 22, cat: "迷思篇", num: "022", title: "一切都是命，保什麼", quote: "生死有命富貴由天，要發生始終要發生，保嚟做乜？", insight: "宿命論思維，混淆了「風險發生」與「風險後的財務後果」" },
+      { id: 25, cat: "迷思篇", num: "025", title: "紅利非保證，到時拿不到", quote: "你份計劃書啲非保證紅利寫到咁高，但到時派唔足咪得個桔？根本無保證。", insight: "對保監局 GN16 履行比率及平滑機制缺乏理解，需以百年險企往績與長期資產配置化解" },
+      { id: 28, cat: "迷思篇", num: "028", title: "朋友說保險不能買", quote: "我啲朋友同親戚都叫我千祈唔好買保險，話會後悔。", insight: "受身邊非專業意見影響，需反問朋友能否承擔生病時的醫藥費" },
+      { id: 29, cat: "迷思篇", num: "029", title: "以前的人沒保險日子都過了，我何必買", quote: "以前老一輩無保險咪一樣養大幾代人，點解依家一定要買？", insight: "忽略現代醫療技術大幅進步伴隨而來的巨額醫療費用與長壽風險" },
+      { id: 30, cat: "迷思篇", num: "030", title: "死後錢是別人領，那為什麼要買", quote: "人死咗筆錢係其他人拎，我自己又用唔到，買嚟做乜？", insight: "只看到死亡賠償，忽視重疾生前自用補償與對摯愛的責任延續" },
+      { id: 31, cat: "迷思篇", num: "031", title: "錢會貶值，不要買保險", quote: "通脹咁勁，幾十年後幾百萬都貶值曬啦，買保險無用。", insight: "未理解保險是用當下的小錢鎖定當下即時的數百萬高額槓桿" },
+      { id: 32, cat: "迷思篇", num: "032", title: "錢拿去投資，利潤比還保險高", quote: "買股票同買樓回報高好多，買儲蓄險綁死嚿錢好唔抵。", insight: "拿「進攻型資產」與「防守型資產」對比，未設想急需用錢時低位斬倉的代價" },
+      { id: 33, cat: "迷思篇", num: "033", title: "保費太高了，給我換個便宜的", quote: "保費太貴喇，有無啲平啲嘅計劃？", insight: "注重價格而非保障缺口，需釐清是保費太貴還是保障價值未對焦" },
+      { id: 34, cat: "迷思篇", num: "034", title: "錢存銀行最安全，何必買保險", quote: "我啲錢寧願擺喺銀行做定期收息或者放活期，隨時拎得又保本，點解要擺入保險公司？", insight: "混淆了短線流動性與長線抗通脹、防被蠶食的財富累積架構" },
+      { id: 35, cat: "迷思篇", num: "035", title: "死了才有賠，太沒意思了", quote: "死咗先有得賠，咁買嚟有咩意思啫？", insight: "對現代保險只知其一，未認識到生前重疾給付、醫療全數報銷與年金生活費" },
+      { id: 37, cat: "迷思篇", num: "037", title: "養兒育女就是保障，何必買保險", quote: "我有仔有女，第時老咗仔女會照顧我，使乜買保險。", insight: "未意識到現代社會子女面臨的沉重生活成本，父母有保險才是給子女最好的減負" },
+      { id: 40, cat: "迷思篇", num: "040", title: "我買很多了，已經夠了", quote: "我已經買咗好幾份保險，買得好夠，唔使再加。", insight: "以保單數量代替保額質量，多數保單保額停留在十年前未隨通脹與身價調整" },
+
+      // 第三章 抉擇篇
+      { id: 46, cat: "抉擇篇", num: "046", title: "把重點講清楚，我很忙", quote: "你可唔可以 3 分鐘簡單講完個重點？我好忙，無時間聽咁多。", insight: "時間寶貴的高壓型客戶，討厭冗長鋪墊，渴望直接見到價值核心" },
+      { id: 48, cat: "抉擇篇", num: "048", title: "頭幾年退保沒錢拿，太虧了", quote: "買儲蓄險頭嗰幾年根本拎唔返啲錢，退保蝕大本，中途急用點算？鎖死曬啲資金。", insight: "忽略保險前期的保障成本與精算沉澱，需說明強制儲蓄是避免過度消費、積累確定性財富的防線" },
+      { id: 49, cat: "抉擇篇", num: "049", title: "我付不起保費，負擔不起", quote: "我而家手頭好緊，根本無多餘錢買保險，負擔唔起。", insight: "覺得保費是額外開支，未理解付不起小額保費更付不起巨額醫療賬單" },
+      { id: 50, cat: "抉擇篇", num: "050", title: "讓我考慮幾天吧", quote: "等我返去考慮幾日先，諗清楚再搵你啦。", insight: "藉拖延緩衝銷售壓力，需要給予安全感同時強調核保時效" },
+      { id: 51, cat: "抉擇篇", num: "051", title: "等我房子貸款付完再說", quote: "我啱啱先買咗樓供緊按揭，每個月開支好大，等供完層樓再諗。", insight: "供樓期間身負巨額負債，正是家庭最脆弱、最需要人壽重疾兜底的黃金期" },
+      { id: 52, cat: "抉擇篇", num: "052", title: "想買樓留首期", quote: "我最近plan緊買樓，要儲首期，所有資金都要留返用嚟上車。", insight: "將儲蓄重心全部壓在不動產上，忽略了首期蓄水池一旦遇病即刻乾涸的盲區" },
+
+      // 第四章 配偶與家庭篇
+      { id: 72, cat: "家庭篇", num: "072", title: "我要和太太商量一下", quote: "我返去同老婆/老公商量下先，唔急。", insight: "將責任推給不在場配偶，或是真正尊重家庭但需要協助其向配偶轉述價值" },
+
+      // 第五章 退休與養老篇
+      { id: 80, cat: "養老篇", num: "080", title: "等我老一點再買", quote: "我依家仲後生，等我四五十歲老啲嗰陣先買啦。", insight: "不明白年齡越大保費越貴，且可能因體檢小毛病失去投保資格" },
+
+      // 第六章 醫療健康篇
+      { id: 92, cat: "醫療篇", num: "092", title: "我很健康，很小心，不用買保險", quote: "我份人好健康，平時做開運動，用唔著危疾。", insight: "保險只能在最健康時買，身體亮紅燈時保險公司已經拒保" },
+      { id: 108, cat: "醫療篇", num: "108", title: "我已有健保/公司醫保，不需要再買", quote: "我公司醫療福利已經包得好足，唔使再自己買。", insight: "未考慮離職退休後的保障真空期，以及私家醫院標靶藥、免疫治療的巨額自費缺口" },
+
+      // 第七章 頂級富人VIP篇
+      { id: 111, cat: "富人篇", num: "111", title: "我已經很有錢，不需要保險", quote: "我有幾層樓收租又有幾千萬現金，就算生病都畀得起，使乜買保險？", insight: "富人買保險不是為治病，是為了「資產保全、債務隔離、定向免稅傳承」" },
+      { id: 129, cat: "富人篇", num: "129", title: "保險的回報率還沒我賺錢快", quote: "我做生意一個 project 賺幾百萬，你保險啲回報咁慢，我睇唔上眼。", insight: "賺錢是油門，保險是剎車；再快的跑車沒有剎車系統，一次意外就粉身碎骨" }
+    ];
+
+    window.onload = function() {
+      renderLibraryGrid();
+      populateAiSelect();
+      updateProfilerResult();
+      render168List();
+    };
+
+    function open168Modal() {
+      const modal = document.getElementById('modal-168');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+    }
+
+    function close168Modal() {
+      const modal = document.getElementById('modal-168');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function set168Category(cat) {
+      current168Filter = cat;
+      const categories = ['ALL', '理念篇', '迷思篇', '抉擇篇', '家庭篇', '養老篇', '醫療篇', '富人篇'];
+      categories.forEach(c => {
+        const btn = document.getElementById(`cat-btn-${c}`);
+        if(btn) {
+          if(c === cat) {
+            btn.className = "px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold shrink-0 transition-all";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 shrink-0 transition-all";
+          }
+        }
+      });
+      render168List();
+    }
+
+    function filter168Reasons() {
+      render168List();
+    }
+
+    function render168List() {
+      const container = document.getElementById('list-168');
+      if (!container) return;
+      const keyword = (document.getElementById('search-168')?.value || '').trim().toLowerCase();
+      container.innerHTML = '';
+
+      const filtered = CHEN_168_REASONS.filter(item => {
+        const matchCat = (current168Filter === 'ALL' || item.cat === current168Filter);
+        const matchKey = !keyword || 
+          item.title.toLowerCase().includes(keyword) || 
+          item.quote.toLowerCase().includes(keyword) || 
+          item.insight.toLowerCase().includes(keyword) ||
+          item.num.includes(keyword);
+        return matchCat && matchKey;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-400 text-xs sm:text-sm">
+            <i class="fa-solid fa-magnifying-glass text-2xl mb-2 text-slate-300"></i>
+            <p>搵唔到符合「${keyword}」嘅藉口，試下搜尋「投資」、「通脹」、「健康」或「太太」</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 group";
+        card.onclick = () => select168Reason(item.quote);
+
+        let badgeColor = "bg-slate-100 text-slate-700";
+        if(item.cat === '理念篇') badgeColor = "bg-purple-100 text-purple-800";
+        if(item.cat === '迷思篇') badgeColor = "bg-rose-100 text-rose-800";
+        if(item.cat === '抉擇篇') badgeColor = "bg-amber-100 text-amber-800";
+        if(item.cat === '家庭篇') badgeColor = "bg-pink-100 text-pink-800";
+        if(item.cat === '養老篇') badgeColor = "bg-blue-100 text-blue-800";
+        if(item.cat === '醫療篇') badgeColor = "bg-emerald-100 text-emerald-800";
+        if(item.cat === '富人篇') badgeColor = "bg-indigo-100 text-indigo-800";
+
+        card.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">#${item.num}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${item.cat}</span>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-indigo-900">${item.title}</h4>
+            </div>
+            <p class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-1.5">
+              「${item.quote}」
+            </p>
+            <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-lightbulb text-amber-500 text-[10px]"></i>
+              <span>大師破譯心態：${item.insight}</span>
+            </p>
+          </div>
+          <div class="shrink-0 self-end sm:self-center">
+            <span class="text-xs font-bold text-indigo-600 group-hover:text-indigo-800 bg-indigo-50 group-hover:bg-indigo-100 px-3 py-1.5 rounded-lg border border-indigo-200 flex items-center gap-1 transition-all">
+              <span>套用語句</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function select168Reason(quoteText) {
+      setAiObjection(quoteText);
+      close168Modal();
+      showToast("已成功套用陳亦純《168個理由》話術！");
+    }
+
+    /* View Switcher */
+    function switchView(viewName) {
+      const vLookup = document.getElementById('view-lookup');
+      const vLibrary = document.getElementById('view-library');
+      const vAi = document.getElementById('view-ai');
+
+      if (!vLookup || !vLibrary || !vAi) return;
+
+      vLookup.classList.add('hidden');
+      vLibrary.classList.add('hidden');
+      vAi.classList.add('hidden');
+
+      ['lookup', 'library', 'ai'].forEach(tab => {
+        const btn = document.getElementById(`nav-btn-${tab}`);
+        if(btn) {
+          if(tab === 'ai') {
+            btn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5";
+          }
+        }
+      });
+
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.remove('hidden');
+
+      const activeBtn = document.getElementById(`nav-btn-${viewName}`);
+      if(activeBtn) {
+        if(viewName === 'lookup' || viewName === 'library') {
+          activeBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-indigo-300 bg-slate-800 border border-indigo-500/30 transition-all flex items-center gap-1.5";
+        } else if(viewName === 'ai') {
+          activeBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-black text-white bg-gradient-to-r from-indigo-600 to-purple-700 shadow-lg shadow-indigo-500/30 border border-indigo-400/30 transition-all flex items-center gap-1.5";
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Dimension Selector */
+    function setDimension(dim, value) {
+      currentDimensions[dim] = value;
+
+      if(dim === 'ei') {
+        styleOptionButton('btn-E', value === 'E');
+        styleOptionButton('btn-I', value === 'I');
+        document.getElementById('badge-ei').textContent = value === 'E' ? '外向 (E)' : '內向 (I)';
+      } else if(dim === 'sn') {
+        styleOptionButton('btn-S', value === 'S');
+        styleOptionButton('btn-N', value === 'N');
+        document.getElementById('badge-sn').textContent = value === 'S' ? '實感 (S)' : '直覺 (N)';
+      } else if(dim === 'tf') {
+        styleOptionButton('btn-T', value === 'T');
+        styleOptionButton('btn-F', value === 'F');
+        document.getElementById('badge-tf').textContent = value === 'T' ? '理性 (T)' : '情感 (F)';
+      } else if(dim === 'jp') {
+        styleOptionButton('btn-J', value === 'J');
+        styleOptionButton('btn-P', value === 'P');
+        document.getElementById('badge-jp').textContent = value === 'J' ? '條理 (J)' : '彈性 (P)';
+      }
+
+      updateProfilerResult();
+    }
+
+    function styleOptionButton(btnId, isSelected) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      const dot = btn.querySelector('span');
+      if (isSelected) {
+        btn.className = "w-full text-left p-3 rounded-xl border border-indigo-500 bg-indigo-50/70 font-medium text-sm text-slate-900 flex items-start gap-2.5 transition-all shadow-sm";
+        if (dot) dot.className = "w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold";
+      } else {
+        btn.className = "w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-medium text-sm text-slate-700 flex items-start gap-2.5 transition-all";
+        if (dot) dot.className = "w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs shrink-0 mt-0.5";
+      }
+    }
+
+    /* Calculate MBTI Code and Update View 1 Cards */
+    function updateProfilerResult() {
+      const code = `${currentDimensions.ei}${currentDimensions.sn}${currentDimensions.tf}${currentDimensions.jp}`;
+      currentActiveCode = code;
+      const data = MBTI_SALES_DB[code];
+
+      if (!data) return;
+
+      document.getElementById('result-badge-code').textContent = data.code;
+      document.getElementById('result-type-name').textContent = `${data.name} (${data.code})`;
+      document.getElementById('result-role-tag').textContent = data.roleGroupName;
+      document.getElementById('result-type-desc').textContent = data.tagline;
+
+      document.getElementById('tactics-driver').textContent = data.driver;
+      document.getElementById('tactics-taboo').textContent = data.taboo;
+      document.getElementById('tactics-closing').textContent = data.closing;
+
+      document.getElementById('script-opening').textContent = data.opening;
+      document.getElementById('script-objection').innerHTML = data.objection.replace(/\n/g, '<br>');
+      document.getElementById('script-whatsapp').innerHTML = data.whatsapp.replace(/\n/g, '<br>');
+
+      const aiSelect = document.getElementById('ai-select-mbti');
+      if(aiSelect) aiSelect.value = code;
+      const aiActiveLabel = document.getElementById('ai-active-type');
+      if(aiActiveLabel) aiActiveLabel.textContent = `${data.code} (${data.name})`;
+    }
+
+    function renderLibraryGrid(filter = 'ALL') {
+      const container = document.getElementById('personality-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      Object.values(MBTI_SALES_DB).forEach(item => {
+        if (filter !== 'ALL' && item.roleGroup !== filter) return;
+
+        let badgeColor = "bg-indigo-100 text-indigo-800";
+        let borderClass = "hover:border-indigo-500";
+        if(item.roleGroup === 'NT') { badgeColor = "bg-purple-100 text-purple-800"; borderClass = "hover:border-purple-500"; }
+        if(item.roleGroup === 'NF') { badgeColor = "bg-emerald-100 text-emerald-800"; borderClass = "hover:border-emerald-500"; }
+        if(item.roleGroup === 'SJ') { badgeColor = "bg-blue-100 text-blue-800"; borderClass = "hover:border-blue-500"; }
+        if(item.roleGroup === 'SP') { badgeColor = "bg-orange-100 text-orange-800"; borderClass = "hover:border-orange-500"; }
+
+        const card = document.createElement('div');
+        card.className = `type-card bg-white rounded-xl border border-slate-200 p-4 shadow-sm cursor-pointer ${borderClass} flex flex-col justify-between`;
+        card.onclick = () => selectTypeFromLibrary(item.code);
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full ${badgeColor}">${item.roleGroupName.split(' ')[0]}</span>
+              <span class="text-xs font-mono font-bold text-slate-400">${item.roleGroup}</span>
+            </div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <h3 class="text-lg font-black text-slate-900">${item.code}</h3>
+              <span class="text-sm font-bold text-slate-700">${item.name}</span>
+            </div>
+            <p class="text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed">${item.tagline}</p>
+          </div>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-indigo-600 font-bold">
+            <span>睇保險攻心話術</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterGroup(group) {
+      ['all', 'nt', 'nf', 'sj', 'sp'].forEach(g => {
+        const btn = document.getElementById(`filter-${g}`);
+        if(btn) {
+          if(g === group.toLowerCase()) {
+            btn.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all";
+          }
+        }
+      });
+      renderLibraryGrid(group);
+    }
+
+    function selectTypeFromLibrary(code) {
+      currentDimensions = {
+        ei: code[0],
+        sn: code[1],
+        tf: code[2],
+        jp: code[3]
+      };
+      setDimension('ei', code[0]);
+      setDimension('sn', code[1]);
+      setDimension('tf', code[2]);
+      setDimension('jp', code[3]);
+      switchView('lookup');
+    }
+
+    function populateAiSelect() {
+      const select = document.getElementById('ai-select-mbti');
+      if (!select) return;
+      select.innerHTML = '';
+      Object.values(MBTI_SALES_DB).forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.code;
+        opt.textContent = `${item.code} - ${item.name} (${item.roleGroupName.split(' ')[0]})`;
+        if (item.code === currentActiveCode) opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      select.addEventListener('change', (e) => {
+        const code = e.target.value;
+        currentActiveCode = code;
+        const activeLabel = document.getElementById('ai-active-type');
+        if (activeLabel) activeLabel.textContent = `${code} (${MBTI_SALES_DB[code].name})`;
+      });
+    }
+
+    function sendToAIHelper() {
+      const aiSelect = document.getElementById('ai-select-mbti');
+      if(aiSelect) aiSelect.value = currentActiveCode;
+      const activeLabel = document.getElementById('ai-active-type');
+      if (activeLabel) activeLabel.textContent = `${currentActiveCode} (${MBTI_SALES_DB[currentActiveCode].name})`;
+      switchView('ai');
+    }
+
+    function setAiObjection(text) {
+      const textarea = document.getElementById('ai-input-objection');
+      if (textarea) textarea.value = text;
+    }
+
+    function getChenWisdom(objection) {
+      const txt = (objection || '').toLowerCase();
+
+      // 1. 養老與子女照顧
+      if (txt.includes('仔女') || txt.includes('子女') || txt.includes('老咗') || txt.includes('養老') || txt.includes('照顧')) {
+        return {
+          quote: "「孝順有兩種，一種是有孝心，一種是有孝力。久病床前無孝子，不是兒女不孝，是醫藥費壓垮了他。父母有準備，兒女才是孝子；父母沒準備，兒女就成了不肖子。」",
+          insight: "客人以為依靠子女是親情的體現，卻忽略了下一代在面對生活成本與天價醫療時的無力感。將養老負擔推給子女，實質上是在剝奪兒女未來的幸福。",
+          breakthrough: "「陳生，你真係好有福氣，養咗咁孝順嘅仔女！但我想同你分享陳亦純老師講過嘅一句說話：『孝順有分孝心同孝力』。今日仔女想孝順你，但如果萬一我哋有突發大病，每個月幾萬蚊護工同標靶藥，仔女要照顧自己個小家庭同供樓，佢哋就算有孝心，都未必有孝力！真正有遠見嘅父母，買保險唔係為咗自己，而係為了『不成為仔女未來的負擔』。你每個月留一筆錢喺保險公司，就係替仔女保留住盡孝的尊嚴！」",
+          closing: "「今日為自己簽好呢份保障，第時無論幾多歲，都係保險公司同醫生服侍你，仔女只要喺床邊握住你隻手講句『爸爸我愛你』就夠，唔需要為醫藥費愁眉苦臉。我哋今日就將呢份對仔女最大的體貼落實佢。」"
+        };
+      }
+
+      // 2. 投資、炒股、回報快
+      if (txt.includes('股票') || txt.includes('炒股') || txt.includes('投資') || txt.includes('回報') || txt.includes('賺錢快')) {
+        return {
+          quote: "「會賺錢是能力，守得住才是真本事！投資是油門，保險是剎車；只踩油門沒有剎車的跑車，開得越快，撞得越慘。保險不是用來跟股票比收益的，保險是為了保護你的高回報資產在關鍵時刻不被低位賤賣！」",
+          insight: "客人陷入『攻擊型資產』與『防守型資產』的混淆，誤將保險視作投資工具，缺乏對『突發流動性擠提』與『市場週期下跌』的底層風險防禦意識。",
+          breakthrough: "「陳生，你投資眼光咁精準，市場上賺錢嘅能力無庸置疑！但陳亦純老師成日講：『投資係油門，保險係剎車』。買保險從來唔係要同你嘅股票比賺幾多厘息。試諗下，如果市況突然遇著熊市跌三四成，偏偏呢個時候屋企需要 200 萬緊急現金周轉或醫病，你係情願無奈低位斬倉流血割肉，定係直接叫保險公司開張 200 萬支票幫你全數埋單？保險就係保護緊你賺大錢嘅本金！」",
+          closing: "「你繼續用大資金去投資市場賺大錢，只需要撥出其中唔到 5% 的微小利潤，鎖定呢個幾百萬嘅安全氣袋。就算風浪幾大，你都穩操勝券，我哋今日即刻啟動備案。」"
+        };
+      }
+
+      // 3. 錢放銀行定存、活期安全
+      if (txt.includes('銀行') || txt.includes('定期') || txt.includes('定存') || txt.includes('活期') || txt.includes('保本')) {
+        return {
+          quote: "「銀行只能給你利息，不能給你奇蹟；銀行能幫你保管一塊錢，但生病時給不了你一百塊！把錢存在銀行是『水缸儲水』，買保險是『裝自來水管』；一滴水存進銀行依然是一滴水，但存進保險公司卻能在狂風暴雨時變成長明之泉。」",
+          insight: "客人過度沉迷於名義本金的安全感，忽視了長期通貨膨脹對購買力的蠶食，更忽視了銀行存摺完全無法提供『以小博大、瞬間槓桿』的保障功能。",
+          breakthrough: "「陳生，錢擺銀行確實安心，因為隨時睇得見！但正如陳亦純老師所講：『銀行只能幫你保管本金，但給不了你槓桿』。你擺 10 萬喺銀行，遇到事情你最多只能攞出 10 萬，仲要扣返你辛苦儲低嘅血汗錢；但你只要撥少少放喺保險公司，第一日就立刻擁有幾百萬嘅確定保障。更何況長遠嚟講，銀行利息永遠跑輸真實通脹，保險儲蓄為你鎖定的是跨週期的複利與傳承功能。」",
+          closing: "「我哋唔係叫你將銀行的錢全部搬走，只要挪出其中的兩成，轉移到這個兼具長期增值與資產隔離的防守賬戶。進可攻退可守，今日就開始調配。」"
+        };
+      }
+
+      // 4. 紅利非保證、怕拿不到
+      if (txt.includes('紅利') || txt.includes('非保證') || txt.includes('得個桔') || txt.includes('未反映')) {
+        return {
+          quote: "「保險公司的招牌不是靠吹出來的，是靠上百年的理賠與分紅兌現立足的。非保證紅利背後有平滑機制（Smoothing Mechanism）與政府監管（如保監局 GN16 履行比率）。世界上沒有任何一間金融機構，能像百年險企一樣用全球多元資產配置為你穿越世紀牛熊！」",
+          insight: "客人對不確定性極度敏感，對保險精算平滑機制缺乏了解，需要以權威的歷史往績、監管透明度與長期跨週期投資哲學消除疑慮。",
+          breakthrough: "「陳生，你問得非常專業！這正正係識睇條款嘅聰明人先會留意的重點。陳亦純老師講過：『看一間公司的非保證，要看它的百年歷史底蘊』。香港保監局有嚴格的 GN16 監管，所有分紅履行比率（Fulfillment Ratio）全部在官網公開透明，過去數十年哪怕經歷金融海嘯同疫情，百年險企的分紅實現率普遍都在 90%-100% 以上。保險公司係運用全球跨週期的另類投資同優質債券，為你爭取平穩收益，遠比一般個人追漲殺跌更有確定性！」",
+          closing: "「與其將錢擺在隨時面臨購買力貶值的單一貨幣，不如透過這套具備貨幣轉換權的百年分紅引擎鎖定長遠被動現金流。既然歷史數據擺在眼前，我哋今日就把意向書落實。」"
+        };
+      }
+
+      // 5. 頭幾年退保沒錢拿、鎖死資金
+      if (txt.includes('頭幾年') || txt.includes('退保') || txt.includes('鎖死') || txt.includes('蝕本') || txt.includes('急用')) {
+        return {
+          quote: "「保險是人生長跑的耐力鞋，不是百米衝刺的跑鞋！頭幾年退保價值低，是因為保險公司第一天就為你背負了幾百萬的巨大風險責任與精算沉澱。如果你能隨意把錢提走，這筆錢最後只會變成無謂的消費流走。強制儲蓄，才是平凡人累積大財富唯一的鐵律！」",
+          insight: "客人害怕失去資金主導權，但實質上缺乏財務紀律。需引導其意識到『無法隨意支取』恰恰是保護財富免於被揮霍、被借走或被市場誘惑虧光的防護牆。",
+          breakthrough: "「陳生，你講得好真實！頭幾年退保確實唔划算，但這正正是保險的靈魂所在。陳亦純老師講過一句醍醐灌頂嘅話：『如果錢擺喺一個隨時可以拎出嚟嘅地方，99% 的人都會因為買架新車、去個旅行或者朋友借錢而花光，最後甚麼都剩唔低。』保險前期的約束力，表面上是鎖住資金，實際上是幫你『鎖死未來的財富』。況且計劃書明確寫明，幾年後現金價值就開始加速滾存，仲有保單借貸同部分提取的靈活性，根本唔會影響你日常周轉！」",
+          closing: "「人生要有短期的糧食，更要有長期的糧倉。既然這筆錢本身就是用作未來 10 年、20 年的確定儲備，何不今天為它設一道最安全的防火牆？」"
+        };
+      }
+
+      // 6. 買樓、供樓、留首期
+      if (txt.includes('買樓') || txt.includes('按揭') || txt.includes('首期') || txt.includes('供樓')) {
+        return {
+          quote: "「你供樓，是人在供樓；萬一有一天人不能動了，是誰在供樓？如果沒有人壽保障，你買的不是資產，而是留給家人的定時炸彈！一場大病，銀行不會免你的按揭，只會收你的房子；唯有保險，能替你把房貸還清，真正把房子留給最愛的人！」",
+          insight: "客人在供樓或籌備首期期間，負債處於人生頂峰，財務抗風險能力極其脆弱，一旦收入中斷，全家即刻面臨被銀行收樓露宿街頭的極端危機。",
+          breakthrough: "「陳生，恭喜你踏入人生買樓新階段！但這正正是我今日一定要嚟搵你嘅原因。陳亦純老師講過：『買咗樓嘅家庭，最需要嘅唔係裝修，而係一張按揭人壽防護網！』試諗下，而家你每個月供兩三萬，因為你健康、有收入能力。但萬一有一日健康亮紅燈，銀行會唔會因為你生病而唔收按揭？唔會！到時屋企人要面對天價醫藥費之餘，仲要擔心層樓被銀主盤拍賣。今日呢份計劃，就係確保無論發生咩事，保險公司立刻開出支票幫你清還所有房貸，層樓真真正正留畀你愛嘅人住一世！」",
+          closing: "「保費只係佔你每個月按揭供款的零頭，但買的卻是整棟房子的永久擁有權。今日簽署確認，給這棟溫暖的家上一把最安心的鎖。」"
+        };
+      }
+
+      // 7. 沒錢、手頭緊、負擔不起
+      if (txt.includes('無錢') || txt.includes('手頭緊') || txt.includes('負擔') || txt.includes('買唔起')) {
+        return {
+          quote: "「你今天跟我說沒錢買幾百塊的保險，那明天如果醫院要你拿出幾十萬手術費，你又從哪裡拿出來？保險不是有錢人的專利，而是窮人翻身的底牌！越是手頭緊，越經不起一場大病的摧毀！」",
+          insight: "客人將保險視為額外的消費負擔，必須打破其思維局限，讓他意識到『買不起小額保險的人，更付不起巨額的病床費』。",
+          breakthrough: "「陳生，我很理解你現在的感受，生活壓力確實大！但陳亦純老師講過一句好刺痛但好真實嘅話：『今天付不起每年幾千蚊嘅保費，聽日又點樣付得起醫院一張幾十萬嘅賬單？』保險從來唔係叫你節衣縮食，而係將你每天喝少一杯咖啡、抽少一包煙慳落嚟嘅幾十蚊，換取保險公司隨時待命嘅 100 萬醫療兜底金。越是覺得錢緊，越代表家庭經唔起任何突發風險的衝擊，我們更要把這道安全網張開！」",
+          closing: "「我哋先用一個每月幾百蚊、完全不影響你生活質素的基礎保障起步。最重要的是今天先把保障建立起來，以後有餘力再加保，我們今天立即啟動。」"
+        };
+      }
+
+      // 8. 覺得無需要、保險是騙人
+      if (txt.includes('無需要') || txt.includes('呃人') || txt.includes('騙人') || txt.includes('沒需要')) {
+        return {
+          quote: "「人不是需要保險，人是需要錢！生病要錢，意外要錢，養老要錢，傳承要錢。保險這張薄薄的紙，在陽光燦爛時看似多餘，但在傾盆大雨時，卻是唯一一家合法、必定把大筆現金送到你病床前的機構！」",
+          insight: "客人對保險抱有刻板偏見或僥倖心理，需要將『保險』這兩個字還原為『關鍵時刻的救命大額現金』。",
+          breakthrough: "「陳生，我好明白點解身邊會有人覺得保險呃人，因為坊間確實有唔專業嘅人賣錯產品或者無跟足條款！但正如陳亦純老師講：『假錢的存在，證明了真錢的價值！』保險合約係受香港法律同保監局嚴格監管嘅法定契約，白紙黑字寫明保障權益。人其實唔係需要保險，而係需要『萬一出事時有一大筆唔使求人、唔使看人臉色嘅尊嚴現金』。醫院門口只收現金，唔收藉口；當大病來臨，親友借你兩萬都難，但保險公司卻會按合約送來兩百萬！」",
+          closing: "「與其聽信外行人的人云亦云，不如今天我們花 5 分鐘睇清楚白紙黑字的合約保障。為你的家庭捍衛尊嚴，我們今天確認這份守護。」"
+        };
+      }
+
+      // 9. 公司有醫療
+      if (txt.includes('公司') || txt.includes('團體') || txt.includes('福利')) {
+        return {
+          quote: "「公司的雨傘是給你在公司上班時遮陽的，當暴風雨最大的時候，公司會收回雨傘！退休了、離職了、大病被解僱了，公司的醫療立刻歸零。只有自己擁有的保單，才是一輩子風雨同行的真正私人保鏢！」",
+          insight: "客人混淆了『暫時的僱員福利』與『終身可攜的健康資產』，忽視了一旦患重病無法工作時，公司保險會同時失效的致命盲點。",
+          breakthrough: "「陳生，好恭喜你入到一間福利咁好的大公司！但陳亦純老師講過一句至理名言：『公司的醫療就如公司的電腦，你離職個日就要交還，一分一毫都帶唔走！』最殘酷的現實係，如果一個人不幸患上重疾需要停工休養兩三年，公司就算再好，也不可能一直白出糧甚至可能終止合約。到嗰時，公司的團險無咗，而你因為已有病歷，市場上任何一間保險公司都唔會再受保！高端醫療保險就是你的私家防波堤，終身保證續保，唔受任何離職影響！」",
+          closing: "「趁你依家在職、身體最健康、仲有公司補貼，用最優惠的自付額方案將自己的終身私家醫保鎖定。今天確認，受惠一世。」"
+        };
+      }
+
+      // 預設通用大師智慧
+      return {
+        quote: "「保險是今天做明天的準備，生時做死時的準備，父母做兒女的準備，健康時做生病時的準備。這不是消費，這是為家庭築起不可撼動的心靈城牆。」",
+        insight: "客人下意識地推延決策，需要以風險的不可預知性與愛的責任感喚醒其緊迫心態。",
+        breakthrough: "「陳生，你剛才提到這一點好有深意。正如陳亦純老師成日提醒我哋：『沒有人會因為買保險而破產，但太多家庭卻因為沒有保險而陷入深淵。』我們每個人都在為家庭奮鬥，但未來的風險從來唔會同我哋預約。這份規劃正正就是用極小的確定成本，對沖未來無限的不確定性。」",
+        closing: "「既然風險不可預測，而保障方案已精準對位，今天簽署意向確認，就是給家人最好的安枕無憂。」"
+      };
+    }
+
+    async function generateAiTactics() {
+      const targetMbti = document.getElementById('ai-select-mbti')?.value || 'ESTJ';
+      const product = document.getElementById('ai-input-product')?.value || '家庭核心人壽保障';
+      const objectionInput = document.getElementById('ai-input-objection');
+      const objection = objectionInput ? objectionInput.value.trim() : '';
+
+      if (!objection) {
+        showToast("請輸入客人講咗句咩保險抗拒藉口！");
+        return;
+      }
+
+      const mbtiProfile = MBTI_SALES_DB[targetMbti];
+      const loadingBox = document.getElementById('ai-loading-box');
+      const responseBox = document.getElementById('ai-response-box');
+      const btn = document.getElementById('ai-generate-btn');
+      const copyBtn = document.getElementById('btn-copy-ai');
+      const statusIndicator = document.getElementById('ai-status-indicator');
+
+      if (loadingBox) loadingBox.classList.remove('hidden');
+      if (responseBox) responseBox.classList.add('hidden');
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-60');
+      }
+      if (statusIndicator) {
+        statusIndicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span> OGOR 思考攻心話術中...`;
+      }
+
+      const systemPrompt = `你係一位頂尖的 OGOR 團隊首席保險理財督導、百萬圓桌 (MDRT/TOT) 談判導師，同時深諳台灣保險教父陳亦純大師《要買保險的168個理由》與《我有理由不買保險》中的頂層銷售心法。
+請嚴格避免機械化、模版化、空洞的套話（例如千篇一律的「好理解！換著係我...」）。
+你必須因應客人的 MBTI 人格特質，並強制引用陳亦純老師最震撼、最切中要害的【大師經典名言 / 金句哲理 / 犀利比喻】（例如孝順與孝力、油門與剎車、救火車與水管、草船借箭、印鈔機原理等）。
+請使用最地道、專業、鋒利、富感染力且能引發靈魂震動的香港粵語（商務保險與私人理財語境）輸出。
+
+輸出格式必須嚴格包含以下結構：
+1. 【陳亦純老師經典名言 & 心理破譯】：引用陳老師對付該抗拒理由的最經典金句，並從 MBTI 人格視角分析客人為何會築起此道心理防線。
+2. 【黃金回覆 A (大師共情破防法)】：顧問現場一開口講嘅字句（直擊思維盲點，將客人的拒絕反轉為買保險的鐵證）。
+3. 【黃金回覆 B (OGOR 逼單殺手鐧)】：針對該人格的痛點與死穴，給出毫無反駁餘地的臨門一腳促單話術。
+4. 【WhatsApp 補刀追單訊息】：會後 2 小時發送嘅精闢跟進短訊，附帶高情商行動呼籲 (Call-to-Action)。`;
+
+      const userPrompt = `【目標客人 MBTI】：${targetMbti}（${mbtiProfile.name}，屬於 ${mbtiProfile.roleGroupName}）
+【客人特質】：${mbtiProfile.tagline}
+【推介保險產品】：${product}
+【客人的保險抗拒藉口】：「${objection}」
+
+請立即為 OGOR 顧問產出最具陳亦純大師風骨、直擊靈魂、可現場直接照讀的頂級攻心話術！`;
+
+      const apiKey = "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: userPrompt }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+        };
+
+        const res = await fetchWithRetry(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if(!res.ok) throw new Error("API response not ok");
+
+        const data = await res.json();
+        const candidate = data.candidates?.[0];
+        const generatedText = candidate?.content?.parts?.[0]?.text;
+
+        if (generatedText) {
+          lastAiResponseText = generatedText;
+          renderAiOutput(generatedText, targetMbti);
+          if (copyBtn) copyBtn.classList.remove('hidden');
+          if (statusIndicator) {
+            statusIndicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 生成完畢 (Gemini)`;
+          }
+        } else {
+          throw new Error("Empty response text");
+        }
+      } catch (err) {
+        console.warn("Using offline master engine fallback:", err);
+        const fallbackText = generateLocalFallbackScript(targetMbti, product, objection);
+        lastAiResponseText = fallbackText;
+        renderAiOutput(fallbackText, targetMbti);
+        if (copyBtn) copyBtn.classList.remove('hidden');
+        if (statusIndicator) {
+          statusIndicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-indigo-600"></span> 陳亦純大師精華庫 (本地版)`;
+        }
+      } finally {
+        if (loadingBox) loadingBox.classList.add('hidden');
+        if (responseBox) responseBox.classList.remove('hidden');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-60');
+        }
+      }
+    }
+
+    async function fetchWithRetry(url, options, retries = 2, delay = 1000) {
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok && retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return fetchWithRetry(url, options, retries - 1, delay * 2);
+        }
+        return response;
+      } catch (err) {
+        if (retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return fetchWithRetry(url, options, retries - 1, delay * 2);
+        }
+        throw err;
+      }
+    }
+
+    function renderAiOutput(markdownText, targetMbti) {
+      const responseBox = document.getElementById('ai-response-box');
+      if (!responseBox) return;
+
+      const formattedHtml = markdownText
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>')
+        .replace(/### (.*?)(<br>|$)/g, '<h4 class="text-base font-black text-slate-950 mt-4 mb-1.5 flex items-center gap-2"><i class="fa-solid fa-gem text-xs text-indigo-600"></i>$1</h4>')
+        .replace(/## (.*?)(<br>|$)/g, '<h3 class="text-lg font-black text-slate-900 mt-4 mb-2 pb-1 border-b border-indigo-200">$1</h3>')
+        .replace(/【(.*?)】/g, '<span class="inline-block bg-indigo-100 text-indigo-950 font-bold px-2 py-0.5 rounded text-xs mr-1 border border-indigo-200">【$1】</span>');
+
+      responseBox.innerHTML = `
+        <div class="bg-gradient-to-br from-white to-indigo-50/40 p-5 rounded-2xl border border-indigo-200/80 shadow-inner">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-indigo-200/60">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+              <span class="text-sm font-black text-slate-900">OGOR 實戰攻心策：針對 ${targetMbti} 客人</span>
+            </div>
+            <span class="text-xs text-indigo-800 font-bold bg-indigo-100 px-2.5 py-0.5 rounded-full border border-indigo-200">陳亦純大師 × MDRT 實戰話術</span>
+          </div>
+          <div class="text-slate-800 text-sm leading-relaxed space-y-3 font-sans">
+            ${formattedHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function generateLocalFallbackScript(mbti, product, objection) {
+      const p = MBTI_SALES_DB[mbti];
+      const wisdom = getChenWisdom(objection);
+
+      return `### 【陳亦純老師經典名言 & 心理破譯】
+**陳亦純大師金句：**
+${wisdom.quote}
+
+**針對 ${mbti}（${p.name}）心理破譯：**
+${mbti} 客人講「${objection}」，背後反映出：${wisdom.insight}
+對於屬於 **${p.roleGroupName}** 的 ${mbti} 而言，其深層思維為：【${p.driver}】。此時切忌跟對方硬碰或說教，必須以大師的哲學角度轉化抗拒點，直擊其盲區。
+
+### 【黃金回覆 A (大師共情破防法)】
+${wisdom.breakthrough}
+
+### 【黃金回覆 B (OGOR 逼單殺手鐧)】
+「${p.closing}」
+${wisdom.closing}
+
+### 【WhatsApp 補刀追單訊息】
+「${mbti === 'ENTJ' ? '張總' : '陳生'}你好，剛才同你傾完獲益良多。陳亦純老師曾講過：『保險是今天做明天的準備，父母做兒女的尊嚴。』關於剛才提到『${objection}』的考量，我已為你精算好兼顧靈活性與最大槓桿的專屬方案。核保通道與當前年齡費率已先為你保留，聽日下晝 3 點順路放低一頁紙摘要畀你過目？」`;
+    }
+
+    /* Clipboard Copy & Toast */
+    function copyText(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      executeCopy(text);
+    }
+
+    function copyCheatSheet() {
+      const code = currentActiveCode;
+      const data = MBTI_SALES_DB[code];
+      const fullText = `【OGOR 團隊保險速查卡 - ${data.code} ${data.name}】
+• 陣營：${data.roleGroupName}
+• 保險買點：${data.driver}
+• 絕對禁忌：${data.taboo}
+• 逼單法：${data.closing}
+• 破冰開場：${data.opening}
+• 化解抗拒：${data.objection}
+• WhatsApp追單：${data.whatsapp}`;
+      executeCopy(fullText);
+    }
+
+    function copyAiResponse() {
+      if (!lastAiResponseText) return;
+      executeCopy(lastAiResponseText);
+    }
+
+    function executeCopy(textToCopy) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = textToCopy;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast("已成功複製至剪貼簿！可即時發送或現場照讀。");
+      } catch (err) {
+        showToast("複製失敗，請手動選取文字。");
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      if (!toast || !toastText) return;
+      toastText.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
