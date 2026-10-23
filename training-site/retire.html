@@ -1280,68 +1280,77 @@
       calculate();
     });
 
-// Handle PDF Export and Direct iPhone Share to WeChat
+// Handle PDF Export and Direct iPhone Share to WeChat (橫向 A4 旗艦版)
 async function exportAndSharePDF() {
     const btn = document.getElementById('exportPdfBtn');
     const btnText = document.getElementById('exportBtnText');
     const originalText = btnText ? btnText.innerText : '匯出 PDF';
 
     try {
-        if (btnText) btnText.innerText = '正在生成高畫質 PDF...';
+        if (btnText) btnText.innerText = '正在生成橫向 A4 報告...';
         if (btn) btn.disabled = true;
 
-        const mainElement = document.querySelector('main');
-        const filename = `退休策劃報告_${new Date().toISOString().slice(0, 10)}.pdf`;
+        // 確保截圖前畫面回到最頂端
+        window.scrollTo(0, 0);
 
-        // 1. 鎖定為 A4 黃金顯示寬度 (800px)，防止圖表與雙欄網格過寬爆頁或被放大鏡裁切
+        const mainElement = document.querySelector('main');
+        const filename = `退休策劃報告_橫向A4_${new Date().toISOString().slice(0, 10)}.pdf`;
+
+        // 1. 備份原有樣式，設定橫向 A4 黃金寬度 (1200px 完美對應 297mm 比例)
         const prevWidth = mainElement.style.width;
+        const prevMinWidth = mainElement.style.minWidth;
         const prevMaxWidth = mainElement.style.maxWidth;
         const prevMargin = mainElement.style.margin;
         const prevPadding = mainElement.style.padding;
         const prevBoxSizing = mainElement.style.boxSizing;
+        const prevBg = mainElement.style.backgroundColor;
 
-        mainElement.style.width = '800px';
-        mainElement.style.maxWidth = '800px';
+        // 強制切換為橫向寬度排版，讓雙欄與圖表完整延展
+        mainElement.style.width = '1200px';
+        mainElement.style.minWidth = '1200px';
+        mainElement.style.maxWidth = '1200px';
         mainElement.style.margin = '0 auto';
-        mainElement.style.padding = '16px';
+        mainElement.style.padding = '24px';
         mainElement.style.boxSizing = 'border-box';
         mainElement.style.backgroundColor = '#ffffff';
 
-        // 2. 觸發重新排版，等待圖表與文字穩定
+        // 2. 觸發重新排版並等待 Chart.js 圖表以 1200px 重繪
         window.dispatchEvent(new Event('resize'));
         await new Promise(resolve => setTimeout(resolve, 350));
 
-        // 3. 完美配置 html2pdf 參數（等比例縮放入 A4，絕不裁邊）
+        // 3. 配置橫向 A4 html2pdf 參數
         const opt = {
-            margin: [8, 8, 8, 8], // 上右下左邊距 (mm)
+            margin: [8, 8, 8, 8], // 上右下左各留 8mm 邊界
             filename: filename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-                scale: 1.5,         // 1.5倍足夠高清，避免記憶體爆開
+                scale: 1.5,            // 1.5倍高清抗鋸齒
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
                 scrollX: 0,
                 scrollY: 0,
-                windowWidth: 800    // 與 mainElement 寬度完全 1:1 對等
+                width: 1200,           // 與 mainElement 寬度精確對應
+                windowWidth: 1200
             },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            // 關鍵：orientation 設為 'landscape' (橫向)
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
             pagebreak: { 
-                mode: ['css', 'legacy'],
-                avoid: ['.chart-container', 'canvas', 'table', 'tr', '.rounded-2xl', '.rounded-3xl', 'section'] 
+                mode: ['css', 'legacy']
             }
         };
 
-        // 4. 調用原生已載入的 html2pdf 生成並下載
+        // 4. 執行生成並自動下載
         await html2pdf().set(opt).from(mainElement).save();
 
-        // 5. 還原原始樣式
+        // 5. 立即還原原始網頁樣式
         mainElement.style.width = prevWidth;
+        mainElement.style.minWidth = prevMinWidth;
         mainElement.style.maxWidth = prevMaxWidth;
         mainElement.style.margin = prevMargin;
         mainElement.style.padding = prevPadding;
         mainElement.style.boxSizing = prevBoxSizing;
-        mainElement.style.backgroundColor = '';
+        mainElement.style.backgroundColor = prevBg;
         window.dispatchEvent(new Event('resize'));
 
     } catch (error) {
