@@ -1280,7 +1280,7 @@
       calculate();
     });
 
-   // Handle PDF Export and Direct iPhone Share to WeChat
+ // Handle PDF Export and Direct iPhone Share to WeChat
 async function exportAndSharePDF() {
     const btn = document.getElementById('exportPdfBtn');
     const btnText = document.getElementById('exportBtnText');
@@ -1293,49 +1293,36 @@ async function exportAndSharePDF() {
         const mainElement = document.querySelector('main');
         const filename = `退休策劃報告_${new Date().toISOString().slice(0, 10)}.pdf`;
 
-        // 1. 備份原有樣式，強制鎖定標準 A4 比例寬度，徹底根治左邊深色黑柱與右側擠壓
+        // 1. 鎖定標準桌面渲染寬度 (1100px)，確保所有圖表與雙欄網格工整展開
         const prevWidth = mainElement.style.width;
         const prevMaxWidth = mainElement.style.maxWidth;
         const prevMargin = mainElement.style.margin;
         const prevPadding = mainElement.style.padding;
         const prevBoxSizing = mainElement.style.boxSizing;
 
-        mainElement.style.width = '1000px';
-        mainElement.style.maxWidth = '1000px';
+        mainElement.style.width = '1100px';
+        mainElement.style.maxWidth = '1100px';
         mainElement.style.margin = '0 auto';
-        mainElement.style.padding = '20px';
+        mainElement.style.padding = '24px';
         mainElement.style.boxSizing = 'border-box';
-        mainElement.style.backgroundColor = '#ffffff'; // 防止底色變黑透底
+        mainElement.style.backgroundColor = '#f8fafc';
 
-        // 2. 觸發重新排版並等待圖表重繪
+        // 2. 觸發重新排版，等待圖表與文字穩定
         window.dispatchEvent(new Event('resize'));
-        await new Promise(resolve => setTimeout(resolve, 350));
+        await new Promise(resolve => setTimeout(resolve, 400));
 
-        // 3. html2pdf 精確配置 (完美匹配 A4 比例)
-        const opt = {
-            margin: [10, 10, 10, 10], // 上右下左邊距 (mm)
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 2,           // 2倍高清抗鋸齒
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff',
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: 1000   // 與 mainElement 寬度完全一致
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { 
-                mode: ['css', 'legacy'],
-                avoid: ['.chart-container', 'canvas', 'table', 'tr', '.rounded-2xl', '.rounded-3xl'] // 防止卡片與圖表被撕裂截斷
-            }
-        };
+        // 3. 高清無損擷取 Canvas
+        const canvas = await html2canvas(mainElement, {
+            scale: 1.5,            // 1.5倍足夠高清，同時避免記憶體爆開或縮放失真
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#f8fafc',
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: 1100
+        });
 
-        // 4. 生成並下載 PDF
-        await html2pdf().set(opt).from(mainElement).save();
-
-        // 5. 還原原始樣式
+        // 4. 即時還原網頁原本的樣式
         mainElement.style.width = prevWidth;
         mainElement.style.maxWidth = prevMaxWidth;
         mainElement.style.margin = prevMargin;
@@ -1343,6 +1330,35 @@ async function exportAndSharePDF() {
         mainElement.style.boxSizing = prevBoxSizing;
         mainElement.style.backgroundColor = '';
         window.dispatchEvent(new Event('resize'));
+
+        // 5. 核心：將截圖等比例「縮印」至標準 A4 紙張 (210mm x 297mm)
+        const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const margin = 8; // 上下左右各留 8mm 邊距，美觀防切邊
+        
+        const renderWidth = pageWidth - (margin * 2); // 實際內容寬度 194mm
+        const renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+        let heightLeft = renderHeight;
+        let position = margin; // 第一頁頂部邊距
+
+        // 第一頁
+        pdf.addImage(imgData, 'JPEG', margin, position, renderWidth, renderHeight);
+        heightLeft -= (pageHeight - margin * 2);
+
+        // 自動順暢分頁
+        while (heightLeft > 0) {
+            position = heightLeft - renderHeight + margin;
+            pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', margin, position, renderWidth, renderHeight);
+            heightLeft -= (pageHeight - margin * 2);
+        }
+
+        // 6. 下載儲存 PDF
+        pdf.save(filename);
 
     } catch (error) {
         console.error('PDF 生成失敗:', error);
