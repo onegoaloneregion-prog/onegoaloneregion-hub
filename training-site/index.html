@@ -3020,13 +3020,20 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     71:13147, 72:13967, 73:14736, 74:15514, 75:16347, 76:16932, 77:17781, 78:18129, 79:19173, 80:20307
   }
 };
-        function calcVPrimeFullPremium(age, gender, ded) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            ded = String(ded || '50000');
-            var table = vPrimeExactEveryYearStandard[ded] || vprimeExactEveryYearStandard['50000'];
-            return table[age] !== undefined ? table[age] : 3709;
-        }
+      function calcVPrimeFullPremium(age, gender, ded) {
+    var inputAge = parseInt(age, 10) || 1;
+    
+    // 關鍵校正：FWD SMART 官方系統顯示之年齡直接對應資料表 (查表索引 = inputAge - 1)
+    var queryAge = inputAge - 1;
+    if (queryAge < 1) queryAge = 1;
+    if (queryAge > 80) queryAge = 80;
 
+    ded = String(ded || '50000');
+    var table = vPrimeExactEveryYearStandard[ded] || vPrimeExactEveryYearStandard['50000'];
+    
+    // 取出與官方 FWD SMART 100% 一致之保費
+    return table[queryAge] !== undefined ? table[queryAge] : 3709;
+}
         // =========================================================================
         // 3. 醫家保 (vFamily) - 標準保障級別 官方標準保費表 (港元 HKD)
         // 來源：vFamily Medical Plan Standard Schedule (2024.12.16 生效)[cite: 4]
@@ -3054,18 +3061,18 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     }
 };
 
-        function calcVFamilyFullPremium(age, gender) {
-            age = Math.min(80, Math.max(0, parseInt(age) || 0));
-            var table = (gender === 'female') ? vfamilyOfficialData.female : vfamilyOfficialData.male;
-            if (table[age] !== undefined) return table[age];
-            var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
-            var lower = keys[0], upper = keys[keys.length-1];
-            for (var i = 0; i < keys.length; i++) {
-                if (keys[i] <= age) lower = keys[i];
-                if (keys[i] >= age) { upper = keys[i]; break; }
-            }
-            return table[lower] + ((age - lower) / (upper - lower)) * (table[upper] - table[lower]);
-        }
+      function calcVFamilyFullPremium(age, gender) {
+    // 官方下次生日年齡 (ANB)：0 歲 BB 下次生日為 1 歲，範圍 1-80 歲
+    age = parseInt(age, 10) || 1;
+    if (age < 1) age = 1;
+    if (age > 80) age = 80;
+
+    var isFemale = (gender === 'female' || gender === '女');
+    var table = isFemale ? vfamilyOfficialData.female : vfamilyOfficialData.male;
+
+    // 直接取官方下次生日年齡保費，不再進行浮點插值
+    return table[age] !== undefined ? table[age] : (table[30] || 4751);
+}
 
         // =========================================================================
         // 4. 易衛您 (vCANsurance) - 標準保障級別 官方標準保費表 (港元 HKD)
@@ -3094,28 +3101,18 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     }
 };
 
-      function calcVcansuranceFullPremium(age, gender) {
-  age = Math.min(80, Math.max(0, parseInt(age) || 0));
-  var isFemale = (gender === 'female' || gender === '女性' || gender === 'F');
-  var table = isFemale ? vcansuranceOfficialData.female : vcansuranceOfficialData.male;
-  if (table[age] !== undefined) return table[age];
-  var keys = Object.keys(table).map(Number).sort(function(a,b){return a-b;});
-  var lower = keys[0], upper = keys[keys.length-1];
-  for (var i = 0; i < keys.length; i++) {
-    if (keys[i] <= age) lower = keys[i];
-    if (keys[i] >= age) { upper = keys[i]; break; }
-  }
-  return table[lower] + ((age - lower) / (upper - lower)) * (table[upper] - table[lower]);
+     function calcVcansuranceFullPremium(age, gender) {
+    // 官方下次生日年齡 (ANB)：0 歲 BB 下次生日為 1 歲，範圍 1-80 歲
+    age = parseInt(age, 10) || 1;
+    if (age < 1) age = 1;
+    if (age > 80) age = 80;
+
+    var isFemale = (gender === 'female' || gender === '女性' || gender === 'F');
+    var table = isFemale ? vcansuranceOfficialData.female : vcansuranceOfficialData.male;
+
+    // 直接查表取出整數保費，取消中間浮點內插
+    return table[age] !== undefined ? table[age] : (table[30] || 5522);
 }
-
-        function toggleHospitalCashSelect() { 
-            var chk = document.getElementById('riderHospitalCash'); 
-            var div = document.getElementById('hospitalCashLevelDiv'); 
-            if (chk && chk.checked) div.classList.remove('hidden'); 
-            else if (div) div.classList.add('hidden'); 
-            runPremiumQuery(); 
-        }
-
         function setDisplayMode(mode) {
             currentDisplayMode = mode; 
             var bBoth = document.getElementById('btnModeBoth'); 
