@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全意守護意外保障計劃 | 客戶專屬互動系統</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fwd: {
+              orange: '#E87722',
+              darkorange: '#C85A0D',
+              lightorange: '#FFF5EE',
+              navy: '#0E3B43',
+              slate: '#1E555C',
+              teal: '#2A9D8F',
+              accent: '#E76F51'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(42, 157, 143, 0.25); }
+    .gradient-hero-easycare { background: linear-gradient(135deg, #0E3B43 0%, #1E555C 55%, #E87722 100%); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- Navigation Bar (純圖案 Logo，無熱線電話) -->
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <div class="flex items-center space-x-3 py-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-md">
+          <i class="fa-solid fa-person-falling-burst"></i>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">意外防護（澳門）</div>
+          <div class="text-base sm:text-lg font-bold text-fwd-navy leading-tight">全意守護意外保障計劃 / 附約</div>
+        </div>
+      </div>
+      
+      <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+        <a href="#calculator" class="hover:text-teal-600 transition">保費與權益測算</a>
+        <a href="#features" class="hover:text-teal-600 transition">五重核心特點</a>
+        <a href="#schedule" class="hover:text-teal-600 transition">傷殘與疤痕明細</a>
+        <a href="#casestudy" class="hover:text-teal-600 transition">理賠實例透視</a>
+        <a href="#faq" class="hover:text-teal-600 transition">常見問題及索償</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="gradient-hero-easycare text-white relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 space-y-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-teal-200 border border-white/20">
+            <i class="fa-solid fa-shield-virus mr-1.5"></i> 澳門特區・全方位意外及特定傳染病防護
+          </span>
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            意外保障廣泛 照顧更知您心 <br>
+            <span class="text-teal-300">市場首創疤痕保障・續保自動遞增保額</span>
+          </h1>
+          <p class="text-slate-200 text-sm sm:text-base max-w-2xl leading-relaxed">
+            為您抵禦意料之外的衝擊！涵蓋意外身故、斷肢、三級燒傷、永久完全傷殘每月年金。特定公共交通及火警享 <strong class="text-white">雙倍賠償</strong>，特設特定傳染病每日住院現金及自選醫療實報實銷。
+          </p>
+          
+          <div class="flex flex-wrap gap-3 pt-2">
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-teal-300"></i>
+              <span>投保年齡 1 歲(15日) - 70 歲</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-teal-300"></i>
+              <span>保額每年遞增 5% (最高 30% 無需加費)</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-teal-300"></i>
+              <span>特定疾病 (流感/手足口/輪狀) 留院現金</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md text-center">
+          <div class="text-xs uppercase text-teal-200 font-semibold mb-1">最低投保額門檻</div>
+          <div class="text-3xl sm:text-4xl font-black text-white mb-2" id="hero-min-display">HK$ 400,000</div>
+          <div class="text-xs text-slate-300 mb-4">(或 US$ 50,000) 構築家庭全天候活動安全網</div>
+          <a href="#calculator" class="w-full inline-flex justify-center items-center py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-lg transition transform active:scale-95">
+            <i class="fa-solid fa-calculator mr-2"></i> 立即計算專屬保費
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-12 pb-20">
+    
+    <!-- Calculator Card -->
+    <section id="calculator" class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
+      <div class="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="inline-block px-3 py-1 rounded bg-teal-500/20 text-teal-400 text-xs font-bold uppercase mb-1">
+              官方職業分類精算引擎
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold flex items-center">
+              <i class="fa-solid fa-sliders text-teal-400 mr-3"></i>
+              全意守護・意外保費與保障權益測算
+            </h2>
+            <p class="text-slate-300 text-sm mt-1">選定計劃類型、職業類別及自選醫療保障，即時獲得官方年繳保費與各項權益賠付額</p>
+          </div>
+          <div class="bg-white/10 rounded-xl px-4 py-2 border border-white/10 text-right shrink-0">
+            <div class="text-xs text-slate-300">保證保障期</div>
+            <div class="text-sm font-semibold text-teal-300">每年續保至 75 歲</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Input Form -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- Form Type -->
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">投保形式</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" onclick="setPlanType('basic')" id="btn-type-basic" class="p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-file-shield"></i>
+                <span>基本計劃 (獨立主約)</span>
+              </button>
+              <button type="button" onclick="setPlanType('rider')" id="btn-type-rider" class="p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                <span>意外附加契約 (附約享優惠費率)</span>
+              </button>
+            </div>
+            <p id="planTypeHint" class="text-xs text-slate-400 mt-1.5 flex items-center">
+              <i class="fa-solid fa-circle-info mr-1 text-slate-400"></i>
+              附加於壽險或危疾主約時保費更優惠，保障範圍完全一致。
+            </p>
+          </div>
+
+          <!-- Occupation Class -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">被保人職業類別 (Occupation Class)</label>
+              <span class="text-xs text-teal-700 font-semibold" id="occ-desc-title">類別 1: 室內專業/行政管理</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+              <button type="button" onclick="setOccClass(1)" id="btn-occ-1" class="py-2.5 rounded-xl font-bold text-xs text-center border-2 border-teal-600 bg-teal-50 text-teal-700">類別 1</button>
+              <button type="button" onclick="setOccClass(2)" id="btn-occ-2" class="py-2.5 rounded-xl font-bold text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">類別 2</button>
+              <button type="button" onclick="setOccClass(3)" id="btn-occ-3" class="py-2.5 rounded-xl font-bold text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">類別 3</button>
+              <button type="button" onclick="setOccClass(4)" id="btn-occ-4" class="py-2.5 rounded-xl font-bold text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">類別 4</button>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl mt-2 text-xs text-slate-600" id="occ-detail-desc">
+              <strong>典型代表：</strong>會計師、律師、醫生、教師、文職人員、室內行政人員（非體力勞動）。
+            </div>
+          </div>
+
+          <!-- Currency & Sum Insured -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">保單貨幣</label>
+              <select id="calc-currency" onchange="onCurrencyChange()" class="w-full py-3 px-3 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <option value="HKD">港幣 (HKD)</option>
+                <option value="USD">美元 (USD)</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="calc-sum-insured" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                原有投保額 (<span id="currency-label">HKD</span>)
+              </label>
+              <div class="relative">
+                <input type="text" inputmode="numeric" id="calc-sum-insured" value="1,000,000" class="w-full pl-4 pr-16 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" oninput="handleSumInsuredInput(this)">
+                <div class="absolute right-2 top-2">
+                  <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded">千位格式</span>
+                </div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span id="min-si-hint">最低門檻: HK$ 400,000</span>
+                <span>最高投保額: HK$ 3,000,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="flex items-center space-x-2 pt-1">
+            <span class="text-xs text-slate-400">快速保額:</span>
+            <button type="button" onclick="setPresetSI(400000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">40萬</button>
+            <button type="button" onclick="setPresetSI(600000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">60萬</button>
+            <button type="button" onclick="setPresetSI(1000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">100萬</button>
+            <button type="button" onclick="setPresetSI(2000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">200萬</button>
+            <button type="button" onclick="setPresetSI(3000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">300萬</button>
+          </div>
+
+          <!-- Optional Medical Benefit Checkbox -->
+          <div class="p-4 bg-teal-50/70 rounded-2xl border border-teal-200 space-y-3">
+            <label class="flex items-start space-x-3 cursor-pointer">
+              <input type="checkbox" id="opt-medical" checked onchange="toggleMedicalOption()" class="mt-1 w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500">
+              <div class="text-xs">
+                <span class="font-bold text-slate-800 text-sm">自選額外意外醫療費用權益 (實報實銷合資格費用 7%)</span>
+                <p class="text-slate-600 mt-0.5">
+                  涵蓋門診、跌打/針灸(每日$300)、物理/脊醫治療(每日$600)、手術及救傷車。連續2年無索償更可 <strong class="text-teal-700">永久豁免物理及脊醫年度賠償上限</strong>！
+                </p>
+                <p class="text-teal-700 text-[11px] mt-1 font-semibold">
+                  ※ 附加此權益時，最低投保額門檻調至 600,000 港元 (或 75,000 美元)。
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Output Column -->
+        <div class="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-teal-50/70 via-white to-emerald-50/50 p-6 sm:p-7 rounded-2xl border border-teal-200 shadow-inner">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-teal-100 mb-4">
+              <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">精算保費與權益試算</span>
+              <span class="text-xs bg-teal-100 text-teal-800 font-bold px-2.5 py-0.5 rounded-full flex items-center">
+                <i class="fa-solid fa-arrow-trend-up text-[10px] mr-1"></i> 保費不隨年齡增長
+              </span>
+            </div>
+
+            <div class="mb-5">
+              <div class="text-xs text-slate-500 font-medium">首年應繳年繳保費 (Annual Premium)</div>
+              <div class="flex items-baseline space-x-2">
+                <span class="text-lg font-bold text-teal-700" id="res-curr-sym">HK$</span>
+                <span class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight" id="res-annual-premium">4,480</span>
+                <span class="text-xs text-slate-400">/ 年</span>
+              </div>
+              <div class="text-xs text-slate-500 mt-1" id="res-daily-rate">
+                相當於每日僅需約 <strong class="text-slate-900 font-bold" id="res-daily-amount">HK$ 12.27</strong>，全方位構築意外金鐘罩
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 p-3 bg-white rounded-xl border border-teal-100 shadow-sm mb-5 text-xs">
+              <div>
+                <span class="text-[11px] text-slate-400 font-medium block">半年繳保費估算</span>
+                <span class="text-base font-bold text-slate-700" id="res-semiannual-premium">HK$ 2,330</span>
+              </div>
+              <div>
+                <span class="text-[11px] text-slate-400 font-medium block">月繳保費估算</span>
+                <span class="text-base font-bold text-slate-700" id="res-monthly-premium">HK$ 403</span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-shield-halved text-teal-600 mr-1.5"></i> 核心權益及賠付額度總覽
+              </div>
+
+              <div class="bg-white p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">意外身故 / 斷肢 (100% 投保額)</span>
+                  <span class="font-bold text-slate-900" id="res-death-benefit">HK$ 1,000,000</span>
+                </div>
+                
+                <div class="flex justify-between items-center text-teal-800 bg-teal-50/70 p-1.5 rounded-lg border border-teal-200/50">
+                  <span class="flex items-center font-medium">
+                    <i class="fa-solid fa-bandage mr-1 text-teal-600"></i> 意外疤痕權益 (預支 20%)
+                  </span>
+                  <span class="font-extrabold text-teal-900" id="res-scar-benefit">HK$ 200,000</span>
+                </div>
+
+                <div class="flex justify-between items-center text-amber-800 bg-amber-50/70 p-1.5 rounded-lg border border-amber-200/50">
+                  <span class="flex items-center font-medium">
+                    <i class="fa-solid fa-bus mr-1 text-amber-600"></i> 公共交通/火警/天災 雙倍賠償
+                  </span>
+                  <span class="font-extrabold text-amber-900" id="res-double-benefit">最高 HK$ 2,000,000</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">永久完全傷殘每月賠付 (1% x 最長18月)</span>
+                  <span class="font-semibold text-slate-800" id="res-disability-monthly">HK$ 10,000 / 月</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">留院現金 (0.1%/日，ICU 享雙倍)</span>
+                  <span class="font-semibold text-slate-800" id="res-hospital-cash">HK$ 1,000 / 日 (ICU $2,000)</span>
+                </div>
+
+                <div class="flex justify-between items-center text-teal-700" id="row-medical-benefit">
+                  <span class="flex items-center">
+                    <i class="fa-solid fa-notes-medical mr-1 text-teal-600"></i> 額外意外醫療實報實銷 (7%/每宗)
+                  </span>
+                  <span class="font-bold text-teal-900" id="res-medical-benefit">最高 HK$ 70,000</span>
+                </div>
+
+                <div class="flex justify-between items-center text-slate-500 pt-2 border-t border-slate-100 text-[11px]">
+                  <span>滿 6 年續保獎賞最高累計提升至：</span>
+                  <span class="font-black text-teal-700 text-sm" id="res-max-renewal">HK$ 1,300,000 (+30%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-teal-200 text-[11px] text-slate-400 space-y-1">
+            <p>※ 永久完全傷殘權益適用於下次生日年齡 19 歲或以上受保人。</p>
+            <p>※ 額外意外醫療保障：19 歲以下每宗意外最高賠償為 16,000 港元 / 2,000 美元。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Features Section -->
+    <section id="features" class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-xs font-bold text-teal-600 tracking-widest uppercase">Product Highlights</h2>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy">超越傳統意外險的五重防護矩陣</h3>
+        <p class="text-slate-500 text-sm">兼顧日常微小損傷到重大事故，貼心涵蓋疤痕撫平與特定傳染病留院現金補償。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-bandage"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">市場首創・意外疤痕保障</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              不僅關注斷肢與身故，意外留下的疤痕亦嚴重影響生活自信。面頸部超過 20% 瘢痕疙瘩、25% 增生性疤痕或肢體攣縮疤痕，<strong class="text-teal-700">可直接預支 20% 原有投保額</strong>。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-teal-600 mr-1.5"></i> 首創身心兼顧貼心權益
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">特定高危情境雙倍賠償</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              繳費乘搭持牌公共交通工具（巴士、的士、渡輪、航班）、公共建築物火警、升降機事故、行人交通碰撞或地震、水浸、山泥傾瀉等天災受傷，<strong class="text-amber-700">身故/斷肢/傷殘/疤痕全數雙倍賠償</strong>。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-amber-600 mr-1.5"></i> 出行通勤最高級別保障
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-bed-pulse"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">意外受傷及特定傳染病住院現金</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              不僅涵蓋意外住院，更延伸保障 <strong class="text-blue-700">手足口病、流感（甲/乙/丙型）、豬流感、禽流感及輪狀病毒</strong> 入院。每日獲賠 0.1% 保額，入住深切治療部 (ICU) 享雙倍，長達 90 天。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-blue-600 mr-1.5"></i> 兒童與家庭高發感染病剋星
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-arrow-up-right-dots"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">續保獎賞・保額自動遞增 30%</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              毋須額外繳付保費！自第 1 個保單週年日起，意外身故、斷肢、疤痕及傷殘之賠償金額每年自動遞增 5%，至第 6 個保單週年日最高可獲 <strong class="text-purple-700">+30% 額外加碼</strong>。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-purple-600 mr-1.5"></i> 雙倍賠償額亦享同步遞增
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-wheelchair"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">傷殘入息補助＋投保額餘額</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              意外導致永久完全傷殘滿 1 年且持續，第 13 個月起 <strong class="text-emerald-700">每月支付 1% 保額並豁免保費</strong>（長達 18 個月）。若 18 個月後傷殘持續，一筆過發放全部剩餘保額。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> 長期復康生活無憂
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl mb-4 font-bold">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+            <h4 class="text-lg font-bold text-fwd-navy mb-2">24 小時國際救援＋簡易核保</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              尊享國際 SOS 24小時電話醫療諮詢、緊急醫療運送及遺體運返。投保只需回答 <strong class="text-rose-600">1 條簡易健康問題</strong>，毋須繁瑣體檢，為您與至親迅速築起防護圈。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center">
+            <i class="fa-solid fa-circle-check text-rose-600 mr-1.5"></i> 出門在外的全天候後盾
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Schedule & Scar Definition -->
+    <section id="schedule" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-md space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center px-2.5 py-1 rounded bg-teal-100 text-teal-800 text-xs font-bold uppercase">
+            <i class="fa-solid fa-list-check mr-1.5"></i> 官方條款權益明細
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy mt-1">傷殘賠償比率與疤痕醫學定義</h3>
+          <p class="text-xs sm:text-sm text-slate-500">透明條款標準，點選即時檢視受保項目及醫學判定條件</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button type="button" onclick="switchScheduleTab('disability')" id="tab-btn-disability" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-sm transition">
+            意外斷肢與傷殘明細
+          </button>
+          <button type="button" onclick="switchScheduleTab('burns')" id="tab-btn-burns" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            三級燒傷比率表
+          </button>
+          <button type="button" onclick="switchScheduleTab('scar')" id="tab-btn-scar" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            意外疤痕醫學定義
+          </button>
+        </div>
+      </div>
+
+      <!-- Content Panels -->
+      <div id="panel-disability" class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-slate-900 text-white divide-x divide-slate-800 text-center">
+              <th class="py-3 px-4 text-left font-bold">傷殘及斷肢受保項目</th>
+              <th class="py-3 px-4 bg-teal-700 text-white font-bold w-48">原有投保額賠付百分比</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4 font-semibold text-slate-800">意外身故 / 永久無法痊癒之四肢癱瘓</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">喪失兩肢或一肢，或永久完全喪失其功能</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">雙目或單目永久完全失明</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">永久完全喪失聽覺及語言能力</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">永久完全喪失聽覺 (雙耳 / 單耳)</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">75% / 25%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">永久完全喪失語言能力 / 喪失一眼晶體</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">50%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">經手術割除下顎</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">30%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">喪失一隻拇指及四隻手指 (右手 / 左手**)</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">70% / 50%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">喪失四隻手指 (右手 / 左手**)</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">40% / 30%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">喪失一隻拇指兩關節 (右手 / 左手**)</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">30% / 20%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">喪失一隻腳所有腳趾 / 大腳趾兩關節</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">15% / 5%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">腿部或膝蓋骨斷裂而無法癒合 / 足腿縮短 5 厘米以上</td><td class="py-2.5 px-4 font-bold text-slate-700 text-center">10% / 7.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="text-[11px] text-slate-400 mt-2">** 若被保人慣用左手，則左右兩手之權益賠付百分比互調。</p>
+      </div>
+
+      <div id="panel-burns" class="hidden overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-slate-900 text-white divide-x divide-slate-800 text-center">
+              <th class="py-3 px-4 text-left font-bold">三級燒傷等級（經醫生確診每層皮膚破損）</th>
+              <th class="py-3 px-4 bg-teal-700 text-white font-bold w-48">原有投保額賠付百分比</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="bg-teal-50/40"><td colspan="2" class="py-2 px-4 font-bold text-teal-800">頭部三級燒傷 (佔全身體表面積比例)</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 2% 但少於 4%</td><td class="py-2.5 px-4 font-bold text-center">25%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 4% 但少於 6%</td><td class="py-2.5 px-4 font-bold text-center">50%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 6% 但少於 8%</td><td class="py-2.5 px-4 font-bold text-center">75%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 8% 或以上</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+
+            <tr class="bg-teal-50/40"><td colspan="2" class="py-2 px-4 font-bold text-teal-800">身體部位三級燒傷 (佔全身體表面積比例)</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 10% 但少於 13%</td><td class="py-2.5 px-4 font-bold text-center">25%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 13% 但少於 15%</td><td class="py-2.5 px-4 font-bold text-center">50%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 15% 但少於 20%</td><td class="py-2.5 px-4 font-bold text-center">75%</td></tr>
+            <tr class="hover:bg-slate-50"><td class="py-2.5 px-4">等同或超於 20% 或以上</td><td class="py-2.5 px-4 font-black text-teal-700 text-center">100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="panel-scar" class="hidden space-y-4 text-xs sm:text-sm">
+        <div class="p-4 bg-teal-50 border border-teal-200 rounded-2xl">
+          <h4 class="font-bold text-teal-900 mb-1 flex items-center">
+            <i class="fa-solid fa-stethoscope mr-2 text-teal-600"></i> 保單條款第 9 節：意外所造成的疤痕醫學定義
+          </h4>
+          <p class="text-teal-800 text-xs leading-relaxed">
+            符合下列任何一項經醫生診斷由意外直接引起的疤痕，即可獲預支 <strong>20% 原有投保額</strong>（本權益限賠一次，受投保額餘額所限）：
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-1.5">
+            <span class="font-bold text-slate-800 flex items-center"><i class="fa-solid fa-check text-teal-600 mr-2"></i> 臉部和頸部疤痕</span>
+            <p class="text-xs text-slate-600">被保人臉部和頸部超過 <strong>20%</strong> 因意外受傷而導致的瘢痕疙瘩；或臉部和頸部超過 <strong>25%</strong> 因意外受傷而導致的增生性疤痕。</p>
+          </div>
+
+          <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-1.5">
+            <span class="font-bold text-slate-800 flex items-center"><i class="fa-solid fa-check text-teal-600 mr-2"></i> 肢體瘢痕與活動受限</span>
+            <p class="text-xs text-slate-600">肢體超過 <strong>25%</strong> 因意外受傷而導致的瘢痕疙瘩或增生性疤痕；或身體任何部位的攣縮性疤痕造成關節活動受限制。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Study Walkthrough -->
+    <section id="casestudy" class="bg-gradient-to-r from-teal-900 to-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">Case Study Analysis</span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">真實理賠實例透視：陳先生（Peter）</h3>
+          <p class="text-xs sm:text-sm text-slate-300">投保保額 1,000,000 港元，從巴士交通意外到不幸地震身故之完整索償歷程</p>
+        </div>
+        <div class="bg-white/10 px-4 py-2 rounded-xl border border-white/10 text-right">
+          <div class="text-[10px] text-teal-300">職業：行政助理 (類別 1)</div>
+          <div class="text-sm font-bold">投保年齡：35 歲</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
+        <!-- Event 1 -->
+        <div class="bg-white/10 p-5 rounded-2xl border border-white/15 space-y-3">
+          <div class="flex justify-between items-center border-b border-white/10 pb-2">
+            <span class="font-bold text-teal-300"><i class="fa-solid fa-bus mr-1.5"></i> 事故一：澳門乘搭巴士意外</span>
+            <span class="text-[11px] text-slate-300">第 2 個保單年度</span>
+          </div>
+          <p class="text-xs text-slate-200">
+            於澳門乘坐巴士意外受傷，留院 6 天（含入住 ICU 2 天），確診一隻腳趾功能永久喪失，且腳踝留有攣縮性疤痕致關節受限。
+          </p>
+          <div class="space-y-1.5 bg-black/20 p-3 rounded-xl font-mono text-xs text-slate-200">
+            <div class="flex justify-between"><span>喪失單腳趾功能 (2%)：</span><span>HK$ 20,000</span></div>
+            <div class="flex justify-between"><span>腳踝攣縮疤痕權益 (20%)：</span><span>HK$ 200,000</span></div>
+            <div class="flex justify-between text-amber-300"><span>公共交通雙倍賠償 (+100%)：</span><span>HK$ 220,000</span></div>
+            <div class="flex justify-between text-teal-300"><span>第2年續保獎賞 (5%)：</span><span>HK$ 22,000</span></div>
+            <div class="flex justify-between"><span>6日住院現金 (含2日ICU雙倍)：</span><span>HK$ 8,000</span></div>
+            <div class="flex justify-between border-t border-white/20 pt-1 font-bold text-sm text-teal-400">
+              <span>事故一獲賠總額：</span><span>HK$ 470,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="bg-white/10 p-5 rounded-2xl border border-white/15 space-y-3">
+          <div class="flex justify-between items-center border-b border-white/10 pb-2">
+            <span class="font-bold text-amber-300"><i class="fa-solid fa-house-crack mr-1.5"></i> 事故二：外遊不幸遇地震身故</span>
+            <span class="text-[11px] text-slate-300">第 4 個保單年度</span>
+          </div>
+          <p class="text-xs text-slate-200">
+            不幸於外遊時遭遇地震重傷身故。身故賠付依原有保額扣除先前已賠之 22 萬斷肢及疤痕款項後結算。
+          </p>
+          <div class="space-y-1.5 bg-black/20 p-3 rounded-xl font-mono text-xs text-slate-200">
+            <div class="flex justify-between"><span>意外身故 (扣減已賠投保額餘額)：</span><span>HK$ 780,000</span></div>
+            <div class="flex justify-between text-amber-300"><span>地震天災雙倍賠償 (+100%)：</span><span>HK$ 780,000</span></div>
+            <div class="flex justify-between text-teal-300"><span>第4年續保獎賞 (15%)：</span><span>HK$ 234,000</span></div>
+            <div class="flex justify-between"><span>身故體恤權益 (1%)：</span><span>HK$ 10,000</span></div>
+            <div class="flex justify-between border-t border-white/20 pt-1 font-bold text-sm text-amber-400">
+              <span>妻兒獲發理賠總額：</span><span>HK$ 1,804,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support, FAQ & Compliance -->
+    <section id="faq" class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-xs font-bold text-teal-600 tracking-widest uppercase">Support & Claims</h2>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy">常見問題與理賠指引</h3>
+        <p class="text-slate-500 text-sm">幫助您快速掌握全意守護保單細則與權益行使流程</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 保費會否隨著被保人生日年齡增加而調高？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            不會。本計劃保費依職業類別及居住地釐定，<strong>不會單純因為被保人年齡增長而調高保費</strong>。續保時保費將維持平穩（惟保費非保證，保留因整體營運與索償經驗調整之權利）。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 物理治療及脊醫治療的年度上限如何享有永久豁免？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            若保單已連續生效滿 2 個保單年度，且在緊接續保前的任何連續兩個保單年度內<strong>沒有招致任何索償</strong>，額外意外醫療保障中脊醫與物理治療的每年 4,000 港元賠償限額將<strong>永久免除</strong>！
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 特定傳染病（流感/手足口病）留院有等候期嗎？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            有的。手足口病、流感（甲/乙/丙型）、豬流感、禽流感及輪狀病毒等特定疾病，於保單簽發日、復效日或增額日之前或之後 <strong>30 個曆日內</strong> 出現徵狀者不獲支付留院現金。純意外受傷留院則無此限制。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 索償通知及文件的期限規定為何？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            保單持有人必須在引起索償之意外事故發生後 <strong>90 個曆日內</strong> 書面通知富衛，並於取得表格後 180 個曆日內提交包括醫生證明、醫療報告、醫療費用正本收據及警方事故記錄等文件。
+          </p>
+        </div>
+      </div>
+
+      <!-- Compliance Notice Box -->
+      <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex items-start space-x-3 text-slate-700">
+        <div class="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 mt-0.5">
+          <i class="fa-solid fa-circle-info text-sm"></i>
+        </div>
+        <div class="text-xs sm:text-sm leading-relaxed space-y-0.5">
+          <span class="font-bold text-slate-800">重要法律及理賠服務說明：</span>
+          <p class="text-slate-600">本計劃保單條款受澳門特別行政區法律規管。如需辦理索償、退保或保單服務，理財顧問與專線櫃檯為您全程協辦。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (純圖案 Logo，無品牌英文字樣) -->
+  <footer class="bg-white border-t border-slate-200 py-10 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-6">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs">
+            <i class="fa-solid fa-person-falling-burst"></i>
+          </div>
+          <span class="font-bold text-slate-800 text-sm">全意守護意外保障計劃 / 附約 客戶專屬互動系統</span>
+        </div>
+        <div class="text-xs text-slate-400">
+          敢至係人生 | Celebrate Living
+        </div>
+      </div>
+      <div class="space-y-2 text-[11px] leading-relaxed text-slate-400">
+        <p><strong>重要聲明：</strong>本互動系統所提供之測算數據及產品介紹僅供說明與推廣參考之用，並不構成任何保險合約或法律依據。產品完整保障範圍、權益限制、不保事項及條款細則，均以簽發之正式保單合約條款為準。本保險產品不受澳門特別行政區存款保障制度所保障。</p>
+        <p>© 2026 版權所有。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Premium Rates Database (依照產品小冊子表2澳門居民官方數據精確收錄)
+    // Rates are per 1,000 Sum Insured (HKD)
+    // Basic without Medical: Class 1: 2.00, Class 2: 2.50, Class 3: 3.00, Class 4: 5.00
+    // Basic with Medical:    Class 1: 4.48, Class 2: 5.60, Class 3: 6.72, Class 4: 11.20
+    // Rider without Medical: Class 1: 1.60, Class 2: 2.00, Class 3: 2.40, Class 4: 4.00
+    // Rider with Medical:    Class 1: 3.23, Class 2: 4.04, Class 3: 4.85, Class 4: 8.08
+    const RATES_TABLE = {
+      basic: {
+        noMed: { 1: 2.00, 2: 2.50, 3: 3.00, 4: 5.00 },
+        withMed: { 1: 4.48, 2: 5.60, 3: 6.72, 4: 11.20 }
+      },
+      rider: {
+        noMed: { 1: 1.60, 2: 2.00, 3: 2.40, 4: 4.00 },
+        withMed: { 1: 3.23, 2: 4.04, 3: 4.85, 4: 8.08 }
+      }
+    };
+
+    const OCC_INFO = {
+      1: {
+        title: "類別 1: 室內專業/行政管理",
+        desc: "<strong>典型代表：</strong>會計師、律師、醫生、教師、文職人員、室內行政人員（非體力勞動）。"
+      },
+      2: {
+        title: "類別 2: 戶外/非體力工程監督",
+        desc: "<strong>典型代表：</strong>工程師、推銷員、家傭、郵差、物業巡邏員、戶外監督人員。"
+      },
+      3: {
+        title: "類別 3: 輕體力勞動工作",
+        desc: "<strong>典型代表：</strong>麵包師傅、餐廳服務員、鎖匠、零售理貨員（無需操作重型機械）。"
+      },
+      4: {
+        title: "類別 4: 體力勞動與技術人員",
+        desc: "<strong>典型代表：</strong>電工(室內)、技工、裝修工、水喉匠、風帆/滑雪教練等體力勞動人員。"
+      }
+    };
+
+    let currentPlanType = 'basic';
+    let currentOccClass = 1;
+    let currentCurrency = 'HKD';
+
+    function setPlanType(type) {
+      currentPlanType = type;
+      const btnBasic = document.getElementById('btn-type-basic');
+      const btnRider = document.getElementById('btn-type-rider');
+      const hint = document.getElementById('planTypeHint');
+
+      if (type === 'basic') {
+        btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
+        btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
+        hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-slate-400"></i> 基本計劃為獨立保單，提供完整的意外及身故體恤保障。';
+      } else {
+        btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
+        btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
+        hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-teal-600"></i> 附約形式附加於指定壽險或危疾主約，保費享專屬優惠。';
+      }
+      calculateAll();
+    }
+
+    function setOccClass(cls) {
+      currentOccClass = cls;
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btn-occ-${i}`);
+        if (i === cls) {
+          btn.className = 'py-2.5 rounded-xl font-bold text-xs text-center border-2 border-teal-600 bg-teal-50 text-teal-700';
+        } else {
+          btn.className = 'py-2.5 rounded-xl font-bold text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300';
+        }
+      }
+      document.getElementById('occ-desc-title').innerText = OCC_INFO[cls].title;
+      document.getElementById('occ-detail-desc').innerHTML = OCC_INFO[cls].desc;
+      calculateAll();
+    }
+
+    function toggleMedicalOption() {
+      const hasMed = document.getElementById('opt-medical').checked;
+      const minSI = document.getElementById('min-si-hint');
+      const heroMin = document.getElementById('hero-min-display');
+      const input = document.getElementById('calc-sum-insured');
+      const currentVal = parseSumInsured();
+
+      if (currentCurrency === 'HKD') {
+        if (hasMed) {
+          minSI.innerText = '最低門檻: HK$ 600,000 (附加醫療)';
+          heroMin.innerText = 'HK$ 600,000';
+          if (currentVal < 600000) input.value = '600,000';
+        } else {
+          minSI.innerText = '最低門檻: HK$ 400,000';
+          heroMin.innerText = 'HK$ 400,000';
+        }
+      } else {
+        if (hasMed) {
+          minSI.innerText = '最低門檻: US$ 75,000 (附加醫療)';
+          heroMin.innerText = 'US$ 75,000';
+          if (currentVal < 75000) input.value = '75,000';
+        } else {
+          minSI.innerText = '最低門檻: US$ 50,000';
+          heroMin.innerText = 'US$ 50,000';
+        }
+      }
+      calculateAll();
+    }
+
+    function onCurrencyChange() {
+      const select = document.getElementById('calc-currency');
+      currentCurrency = select.value;
+      document.getElementById('currency-label').innerText = currentCurrency;
+      document.getElementById('res-curr-sym').innerText = currentCurrency === 'HKD' ? 'HK$' : 'US$';
+      toggleMedicalOption();
+    }
+
+    function parseSumInsured() {
+      const input = document.getElementById('calc-sum-insured');
+      if (!input) return 0;
+      const num = parseFloat(input.value.replace(/,/g, '').trim());
+      return isNaN(num) ? 0 : num;
+    }
+
+    function handleSumInsuredInput(input) {
+      const rawDigits = input.value.replace(/[^\d]/g, '');
+      if (!rawDigits) {
+        input.value = '';
+        calculateAll();
+        return;
+      }
+      const num = parseInt(rawDigits, 10);
+      input.value = num.toLocaleString('en-US');
+      calculateAll();
+    }
+
+    function setPresetSI(val) {
+      const input = document.getElementById('calc-sum-insured');
+      const finalVal = currentCurrency === 'USD' ? Math.round(val / 8) : val;
+      input.value = finalVal.toLocaleString('en-US');
+      calculateAll();
+    }
+
+    function calculateAll() {
+      let sumInsured = parseSumInsured();
+      const hasMed = document.getElementById('opt-medical').checked;
+      
+      let minVal = currentCurrency === 'HKD' ? (hasMed ? 600000 : 400000) : (hasMed ? 75000 : 50000);
+      let maxVal = currentCurrency === 'HKD' ? 3000000 : 375000;
+      
+      if (sumInsured < minVal) sumInsured = minVal;
+      if (sumInsured > maxVal) sumInsured = maxVal;
+
+      const medKey = hasMed ? 'withMed' : 'noMed';
+      const ratePer1000 = RATES_TABLE[currentPlanType][medKey][currentOccClass];
+
+      // For USD calculations, the formula calculates using rate x USD_SI
+      const annualPremium = Math.round((ratePer1000 * sumInsured) / 1000);
+      const semiAnnualPremium = Math.round(annualPremium * 0.52);
+      const monthlyPremium = Math.round(annualPremium * 0.09);
+      const dailyEquivalent = (annualPremium / 365).toFixed(2);
+
+      const deathBenefit = sumInsured;
+      const scarBenefit = Math.round(sumInsured * 0.20);
+      const doubleBenefit = sumInsured * 2;
+      const disabilityMonthly = Math.round(sumInsured * 0.01);
+      const hospDaily = Math.round(sumInsured * 0.001);
+      const hospICU = hospDaily * 2;
+      const medicalLimit = Math.round(sumInsured * 0.07);
+      const maxRenewal = Math.round(sumInsured * 1.30);
+
+      const sym = currentCurrency === 'HKD' ? 'HK$' : 'US$';
+      const fmt = (n) => n.toLocaleString('en-US');
+
+      document.getElementById('res-annual-premium').innerText = fmt(annualPremium);
+      document.getElementById('res-semiannual-premium').innerText = `${sym} ${fmt(semiAnnualPremium)}`;
+      document.getElementById('res-monthly-premium').innerText = `${sym} ${fmt(monthlyPremium)}`;
+      document.getElementById('res-daily-amount').innerText = `${sym} ${dailyEquivalent}`;
+      document.getElementById('res-daily-rate').innerHTML = `相當於每日僅需約 <strong class="text-slate-900 font-bold">${sym} ${dailyEquivalent}</strong>，全方位構築意外金鐘罩`;
+
+      document.getElementById('res-death-benefit').innerText = `${sym} ${fmt(deathBenefit)}`;
+      document.getElementById('res-scar-benefit').innerText = `${sym} ${fmt(scarBenefit)}`;
+      document.getElementById('res-double-benefit').innerText = `最高 ${sym} ${fmt(doubleBenefit)}`;
+      document.getElementById('res-disability-monthly').innerText = `${sym} ${fmt(disabilityMonthly)} / 月`;
+      document.getElementById('res-hospital-cash').innerText = `${sym} ${fmt(hospDaily)} / 日 (ICU ${sym}${fmt(hospICU)})`;
+      
+      const rowMed = document.getElementById('row-medical-benefit');
+      if (hasMed) {
+        rowMed.style.display = 'flex';
+        document.getElementById('res-medical-benefit').innerText = `最高 ${sym} ${fmt(medicalLimit)}`;
+      } else {
+        rowMed.style.display = 'none';
+      }
+
+      document.getElementById('res-max-renewal').innerText = `${sym} ${fmt(maxRenewal)} (+30%)`;
+    }
+
+    function switchScheduleTab(tab) {
+      const tabs = ['disability', 'burns', 'scar'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const panel = document.getElementById(`panel-${t}`);
+        if (t === tab) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-sm transition';
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    window.onload = function() {
+      calculateAll();
+    };
+  </script>
+</body>
+</html>
