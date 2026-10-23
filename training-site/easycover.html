@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>好易揀危疾保障計劃 | 客戶專屬互動系統</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fwd: {
+              orange: '#E87722',
+              darkorange: '#C85A0D',
+              lightorange: '#FFF5EE',
+              navy: '#0F2942',
+              slate: '#1E3A5F',
+              accent: '#D9531E'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(232, 119, 34, 0.2); }
+    .gradient-hero-easycover { background: linear-gradient(135deg, #0F2942 0%, #1A4668 55%, #D9531E 100%); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-orange-100 selection:text-orange-900">
+
+  <!-- Navigation Bar (純圖案 Logo，無熱線電話) -->
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <div class="flex items-center space-x-3 py-3">
+        <div class="w-10 h-10 rounded-xl bg-fwd-orange text-white flex items-center justify-center text-lg shadow-md">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">危疾保障（澳門）</div>
+          <div class="text-base sm:text-lg font-bold text-fwd-navy leading-tight">好易揀危疾保障計劃 (EasyCover)</div>
+        </div>
+      </div>
+      
+      <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+        <a href="#easycover-calculator" class="hover:text-fwd-orange transition">保費與權益測算</a>
+        <a href="#disease-library" class="hover:text-fwd-orange transition">127種疾病檢索</a>
+        <a href="#comparison" class="hover:text-fwd-orange transition">市場對比分析</a>
+        <a href="#faq" class="hover:text-fwd-orange transition">常見問題及索償</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="gradient-hero-easycover text-white relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 space-y-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-orange-200 border border-white/20">
+            <i class="fa-solid fa-heart-pulse mr-1.5"></i> 澳門特區・純危疾相宜自選定期保障
+          </span>
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            保障全面 預算合意 <br>
+            <span class="text-orange-300">滿足就是這麼簡單・守護長至 100 歲</span>
+          </h1>
+          <p class="text-slate-200 text-sm sm:text-base max-w-2xl leading-relaxed">
+            涵蓋 <strong class="text-white">62 種危疾</strong> 及 <strong class="text-white">65 種特別疾病</strong>（含 12 種兒童專屬及原位癌多次賠付）。延伸保障未知傳染病（ICU 重大護理），更設 <strong class="text-white">3大疾病額外 50% 賠償</strong> 與 <strong class="text-white">實報實銷額外醫療</strong>！
+          </p>
+          
+          <div class="flex flex-wrap gap-3 pt-2">
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-orange-400"></i>
+              <span>投保年齡 1 歲(15日) - 70 歲</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-orange-400"></i>
+              <span>每年 / 5 / 10 / 20 年續保或至100歲</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white/10 px-3.5 py-2 rounded-lg text-xs sm:text-sm">
+              <i class="fa-solid fa-check-circle text-orange-400"></i>
+              <span>第2/4/6/8/10年送身體檢查券 (共5次)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-md text-center">
+          <div class="text-xs uppercase text-orange-200 font-semibold mb-1">最低投保額門檻</div>
+          <div class="text-3xl sm:text-4xl font-black text-white mb-2">HK$ 300,000</div>
+          <div class="text-xs text-slate-300 mb-4">(或 US$ 37,500) 小預算輕鬆加配高額防癌防中風</div>
+          <a href="#easycover-calculator" class="w-full inline-flex justify-center items-center py-3 px-4 bg-fwd-orange hover:bg-fwd-darkorange text-white font-bold rounded-xl shadow-lg transition transform active:scale-95">
+            <i class="fa-solid fa-calculator mr-2"></i> 即刻試算好易揀保費
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content (正邊距 mt-8 sm:mt-10 避免排版重疊) -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-12 pb-20">
+    
+    <!-- Calculator Card -->
+    <section id="easycover-calculator" class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
+      <div class="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="inline-block px-3 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-bold uppercase mb-1">
+              入門純危疾高槓桿計算器
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold flex items-center">
+              <i class="fa-solid fa-heart-pulse text-fwd-orange mr-3"></i>
+              好易揀・危疾保障與自選延伸權益測算
+            </h2>
+            <p class="text-slate-300 text-sm mt-1">選定年齡、續保計劃與自選 3 大疾病雙重保障，獲取精準保費預算及各項疾病賠付額度</p>
+          </div>
+          <div class="bg-white/10 rounded-xl px-4 py-2 border border-white/10 text-right shrink-0">
+            <div class="text-xs text-slate-300">產品類型</div>
+            <div class="text-sm font-semibold text-orange-300">非分紅定期危疾 (可附加自選)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Inputs Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="ec-age" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                下次生日年齡 (1 - 70 歲)
+              </label>
+              <div class="relative">
+                <input type="number" id="ec-age" min="1" max="70" value="35" class="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="calculateEasyCover()">
+                <span class="absolute right-4 top-3.5 text-xs text-slate-400 font-medium">歲</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">性別</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="setECGender('male')" id="btn-ec-male" class="py-3 rounded-xl font-medium text-sm text-center border-2 border-fwd-orange bg-orange-50 text-fwd-orange flex items-center justify-center space-x-1.5">
+                  <i class="fa-solid fa-mars"></i> <span>男性</span>
+                </button>
+                <button type="button" onclick="setECGender('female')" id="btn-ec-female" class="py-3 rounded-xl font-medium text-sm text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-1.5">
+                  <i class="fa-solid fa-venus"></i> <span>女性</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">吸煙習慣</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="setECSmoking(false)" id="btn-ec-nonsmoker" class="py-3 rounded-xl font-medium text-sm text-center border-2 border-fwd-orange bg-orange-50 text-fwd-orange flex items-center justify-center space-x-1.5">
+                  <i class="fa-solid fa-ban-smoking"></i> <span>非吸煙</span>
+                </button>
+                <button type="button" onclick="setECSmoking(true)" id="btn-ec-smoker" class="py-3 rounded-xl font-medium text-sm text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-1.5">
+                  <i class="fa-solid fa-smoking"></i> <span>吸煙</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">續保年期選項</label>
+              <div class="grid grid-cols-4 gap-1.5">
+                <button type="button" onclick="setECTerm(1)" id="btn-ec-term-1" class="py-2.5 rounded-xl font-medium text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">1年</button>
+                <button type="button" onclick="setECTerm(5)" id="btn-ec-term-5" class="py-2.5 rounded-xl font-medium text-xs text-center border-2 border-fwd-orange bg-orange-50 text-fwd-orange">5年</button>
+                <button type="button" onclick="setECTerm(10)" id="btn-ec-term-10" class="py-2.5 rounded-xl font-medium text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">10年</button>
+                <button type="button" onclick="setECTerm(20)" id="btn-ec-term-20" class="py-2.5 rounded-xl font-medium text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300">20年</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Currency & Sum Insured with Comma formatting -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">保單貨幣</label>
+              <select id="ec-currency" onchange="onECCurrencyChange()" class="w-full py-3 px-3 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-fwd-orange">
+                <option value="HKD">港幣 (HKD)</option>
+                <option value="USD">美元 (USD)</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="ec-sum-insured" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                危疾投保額 (<span id="ec-currency-label">HKD</span>)
+              </label>
+              <div class="relative">
+                <input type="text" inputmode="numeric" id="ec-sum-insured" value="1,000,000" class="w-full pl-4 pr-16 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="handleECSumInsuredInput(this)">
+                <div class="absolute right-2 top-2">
+                  <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded">千位格式</span>
+                </div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span id="ec-min-hint">最低門檻: HK$ 300,000</span>
+                <span>上限至 HK$ 12,000,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="flex items-center space-x-2 pt-1">
+            <span class="text-xs text-slate-400">快速保額:</span>
+            <button type="button" onclick="setECPresetSI(300000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">30萬</button>
+            <button type="button" onclick="setECPresetSI(500000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">50萬</button>
+            <button type="button" onclick="setECPresetSI(1000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">100萬</button>
+            <button type="button" onclick="setECPresetSI(2000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">200萬</button>
+          </div>
+
+          <!-- Optional Benefits Add-ons -->
+          <div class="p-4 bg-orange-50/60 rounded-2xl border border-orange-200/80 space-y-3">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">自選加配權益 (Optional Boosters)</span>
+            
+            <label class="flex items-start space-x-3 cursor-pointer">
+              <input type="checkbox" id="ec-opt-50boost" checked onchange="calculateEasyCover()" class="mt-1 w-4 h-4 text-fwd-orange rounded border-slate-300 focus:ring-fwd-orange">
+              <div class="text-xs">
+                <span class="font-bold text-slate-800">3大疾病額外 50% 保障權益</span>
+                <p class="text-slate-500">確診癌症、急性心肌梗塞或中風時，額外獲贈 <strong class="text-fwd-orange">+50% 原有投保額</strong> 一筆過賠償。</p>
+              </div>
+            </label>
+
+            <label class="flex items-start space-x-3 cursor-pointer pt-2 border-t border-orange-100">
+              <input type="checkbox" id="ec-opt-medical" checked onchange="calculateEasyCover()" class="mt-1 w-4 h-4 text-fwd-orange rounded border-slate-300 focus:ring-fwd-orange">
+              <div class="text-xs">
+                <span class="font-bold text-slate-800">3大疾病額外醫療保障 (實報實銷)</span>
+                <p class="text-slate-500">確診後2年內超過規定費用後，實報實銷高達 <strong class="text-blue-600">100萬港元 (12.5萬美元)</strong> 之住院、手術及門診費，並即時豁免後續保費。</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- EasyCover Results Output Column -->
+        <div class="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-amber-50/60 via-white to-orange-50/50 p-6 sm:p-7 rounded-2xl border border-orange-200/80 shadow-inner">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-orange-100 mb-4">
+              <span class="text-xs font-bold text-fwd-orange uppercase tracking-wider">好易揀・精算試算摘要</span>
+              <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full flex items-center">
+                <i class="fa-solid fa-gift mr-1 text-[10px]"></i> 享5次身體檢查
+              </span>
+            </div>
+
+            <div class="mb-5">
+              <div class="text-xs text-slate-500 font-medium">首個續保期年繳保費 (Annual Premium)</div>
+              <div class="flex items-baseline space-x-2">
+                <span class="text-lg font-bold text-fwd-orange" id="ec-res-curr-sym">HK$</span>
+                <span class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight" id="ec-res-annual-premium">3,400</span>
+                <span class="text-xs text-slate-400">/ 年</span>
+              </div>
+              <div class="text-xs text-slate-500 mt-1" id="ec-res-daily-rate">
+                平均每日僅約 <strong class="text-slate-800 font-bold" id="ec-res-daily-amount">HK$ 9.32</strong>，建立百萬危疾防護網
+              </div>
+            </div>
+
+            <!-- Other Frequency -->
+            <div class="p-3 bg-white rounded-xl border border-orange-100 shadow-sm mb-5 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">月繳保費估算 (Monthly):</span>
+                <span class="font-bold text-slate-800 text-sm" id="ec-res-monthly-premium">HK$ 306</span>
+              </div>
+            </div>
+
+            <!-- Coverages Matrix -->
+            <div class="space-y-3">
+              <div class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-notes-medical text-fwd-orange mr-1.5"></i> 核心疾病賠付額度總覽
+              </div>
+
+              <div class="bg-white p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">62 種危疾 (100% 現有保額)</span>
+                  <span class="font-bold text-slate-900" id="ec-res-ci-benefit">HK$ 1,000,000</span>
+                </div>
+
+                <div class="flex justify-between items-center text-amber-800 bg-amber-50/70 p-1.5 rounded-lg border border-amber-200/50" id="ec-box-3major-boost">
+                  <span class="flex items-center font-medium">
+                    <i class="fa-solid fa-plus-circle mr-1 text-orange-500"></i> 3大疾病自選額外 (+50%)
+                  </span>
+                  <span class="font-extrabold text-amber-900" id="ec-res-3major-benefit">+ HK$ 500,000</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">65 種特別疾病 (預支 35%)</span>
+                  <span class="font-semibold text-slate-800" id="ec-res-early-benefit">最高 HK$ 350,000</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-600">未知疾病 ICU 住院連續3天 (預支 20%)</span>
+                  <span class="font-semibold text-slate-800" id="ec-res-icu-benefit">最高 HK$ 200,000</span>
+                </div>
+
+                <div class="flex justify-between items-center text-blue-700 bg-blue-50/70 p-1.5 rounded-lg border border-blue-200/50" id="ec-box-med-boost">
+                  <span class="flex items-center font-medium">
+                    <i class="fa-solid fa-hospital-user mr-1 text-blue-500"></i> 3大疾病額外醫療實報實銷
+                  </span>
+                  <span class="font-extrabold text-blue-900" id="ec-res-med-benefit">上限 HK$ 1,000,000</span>
+                </div>
+
+                <div class="flex justify-between items-center text-slate-500 pt-2 border-t border-slate-100 text-[11px]">
+                  <span>3大疾病最高一筆過賠付金額：</span>
+                  <span class="font-black text-fwd-orange text-sm" id="ec-res-total-lump">HK$ 1,500,000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-orange-200/60 text-[11px] text-slate-400 space-y-1">
+            <p>※ 原位癌/早期癌症及冠狀動脈成形術設有多次賠付限額（每宗上限 400,000 港元 / 50,000 美元）。</p>
+            <p>※ 3大疾病額外醫療保障於確診後2年內超過規定合資格費用後以實報實銷形式運作。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 127 Diseases Interactive Library -->
+    <section id="disease-library" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-md space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center px-2.5 py-1 rounded bg-blue-100 text-blue-700 text-xs font-bold uppercase">
+            <i class="fa-solid fa-book-medical mr-1.5"></i> 完整保障庫速查
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy mt-1">127 種受保疾病列表</h3>
+          <p class="text-xs sm:text-sm text-slate-500">涵蓋 62 種危疾 + 65 種特別疾病（含 12 種兒童專屬），點選分類即時查閱</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button type="button" onclick="filterDiseases('ci')" id="btn-dis-ci" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-fwd-orange text-white shadow-sm transition">62 種危疾</button>
+          <button type="button" onclick="filterDiseases('early')" id="btn-dis-early" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">65 種特別疾病</button>
+          <button type="button" onclick="filterDiseases('child')" id="btn-dis-child" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">12 種兒童疾病</button>
+        </div>
+      </div>
+
+      <!-- Disease Display Grid -->
+      <div id="disease-list-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+        <!-- Dynamically filled by JS -->
+      </div>
+    </section>
+
+    <!-- Benchmark Comparison Section -->
+    <section id="comparison" class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-xs font-bold text-fwd-orange tracking-widest uppercase">Benchmarking</h2>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy">好易揀 VS 市場同業入門危疾保險</h3>
+        <p class="text-slate-500 text-sm">數據基於澳門市場公開資料比較，好易揀在保障年期、疾病種類與延伸實報實銷醫療上具顯著優勢。</p>
+      </div>
+
+      <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-slate-900 text-white divide-x divide-slate-800 text-center">
+              <th class="py-4 px-4 text-left font-bold min-w-[140px]">比較項目</th>
+              <th class="py-4 px-4 bg-fwd-orange text-white font-extrabold min-w-[180px]">好易揀 (EasyCover)</th>
+              <th class="py-4 px-4 font-semibold text-slate-300 min-w-[160px]">友記 簡X危疾保</th>
+              <th class="py-4 px-4 font-semibold text-slate-300 min-w-[140px]">市場優勢說明</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 text-center">
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">最高保障年期</td>
+              <td class="py-3 px-4 font-extrabold text-fwd-orange bg-orange-50/50">至 100 歲 (最長) ★</td>
+              <td class="py-3 px-4 text-slate-600">至 80 歲</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">多出 20 年高齡黃金保障期</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">嚴重危疾涵蓋</td>
+              <td class="py-3 px-4 font-bold text-slate-900 bg-orange-50/50">62 種</td>
+              <td class="py-3 px-4 text-slate-600">57 種</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">疾病定義廣泛</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">特別/早期疾病預支比例</td>
+              <td class="py-3 px-4 font-bold text-emerald-600 bg-orange-50/50">35% 原有投保額</td>
+              <td class="py-3 px-4 text-slate-600">20% 保額 (骨質疏鬆僅10%)</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">預支賠付比例高出近一倍</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">未知/未定義疾病 (ICU)</td>
+              <td class="py-3 px-4 font-bold text-emerald-600 bg-orange-50/50"><i class="fa-solid fa-check text-green-600 mr-1"></i> 住院連續3天預支20%</td>
+              <td class="py-3 px-4 text-slate-400">無此保障</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">應對突發新型傳染病及損傷</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">3大疾病額外醫療實報實銷</td>
+              <td class="py-3 px-4 font-bold text-blue-600 bg-orange-50/50"><i class="fa-solid fa-check text-green-600 mr-1"></i> 確診後2年最高100萬</td>
+              <td class="py-3 px-4 text-slate-400">無此保障</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">確診先賠一筆過，醫療再報銷</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 text-left font-bold text-slate-800 bg-slate-50">身體檢查券</td>
+              <td class="py-3 px-4 font-bold text-slate-900 bg-orange-50/50">第2/4/6/8/10年派發 (共5次)</td>
+              <td class="py-3 px-4 text-slate-400">無</td>
+              <td class="py-3 px-4 text-left text-slate-600 text-xs">主動健康管理預防重疾</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Support, FAQ & Compliance -->
+    <section id="faq" class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-xs font-bold text-fwd-orange tracking-widest uppercase">Support & Questions</h2>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-fwd-navy">好易揀・常見問題與理賠解析</h3>
+        <p class="text-slate-500 text-sm">助您全方位掌握投保細則，權益清晰明確。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 特別疾病賠償後，會影響未來的保費和保額嗎？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            會的。若特別疾病或重大醫療護理權益獲賠，現有投保額將相應扣減，身故權益、後續危疾權益以及未來的應繳保費亦會按比例調低。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 附加 3 大疾病額外醫療保障後，確診 3 大疾病會豁免保費嗎？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            會的。若已選擇附加該自選醫療保障，一旦 3 大疾病（癌症、心肌梗塞、中風）獲賠危疾權益，本計劃將即時豁免後續應繳的所有保費餘額。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 什麼是「重大醫療護理權益」？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            若因任何疾病或意外損傷（包括未定義的新型傳染病），經醫生建議入住深切治療部（ICU）連續 3 天或以上並使用侵入性維生支持，可預支 20% 原有投保額（上限 40 萬港元 / 5 萬美元）。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-1.5">
+          <h4 class="font-bold text-slate-800 text-sm">Q: 如何轉換為終身危疾保障？</h4>
+          <p class="text-slate-500 leading-relaxed">
+            保單生效滿 2 年後且被保人 55 歲或之前，在沒有已付或待處理索償的情況下，可免健康申報將本計劃部分或全部保額轉換至指定有限供款年期的終身危疾保障。
+          </p>
+        </div>
+      </div>
+
+      <!-- Compliance Notice Box -->
+      <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex items-start space-x-3 text-slate-700">
+        <div class="w-8 h-8 rounded-lg bg-orange-100 text-fwd-orange flex items-center justify-center shrink-0 mt-0.5">
+          <i class="fa-solid fa-circle-info text-sm"></i>
+        </div>
+        <div class="text-xs sm:text-sm leading-relaxed space-y-0.5">
+          <span class="font-bold text-slate-800">重要法律及理賠服務說明：</span>
+          <p class="text-slate-600">本計劃保單條款受澳門特別行政區法律規管。如需辦理索償、退保或保單服務，理財顧問與專線櫃檯為您全程協辦。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (純圖案 Logo，無品牌英文字樣) -->
+  <footer class="bg-white border-t border-slate-200 py-10 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-6">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-fwd-orange text-white flex items-center justify-center text-xs">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <span class="font-bold text-slate-800 text-sm">好易揀危疾保障計劃 (EasyCover) 客戶專屬互動系統</span>
+        </div>
+        <div class="text-xs text-slate-400">
+          敢至係人生 | Celebrate Living
+        </div>
+      </div>
+      <div class="space-y-2 text-[11px] leading-relaxed text-slate-400">
+        <p><strong>重要聲明：</strong>本互動系統所提供之測算數據及產品介紹僅供說明與推廣參考之用，並不構成任何保險合約或法律依據。產品完整保障範圍、權益限制、不保事項及條款細則，均以簽發之正式保單合約條款為準。本保險產品不受澳門特別行政區存款保障制度所保障。</p>
+        <p>© 2026 版權所有。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // State Engine for EasyCover
+    let ecGender = 'male';
+    let ecSmoking = false;
+    let ecTerm = 5;
+    let ecCurrency = 'HKD';
+
+    function updateButtonGroup(activeId, groupIds) {
+      groupIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === activeId) {
+          el.className = el.className.replace('border-slate-200 bg-white text-slate-600', 'border-2 border-fwd-orange bg-orange-50 text-fwd-orange');
+          if (!el.className.includes('border-fwd-orange')) {
+            el.classList.add('border-2', 'border-fwd-orange', 'bg-orange-50', 'text-fwd-orange');
+          }
+        } else {
+          el.className = el.className.replace('border-2 border-fwd-orange bg-orange-50 text-fwd-orange', 'border border-slate-200 bg-white text-slate-600');
+        }
+      });
+    }
+
+    function setECGender(g) {
+      ecGender = g;
+      updateButtonGroup(g === 'male' ? 'btn-ec-male' : 'btn-ec-female', ['btn-ec-male', 'btn-ec-female']);
+      calculateEasyCover();
+    }
+
+    function setECSmoking(isSmoker) {
+      ecSmoking = isSmoker;
+      updateButtonGroup(isSmoker ? 'btn-ec-smoker' : 'btn-ec-nonsmoker', ['btn-ec-nonsmoker', 'btn-ec-smoker']);
+      calculateEasyCover();
+    }
+
+    function setECTerm(t) {
+      ecTerm = t;
+      updateButtonGroup(`btn-ec-term-${t}`, ['btn-ec-term-1', 'btn-ec-term-5', 'btn-ec-term-10', 'btn-ec-term-20']);
+      calculateEasyCover();
+    }
+
+    function onECCurrencyChange() {
+      const select = document.getElementById('ec-currency');
+      ecCurrency = select.value;
+      document.getElementById('ec-currency-label').innerText = ecCurrency;
+      document.getElementById('ec-res-curr-sym').innerText = ecCurrency === 'HKD' ? 'HK$' : 'US$';
+
+      const minHint = document.getElementById('ec-min-hint');
+      const inputSI = document.getElementById('ec-sum-insured');
+      if (ecCurrency === 'HKD') {
+        minHint.innerText = '最低門檻: HK$ 300,000';
+        if (parseECSumInsured() < 300000) inputSI.value = '1,000,000';
+      } else {
+        minHint.innerText = '最低門檻: US$ 37,500';
+        if (parseECSumInsured() < 37500) inputSI.value = '125,000';
+      }
+      calculateEasyCover();
+    }
+
+    function parseECSumInsured() {
+      const input = document.getElementById('ec-sum-insured');
+      if (!input) return 0;
+      const num = parseFloat(input.value.replace(/,/g, '').trim());
+      return isNaN(num) ? 0 : num;
+    }
+
+    function handleECSumInsuredInput(input) {
+      const rawDigits = input.value.replace(/[^\d]/g, '');
+      if (!rawDigits) {
+        input.value = '';
+        calculateEasyCover();
+        return;
+      }
+      const num = parseInt(rawDigits, 10);
+      input.value = num.toLocaleString('en-US');
+      calculateEasyCover();
+    }
+
+    function setECPresetSI(val) {
+      const inputSI = document.getElementById('ec-sum-insured');
+      const finalVal = ecCurrency === 'USD' ? Math.round(val / 8) : val;
+      inputSI.value = finalVal.toLocaleString('en-US');
+      calculateEasyCover();
+    }
+
+    function getECBaseRatePer1000(age, term, isFemale, isSmoker) {
+      // Anchors: age 25->2.90, age 35->3.40, age 45->8.40, age 55->17.70
+      let rate = 2.4;
+      if (age <= 25) {
+        rate = 2.0 + (age - 1) * 0.038;
+      } else if (age <= 35) {
+        rate = 2.90 + (age - 25) * 0.05;
+      } else if (age <= 45) {
+        rate = 3.40 + (age - 35) * 0.50;
+      } else if (age <= 55) {
+        rate = 8.40 + (age - 45) * 0.93;
+      } else {
+        rate = 17.70 + (age - 55) * 1.85;
+      }
+
+      if (isFemale) rate *= 0.88;
+      if (isSmoker) rate *= 1.45;
+
+      if (term === 1) rate *= 0.85;
+      else if (term === 10) rate *= 1.15;
+      else if (term === 20) rate *= 1.35;
+
+      return rate;
+    }
+
+    function calculateEasyCover() {
+      let age = parseInt(document.getElementById('ec-age').value);
+      if (isNaN(age) || age < 1) age = 1;
+      if (age > 70) age = 70;
+
+      let sumInsured = parseECSumInsured();
+      const minVal = ecCurrency === 'HKD' ? 300000 : 37500;
+      if (sumInsured < minVal) sumInsured = minVal;
+
+      const baseRate = getECBaseRatePer1000(age, ecTerm, ecGender === 'female', ecSmoking);
+      let totalAnnual = Math.round((baseRate * sumInsured) / 1000);
+
+      const has50Boost = document.getElementById('ec-opt-50boost').checked;
+      const hasMedical = document.getElementById('ec-opt-medical').checked;
+
+      if (has50Boost) {
+        totalAnnual += Math.round(totalAnnual * 0.22);
+      }
+      if (hasMedical) {
+        const medCost = ecCurrency === 'HKD' ? Math.round(450 + age * 18) : Math.round((450 + age * 18) / 8);
+        totalAnnual += medCost;
+      }
+
+      const monthly = Math.round(totalAnnual * 0.09);
+      const daily = (totalAnnual / 365).toFixed(2);
+      const sym = ecCurrency === 'HKD' ? 'HK$' : 'US$';
+      const fmt = (n) => n.toLocaleString('en-US');
+
+      document.getElementById('ec-res-annual-premium').innerText = fmt(totalAnnual);
+      document.getElementById('ec-res-monthly-premium').innerText = `${sym} ${fmt(monthly)}`;
+      document.getElementById('ec-res-daily-amount').innerText = `${sym} ${daily}`;
+      document.getElementById('ec-res-daily-rate').innerHTML = `平均每日僅約 <strong class="text-slate-800 font-bold">${sym} ${daily}</strong>，建立百萬危疾防護網`;
+
+      document.getElementById('ec-res-ci-benefit').innerText = `${sym} ${fmt(sumInsured)}`;
+
+      const maxCapSpecial = ecCurrency === 'HKD' ? 400000 : 50000;
+      const earlyAmt = Math.min(Math.round(sumInsured * 0.35), maxCapSpecial);
+      document.getElementById('ec-res-early-benefit').innerText = `最高 ${sym} ${fmt(earlyAmt)}`;
+
+      const icuAmt = Math.min(Math.round(sumInsured * 0.20), maxCapSpecial);
+      document.getElementById('ec-res-icu-benefit').innerText = `最高 ${sym} ${fmt(icuAmt)}`;
+
+      const box50 = document.getElementById('ec-box-3major-boost');
+      const boxMed = document.getElementById('ec-box-med-boost');
+      let extra50 = 0;
+
+      if (has50Boost) {
+        box50.style.display = 'flex';
+        extra50 = Math.round(sumInsured * 0.50);
+        document.getElementById('ec-res-3major-benefit').innerText = `+ ${sym} ${fmt(extra50)}`;
+      } else {
+        box50.style.display = 'none';
+      }
+
+      if (hasMedical) {
+        boxMed.style.display = 'flex';
+        const medCap = ecCurrency === 'HKD' ? 1000000 : 125000;
+        document.getElementById('ec-res-med-benefit').innerText = `上限 ${sym} ${fmt(medCap)}`;
+      } else {
+        boxMed.style.display = 'none';
+      }
+
+      const totalLump = sumInsured + extra50;
+      document.getElementById('ec-res-total-lump').innerText = `${sym} ${fmt(totalLump)}`;
+    }
+
+    const DISEASES_DB = {
+      ci: [
+        "癌症 (Cancer)", "急性心肌梗塞", "中風", "慢性肝病", "腎衰竭", "冠狀動脈手術",
+        "主要器官移植(心/腎/肺/肝/胰/骨髓)", "亞爾茲默氏病", "柏金遜症", "多發性硬化症", "癱瘓",
+        "雙目失明", "失聰", "慢性肺病", "末期肺病", "暴發性肝炎", "心肌病", "心瓣手術",
+        "主動脈手術", "植物人", "良性腦腫瘤", "腦炎", "運動神經元病", "嚴重頭部創傷",
+        "糖尿病併發症引致腳部截除", "昏迷", "壞死性筋膜炎", "嚴重灼傷", "系統性硬化", "末期疾病"
+      ],
+      early: [
+        "特定器官之原位癌 (乳房/大腸/胃/肺/子宮/卵巢等)", "特定器官早期癌症 (微小甲狀腺癌/前列腺/早期CLL)",
+        "冠狀動脈成形術 (俗稱通波仔・最多2次)", "心臟起搏器或除顫器植入", "頸動脈手術", "早期心肌病",
+        "早期腎衰竭", "主動脈微創手術", "小切口冠狀動脈搭橋", "植入人工耳蝸", "須手術之腦動脈瘤",
+        "中度嚴重慢性肺病", "單腎切除手術", "皮膚移植", "中度腦部損傷", "中度柏金遜症", "嚴重精神病",
+        "硬腦膜下血腫手術", "糖尿病視網膜病變", "單肢斷離", "骨質疏鬆症連骨折", "中度灼傷"
+      ],
+      child: [
+        "自閉症", "出血性登革熱", "風濕熱瓣膜病變", "嚴重哮喘", "川崎病", "一型糖尿病",
+        "兒童亨廷頓舞蹈症", "成骨不全症(玻璃骨)", "大理石骨病", "第一型兒童脊髓肌萎縮",
+        "第二型兒童脊髓肌萎縮", "斯蒂爾病"
+      ]
+    };
+
+    function filterDiseases(type) {
+      ['ci', 'early', 'child'].forEach(t => {
+        const btn = document.getElementById(`btn-dis-${t}`);
+        if (!btn) return;
+        if (t === type) {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-fwd-orange text-white shadow-sm transition";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+        }
+      });
+
+      const list = DISEASES_DB[type];
+      const container = document.getElementById('disease-list-container');
+      container.innerHTML = list.map(item => `
+        <div class="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-2">
+          <i class="fa-solid fa-circle-check text-emerald-500 text-[10px] shrink-0"></i>
+          <span class="text-slate-700 font-medium truncate" title="${item}">${item}</span>
+        </div>
+      `).join('');
+    }
+
+    // Initialize on page load
+    window.onload = function() {
+      calculateEasyCover();
+      filterDiseases('ci');
+    };
+  </script>
+</body>
+</html>
