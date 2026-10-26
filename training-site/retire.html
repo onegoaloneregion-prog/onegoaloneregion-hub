@@ -1280,7 +1280,7 @@
       calculate();
     });
 
-// Handle PDF Export and Direct iPhone Share to WeChat (橫向 A4 旗艦版)
+// Handle PDF Export and Direct iPhone/iPad Share (橫向 A4 零切邊精修版)
 async function exportAndSharePDF() {
     const btn = document.getElementById('exportPdfBtn');
     const btnText = document.getElementById('exportBtnText');
@@ -1290,13 +1290,13 @@ async function exportAndSharePDF() {
         if (btnText) btnText.innerText = '正在生成橫向 A4 報告...';
         if (btn) btn.disabled = true;
 
-        // 確保截圖前畫面回到最頂端
+        // 1. 確保回到頂部與左側原點
         window.scrollTo(0, 0);
 
         const mainElement = document.querySelector('main');
         const filename = `退休策劃報告_橫向A4_${new Date().toISOString().slice(0, 10)}.pdf`;
 
-        // 1. 備份原有樣式，設定橫向 A4 黃金寬度 (1200px 完美對應 297mm 比例)
+        // 2. 備份原有樣式
         const prevWidth = mainElement.style.width;
         const prevMinWidth = mainElement.style.minWidth;
         const prevMaxWidth = mainElement.style.maxWidth;
@@ -1305,45 +1305,49 @@ async function exportAndSharePDF() {
         const prevBoxSizing = mainElement.style.boxSizing;
         const prevBg = mainElement.style.backgroundColor;
 
-        // 強制切換為橫向寬度排版，讓雙欄與圖表完整延展
+        // 3. 寬度設定 1200px，並在左邊加入充裕的 32px 內部邊距，徹底杜絕 iPad 左切
         mainElement.style.width = '1200px';
         mainElement.style.minWidth = '1200px';
         mainElement.style.maxWidth = '1200px';
         mainElement.style.margin = '0 auto';
-        mainElement.style.padding = '24px';
+        mainElement.style.padding = '24px 32px'; // 左側由 24px 增至 32px
         mainElement.style.boxSizing = 'border-box';
         mainElement.style.backgroundColor = '#ffffff';
 
-        // 2. 觸發重新排版並等待 Chart.js 圖表以 1200px 重繪
+        // 觸發重新排版
         window.dispatchEvent(new Event('resize'));
         await new Promise(resolve => setTimeout(resolve, 350));
 
-        // 3. 配置橫向 A4 html2pdf 參數
+        // 獲取 main 元素在當前畫面的精準物理邊界
+        const rect = mainElement.getBoundingClientRect();
+
+        // 4. 配置 html2pdf
         const opt = {
-            margin: [8, 8, 8, 8], // 上右下左各留 8mm 邊界
+            margin: [8, 8, 8, 8], // 上右下左留白 8mm
             filename: filename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-                scale: 1.5,            // 1.5倍高清抗鋸齒
+                scale: 1.5,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
+                // 關鍵校正：精確抓取元素的左邊原點，消除 iPad 負偏移
+                x: rect.left < 0 ? rect.left : 0,
                 scrollX: 0,
                 scrollY: 0,
-                width: 1200,           // 與 mainElement 寬度精確對應
+                width: 1200,
                 windowWidth: 1200
             },
-            // 關鍵：orientation 設為 'landscape' (橫向)
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
             pagebreak: { 
                 mode: ['css', 'legacy']
             }
         };
 
-        // 4. 執行生成並自動下載
+        // 5. 輸出 PDF
         await html2pdf().set(opt).from(mainElement).save();
 
-        // 5. 立即還原原始網頁樣式
+        // 6. 還原原始樣式
         mainElement.style.width = prevWidth;
         mainElement.style.minWidth = prevMinWidth;
         mainElement.style.maxWidth = prevMaxWidth;
