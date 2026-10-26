@@ -1280,7 +1280,7 @@
       calculate();
     });
 
-// Handle PDF Export and Direct iPhone/iPad Share (橫向 A4 零切邊精修版)
+// Handle PDF Export and Direct iPhone/iPad Share (橫向 A4 完美居中旗艦版)
 async function exportAndSharePDF() {
     const btn = document.getElementById('exportPdfBtn');
     const btnText = document.getElementById('exportBtnText');
@@ -1290,7 +1290,7 @@ async function exportAndSharePDF() {
         if (btnText) btnText.innerText = '正在生成橫向 A4 報告...';
         if (btn) btn.disabled = true;
 
-        // 1. 確保回到頂部與左側原點
+        // 1. 確保視窗滾動歸零，避免頂部/左側截斷
         window.scrollTo(0, 0);
 
         const mainElement = document.querySelector('main');
@@ -1305,38 +1305,33 @@ async function exportAndSharePDF() {
         const prevBoxSizing = mainElement.style.boxSizing;
         const prevBg = mainElement.style.backgroundColor;
 
-        // 3. 寬度設定 1200px，並在左邊加入充裕的 32px 內部邊距，徹底杜絕 iPad 左切
-        mainElement.style.width = '1200px';
-        mainElement.style.minWidth = '1200px';
-        mainElement.style.maxWidth = '1200px';
+        // 3. 核心鎖定：1120px + 左右各 20px 邊距 = 剛好 1160px，完美匹配橫向 A4 比例
+        mainElement.style.width = '1120px';
+        mainElement.style.minWidth = '1120px';
+        mainElement.style.maxWidth = '1120px';
         mainElement.style.margin = '0 auto';
-        mainElement.style.padding = '24px 32px'; // 左側由 24px 增至 32px
+        mainElement.style.padding = '20px';
         mainElement.style.boxSizing = 'border-box';
         mainElement.style.backgroundColor = '#ffffff';
 
-        // 觸發重新排版
+        // 觸發重新排版並等待圖表以 1120px 完成重繪
         window.dispatchEvent(new Event('resize'));
         await new Promise(resolve => setTimeout(resolve, 350));
 
-        // 獲取 main 元素在當前畫面的精準物理邊界
-        const rect = mainElement.getBoundingClientRect();
-
-        // 4. 配置 html2pdf
+        // 4. 配置 html2pdf：等比例置中截取
         const opt = {
-            margin: [8, 8, 8, 8], // 上右下左留白 8mm
+            margin: [8, 8, 8, 8], // 上右下左均勻留白 8mm
             filename: filename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-                scale: 1.5,
+                scale: 1.5,             // 1.5倍清晰度，保證小字清晰且不爆邊
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
-                // 關鍵校正：精確抓取元素的左邊原點，消除 iPad 負偏移
-                x: rect.left < 0 ? rect.left : 0,
                 scrollX: 0,
                 scrollY: 0,
-                width: 1200,
-                windowWidth: 1200
+                width: 1120,            // 與 mainElement 寬度完全一致
+                windowWidth: 1120
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
             pagebreak: { 
