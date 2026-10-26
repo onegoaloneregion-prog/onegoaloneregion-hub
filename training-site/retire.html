@@ -17,29 +17,57 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <!-- 防止 PDF 截斷與排版擠壓修復 -->
-    <style>
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                background-color: #ffffff !important;
-            }
-            .card, .p-6, .rounded-3xl, .rounded-2xl, table, tr, canvas {
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
-            header, nav, button, .no-print {
-                display: none !important;
-            }
-        }
+  <style>
+  /* ================= 橫向 A4 旗艦級原生列印規範 ================= */
+  @page {
+    size: A4 landscape; /* 關鍵：強制鎖定為橫向 A4 (297mm x 210mm) */
+    margin: 10mm 12mm;  /* 上下 10mm，左右 12mm 完美置中留白 */
+  }
 
-        .pdf-export-mode {
-            width: 1100px !important;
-            min-width: 1100px !important;
-            max-width: 1100px !important;
-            margin: 0 auto !important;
-        }
-    </style>
+  @media print {
+    /* 1. 隱藏操作按鈕與螢幕專用導航 */
+    .no-print, header, nav, #exportPdfBtn, button {
+      display: none !important;
+    }
+
+    /* 2. 顯示列印專屬標題 (可選) */
+    .print-only {
+      display: block !important;
+    }
+
+    /* 3. 強制主內容展開為 100% 橫向寬度，解除所有手機寬度限制 */
+    body {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    main {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+
+    /* 4. 防止卡片、表格與圖表被跨頁硬生生切開 (防腰斬關鍵) */
+    section, .chart-container, canvas, table, tr, .rounded-2xl, .rounded-3xl, .card {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* 5. 消除多餘陰影 */
+    .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+      box-shadow: none !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+  }
+
+  @media screen {
+    .print-only { display: none !important; }
+  }
+</style>
   <script>
     tailwind.config = {
       theme: {
@@ -133,7 +161,9 @@
         <button onclick="resetDefaults()" class="text-xs sm:text-sm px-3.5 py-2 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 font-medium">
           <i class="fa-solid fa-arrow-rotate-left"></i> 重設預設值
         </button>
-        <button id="exportPdfBtn" onclick="exportAndSharePDF()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-md shadow-blue-500/25 transition-all flex items-center gap-2 active:scale-95">
+       <button id="exportPdfBtn" onclick="window.print()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
+  <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 列印報告</span>
+</button>
           <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 微信分享</span>
         </button>
       </div>
