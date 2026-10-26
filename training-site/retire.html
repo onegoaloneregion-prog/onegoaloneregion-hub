@@ -17,50 +17,69 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <!-- 防止 PDF 截斷與排版擠壓修復 -->
-  <style>
+ <style>
   /* ================= 橫向 A4 旗艦級原生列印規範 ================= */
   @page {
-    size: A4 landscape; /* 關鍵：強制鎖定為橫向 A4 (297mm x 210mm) */
-    margin: 10mm 12mm;  /* 上下 10mm，左右 12mm 完美置中留白 */
+    size: A4 landscape; /* 強制橫向 A4 (297mm x 210mm) */
+    margin: 8mm 10mm;   /* 上下 8mm，左右 10mm */
   }
 
   @media print {
-    /* 1. 隱藏操作按鈕與螢幕專用導航 */
+    /* 1. 隱藏不必要的網頁元素 */
     .no-print, header, nav, #exportPdfBtn, button {
       display: none !important;
     }
 
-    /* 2. 顯示列印專屬標題 (可選) */
     .print-only {
       display: block !important;
     }
 
-    /* 3. 強制主內容展開為 100% 橫向寬度，解除所有手機寬度限制 */
+    /* 2. 重置 Body 與 Main 尺寸 */
     body {
       background: #ffffff !important;
       color: #0f172a !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+      font-size: 11px !important;
     }
 
     main {
       width: 100% !important;
       max-width: 100% !important;
-      margin: 0 auto !important;
+      margin: 0 !important;
       padding: 0 !important;
-      box-shadow: none !important;
     }
 
-    /* 4. 防止卡片、表格與圖表被跨頁硬生生切開 (防腰斬關鍵) */
-    section, .chart-container, canvas, table, tr, .rounded-2xl, .rounded-3xl, .card {
+    /* 3. 核心修復：強制所有網格 (Grid) 恢復水平左右排列，禁止重疊撞車 */
+    .grid {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 16px !important;
+    }
+
+    /* 雙欄容器各自佔 48% 寬度，整齊並列 */
+    .grid > div, .grid > section {
+      flex: 1 1 45% !important;
+      min-width: 0 !important;
+      position: relative !important;
+    }
+
+    /* 4. 強制 Canvas 圖表容器固定高度，防止 Chart.js 畫布覆蓋 */
+    canvas {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+      position: relative !important;
+    }
+
+    /* 5. 防止各區塊被生硬切開 */
+    .card, section, table, tr, .rounded-2xl, .rounded-3xl {
       break-inside: avoid !important;
       page-break-inside: avoid !important;
-    }
-
-    /* 5. 消除多餘陰影 */
-    .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
       box-shadow: none !important;
       border: 1px solid #e2e8f0 !important;
+      margin-bottom: 12px !important;
     }
   }
 
@@ -164,8 +183,6 @@
        <button id="exportPdfBtn" onclick="window.print()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
   <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 列印報告</span>
 </button>
-          <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 微信分享</span>
-        </button>
       </div>
     </div>
   </header>
