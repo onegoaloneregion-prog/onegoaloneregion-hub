@@ -56,12 +56,74 @@
       background-color: #cbd5e1;
       border-radius: 9999px;
     }
-    @media print {
-      .no-print { display: none !important; }
-      .print-only { display: block !important; }
-      body { background: white; }
-      .card-shadow { box-shadow: none !important; border: 1px solid #e2e8f0; }
+   /* ================= 橫向 A4 旗艦級原生列印規範 (fna-pro 專用) ================= */
+  @page {
+    size: A4 landscape; /* 鎖定為橫向 A4 (297mm x 210mm) */
+    margin: 8mm 10mm;   /* 上下 8mm，左右 10mm */
+  }
+
+  @media print {
+    /* 1. 隱藏不必要的按鈕與導航 */
+    .no-print, header, nav, button, input[type="button"] {
+      display: none !important;
     }
+
+    .print-only {
+      display: block !important;
+    }
+
+    /* 2. 背景與文字保真 */
+    body {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      font-size: 11px !important;
+    }
+
+    main {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+
+    /* 3. 防止網格雙欄撞車疊圖，維持左右並列 */
+    .grid {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 16px !important;
+    }
+
+    .grid > div, .grid > section {
+      flex: 1 1 45% !important;
+      min-width: 0 !important;
+      position: relative !important;
+    }
+
+    /* 4. Canvas 圖表自適應防覆蓋 */
+    canvas {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+      position: relative !important;
+    }
+
+    /* 5. 卡片防生硬腰斬跨頁 */
+    .card, .card-shadow, section, table, tr, .rounded-2xl, .rounded-3xl {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+      box-shadow: none !important;
+      border: 1px solid #e2e8f0 !important;
+      margin-bottom: 12px !important;
+    }
+  }
+
+  @media screen {
+    .print-only { display: none !important; }
+  }
   </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col bg-slate-50">
@@ -93,9 +155,9 @@
           <button onclick="clearAllInputs()" class="text-xs px-2 py-1 rounded bg-rose-900/60 hover:bg-rose-700 text-rose-200 transition" title="清空全部重填"><i class="fa-solid fa-rotate-left"></i> 重設清空</button>
         </div>
 
-        <button onclick="openExportModal()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 border border-white/20">
-          <i class="fa-solid fa-file-pdf text-sm"></i> 匯出 PDF / 微信分享
-        </button>
+       <button onclick="window.print()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 border border-white/20 cursor-pointer no-print">
+  <i class="fa-solid fa-file-pdf text-sm"></i> 匯出評估報告 / 列印 PDF
+</button>
       </div>
     </div>
   </header>
