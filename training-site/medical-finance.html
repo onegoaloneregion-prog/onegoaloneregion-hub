@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>醫療融資策略精算系統 - 盈聚·天下 II 儲蓄搭配醫療保單自動抵繳規劃</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* 滑動桿自訂樣式 - 圖一大尺寸 */
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #ea580c;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      border: 2px solid white;
+    }
+    input[type=range]::-moz-range-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #ea580c;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      border: 2px solid white;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; font-size: 12px; }
+      .shadow-sm, .shadow-xl { box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+  <div id="app" class="max-w-7xl mx-auto px-4 py-6">
+    
+    <!-- 頂部 Navbar -->
+    <nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 mb-5 border-b border-slate-200 gap-3">
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white font-black text-2xl shadow-md shadow-orange-500/20">
+          F
+        </div>
+        <div>
+          <h1 class="text-xl font-black text-slate-900 tracking-tight leading-none">醫療融資策略精算系統</h1>
+          <p class="text-sm text-slate-500 mt-1.5 font-medium">盈聚·天下 II 儲蓄搭配醫療保單保費自動抵繳規劃</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 no-print">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-semibold rounded-full border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          第 {{ offsetStartYear }} 年起全自動抵繳
+        </span>
+        <button @click="exportToPrint" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          列印 / 導出報告
+        </button>
+      </div>
+    </nav>
+
+    <!-- 方案架構橫幅 -->
+    <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/10 mb-7 border border-slate-800 relative overflow-hidden">
+      <div class="relative z-10 max-w-4xl">
+        <span class="inline-block px-3 py-1 bg-orange-500 text-white font-bold text-xs rounded tracking-wide mb-2.5 uppercase">精算方案架構</span>
+        <h2 class="text-2xl sm:text-3xl font-black tracking-tight leading-snug">
+          {{ startAge }}歲投保，第{{ offsetStartYear }}年（{{ startAge + offsetStartYear - 1 }}歲）實現「醫療保費終身自由」
+        </h2>
+        <p class="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
+          透過首{{ offsetStartYear - 1 }}年自付基本醫療保費，配合「盈聚·天下 II」的高複利滾存。由第{{ offsetStartYear }}個保單年度（被保人{{ startAge + offsetStartYear - 1 }}歲）開始，所有後續醫療保費（考慮醫療通脹）100% 由盈聚保單每年部分提取代為繳付，被保人毋須再自掏腰包，並在{{ targetAge }}歲時保單依然保有高額滾存資產。
+        </p>
+      </div>
+      <div class="absolute -right-6 -bottom-10 opacity-10 pointer-events-none">
+        <svg class="w-72 h-72 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 2h2v2h-2V5zm0 4h2v2h-2V9zm-4-4h2v2H8V5zm0 4h2v2H8V9zm-1 8v-2h10v2H7zm9-6h2v2h-2v-2z"/></svg>
+      </div>
+    </div>
+
+    <!-- 智能防呆警告 (相隔太近無法抵繳提示) -->
+    <div v-if="isInvalidRange" class="mb-7 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl flex items-start gap-3">
+      <span class="text-xl">⚠️</span>
+      <div>
+        <h4 class="font-bold text-sm text-red-800">規劃參數無法形成有效抵繳期</h4>
+        <p class="text-sm text-red-700 mt-1">
+          投保年齡 ({{ startAge }} 歲) + 開始抵繳年期 (第 {{ offsetStartYear }} 年，即 {{ startAge + offsetStartYear - 1 }} 歲) 已達到或超出所選之抵繳目標年齡 ({{ targetAge }} 歲)。
+        </p>
+        <p class="text-sm font-semibold text-red-600 mt-1.5">
+          建議：請調高「抵繳目標年齡」、或調低「受保人投保起始年齡」。
+        </p>
+      </div>
+    </div>
+
+    <!-- 主體格網 (4 cols 控制面板 + 8 cols 視覺化面板) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+      
+      <!-- 左側：參數控制面板 (字體全面放大回圖一大小) -->
+      <div class="lg:col-span-4 space-y-5">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-5">
+          <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
+            <span class="text-orange-500 font-bold text-base">⚙️</span>
+            <h3 class="font-bold text-base text-slate-800">客戶及方案參數</h3>
+          </div>
+
+          <!-- 年齡與性別選單 -->
+          <div class="grid grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">投保起始年齡</label>
+              <select v-model.number="startAge" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option v-for="a in 66" :key="a-1" :value="a-1">{{ a-1 }} 歲起投保</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">受保人性別</label>
+              <select v-model="gender" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option value="male">男性 (非吸煙)</option>
+                <option value="female">女性 (非吸煙)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 抵繳目標年齡與抵繳開始年份 -->
+          <div class="grid grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">抵繳目標年齡</label>
+              <select v-model.number="targetAge" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option v-for="age in [55, 60, 65, 70, 75, 80, 85]" :key="age" :value="age">{{ age }} 歲</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">開始自動抵繳年度</label>
+              <select v-model.number="offsetStartYear" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option :value="6">第 6 年起</option>
+                <option :value="10">第 10 年起 (推薦)</option>
+                <option :value="11">第 11 年起</option>
+                <option :value="15">第 15 年起</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 選擇搭配醫療計劃 -->
+          <div>
+            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">選擇搭配之醫療計劃</label>
+            <select v-model="selectedPlan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <option value="vFamily">醫家保醫療計劃 (vFamily Standalone)</option>
+              <option value="vPrime_standard">尊衛您 (寰譽版) - 標準計劃 (Standard)</option>
+              <option value="vPrime_superior">尊衛您 (寰譽版) - 特等計劃 (Superior)</option>
+            </select>
+          </div>
+
+          <!-- 尊衛您自付額 (選尊衛您時出現) -->
+          <div v-if="selectedPlan.startsWith('vPrime')">
+            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">尊衛您自付費 (Deductible)</label>
+            <select v-model.number="selectedDeductible" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <option :value="0">HKD 0 自付額</option>
+              <option :value="16000">HKD 16,000 自付額</option>
+              <option :value="25000">HKD 25,000 自付額</option>
+              <option :value="50000">HKD 50,000 自付額</option>
+              <option :value="100000">HKD 100,000 自付額</option>
+              <option :value="250000">HKD 250,000 自付額</option>
+            </select>
+          </div>
+
+          <!-- 醫療通脹率 (圖一大字體左右拉動 Slider) -->
+          <div class="space-y-2 pt-1">
+            <div class="flex justify-between items-center">
+              <label class="text-xs sm:text-sm font-bold text-slate-700">預期年度醫療通脹率</label>
+              <span class="text-sm font-black text-orange-600 bg-orange-50 px-2.5 py-0.5 rounded border border-orange-200">
+                {{ inflationRate }}%
+              </span>
+            </div>
+            
+            <!-- 左右拉動 Slider -->
+            <input type="range" min="0" max="10" step="0.5" v-model.number="inflationRate" 
+                   class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500 focus:outline-none">
+            
+            <!-- 預設點擊標籤 -->
+            <div class="flex justify-between text-xs text-slate-400 px-1 font-medium">
+              <button type="button" @click="inflationRate = 0" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 0}">0%</button>
+              <button type="button" @click="inflationRate = 2.5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 2.5}">2.5%</button>
+              <button type="button" @click="inflationRate = 5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 5}">5%</button>
+              <button type="button" @click="inflationRate = 7.5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 7.5}">7.5%</button>
+              <button type="button" @click="inflationRate = 10" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 10}">10%</button>
+            </div>
+          </div>
+
+          <!-- 提款後戶口結餘策略切換 (大按鈕 & 大字體) -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <label class="block text-xs sm:text-sm font-bold text-slate-800">提款後戶口結餘策略</label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" @click="balanceStrategy = 'guarantee_principal'"
+                      :class="balanceStrategy === 'guarantee_principal' ? 'bg-orange-600 text-white font-bold shadow-sm' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'"
+                      class="py-2.5 px-2 rounded-xl text-xs sm:text-sm transition-all flex flex-col items-center justify-center text-center">
+                <span class="font-bold">🛡️ 保本模式</span>
+                <span class="text-[11px] opacity-85 mt-0.5">結餘 ≥ 已繳本金</span>
+              </button>
+
+              <button type="button" @click="balanceStrategy = 'depleting'"
+                      :class="balanceStrategy === 'depleting' ? 'bg-orange-600 text-white font-bold shadow-sm' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'"
+                      class="py-2.5 px-2 rounded-xl text-xs sm:text-sm transition-all flex flex-col items-center justify-center text-center">
+                <span class="font-bold">📉 遞減消耗模式</span>
+                <span class="text-[11px] opacity-85 mt-0.5">極致槓桿 (結餘≥0)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 盈聚·天下 II 供款年期按鈕組 (大按鈕大字) -->
+          <div>
+            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-2">盈聚·天下 II 供款年期</label>
+            <div class="grid grid-cols-4 gap-2">
+              <button v-for="term in [2, 3, 5, 10]" :key="term"
+                      @click="paymentTerm = term"
+                      type="button"
+                      :class="paymentTerm === term ? 'bg-orange-50 border-2 border-orange-500 text-orange-600 font-black shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100'"
+                      class="py-2.5 rounded-xl text-sm transition-all flex flex-col items-center">
+                <span class="font-bold">{{ term }} 年供</span>
+                <span class="text-[10px] opacity-70 mt-0.5 font-medium">年繳</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 精算結果輸出標籤 (大字大標題) -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 text-white shadow-md">
+            <span class="text-slate-400 text-xs sm:text-sm font-semibold block">建議盈聚每年保費 ({{ paymentTerm }} 年供)</span>
+            <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1.5">
+              HKD ${{ formatNumber(requiredAnnualPremium) }}
+            </div>
+            <div class="flex justify-between items-center text-xs sm:text-sm text-slate-300 border-t border-slate-700/60 pt-3 mt-3">
+              <span class="font-medium">盈聚融資總供款</span>
+              <span class="font-bold text-white text-sm sm:text-base">HKD ${{ formatNumber(totalInvestment) }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 右側：數據指標與動態圖表 (字體全面放大回圖一大小) -->
+      <div class="lg:col-span-8 space-y-5">
+        
+        <!-- 3 個 KPI 卡片 -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">醫療全期需抵繳總額 ({{ startAge }}-{{ targetAge }}歲)</span>
+            <div class="text-xl sm:text-2xl font-black text-slate-900">HKD ${{ formatNumber(offsetMedicalTotal) }}</div>
+            <span class="text-xs text-slate-400 mt-1 block">含通脹率 {{ inflationRate }}% 複利計算</span>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">盈聚融資總供款 ({{ paymentTerm }}年)</span>
+            <div class="text-xl sm:text-2xl font-black text-orange-600">HKD ${{ formatNumber(totalInvestment) }}</div>
+            <span class="text-xs text-emerald-600 font-bold mt-1 block">
+              ↓ 融資槓桿率: {{ totalInvestment > 0 ? (offsetMedicalTotal / totalInvestment).toFixed(1) : 0 }}x
+            </span>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">{{ targetAge }}歲時盈聚剩餘保單價值</span>
+            <div class="text-xl sm:text-2xl font-black text-emerald-600">HKD ${{ formatNumber(remainingPolicyValue80) }}</div>
+            <span class="text-xs text-slate-400 mt-1 block">
+              <span v-if="balanceStrategy === 'guarantee_principal'" class="text-blue-600 font-bold">✓ 達成保本 (≥總供款)</span>
+              <span v-else>支付全部醫療費後傳承結餘</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- 圖表區 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3.5">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base">現金流及資產變化軌跡 ({{ startAge }}歲至{{ targetAge }}歲)</h3>
+              <p class="text-xs text-slate-400 mt-0.5">綠色柱體代表盈聚保單現金價值，橙色折線代表每年醫療保費提取需求</p>
+            </div>
+            <div class="flex items-center gap-4 text-xs sm:text-sm font-medium">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-emerald-500 rounded-sm"></span> 保單價值</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-orange-500 rounded-full"></span> 年度醫療保費</span>
+            </div>
+          </div>
+          <div class="relative h-64 sm:h-80 w-full pt-2">
+            <canvas id="flowChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 底部：現金流精算細表 -->
+    <div class="mt-7 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+        <div>
+          <h3 class="font-black text-slate-900 text-base sm:text-lg">融資方案現金流精算細表</h3>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            顯示各關鍵年齡節點之保費提取與保單滾存結餘 (港幣)
+            <span class="ml-2 px-2.5 py-0.5 rounded text-xs font-semibold" :class="balanceStrategy === 'guarantee_principal' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'">
+              {{ balanceStrategy === 'guarantee_principal' ? '🛡️ 保本模式 (終值 ≥ 總保費)' : '📉 遞減模式 (終值 ≥ $0)' }}
+            </span>
+          </p>
+        </div>
+        <span class="text-xs sm:text-sm text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
+          共 {{ totalYears }} 個保單年度
+        </span>
+      </div>
+
+      <div class="overflow-x-auto max-h-[500px]">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 z-10 text-xs sm:text-sm">
+            <tr>
+              <th class="py-3 px-4 font-bold text-slate-600">保單年度</th>
+              <th class="py-3 px-4 font-bold text-slate-600">年齡</th>
+              <th class="py-3 px-4 font-bold text-slate-600">醫療保費 (原始)</th>
+              <th class="py-3 px-4 font-bold text-slate-600">醫療保費 (通脹後)</th>
+              <th class="py-3 px-4 font-bold text-slate-600">自付 / 提取狀態</th>
+              <th class="py-3 px-4 font-bold text-slate-600 text-right">盈聚戶口結餘 (預估)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="item in scheduleData" :key="item.year" :class="{'bg-orange-50/40': item.isOffsetYear}">
+              <td class="py-3 px-4 font-semibold text-slate-700">第 {{ item.year }} 年</td>
+              <td class="py-3 px-4 text-slate-600">{{ item.age }} 歲</td>
+              <td class="py-3 px-4 text-slate-500">${{ formatNumber(item.baseMedical) }}</td>
+              <td class="py-3 px-4 font-semibold" :class="item.isOffsetYear ? 'text-red-600 font-bold' : 'text-slate-800'">
+                ${{ formatNumber(item.inflatedMedical) }}
+              </td>
+              <td class="py-3 px-4">
+                <span v-if="item.isOffsetYear" class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+                  ✓ 盈聚自動抵繳
+                </span>
+                <span v-else class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">
+                  自行繳付
+                </span>
+              </td>
+              <td class="py-3 px-4 font-bold text-slate-900 text-right text-sm">
+                ${{ formatNumber(item.endPolicyValue) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed, watch, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        // ========== 1. 醫家保 (vFamily) 官方保費表 (港幣) ==========
+        const vFamilyRates = {
+          male: [
+            5524, 5524, 5524, 5524, 4728, 4728, 4728, 4728, 4728, 4728,
+            4728, 4728, 4728, 4728, 4728, 4728, 4728, 4728, 4647, 3718,
+            3754, 3696, 3611, 3644, 3682, 3853, 4082, 4304, 4538, 4751,
+            4917, 5054, 5210, 5337, 5491, 5568, 5603, 5605, 5607, 5609,
+            5689, 5920, 7939, 6379, 6667, 6995, 7332, 7846, 8258, 8686,
+            8802, 8882, 9447, 9922, 10408, 11090, 11793, 12677, 13903, 14062,
+            15246, 16263, 17411, 18734, 19942, 21449, 22953, 24758, 24386, 27888,
+            26759, 28327, 34980, 30286, 31058, 32413, 40023, 34656, 43676, 45121, 49893
+          ],
+          female: [
+            3841, 3841, 3841, 3841, 4394, 4394, 4394, 4394, 4394, 4394,
+            4394, 4394, 4394, 4394, 4394, 4394, 4394, 4394, 4420, 4446,
+            4473, 4500, 4520, 4659, 4855, 5184, 5459, 5751, 6015, 6302,
+            6464, 6655, 6868, 7068, 7243, 7283, 7338, 7377, 7431, 7487,
+            7542, 7598, 6171, 8174, 8480, 8805, 9120, 9505, 9755, 9986,
+            10232, 10479, 10857, 11195, 11528, 12078, 12613, 13349, 13377, 14476,
+            15345, 16412, 17547, 18498, 19585, 20747, 21963, 23164, 26322, 25599,
+            30737, 32747, 29332, 36340, 37297, 38607, 33679, 42216, 35932, 37243, 41188
+          ]
+        };
+
+        // ========== 2. 尊衛您 (寰譽版) 基礎保費表 (港幣) ==========
+        const vPrimeBaseRates = {
+          standard: { 0: 9059, 16000: 4695, 25000: 4134, 50000: 3272, 100000: 2567, 250000: 2066 },
+          superior: { 0: 10786, 16000: 5574, 25000: 4882, 50000: 3841, 100000: 2994, 250000: 2421 }
+        };
+
+        // ========== 3. 響應式狀態 ==========
+        const startAge = ref(41);
+        const targetAge = ref(85);
+        const offsetStartYear = ref(10);
+        const gender = ref('male');
+        const selectedPlan = ref('vPrime_standard');
+        const selectedDeductible = ref(50000);
+        const inflationRate = ref(2.5); // Slider 左右滑動數值
+        const paymentTerm = ref(5);
+        const balanceStrategy = ref('depleting'); // 預設遞減消耗模式，可切換保本模式
+
+        let chartInstance = null;
+
+        // 防呆校驗判斷
+        const isInvalidRange = computed(() => {
+          return (startAge.value + offsetStartYear.value - 1) >= targetAge.value;
+        });
+
+        const totalYears = computed(() => {
+          if (isInvalidRange.value) return 0;
+          return targetAge.value - startAge.value + 1;
+        });
+
+        // 取得對應年齡的醫療保費
+        const getMedicalPremiumForAge = (age) => {
+          if (age > 80) age = 80;
+          if (selectedPlan.value === 'vFamily') {
+            const list = vFamilyRates[gender.value];
+            return list[age] || list[list.length - 1];
+          } else {
+            const planType = selectedPlan.value === 'vPrime_superior' ? 'superior' : 'standard';
+            const base = vPrimeBaseRates[planType][selectedDeductible.value] || 4000;
+            const factor = Math.pow(1.042, age);
+            return Math.round(base * factor);
+          }
+        };
+
+        // 方案模擬函數
+        const simulatePlan = (annualPremium) => {
+          if (isInvalidRange.value || totalYears.value <= 0) {
+            return { schedule: [], finalValue: 0, minBalance: 0 };
+          }
+          const term = paymentTerm.value;
+          const schedule = [];
+          let currentBalance = 0;
+          let minBalance = Infinity;
+
+          for (let y = 1; y <= totalYears.value; y++) {
+            const currentAge = startAge.value + y - 1;
+            const baseMed = getMedicalPremiumForAge(currentAge);
+            const inflatedMed = Math.round(baseMed * Math.pow(1 + inflationRate.value / 100, y - 1));
+            const isOffset = y >= offsetStartYear.value;
+
+            // 滾存盈聚價值
+            if (y <= term) {
+              currentBalance += annualPremium;
+              currentBalance *= 1.025;
+            } else {
+              const annualYield = term <= 3 ? 0.064 : 0.061;
+              currentBalance *= (1 + annualYield);
+            }
+
+            // 扣除醫療提取
+            if (isOffset) {
+              currentBalance -= inflatedMed;
+            }
+
+            if (currentBalance < minBalance) {
+              minBalance = currentBalance;
+            }
+
+            schedule.push({
+              year: y,
+              age: currentAge,
+              baseMedical: baseMed,
+              inflatedMedical: inflatedMed,
+              isOffsetYear: isOffset,
+              endPolicyValue: Math.round(currentBalance)
+            });
+          }
+
+          return { schedule, finalValue: currentBalance, minBalance };
+        };
+
+        // 二分逼近法求解最優年繳保費
+        const requiredAnnualPremium = computed(() => {
+          if (isInvalidRange.value) return 0;
+          let low = 1000;
+          let high = 3000000;
+          let optimal = high;
+          const term = paymentTerm.value;
+
+          for (let iter = 0; iter < 45; iter++) {
+            const mid = (low + high) / 2;
+            const result = simulatePlan(mid);
+            const totalPrem = mid * term;
+
+            let conditionMet = false;
+            if (balanceStrategy.value === 'guarantee_principal') {
+              // 保本模式：期末結餘 >= 已繳總保費，且中途不能穿底
+              conditionMet = (result.finalValue >= totalPrem) && (result.minBalance >= 0);
+            } else {
+              // 遞減消耗模式：期末結餘 >= 0，且中途不能穿底
+              conditionMet = (result.finalValue >= 0) && (result.minBalance >= 0);
+            }
+
+            if (conditionMet) {
+              optimal = mid;
+              high = mid; // 嘗試更低保費
+            } else {
+              low = mid;  // 保費不足，調高
+            }
+          }
+          return Math.ceil(optimal / 100) * 100;
+        });
+
+        const totalInvestment = computed(() => {
+          return requiredAnnualPremium.value * paymentTerm.value;
+        });
+
+        const activeSimulation = computed(() => {
+          return simulatePlan(requiredAnnualPremium.value);
+        });
+
+        const scheduleData = computed(() => {
+          return activeSimulation.value.schedule;
+        });
+
+        const offsetMedicalTotal = computed(() => {
+          return scheduleData.value
+            .filter(d => d.isOffsetYear)
+            .reduce((sum, d) => sum + d.inflatedMedical, 0);
+        });
+
+        const remainingPolicyValue80 = computed(() => {
+          if (scheduleData.value.length === 0) return 0;
+          return scheduleData.value[scheduleData.value.length - 1].endPolicyValue;
+        });
+
+        // 繪製與更新圖表 (字體大小回歸清晰大字版)
+        const updateChart = () => {
+          const ctx = document.getElementById('flowChart');
+          if (!ctx) return;
+          if (chartInstance) chartInstance.destroy();
+          if (isInvalidRange.value || scheduleData.value.length === 0) return;
+
+          const labels = scheduleData.value.map(d => `${d.age}歲(第${d.year}年)`);
+          const policyValues = scheduleData.value.map(d => d.endPolicyValue);
+          const medicalWithdrawals = scheduleData.value.map(d => d.isOffsetYear ? d.inflatedMedical : 0);
+
+          chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: '年度醫療保費需求 (HKD)',
+                  data: medicalWithdrawals,
+                  type: 'line',
+                  borderColor: '#ea580c',
+                  backgroundColor: '#ea580c',
+                  borderWidth: 2.5,
+                  yAxisID: 'y1',
+                  pointRadius: 2.5,
+                  pointHoverRadius: 6
+                },
+                {
+                  label: '盈聚滾存保單價值 (HKD)',
+                  data: policyValues,
+                  backgroundColor: 'rgba(52, 211, 153, 0.7)',
+                  borderColor: '#10b981',
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  yAxisID: 'y'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              scales: {
+                x: { grid: { display: false }, ticks: { maxTicksLimit: 14, font: { size: 10 } } },
+                y: {
+                  position: 'left',
+                  grid: { color: '#f1f5f9' },
+                  ticks: { font: { size: 10 }, callback: v => '$' + (v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k') }
+                },
+                y1: {
+                  position: 'right',
+                  grid: { display: false },
+                  ticks: { font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }
+                }
+              },
+              plugins: { legend: { display: false } }
+            }
+          });
+        };
+
+        const formatNumber = (num) => {
+          if (isNaN(num) || num === null || num === undefined) return '0';
+          return Math.round(num).toLocaleString('en-US');
+        };
+
+        const exportToPrint = () => {
+          window.print();
+        };
+
+        watch([startAge, targetAge, offsetStartYear, gender, selectedPlan, selectedDeductible, inflationRate, paymentTerm, balanceStrategy], () => {
+          setTimeout(updateChart, 50);
+        });
+
+        onMounted(() => {
+          updateChart();
+        });
+
+        return {
+          startAge,
+          targetAge,
+          offsetStartYear,
+          gender,
+          totalYears,
+          isInvalidRange,
+          selectedPlan,
+          selectedDeductible,
+          inflationRate,
+          paymentTerm,
+          balanceStrategy,
+          offsetMedicalTotal,
+          requiredAnnualPremium,
+          totalInvestment,
+          remainingPolicyValue80,
+          scheduleData,
+          formatNumber,
+          exportToPrint
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
