@@ -11,7 +11,7 @@
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* 滑動桿自訂樣式 - 圖一大尺寸 */
+    /* 滑動桿自訂樣式 */
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       height: 20px;
@@ -19,7 +19,7 @@
       border-radius: 50%;
       background: #ea580c;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       border: 2px solid white;
     }
     input[type=range]::-moz-range-thumb {
@@ -28,7 +28,7 @@
       border-radius: 50%;
       background: #ea580c;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       border: 2px solid white;
     }
     @media print {
@@ -38,7 +38,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen">
   <div id="app" class="max-w-7xl mx-auto px-4 py-6">
     
     <!-- 頂部 Navbar -->
@@ -49,15 +49,15 @@
         </div>
         <div>
           <h1 class="text-xl font-black text-slate-900 tracking-tight leading-none">醫療融資策略精算系統</h1>
-          <p class="text-sm text-slate-500 mt-1.5 font-medium">盈聚·天下 II 儲蓄搭配醫療保單保費自動抵繳規劃</p>
+          <p class="text-sm text-slate-600 mt-1.5 font-bold">盈聚·天下 II 儲蓄搭配醫療保單保費自動抵繳規劃</p>
         </div>
       </div>
       <div class="flex items-center gap-3 no-print">
-        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-semibold rounded-full border border-emerald-200">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 text-emerald-800 text-xs sm:text-sm font-bold rounded-full border border-emerald-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           第 {{ offsetStartYear }} 年起全自動抵繳
         </span>
-        <button @click="exportToPrint" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-sm transition-all">
+        <button @click="exportToPrint" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-black px-4 py-2 rounded-xl shadow-sm transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
           列印 / 導出報告
         </button>
@@ -67,12 +67,12 @@
     <!-- 方案架構橫幅 -->
     <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/10 mb-7 border border-slate-800 relative overflow-hidden">
       <div class="relative z-10 max-w-4xl">
-        <span class="inline-block px-3 py-1 bg-orange-500 text-white font-bold text-xs rounded tracking-wide mb-2.5 uppercase">精算方案架構</span>
+        <span class="inline-block px-3 py-1 bg-orange-500 text-white font-black text-xs rounded tracking-wide mb-2.5 uppercase">精算方案架構 (下次生日年齡計)</span>
         <h2 class="text-2xl sm:text-3xl font-black tracking-tight leading-snug">
-          {{ startAge }}歲投保，第{{ offsetStartYear }}年（{{ startAge + offsetStartYear - 1 }}歲）實現「醫療保費終身自由」
+          下次生日 {{ startAgeNext }} 歲投保，第 {{ offsetStartYear }} 年（{{ startAgeNext + offsetStartYear - 1 }} 歲）實現「醫療保費終身自由」
         </h2>
-        <p class="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
-          透過首{{ offsetStartYear - 1 }}年自付基本醫療保費，配合「盈聚·天下 II」的高複利滾存。由第{{ offsetStartYear }}個保單年度（被保人{{ startAge + offsetStartYear - 1 }}歲）開始，所有後續醫療保費（考慮醫療通脹）100% 由盈聚保單每年部分提取代為繳付，被保人毋須再自掏腰包，並在{{ targetAge }}歲時保單依然保有高額滾存資產。
+        <p class="mt-3 text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
+          透過首 {{ offsetStartYear - 1 }} 年自付基本醫療保費，配合「盈聚·天下 II」的高複利滾存。由第 {{ offsetStartYear }} 個保單年度（被保人下次生日 {{ startAgeNext + offsetStartYear - 1 }} 歲）開始，所有後續醫療保費（考慮醫療通脹）100% 由盈聚保單每年部分提取代為繳付，被保人毋須再自掏腰包，並在 {{ targetAgeNext }} 歲時保單依然保有高額滾存資產。
         </p>
       </div>
       <div class="absolute -right-6 -bottom-10 opacity-10 pointer-events-none">
@@ -84,11 +84,11 @@
     <div v-if="isInvalidRange" class="mb-7 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl flex items-start gap-3">
       <span class="text-xl">⚠️</span>
       <div>
-        <h4 class="font-bold text-sm text-red-800">規劃參數無法形成有效抵繳期</h4>
-        <p class="text-sm text-red-700 mt-1">
-          投保年齡 ({{ startAge }} 歲) + 開始抵繳年期 (第 {{ offsetStartYear }} 年，即 {{ startAge + offsetStartYear - 1 }} 歲) 已達到或超出所選之抵繳目標年齡 ({{ targetAge }} 歲)。
+        <h4 class="font-black text-sm text-red-900">規劃參數無法形成有效抵繳期</h4>
+        <p class="text-sm text-red-800 mt-1 font-medium">
+          投保年齡 (下次生日 {{ startAgeNext }} 歲) + 開始抵繳年期 (第 {{ offsetStartYear }} 年，即下次生日 {{ startAgeNext + offsetStartYear - 1 }} 歲) 已達到或超出所選之抵繳目標年齡 (下次生日 {{ targetAgeNext }} 歲)。
         </p>
-        <p class="text-sm font-semibold text-red-600 mt-1.5">
+        <p class="text-sm font-bold text-red-700 mt-1.5">
           建議：請調高「抵繳目標年齡」、或調低「受保人投保起始年齡」。
         </p>
       </div>
@@ -97,42 +97,42 @@
     <!-- 主體格網 (4 cols 控制面板 + 8 cols 視覺化面板) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
       
-      <!-- 左側：參數控制面板 (字體全面放大回圖一大小) -->
+      <!-- 左側：參數控制面板 -->
       <div class="lg:col-span-4 space-y-5">
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-5">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 space-y-5">
           <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
-            <span class="text-orange-500 font-bold text-base">⚙️</span>
-            <h3 class="font-bold text-base text-slate-800">客戶及方案參數</h3>
+            <span class="text-orange-500 font-black text-lg">⚙️</span>
+            <h3 class="font-black text-base text-slate-900 tracking-tight">客戶及方案參數</h3>
           </div>
 
-          <!-- 年齡與性別選單 -->
+          <!-- 年齡（下次生日年齡）與性別選單 -->
           <div class="grid grid-cols-2 gap-3.5">
             <div>
-              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">投保起始年齡</label>
-              <select v-model.number="startAge" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
-                <option v-for="a in 66" :key="a-1" :value="a-1">{{ a-1 }} 歲起投保</option>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">投保年齡 (下次生日)</label>
+              <select v-model.number="startAgeNext" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+                <option v-for="a in 70" :key="a" :value="a">{{ a }} 歲起投保 (ANB)</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">受保人性別</label>
-              <select v-model="gender" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">受保人性別</label>
+              <select v-model="gender" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
                 <option value="male">男性 (非吸煙)</option>
                 <option value="female">女性 (非吸煙)</option>
               </select>
             </div>
           </div>
 
-          <!-- 抵繳目標年齡與抵繳開始年份 -->
+          <!-- 抵繳目標年齡（下次生日）與抵繳開始年份 -->
           <div class="grid grid-cols-2 gap-3.5">
             <div>
-              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">抵繳目標年齡</label>
-              <select v-model.number="targetAge" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
-                <option v-for="age in [55, 60, 65, 70, 75, 80, 85]" :key="age" :value="age">{{ age }} 歲</option>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">抵繳目標年齡 (下次生日)</label>
+              <select v-model.number="targetAgeNext" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+                <option v-for="age in [55, 60, 65, 70, 75, 80, 85, 100]" :key="age" :value="age">{{ age }} 歲 (ANB)</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">開始自動抵繳年度</label>
-              <select v-model.number="offsetStartYear" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">開始自動抵繳年度</label>
+              <select v-model.number="offsetStartYear" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
                 <option :value="6">第 6 年起</option>
                 <option :value="10">第 10 年起 (推薦)</option>
                 <option :value="11">第 11 年起</option>
@@ -143,8 +143,8 @@
 
           <!-- 選擇搭配醫療計劃 -->
           <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">選擇搭配之醫療計劃</label>
-            <select v-model="selectedPlan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">選擇搭配之醫療計劃</label>
+            <select v-model="selectedPlan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
               <option value="vFamily">醫家保醫療計劃 (vFamily Standalone)</option>
               <option value="vPrime_standard">尊衛您 (寰譽版) - 標準計劃 (Standard)</option>
               <option value="vPrime_superior">尊衛您 (寰譽版) - 特等計劃 (Superior)</option>
@@ -153,8 +153,8 @@
 
           <!-- 尊衛您自付額 (選尊衛您時出現) -->
           <div v-if="selectedPlan.startsWith('vPrime')">
-            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">尊衛您自付費 (Deductible)</label>
-            <select v-model.number="selectedDeductible" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">尊衛您自付費 (Deductible)</label>
+            <select v-model.number="selectedDeductible" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
               <option :value="0">HKD 0 自付額</option>
               <option :value="16000">HKD 16,000 自付額</option>
               <option :value="25000">HKD 25,000 自付額</option>
@@ -164,11 +164,11 @@
             </select>
           </div>
 
-          <!-- 醫療通脹率 (圖一大字體左右拉動 Slider) -->
+          <!-- 醫療通脹率 (粗體標籤與左右拉 Slider) -->
           <div class="space-y-2 pt-1">
             <div class="flex justify-between items-center">
-              <label class="text-xs sm:text-sm font-bold text-slate-700">預期年度醫療通脹率</label>
-              <span class="text-sm font-black text-orange-600 bg-orange-50 px-2.5 py-0.5 rounded border border-orange-200">
+              <label class="text-sm font-bold text-slate-800">預期年度醫療通脹率</label>
+              <span class="text-sm font-black text-orange-600 bg-orange-50 px-2.5 py-0.5 rounded-md border border-orange-200">
                 {{ inflationRate }}%
               </span>
             </div>
@@ -178,102 +178,102 @@
                    class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500 focus:outline-none">
             
             <!-- 預設點擊標籤 -->
-            <div class="flex justify-between text-xs text-slate-400 px-1 font-medium">
-              <button type="button" @click="inflationRate = 0" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 0}">0%</button>
-              <button type="button" @click="inflationRate = 2.5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 2.5}">2.5%</button>
-              <button type="button" @click="inflationRate = 5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 5}">5%</button>
-              <button type="button" @click="inflationRate = 7.5" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 7.5}">7.5%</button>
-              <button type="button" @click="inflationRate = 10" class="hover:text-orange-600 transition" :class="{'font-bold text-orange-600': inflationRate === 10}">10%</button>
+            <div class="flex justify-between text-xs text-slate-500 px-1 font-bold">
+              <button type="button" @click="inflationRate = 0" class="hover:text-orange-600 transition" :class="{'font-black text-orange-600': inflationRate === 0}">0%</button>
+              <button type="button" @click="inflationRate = 2.5" class="hover:text-orange-600 transition" :class="{'font-black text-orange-600': inflationRate === 2.5}">2.5%</button>
+              <button type="button" @click="inflationRate = 5" class="hover:text-orange-600 transition" :class="{'font-black text-orange-600': inflationRate === 5}">5%</button>
+              <button type="button" @click="inflationRate = 7.5" class="hover:text-orange-600 transition" :class="{'font-black text-orange-600': inflationRate === 7.5}">7.5%</button>
+              <button type="button" @click="inflationRate = 10" class="hover:text-orange-600 transition" :class="{'font-black text-orange-600': inflationRate === 10}">10%</button>
             </div>
           </div>
 
-          <!-- 提款後戶口結餘策略切換 (大按鈕 & 大字體) -->
+          <!-- 提款後戶口結餘策略切換 (大按鈕 & 粗體字) -->
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-            <label class="block text-xs sm:text-sm font-bold text-slate-800">提款後戶口結餘策略</label>
+            <label class="block text-sm font-black text-slate-900">提款後戶口結餘策略</label>
             <div class="grid grid-cols-2 gap-2.5">
               <button type="button" @click="balanceStrategy = 'guarantee_principal'"
-                      :class="balanceStrategy === 'guarantee_principal' ? 'bg-orange-600 text-white font-bold shadow-sm' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'"
+                      :class="balanceStrategy === 'guarantee_principal' ? 'bg-orange-600 text-white font-black shadow-md' : 'bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-100'"
                       class="py-2.5 px-2 rounded-xl text-xs sm:text-sm transition-all flex flex-col items-center justify-center text-center">
-                <span class="font-bold">🛡️ 保本模式</span>
-                <span class="text-[11px] opacity-85 mt-0.5">結餘 ≥ 已繳本金</span>
+                <span class="font-black text-sm">🛡️ 保本模式</span>
+                <span class="text-[11px] font-semibold opacity-90 mt-0.5">結餘 ≥ 已繳本金</span>
               </button>
 
               <button type="button" @click="balanceStrategy = 'depleting'"
-                      :class="balanceStrategy === 'depleting' ? 'bg-orange-600 text-white font-bold shadow-sm' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'"
+                      :class="balanceStrategy === 'depleting' ? 'bg-orange-600 text-white font-black shadow-md' : 'bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-100'"
                       class="py-2.5 px-2 rounded-xl text-xs sm:text-sm transition-all flex flex-col items-center justify-center text-center">
-                <span class="font-bold">📉 遞減消耗模式</span>
-                <span class="text-[11px] opacity-85 mt-0.5">極致槓桿 (結餘≥0)</span>
+                <span class="font-black text-sm">📉 遞減消耗模式</span>
+                <span class="text-[11px] font-semibold opacity-90 mt-0.5">極致槓桿 (結餘≥0)</span>
               </button>
             </div>
           </div>
 
-          <!-- 盈聚·天下 II 供款年期按鈕組 (大按鈕大字) -->
+          <!-- 盈聚·天下 II 供款年期按鈕組 -->
           <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-2">盈聚·天下 II 供款年期</label>
+            <label class="block text-sm font-bold text-slate-800 mb-2">盈聚·天下 II 供款年期</label>
             <div class="grid grid-cols-4 gap-2">
               <button v-for="term in [2, 3, 5, 10]" :key="term"
                       @click="paymentTerm = term"
                       type="button"
-                      :class="paymentTerm === term ? 'bg-orange-50 border-2 border-orange-500 text-orange-600 font-black shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100'"
+                      :class="paymentTerm === term ? 'bg-orange-50 border-2 border-orange-500 text-orange-600 font-black shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 font-bold hover:bg-slate-100'"
                       class="py-2.5 rounded-xl text-sm transition-all flex flex-col items-center">
-                <span class="font-bold">{{ term }} 年供</span>
-                <span class="text-[10px] opacity-70 mt-0.5 font-medium">年繳</span>
+                <span class="font-black">{{ term }} 年供</span>
+                <span class="text-[10px] opacity-75 mt-0.5 font-bold">年繳</span>
               </button>
             </div>
           </div>
 
-          <!-- 精算結果輸出標籤 (大字大標題) -->
+          <!-- 精算結果輸出標籤 (特粗大字體) -->
           <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 text-white shadow-md">
-            <span class="text-slate-400 text-xs sm:text-sm font-semibold block">建議盈聚每年保費 ({{ paymentTerm }} 年供)</span>
-            <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1.5">
+            <span class="text-slate-300 text-xs sm:text-sm font-bold block">建議盈聚每年保費 ({{ paymentTerm }} 年供)</span>
+            <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1.5 tracking-tight">
               HKD ${{ formatNumber(requiredAnnualPremium) }}
             </div>
             <div class="flex justify-between items-center text-xs sm:text-sm text-slate-300 border-t border-slate-700/60 pt-3 mt-3">
-              <span class="font-medium">盈聚融資總供款</span>
-              <span class="font-bold text-white text-sm sm:text-base">HKD ${{ formatNumber(totalInvestment) }}</span>
+              <span class="font-bold">盈聚融資總供款</span>
+              <span class="font-black text-white text-sm sm:text-base">HKD ${{ formatNumber(totalInvestment) }}</span>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- 右側：數據指標與動態圖表 (字體全面放大回圖一大小) -->
+      <!-- 右側：數據指標與動態圖表 (粗體深黑) -->
       <div class="lg:col-span-8 space-y-5">
         
         <!-- 3 個 KPI 卡片 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">醫療全期需抵繳總額 ({{ startAge }}-{{ targetAge }}歲)</span>
-            <div class="text-xl sm:text-2xl font-black text-slate-900">HKD ${{ formatNumber(offsetMedicalTotal) }}</div>
-            <span class="text-xs text-slate-400 mt-1 block">含通脹率 {{ inflationRate }}% 複利計算</span>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-600 font-bold block mb-1.5">醫療全期需抵繳總額 ({{ startAgeNext }}-{{ targetAgeNext }}歲 ANB)</span>
+            <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">HKD ${{ formatNumber(offsetMedicalTotal) }}</div>
+            <span class="text-xs text-slate-500 font-semibold mt-1 block">含通脹率 {{ inflationRate }}% 複利計算</span>
           </div>
 
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">盈聚融資總供款 ({{ paymentTerm }}年)</span>
-            <div class="text-xl sm:text-2xl font-black text-orange-600">HKD ${{ formatNumber(totalInvestment) }}</div>
-            <span class="text-xs text-emerald-600 font-bold mt-1 block">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-600 font-bold block mb-1.5">盈聚融資總供款 ({{ paymentTerm }}年)</span>
+            <div class="text-xl sm:text-2xl font-black text-orange-600 tracking-tight">HKD ${{ formatNumber(totalInvestment) }}</div>
+            <span class="text-xs text-emerald-700 font-black mt-1 block">
               ↓ 融資槓桿率: {{ totalInvestment > 0 ? (offsetMedicalTotal / totalInvestment).toFixed(1) : 0 }}x
             </span>
           </div>
 
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs sm:text-sm text-slate-500 font-semibold block mb-1.5">{{ targetAge }}歲時盈聚剩餘保單價值</span>
-            <div class="text-xl sm:text-2xl font-black text-emerald-600">HKD ${{ formatNumber(remainingPolicyValue80) }}</div>
-            <span class="text-xs text-slate-400 mt-1 block">
-              <span v-if="balanceStrategy === 'guarantee_principal'" class="text-blue-600 font-bold">✓ 達成保本 (≥總供款)</span>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+            <span class="text-xs sm:text-sm text-slate-600 font-bold block mb-1.5">{{ targetAgeNext }}歲(ANB)時盈聚剩餘保單價值</span>
+            <div class="text-xl sm:text-2xl font-black text-emerald-600 tracking-tight">HKD ${{ formatNumber(remainingPolicyValue80) }}</div>
+            <span class="text-xs text-slate-500 font-semibold mt-1 block">
+              <span v-if="balanceStrategy === 'guarantee_principal'" class="text-blue-700 font-black">✓ 達成保本 (≥總供款)</span>
               <span v-else>支付全部醫療費後傳承結餘</span>
             </span>
           </div>
         </div>
 
         <!-- 圖表區 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3.5">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-3.5">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
-              <h3 class="font-bold text-slate-800 text-sm sm:text-base">現金流及資產變化軌跡 ({{ startAge }}歲至{{ targetAge }}歲)</h3>
-              <p class="text-xs text-slate-400 mt-0.5">綠色柱體代表盈聚保單現金價值，橙色折線代表每年醫療保費提取需求</p>
+              <h3 class="font-black text-slate-900 text-sm sm:text-base tracking-tight">現金流及資產變化軌跡 (下次生日 {{ startAgeNext }} 歲至 {{ targetAgeNext }} 歲)</h3>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">綠色柱體代表盈聚保單現金價值，橙色折線代表每年醫療保費提取需求</p>
             </div>
-            <div class="flex items-center gap-4 text-xs sm:text-sm font-medium">
+            <div class="flex items-center gap-4 text-xs sm:text-sm font-bold text-slate-800">
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-emerald-500 rounded-sm"></span> 保單價值</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-orange-500 rounded-full"></span> 年度醫療保費</span>
             </div>
@@ -287,18 +287,18 @@
     </div>
 
     <!-- 底部：現金流精算細表 -->
-    <div class="mt-7 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <div class="mt-7 bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
-          <h3 class="font-black text-slate-900 text-base sm:text-lg">融資方案現金流精算細表</h3>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
-            顯示各關鍵年齡節點之保費提取與保單滾存結餘 (港幣)
-            <span class="ml-2 px-2.5 py-0.5 rounded text-xs font-semibold" :class="balanceStrategy === 'guarantee_principal' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'">
+          <h3 class="font-black text-slate-900 text-base sm:text-lg tracking-tight">融資方案現金流精算細表</h3>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+            顯示各保單年度節點之保費提取與保單滾存結餘 (港幣，依下次生日年齡 ANB 計算)
+            <span class="ml-2 px-2.5 py-0.5 rounded text-xs font-bold" :class="balanceStrategy === 'guarantee_principal' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'">
               {{ balanceStrategy === 'guarantee_principal' ? '🛡️ 保本模式 (終值 ≥ 總保費)' : '📉 遞減模式 (終值 ≥ $0)' }}
             </span>
           </p>
         </div>
-        <span class="text-xs sm:text-sm text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
+        <span class="text-xs sm:text-sm text-slate-600 bg-slate-100 px-3.5 py-1.5 rounded-full font-bold">
           共 {{ totalYears }} 個保單年度
         </span>
       </div>
@@ -307,31 +307,31 @@
         <table class="w-full text-left border-collapse text-xs sm:text-sm">
           <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 z-10 text-xs sm:text-sm">
             <tr>
-              <th class="py-3 px-4 font-bold text-slate-600">保單年度</th>
-              <th class="py-3 px-4 font-bold text-slate-600">年齡</th>
-              <th class="py-3 px-4 font-bold text-slate-600">醫療保費 (原始)</th>
-              <th class="py-3 px-4 font-bold text-slate-600">醫療保費 (通脹後)</th>
-              <th class="py-3 px-4 font-bold text-slate-600">自付 / 提取狀態</th>
-              <th class="py-3 px-4 font-bold text-slate-600 text-right">盈聚戶口結餘 (預估)</th>
+              <th class="py-3 px-4 font-black text-slate-700">保單年度</th>
+              <th class="py-3 px-4 font-black text-slate-700">下次生日年齡 (ANB)</th>
+              <th class="py-3 px-4 font-black text-slate-700">醫療保費 (原始)</th>
+              <th class="py-3 px-4 font-black text-slate-700">醫療保費 (通脹後)</th>
+              <th class="py-3 px-4 font-black text-slate-700">自付 / 提取狀態</th>
+              <th class="py-3 px-4 font-black text-slate-700 text-right">盈聚戶口結餘 (預估)</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr v-for="item in scheduleData" :key="item.year" :class="{'bg-orange-50/40': item.isOffsetYear}">
-              <td class="py-3 px-4 font-semibold text-slate-700">第 {{ item.year }} 年</td>
-              <td class="py-3 px-4 text-slate-600">{{ item.age }} 歲</td>
-              <td class="py-3 px-4 text-slate-500">${{ formatNumber(item.baseMedical) }}</td>
-              <td class="py-3 px-4 font-semibold" :class="item.isOffsetYear ? 'text-red-600 font-bold' : 'text-slate-800'">
+              <td class="py-3 px-4 font-bold text-slate-800">第 {{ item.year }} 年</td>
+              <td class="py-3 px-4 font-semibold text-slate-700">{{ item.ageNext }} 歲</td>
+              <td class="py-3 px-4 font-medium text-slate-600">${{ formatNumber(item.baseMedical) }}</td>
+              <td class="py-3 px-4 font-bold" :class="item.isOffsetYear ? 'text-red-600' : 'text-slate-900'">
                 ${{ formatNumber(item.inflatedMedical) }}
               </td>
               <td class="py-3 px-4">
-                <span v-if="item.isOffsetYear" class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+                <span v-if="item.isOffsetYear" class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">
                   ✓ 盈聚自動抵繳
                 </span>
-                <span v-else class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">
+                <span v-else class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-700">
                   自行繳付
                 </span>
               </td>
-              <td class="py-3 px-4 font-bold text-slate-900 text-right text-sm">
+              <td class="py-3 px-4 font-black text-slate-900 text-right text-sm">
                 ${{ formatNumber(item.endPolicyValue) }}
               </td>
             </tr>
@@ -347,74 +347,224 @@
 
     createApp({
       setup() {
-        // ========== 1. 醫家保 (vFamily) 官方保費表 (港幣) ==========
-        const vFamilyRates = {
-          male: [
-            5524, 5524, 5524, 5524, 4728, 4728, 4728, 4728, 4728, 4728,
-            4728, 4728, 4728, 4728, 4728, 4728, 4728, 4728, 4647, 3718,
-            3754, 3696, 3611, 3644, 3682, 3853, 4082, 4304, 4538, 4751,
-            4917, 5054, 5210, 5337, 5491, 5568, 5603, 5605, 5607, 5609,
-            5689, 5920, 7939, 6379, 6667, 6995, 7332, 7846, 8258, 8686,
-            8802, 8882, 9447, 9922, 10408, 11090, 11793, 12677, 13903, 14062,
-            15246, 16263, 17411, 18734, 19942, 21449, 22953, 24758, 24386, 27888,
-            26759, 28327, 34980, 30286, 31058, 32413, 40023, 34656, 43676, 45121, 49893
-          ],
-          female: [
-            3841, 3841, 3841, 3841, 4394, 4394, 4394, 4394, 4394, 4394,
-            4394, 4394, 4394, 4394, 4394, 4394, 4394, 4394, 4420, 4446,
-            4473, 4500, 4520, 4659, 4855, 5184, 5459, 5751, 6015, 6302,
-            6464, 6655, 6868, 7068, 7243, 7283, 7338, 7377, 7431, 7487,
-            7542, 7598, 6171, 8174, 8480, 8805, 9120, 9505, 9755, 9986,
-            10232, 10479, 10857, 11195, 11528, 12078, 12613, 13349, 13377, 14476,
-            15345, 16412, 17547, 18498, 19585, 20747, 21963, 23164, 26322, 25599,
-            30737, 32747, 29332, 36340, 37297, 38607, 33679, 42216, 35932, 37243, 41188
-          ]
+        // ========== 1. 醫家保 (vFamily) 官方保費表 (港幣，索引 key = 下次生日年齡 ANB 1-81) ==========
+        const vFamilyRatesByANB = {
+          male: {
+            1: 5524, 2: 5524, 3: 5524, 4: 5524, 5: 4728, 6: 4728, 7: 4728, 8: 4728, 9: 4728, 10: 4728,
+            11: 4728, 12: 4728, 13: 4728, 14: 4728, 15: 4728, 16: 4728, 17: 4728, 18: 4728, 19: 4647, 20: 3718,
+            21: 3754, 22: 3696, 23: 3611, 24: 3644, 25: 3682, 26: 3853, 27: 4082, 28: 4304, 29: 4538, 30: 4751,
+            31: 4917, 32: 5054, 33: 5210, 34: 5337, 35: 5491, 36: 5568, 37: 5603, 38: 5605, 39: 5607, 40: 5609,
+            41: 5689, 42: 5920, 43: 7939, 44: 6379, 45: 6667, 46: 6995, 47: 7332, 48: 7846, 49: 8258, 50: 8686,
+            51: 8802, 52: 8882, 53: 9447, 54: 9922, 55: 10408, 56: 11090, 57: 11793, 58: 12677, 59: 13903, 60: 14062,
+            61: 15246, 62: 16263, 63: 17411, 64: 18734, 65: 19942, 66: 21449, 67: 22953, 68: 24758, 69: 24386, 70: 27888,
+            71: 26759, 72: 28327, 73: 34980, 74: 30286, 75: 31058, 76: 32413, 77: 40023, 78: 34656, 79: 43676, 80: 45121, 81: 49893
+          },
+          female: {
+            1: 3841, 2: 3841, 3: 3841, 4: 3841, 5: 4394, 6: 4394, 7: 4394, 8: 4394, 9: 4394, 10: 4394,
+            11: 4394, 12: 4394, 13: 4394, 14: 4394, 15: 4394, 16: 4394, 17: 4394, 18: 4394, 19: 4420, 20: 4446,
+            21: 4473, 22: 4500, 23: 4520, 24: 4659, 25: 4855, 26: 5184, 27: 5459, 28: 5751, 29: 6015, 30: 6302,
+            31: 6464, 32: 6655, 33: 6868, 34: 7068, 35: 7243, 36: 7283, 37: 7338, 38: 7377, 39: 7431, 40: 7487,
+            41: 7542, 42: 7598, 43: 6171, 44: 8174, 45: 8480, 46: 8805, 47: 9120, 48: 9505, 49: 9755, 50: 9986,
+            51: 10232, 52: 10479, 53: 10857, 54: 11195, 55: 11528, 56: 12078, 57: 12613, 58: 13349, 59: 13377, 60: 14476,
+            61: 15345, 62: 16412, 63: 17547, 64: 18498, 65: 19585, 66: 20747, 67: 21963, 68: 23164, 69: 26322, 70: 25599,
+            71: 30737, 72: 32747, 73: 29332, 74: 36340, 75: 37297, 76: 38607, 77: 33679, 78: 42216, 79: 35932, 80: 37243, 81: 41188
+          }
         };
 
-        // ========== 2. 尊衛您 (寰譽版) 基礎保費表 (港幣) ==========
-        const vPrimeBaseRates = {
-          standard: { 0: 9059, 16000: 4695, 25000: 4134, 50000: 3272, 100000: 2567, 250000: 2066 },
-          superior: { 0: 10786, 16000: 5574, 25000: 4882, 50000: 3841, 100000: 2994, 250000: 2421 }
+        // ========== 2. 尊衛您 (寰譽版) 官方保費全量表 (港幣，索引 key = 下次生日年齡 ANB 1-100) ==========
+        // 嚴格對應 PDF 中「下次生日年齡 Age at next birthday」各欄位精確金額
+        const vPrimeTablesByANB = {
+          standard: {
+            0: {
+              1: 9059, 2: 9059, 3: 9059, 4: 9059, 5: 9059, 6: 8282, 7: 8282, 8: 8282, 9: 8282, 10: 8282,
+              11: 8282, 12: 8282, 13: 8282, 14: 8282, 15: 8282, 16: 8282, 17: 8282, 18: 8282, 19: 8512, 20: 8581,
+              21: 8782, 22: 9053, 23: 9313, 24: 9505, 25: 9646, 26: 10120, 27: 10672, 28: 11217, 29: 11622, 30: 11882,
+              31: 12058, 32: 12331, 33: 12435, 34: 12702, 35: 12944, 36: 13405, 37: 13430, 38: 13705, 39: 14064, 40: 14175,
+              41: 14368, 42: 14646, 43: 15010, 44: 15709, 45: 16665, 46: 17498, 47: 18499, 48: 19079, 49: 19827, 50: 20657,
+              51: 21066, 52: 21857, 53: 23671, 54: 24722, 55: 25758, 56: 26869, 57: 28578, 58: 30231, 59: 31800, 60: 33968,
+              61: 35683, 62: 37461, 63: 40666, 64: 44904, 65: 50243, 66: 54572, 67: 58991, 68: 61317, 69: 62707, 70: 64776,
+              71: 66552, 72: 73579, 73: 77656, 74: 81663, 75: 85029, 76: 86577, 77: 92056, 78: 98428, 79: 101189, 80: 104385,
+              81: 106034, 82: 112174, 83: 115438, 84: 117485, 85: 119345, 86: 121485, 87: 123717, 88: 125670, 89: 127624, 90: 129670,
+              91: 131718, 92: 133856, 93: 135809, 94: 137856, 95: 140089, 96: 142134, 97: 144275, 98: 146864, 99: 149449, 100: 155620
+            },
+            16000: {
+              1: 4695, 2: 4695, 3: 4695, 4: 4695, 5: 4695, 6: 4002, 7: 4002, 8: 4002, 9: 4002, 10: 4002,
+              11: 4002, 12: 4002, 13: 4002, 14: 4002, 15: 4002, 16: 4002, 17: 4002, 18: 4002, 19: 4033, 20: 4197,
+              21: 4275, 22: 4346, 23: 4624, 24: 4638, 25: 5016, 26: 5032, 27: 5032, 28: 5392, 29: 5502, 30: 5613,
+              31: 5722, 32: 5830, 33: 5936, 34: 6001, 35: 6147, 36: 6231, 37: 6569, 38: 6569, 39: 6737, 40: 6737,
+              41: 6821, 42: 7242, 43: 7410, 44: 7748, 45: 8000, 46: 8417, 47: 8834, 48: 9335, 49: 9823, 50: 10321,
+              51: 10933, 52: 11280, 53: 11540, 54: 12060, 55: 12578, 56: 13027, 57: 13915, 58: 14803, 59: 15694, 60: 16849,
+              61: 17993, 62: 19003, 63: 20353, 64: 22401, 65: 24961, 66: 27440, 67: 29924, 68: 30461, 69: 31255, 70: 32304,
+              71: 33324, 72: 36852, 73: 38987, 74: 40729, 75: 42787, 76: 43798, 77: 46092, 78: 49213, 79: 50225, 80: 53158,
+              81: 54356, 82: 55597, 83: 57416, 84: 58352, 85: 59567, 86: 60316, 87: 61736, 88: 63238, 89: 64133, 90: 65703,
+              91: 66901, 92: 68293, 93: 69731, 94: 71001, 95: 72716, 96: 73867, 97: 75180, 98: 75948, 99: 77344, 100: 77805
+            },
+            25000: {
+              1: 4134, 2: 4134, 3: 4134, 4: 4134, 5: 4134, 6: 3541, 7: 3541, 8: 3541, 9: 3541, 10: 3541,
+              11: 3541, 12: 3541, 13: 3541, 14: 3541, 15: 3541, 16: 3541, 17: 3541, 18: 3541, 19: 3541, 20: 3636,
+              21: 3636, 22: 3636, 23: 3924, 24: 4020, 25: 4304, 26: 4304, 27: 4486, 28: 4584, 29: 4692, 30: 4791,
+              31: 4885, 32: 4893, 33: 5043, 34: 5164, 35: 5255, 36: 5422, 37: 5589, 38: 5589, 39: 5672, 40: 5672,
+              41: 5839, 42: 6089, 43: 6298, 44: 6657, 45: 6673, 46: 7406, 47: 7768, 48: 8320, 49: 8670, 50: 9005,
+              51: 9171, 52: 9515, 53: 9699, 54: 10387, 55: 10815, 56: 11085, 57: 11703, 58: 12494, 59: 13375, 60: 14257,
+              61: 15141, 62: 16206, 63: 17341, 64: 19093, 65: 21290, 66: 23156, 67: 25361, 68: 25805, 69: 26502, 70: 27455,
+              71: 28296, 72: 31270, 73: 33022, 74: 34722, 75: 36288, 76: 37198, 77: 39110, 78: 41838, 79: 42656, 80: 45115,
+              81: 46117, 82: 47279, 83: 48728, 84: 49469, 85: 50840, 86: 52683, 87: 53846, 88: 55199, 89: 56034, 90: 57555,
+              91: 58411, 92: 59484, 93: 60264, 94: 61239, 95: 61948, 96: 62577, 97: 63823, 98: 64623, 99: 65334, 100: 66213
+            },
+            50000: {
+              1: 3272, 2: 3272, 3: 3272, 4: 3272, 5: 3272, 6: 2770, 7: 2770, 8: 2770, 9: 2770, 10: 2770,
+              11: 2770, 12: 2770, 13: 2770, 14: 2770, 15: 2770, 16: 2770, 17: 2770, 18: 2770, 19: 2800, 20: 2860,
+              21: 2946, 22: 3023, 23: 3122, 24: 3209, 25: 3296, 26: 3370, 27: 3445, 28: 3518, 29: 3519, 30: 3546,
+              31: 3735, 32: 3735, 33: 3753, 34: 3783, 35: 3783, 36: 3888, 37: 4008, 38: 4008, 39: 4068, 40: 4091,
+              41: 4371, 42: 4683, 43: 4853, 44: 5130, 45: 5221, 46: 5708, 47: 5987, 48: 6412, 49: 6682, 50: 7002,
+              51: 7487, 52: 7866, 53: 8244, 54: 8623, 55: 9000, 56: 9391, 57: 9782, 58: 10175, 59: 10567, 60: 10962,
+              61: 11578, 62: 12242, 63: 12963, 64: 13858, 65: 14667, 66: 15366, 67: 16487, 68: 17547, 69: 18820, 70: 20111,
+              71: 21445, 72: 22728, 73: 24146, 74: 25474, 75: 26819, 76: 28259, 77: 29271, 78: 30740, 79: 31340, 80: 33146,
+              81: 35105, 82: 36040, 83: 37382, 84: 38828, 85: 40141, 86: 41596, 87: 42513, 88: 43583, 89: 44243, 90: 45443,
+              91: 46162, 92: 50176, 93: 51112, 94: 52232, 95: 53477, 96: 54486, 97: 56047, 98: 57712, 99: 58833, 100: 60120
+            },
+            100000: {
+              1: 2567, 2: 2567, 3: 2567, 4: 2567, 5: 2567, 6: 2293, 7: 2293, 8: 2293, 9: 2293, 10: 2293,
+              11: 2293, 12: 2293, 13: 2293, 14: 2293, 15: 2293, 16: 2293, 17: 2293, 18: 2293, 19: 2311, 20: 2354,
+              21: 2404, 22: 2461, 23: 2533, 24: 2597, 25: 2645, 26: 2703, 27: 2761, 28: 2818, 29: 2818, 30: 2836,
+              31: 2985, 32: 2985, 33: 2995, 34: 3018, 35: 3018, 36: 3094, 37: 3183, 38: 3183, 39: 3223, 40: 3236,
+              41: 3451, 42: 3691, 43: 3821, 44: 4032, 45: 4097, 46: 4480, 47: 4698, 48: 5031, 49: 5244, 50: 5494,
+              51: 5875, 52: 6172, 53: 6468, 54: 6765, 55: 7061, 56: 7449, 57: 7754, 58: 8060, 59: 8463, 60: 8773,
+              61: 9261, 62: 9786, 63: 10357, 64: 10939, 65: 11570, 66: 12115, 67: 12990, 68: 13657, 69: 14641, 70: 15635,
+              71: 16671, 72: 17670, 73: 18772, 74: 19805, 75: 20850, 76: 21970, 77: 22757, 78: 23898, 79: 24366, 80: 25769,
+              81: 27293, 82: 28020, 83: 29064, 84: 30187, 85: 31207, 86: 32339, 87: 33053, 88: 33883, 89: 34396, 90: 35330,
+              91: 35889, 92: 39009, 93: 39737, 94: 40608, 95: 41576, 96: 42360, 97: 43574, 98: 44868, 99: 45740, 100: 46741
+            },
+            250000: {
+              1: 2066, 2: 2066, 3: 2066, 4: 2066, 5: 2066, 6: 1852, 7: 1852, 8: 1852, 9: 1852, 10: 1852,
+              11: 1852, 12: 1852, 13: 1852, 14: 1852, 15: 1852, 16: 1852, 17: 1852, 18: 1852, 19: 1866, 20: 1899,
+              21: 1936, 22: 1981, 23: 2037, 24: 2087, 25: 2122, 26: 2168, 27: 2214, 28: 2260, 29: 2260, 30: 2274,
+              31: 2376, 32: 2376, 33: 2383, 34: 2400, 35: 2400, 36: 2442, 37: 2514, 38: 2514, 39: 2544, 40: 2554,
+              41: 2726, 42: 2915, 43: 3017, 44: 3184, 45: 3235, 46: 3484, 47: 3654, 48: 3913, 49: 4079, 50: 4273,
+              51: 4569, 52: 4800, 53: 5031, 54: 5262, 55: 5492, 56: 5814, 57: 6142, 58: 6385, 59: 6725, 60: 6971,
+              61: 7360, 62: 7776, 63: 8230, 64: 8666, 65: 9166, 66: 9596, 67: 10139, 68: 10624, 69: 11387, 70: 12161,
+              71: 12968, 72: 13743, 73: 14601, 74: 15405, 75: 16218, 76: 17089, 77: 17700, 78: 18588, 79: 18952, 80: 20043,
+              81: 21228, 82: 21793, 83: 22606, 84: 23479, 85: 24274, 86: 25154, 87: 25709, 88: 26355, 89: 26754, 90: 27480,
+              91: 27915, 92: 30342, 93: 30908, 94: 31585, 95: 32339, 96: 32948, 97: 33892, 98: 34899, 99: 35578, 100: 36355
+            }
+          },
+          superior: {
+            0: {
+              1: 10786, 2: 10786, 3: 10786, 4: 10786, 5: 10786, 6: 9862, 7: 9862, 8: 9862, 9: 9862, 10: 9862,
+              11: 9862, 12: 9862, 13: 9862, 14: 9862, 15: 9862, 16: 9862, 17: 9862, 18: 9862, 19: 10135, 20: 10218,
+              21: 10457, 22: 10779, 23: 11090, 24: 11317, 25: 11487, 26: 12051, 27: 12708, 28: 13357, 29: 13841, 30: 14150,
+              31: 14362, 32: 14688, 33: 14812, 34: 15132, 35: 15419, 36: 15969, 37: 15999, 38: 16326, 39: 16753, 40: 16884,
+              41: 17114, 42: 17446, 43: 17878, 44: 18712, 45: 19850, 46: 20843, 47: 22035, 48: 22724, 49: 23616, 50: 24604,
+              51: 25093, 52: 26034, 53: 28195, 54: 29446, 55: 30682, 56: 32004, 57: 34040, 58: 36009, 59: 37878, 60: 40460,
+              61: 42502, 62: 44619, 63: 48437, 64: 53484, 65: 59843, 66: 64998, 67: 70261, 68: 73031, 69: 74686, 70: 77150,
+              71: 79265, 72: 87634, 73: 92489, 74: 97263, 75: 101272, 76: 103115, 77: 109641, 78: 117231, 79: 120519, 80: 124326,
+              81: 126290, 82: 133603, 83: 137491, 84: 139927, 85: 142143, 86: 144692, 87: 147351, 88: 149677, 89: 152004, 90: 154441,
+              91: 156879, 92: 159426, 93: 161753, 94: 164191, 95: 166850, 96: 169286, 97: 171835, 98: 174919, 99: 177998, 100: 185349
+            },
+            16000: {
+              1: 5574, 2: 5574, 3: 5574, 4: 5574, 5: 5574, 6: 4752, 7: 4752, 8: 4752, 9: 4752, 10: 4752,
+              11: 4752, 12: 4752, 13: 4752, 14: 4752, 15: 4752, 16: 4752, 17: 4752, 18: 4752, 19: 4787, 20: 4983,
+              21: 5076, 22: 5160, 23: 5491, 24: 5508, 25: 5957, 26: 5975, 27: 5975, 28: 6403, 29: 6534, 30: 6666,
+              31: 6795, 32: 6923, 33: 7049, 34: 7127, 35: 7302, 36: 7402, 37: 7802, 38: 7802, 39: 8002, 40: 8002,
+              41: 8102, 42: 8601, 43: 8802, 44: 9202, 45: 9502, 46: 9997, 47: 10492, 48: 11086, 49: 11667, 50: 12258,
+              51: 12986, 52: 13399, 53: 13707, 54: 14324, 55: 14940, 56: 15473, 57: 16527, 58: 17583, 59: 18641, 60: 20013,
+              61: 21370, 62: 22570, 63: 24174, 64: 26606, 65: 29645, 66: 32590, 67: 35540, 68: 36177, 69: 37118, 70: 38365,
+              71: 39576, 72: 43766, 73: 46301, 74: 48370, 75: 50813, 76: 52014, 77: 54740, 78: 58446, 79: 59648, 80: 63130,
+              81: 64553, 82: 66028, 83: 68188, 84: 69298, 85: 70743, 86: 71631, 87: 73319, 88: 75102, 89: 76166, 90: 78029,
+              91: 79452, 92: 81106, 93: 82813, 94: 84322, 95: 86358, 96: 87726, 97: 89285, 98: 90196, 99: 91856, 100: 92403
+            },
+            25000: {
+              1: 4882, 2: 4882, 3: 4882, 4: 4882, 5: 4882, 6: 4181, 7: 4181, 8: 4181, 9: 4181, 10: 4181,
+              11: 4181, 12: 4181, 13: 4181, 14: 4181, 15: 4181, 16: 4181, 17: 4181, 18: 4181, 19: 4181, 20: 4294,
+              21: 4294, 22: 4294, 23: 4633, 24: 4747, 25: 5082, 26: 5082, 27: 5298, 28: 5413, 29: 5541, 30: 5657,
+              31: 5769, 32: 5780, 33: 5956, 34: 6099, 35: 6207, 36: 6405, 37: 6601, 38: 6601, 39: 6699, 40: 6699,
+              41: 6897, 42: 7193, 43: 7439, 44: 7863, 45: 7882, 46: 8748, 47: 9175, 48: 9827, 49: 10240, 50: 10635,
+              51: 10832, 52: 11240, 53: 11456, 54: 12269, 55: 12774, 56: 13094, 57: 13823, 58: 14758, 59: 15798, 60: 16840,
+              61: 17883, 62: 19142, 63: 20481, 64: 22550, 65: 25146, 66: 27349, 67: 29953, 68: 30478, 69: 31301, 70: 32425,
+              71: 33420, 72: 36930, 73: 39000, 74: 41008, 75: 42858, 76: 43932, 77: 46190, 78: 49413, 79: 50378, 80: 53282,
+              81: 54467, 82: 55838, 83: 57550, 84: 58424, 85: 60044, 86: 62221, 87: 63593, 88: 65192, 89: 66179, 90: 67976,
+              91: 68985, 92: 70252, 93: 71173, 94: 72325, 95: 73163, 96: 73906, 97: 75377, 98: 76322, 99: 77162, 100: 78201
+            },
+            50000: {
+              1: 3841, 2: 3841, 3: 3841, 4: 3841, 5: 3841, 6: 3253, 7: 3253, 8: 3253, 9: 3253, 10: 3253,
+              11: 3253, 12: 3253, 13: 3253, 14: 3253, 15: 3253, 16: 3253, 17: 3253, 18: 3253, 19: 3286, 20: 3357,
+              21: 3458, 22: 3549, 23: 3665, 24: 3767, 25: 3869, 26: 3956, 27: 4044, 28: 4131, 29: 4133, 30: 4165,
+              31: 4385, 32: 4385, 33: 4408, 34: 4442, 35: 4442, 36: 4565, 37: 4707, 38: 4707, 39: 4778, 40: 4805,
+              41: 5133, 42: 5499, 43: 5699, 44: 6026, 45: 6131, 46: 6703, 47: 7030, 48: 7530, 49: 7848, 50: 8223,
+              51: 8792, 52: 9238, 53: 9682, 54: 10126, 55: 10569, 56: 11029, 57: 11488, 58: 11950, 59: 12410, 60: 12873,
+              61: 13597, 62: 14376, 63: 15224, 64: 16274, 65: 17224, 66: 18044, 67: 19361, 68: 20605, 69: 22100, 70: 23616,
+              71: 25182, 72: 26689, 73: 28354, 74: 29913, 75: 31492, 76: 33184, 77: 34373, 78: 36097, 79: 36802, 80: 38922,
+              81: 41224, 82: 42321, 83: 43898, 84: 45595, 85: 47137, 86: 48845, 87: 49923, 88: 51178, 89: 51954, 90: 53363,
+              91: 54207, 92: 58921, 93: 60020, 94: 61335, 95: 62798, 96: 63981, 97: 65815, 98: 67770, 99: 69087, 100: 70598
+            },
+            100000: {
+              1: 2994, 2: 2994, 3: 2994, 4: 2994, 5: 2994, 6: 2672, 7: 2672, 8: 2672, 9: 2672, 10: 2672,
+              11: 2672, 12: 2672, 13: 2672, 14: 2672, 15: 2672, 16: 2672, 17: 2672, 18: 2672, 19: 2693, 20: 2744,
+              21: 2802, 22: 2868, 23: 2953, 24: 3027, 25: 3082, 26: 3150, 27: 3218, 28: 3284, 29: 3284, 30: 3306,
+              31: 3479, 32: 3479, 33: 3492, 34: 3517, 35: 3517, 36: 3607, 37: 3712, 38: 3712, 39: 3757, 40: 3773,
+              41: 4024, 42: 4305, 43: 4455, 44: 4701, 45: 4777, 46: 5224, 47: 5478, 48: 5866, 49: 6114, 50: 6405,
+              51: 6850, 52: 7196, 53: 7541, 54: 7888, 55: 8233, 56: 8686, 57: 9041, 58: 9399, 59: 9868, 60: 10229,
+              61: 10798, 62: 11410, 63: 12076, 64: 12755, 65: 13491, 66: 14125, 67: 15146, 68: 15924, 69: 17071, 70: 18229,
+              71: 19438, 72: 20602, 73: 21887, 74: 23092, 75: 24310, 76: 25616, 77: 26533, 78: 27864, 79: 28410, 80: 30045,
+              81: 31821, 82: 32669, 83: 33887, 84: 35197, 85: 36387, 86: 37706, 87: 38537, 88: 39506, 89: 40105, 90: 41193,
+              91: 41845, 92: 45483, 93: 46331, 94: 47347, 95: 48476, 96: 49390, 97: 50804, 98: 52315, 99: 53330, 100: 54497
+            },
+            250000: {
+              1: 2421, 2: 2421, 3: 2421, 4: 2421, 5: 2421, 6: 2169, 7: 2169, 8: 2169, 9: 2169, 10: 2169,
+              11: 2169, 12: 2169, 13: 2169, 14: 2169, 15: 2169, 16: 2169, 17: 2169, 18: 2169, 19: 2184, 20: 2224,
+              21: 2267, 22: 2320, 23: 2386, 24: 2445, 25: 2485, 26: 2539, 27: 2593, 28: 2647, 29: 2647, 30: 2663,
+              31: 2782, 32: 2782, 33: 2791, 34: 2811, 35: 2811, 36: 2861, 37: 2945, 38: 2945, 39: 2981, 40: 2992,
+              41: 3193, 42: 3414, 43: 3534, 44: 3731, 45: 3790, 46: 4081, 47: 4281, 48: 4586, 49: 4778, 50: 5007,
+              51: 5353, 52: 5624, 53: 5894, 54: 6164, 55: 6434, 56: 6811, 57: 7197, 58: 7480, 59: 7879, 60: 8167,
+              61: 8622, 62: 9111, 63: 9642, 64: 10153, 65: 10738, 66: 11243, 67: 11877, 68: 12446, 69: 13341, 70: 14247,
+              71: 15192, 72: 16101, 73: 17105, 74: 18046, 75: 18999, 76: 20019, 77: 20736, 78: 21776, 79: 22203, 80: 23481,
+              81: 24870, 82: 25532, 83: 26483, 84: 27507, 85: 28438, 86: 29468, 87: 30119, 88: 30876, 89: 31343, 90: 32194,
+              91: 32704, 92: 35547, 93: 36209, 94: 37004, 95: 37886, 96: 38600, 97: 39706, 98: 40885, 99: 41679, 100: 42591
+            }
+          }
         };
 
-        // ========== 3. 響應式狀態 ==========
-        const startAge = ref(41);
-        const targetAge = ref(85);
+        // ========== 3. 響應式狀態 (以「下次生日年齡 ANB」為核心基準) ==========
+        const startAgeNext = ref(42);   // 投保時之下次生日年齡 (ANB)，例如實歲 41 歲即為 ANB 42
+        const targetAgeNext = ref(85);  // 抵繳目標年齡 (ANB)
         const offsetStartYear = ref(10);
         const gender = ref('male');
         const selectedPlan = ref('vPrime_standard');
         const selectedDeductible = ref(50000);
-        const inflationRate = ref(2.5); // Slider 左右滑動數值
+        const inflationRate = ref(2.5);
         const paymentTerm = ref(5);
-        const balanceStrategy = ref('depleting'); // 預設遞減消耗模式，可切換保本模式
+        const balanceStrategy = ref('depleting'); // depleting (遞減消耗) / guarantee_principal (保本)
 
         let chartInstance = null;
 
-        // 防呆校驗判斷
+        // 防呆校驗判斷 (以下次生日年齡計算抵繳年期跨度)
         const isInvalidRange = computed(() => {
-          return (startAge.value + offsetStartYear.value - 1) >= targetAge.value;
+          return (startAgeNext.value + offsetStartYear.value - 1) >= targetAgeNext.value;
         });
 
         const totalYears = computed(() => {
           if (isInvalidRange.value) return 0;
-          return targetAge.value - startAge.value + 1;
+          return targetAgeNext.value - startAgeNext.value + 1;
         });
 
-        // 取得對應年齡的醫療保費
-        const getMedicalPremiumForAge = (age) => {
-          if (age > 80) age = 80;
+        // 準確取得特定「下次生日年齡 ANB」的醫療保費 (精確查表)
+        const getMedicalPremiumForANB = (anb) => {
           if (selectedPlan.value === 'vFamily') {
-            const list = vFamilyRates[gender.value];
-            return list[age] || list[list.length - 1];
+            const list = vFamilyRatesByANB[gender.value];
+            const cappedANB = Math.min(Math.max(anb, 1), 81);
+            return list[cappedANB] || list[81];
           } else {
             const planType = selectedPlan.value === 'vPrime_superior' ? 'superior' : 'standard';
-            const base = vPrimeBaseRates[planType][selectedDeductible.value] || 4000;
-            const factor = Math.pow(1.042, age);
-            return Math.round(base * factor);
+            const table = vPrimeTablesByANB[planType][selectedDeductible.value];
+            if (table) {
+              const cappedANB = Math.min(Math.max(anb, 1), 100);
+              return table[cappedANB] || table[100];
+            }
+            return 5000;
           }
         };
 
-        // 方案模擬函數
+        // 方案模擬函數 (依據下次生日年齡與保單年度逐年推演)
         const simulatePlan = (annualPremium) => {
           if (isInvalidRange.value || totalYears.value <= 0) {
             return { schedule: [], finalValue: 0, minBalance: 0 };
@@ -425,8 +575,9 @@
           let minBalance = Infinity;
 
           for (let y = 1; y <= totalYears.value; y++) {
-            const currentAge = startAge.value + y - 1;
-            const baseMed = getMedicalPremiumForAge(currentAge);
+            // 第 y 個保單年度對應之下次生日年齡 ANB
+            const currentANB = startAgeNext.value + y - 1;
+            const baseMed = getMedicalPremiumForANB(currentANB);
             const inflatedMed = Math.round(baseMed * Math.pow(1 + inflationRate.value / 100, y - 1));
             const isOffset = y >= offsetStartYear.value;
 
@@ -450,7 +601,7 @@
 
             schedule.push({
               year: y,
-              age: currentAge,
+              ageNext: currentANB,
               baseMedical: baseMed,
               inflatedMedical: inflatedMed,
               isOffsetYear: isOffset,
@@ -465,7 +616,7 @@
         const requiredAnnualPremium = computed(() => {
           if (isInvalidRange.value) return 0;
           let low = 1000;
-          let high = 3000000;
+          let high = 5000000;
           let optimal = high;
           const term = paymentTerm.value;
 
@@ -516,14 +667,14 @@
           return scheduleData.value[scheduleData.value.length - 1].endPolicyValue;
         });
 
-        // 繪製與更新圖表 (字體大小回歸清晰大字版)
+        // 繪製與更新圖表 (粗體清晰座標)
         const updateChart = () => {
           const ctx = document.getElementById('flowChart');
           if (!ctx) return;
           if (chartInstance) chartInstance.destroy();
           if (isInvalidRange.value || scheduleData.value.length === 0) return;
 
-          const labels = scheduleData.value.map(d => `${d.age}歲(第${d.year}年)`);
+          const labels = scheduleData.value.map(d => `${d.ageNext}歲(第${d.year}年)`);
           const policyValues = scheduleData.value.map(d => d.endPolicyValue);
           const medicalWithdrawals = scheduleData.value.map(d => d.isOffsetYear ? d.inflatedMedical : 0);
 
@@ -546,9 +697,9 @@
                 {
                   label: '盈聚滾存保單價值 (HKD)',
                   data: policyValues,
-                  backgroundColor: 'rgba(52, 211, 153, 0.7)',
+                  backgroundColor: 'rgba(52, 211, 153, 0.75)',
                   borderColor: '#10b981',
-                  borderWidth: 1,
+                  borderWidth: 1.5,
                   borderRadius: 4,
                   yAxisID: 'y'
                 }
@@ -559,16 +710,27 @@
               maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               scales: {
-                x: { grid: { display: false }, ticks: { maxTicksLimit: 14, font: { size: 10 } } },
+                x: { 
+                  grid: { display: false }, 
+                  ticks: { maxTicksLimit: 14, font: { size: 10, weight: 'bold' }, color: '#334155' } 
+                },
                 y: {
                   position: 'left',
                   grid: { color: '#f1f5f9' },
-                  ticks: { font: { size: 10 }, callback: v => '$' + (v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k') }
+                  ticks: { 
+                    font: { size: 10, weight: 'bold' }, 
+                    color: '#334155',
+                    callback: v => '$' + (v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k') 
+                  }
                 },
                 y1: {
                   position: 'right',
                   grid: { display: false },
-                  ticks: { font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }
+                  ticks: { 
+                    font: { size: 10, weight: 'bold' }, 
+                    color: '#ea580c',
+                    callback: v => '$' + (v / 1000).toFixed(0) + 'k' 
+                  }
                 }
               },
               plugins: { legend: { display: false } }
@@ -585,7 +747,7 @@
           window.print();
         };
 
-        watch([startAge, targetAge, offsetStartYear, gender, selectedPlan, selectedDeductible, inflationRate, paymentTerm, balanceStrategy], () => {
+        watch([startAgeNext, targetAgeNext, offsetStartYear, gender, selectedPlan, selectedDeductible, inflationRate, paymentTerm, balanceStrategy], () => {
           setTimeout(updateChart, 50);
         });
 
@@ -594,8 +756,8 @@
         });
 
         return {
-          startAge,
-          targetAge,
+          startAgeNext,
+          targetAgeNext,
           offsetStartYear,
           gender,
           totalYears,
