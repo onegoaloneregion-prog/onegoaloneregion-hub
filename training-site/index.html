@@ -2595,17 +2595,24 @@ function selectVcanVersion(version) {
                 prompt("📋 請複製：", text);
             }
         }
-
-      function copyVideoStyleResult() {
+function copyVideoStyleResult() {
     var pSelect = document.getElementById('calcProduct');
     var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
     var ageInput = document.getElementById('calcAge');
     var age = ageInput ? ageInput.value : "30";
 
-    // 抓取投保額 (兼容多種常見 input id，找不到則嘗試從左側面板抓取)
+    // 精確判斷純醫療險（已排除「衛您所愛」及壽險，確保衛您所愛正常顯示投保額）
+    var isMedicalPlan = (
+        pNameText.indexOf('醫家保') !== -1 ||
+        pNameText.indexOf('尊衛您') !== -1 ||
+        pNameText.indexOf('易衛您') !== -1 ||
+        (pNameText.indexOf('醫療') !== -1 && pNameText.indexOf('衛您所愛') === -1)
+    ) && pNameText.indexOf('衛您所愛') === -1 && pNameText.indexOf('壽險') === -1;
+
+    // 抓取投保額輸入框 (若為純醫療險則強制不讀取)
     var saInput = document.getElementById('calcSA') || document.getElementById('calcSumAssured') || document.getElementById('sumAssured');
-    var saVal = saInput ? saInput.value.trim() : "";
-    if (!saVal) {
+    var saVal = (saInput && !isMedicalPlan) ? saInput.value.trim() : "";
+    if (!saVal && !isMedicalPlan) {
         var allInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
         for (var i = 0; i < allInputs.length; i++) {
             if (allInputs[i].value && allInputs[i].value.replace(/,/g, '').match(/^\d{5,9}$/)) {
@@ -2615,7 +2622,7 @@ function selectVcanVersion(version) {
         }
     }
 
-    // 抓取繳費年期 (如有 select 或 text)
+    // 抓取繳費年期
     var periodSelect = document.getElementById('calcPeriod') || document.getElementById('calcPayPeriod');
     var periodText = (periodSelect && periodSelect.options && periodSelect.selectedIndex >= 0) ? periodSelect.options[periodSelect.selectedIndex].text : "";
 
@@ -2631,16 +2638,16 @@ function selectVcanVersion(version) {
     var currMatch = annual.match(/[A-Z]{3}/);
     var currency = currMatch ? currMatch[0] : "HKD";
 
-    // 格式化投保額文字
+    // 格式化投保額文字 (非醫療險且有數值時輸出)
     var saLine = "";
-    if (saVal) {
+    if (!isMedicalPlan && saVal) {
         var cleanSa = saVal.replace(/[^0-9]/g, '');
         if (cleanSa) {
             saLine = "投保額：" + currency + " " + Number(cleanSa).toLocaleString() + "\n";
         }
     }
 
-    var periodLine = periodText ? ("繳費期：" + periodText + "\n") : "";
+    var periodLine = (!isMedicalPlan && periodText) ? ("繳費期：" + periodText + "\n") : "";
 
     var copyText = "🟢 FWD 保費快算試算\n" +
                    "產品：" + pNameText + "\n" +
