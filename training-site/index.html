@@ -2596,28 +2596,63 @@ function selectVcanVersion(version) {
             }
         }
 
-        function copyVideoStyleResult() {
-            var pSelect = document.getElementById('calcProduct');
-            var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
-            var ageInput = document.getElementById('calcAge');
-            var age = ageInput ? ageInput.value : "30";
-            
-            var cardTitleEl = document.getElementById('cardMainTitle');
-            var valAnnualEl = document.getElementById('valAnnualText');
-            var valMonthlyEl = document.getElementById('valMonthlyText');
-            
-            var title = cardTitleEl ? cardTitleEl.innerText.trim() : (age + " 歲 · " + pNameText);
-            var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
-            var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
-            
-            var copyText = "🟢 FWD 保費快算試算\n" +
-                           "產品：" + pNameText + "\n" +
-                           "條件：" + title + "\n\n" +
-                           "💵 預估保費：\n" +
-                           "年供：" + annual + "\n" +
-                           "月供：" + monthly + "\n\n" +
-                           "數據來源：2026年第4季富衛客戶優惠 (MATA261002)，實際保費以最新報價單為準";
-            
+      function copyVideoStyleResult() {
+    var pSelect = document.getElementById('calcProduct');
+    var pNameText = (pSelect && pSelect.options && pSelect.selectedIndex >= 0) ? pSelect.options[pSelect.selectedIndex].text : "保費試算";
+    var ageInput = document.getElementById('calcAge');
+    var age = ageInput ? ageInput.value : "30";
+
+    // 抓取投保額 (兼容多種常見 input id，找不到則嘗試從左側面板抓取)
+    var saInput = document.getElementById('calcSA') || document.getElementById('calcSumAssured') || document.getElementById('sumAssured');
+    var saVal = saInput ? saInput.value.trim() : "";
+    if (!saVal) {
+        var allInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].value && allInputs[i].value.replace(/,/g, '').match(/^\d{5,9}$/)) {
+                saVal = allInputs[i].value;
+                break;
+            }
+        }
+    }
+
+    // 抓取繳費年期 (如有 select 或 text)
+    var periodSelect = document.getElementById('calcPeriod') || document.getElementById('calcPayPeriod');
+    var periodText = (periodSelect && periodSelect.options && periodSelect.selectedIndex >= 0) ? periodSelect.options[periodSelect.selectedIndex].text : "";
+
+    var cardTitleEl = document.getElementById('cardMainTitle');
+    var valAnnualEl = document.getElementById('valAnnualText');
+    var valMonthlyEl = document.getElementById('valMonthlyText');
+
+    var title = cardTitleEl ? cardTitleEl.innerText.trim() : (age + " 歲 · " + pNameText);
+    var annual = valAnnualEl ? valAnnualEl.innerText.trim() : "$0.00";
+    var monthly = valMonthlyEl ? valMonthlyEl.innerText.trim() : "$0.00";
+
+    // 智能提取貨幣代碼 (例如 HKD / MOP / USD)
+    var currMatch = annual.match(/[A-Z]{3}/);
+    var currency = currMatch ? currMatch[0] : "HKD";
+
+    // 格式化投保額文字
+    var saLine = "";
+    if (saVal) {
+        var cleanSa = saVal.replace(/[^0-9]/g, '');
+        if (cleanSa) {
+            saLine = "投保額：" + currency + " " + Number(cleanSa).toLocaleString() + "\n";
+        }
+    }
+
+    var periodLine = periodText ? ("繳費期：" + periodText + "\n") : "";
+
+    var copyText = "🟢 FWD 保費快算試算\n" +
+                   "產品：" + pNameText + "\n" +
+                   saLine +
+                   periodLine +
+                   "條件：" + title + "\n\n" +
+                   "💵 預估保費：\n" +
+                   "年供：" + annual + "\n" +
+                   "月供：" + monthly + "\n\n" +
+                   "數據來源：2026年第4季富衛客戶優惠 (MATA261002)，實際保費以最新報價單為準";
+
+    performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
             performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
 
             var btn = document.getElementById('copyResultBtn');
