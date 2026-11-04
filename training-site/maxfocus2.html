@@ -47,7 +47,7 @@
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
       <div class="flex items-center space-x-3.5">
-        <!-- 替換原有字眼為尊尚財富傳承徽章圖案 (Shield & Legacy Tree SVG) -->
+        <!-- 尊尚財富傳承徽章圖案 (Shield & Legacy Tree SVG) -->
         <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400 flex items-center justify-center text-white shadow-md shadow-orange-500/20">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -70,7 +70,7 @@
       </div>
       <div class="flex items-center space-x-3">
         <span class="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-          <i data-lucide="badge-check" class="w-4 h-4 mr-1.5 text-emerald-600"></i> 2026年Q4最新客戶特惠已套用
+          <i data-lucide="badge-check" class="w-4 h-4 mr-1.5 text-emerald-600"></i> 預繳 5.5% 保證年利率特惠已套用
         </span>
         <button onclick="window.print()" class="inline-flex items-center px-3.5 py-1.5 border border-slate-300 text-xs sm:text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition">
           <i data-lucide="printer" class="w-4 h-4 mr-1.5 text-slate-600"></i> 列印 / 導出建議書
@@ -82,7 +82,7 @@
   <!-- STREAMING_CHUNK:Rendering main container and tab buttons -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-    <!-- 標籤頁選項卡 (加強圖案與標籤色彩) -->
+    <!-- 標籤頁選項卡 -->
     <div class="flex border-b border-slate-200 mb-6 bg-white rounded-t-xl px-4 pt-2 shadow-sm no-print overflow-x-auto">
       <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-5 py-3 text-sm font-medium text-slate-600 hover:text-orange-600 flex items-center tab-active whitespace-nowrap">
         <span class="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center mr-2 text-orange-600">
@@ -195,7 +195,7 @@
             </div>
           </div>
 
-          <!-- 預繳優惠 (PDA) 選項 -->
+          <!-- 預繳優惠 (PDA) 選項（升級為 5.5%） -->
           <div id="pdaSection" class="p-3.5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-orange-200 space-y-2">
             <div class="flex items-center justify-between">
               <label for="enablePDA" class="text-xs font-bold text-orange-950 flex items-center cursor-pointer">
@@ -203,11 +203,11 @@
                 行使一筆過預繳優惠 (PDA)
               </label>
               <span class="text-[10px] px-2 py-0.5 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded font-extrabold flex items-center shadow-xs">
-                <i data-lucide="sparkle" class="w-2.5 h-2.5 mr-1"></i> 保證 5.0% p.a.
+                <i data-lucide="sparkle" class="w-2.5 h-2.5 mr-1"></i> 保證 5.5% p.a.
               </span>
             </div>
             <p class="text-[11px] text-orange-900 leading-relaxed">
-              適用於美元保單（2、3或5年期無附約）。首期保費扣減當期保費折扣，預繳保費儲備金享 <strong>5.0% 保證年利率</strong> 逐年扣抵未來保費，進一步大幅壓低首日總投入資金！
+              適用於美元保單（2、3或5年期無附約）。首期保費扣減當期保費折扣，預繳保費儲備金享 <strong>5.5% 保證年利率</strong> 逐年扣抵未來保費，進一步大幅壓低首日總投入資金！
             </p>
           </div>
 
@@ -221,7 +221,7 @@
         <!-- 中間與右側: 報價統計與明細表 -->
         <div class="lg:col-span-2 space-y-6">
           
-          <!-- 統計卡片組 (所有數字強制千分位格式化，加入生動微插圖圖案) -->
+          <!-- 統計卡片組 (所有數字強制千分位格式化，預繳利息顯示 5.5%) -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover relative overflow-hidden">
@@ -246,7 +246,7 @@
               <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
                 <i data-lucide="percent" class="w-4 h-4"></i>
               </div>
-              <div class="text-xs text-emerald-800 font-semibold">預繳利息增值扣減 (5%)</div>
+              <div class="text-xs text-emerald-800 font-semibold">預繳利息增值扣減 (5.5%)</div>
               <div class="text-lg font-bold text-emerald-700 font-mono mt-0.5" id="cardPdaInterest">-$0</div>
               <div class="text-[11px] text-emerald-600 mt-1" id="cardPdaDesc">-</div>
             </div>
@@ -290,15 +290,15 @@
                 </tbody>
               </table>
 
-              <!-- 提示小註解 -->
+              <!-- 提示小註解 (更新推廣期與 5.5% 規定) -->
               <div class="mt-4 p-3 bg-slate-50 rounded-lg text-[11px] text-slate-500 space-y-1 border border-slate-100">
                 <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>保費折扣活動期</strong>：2026年10月1日至12月31日（保單需於2027年3月31日或之前繕發）。</p>
-                <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>預繳 5.0% 保證優惠年利率</strong>：推廣期至2026年10月31日，保單需於2026年11月30日前繕發，一筆過預繳金額須於合資格保單發出日起計31日內收妥。</p>
+                <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>預繳 5.5% 保證優惠年利率</strong>：推廣期為 2026 年 11 月 1 日至 11 月 30 日（包括首尾兩天），保單必須於 2026 年 12 月 31 日或之前繕發，一筆過預繳金額須於合資格保單發出日起計 31 日內收妥。</p>
               </div>
             </div>
           </div>
 
-          <!-- 客戶核心權益摘要卡 (帶視覺圖示) -->
+          <!-- 客戶核心權益摘要卡 -->
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
             <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
               <i data-lucide="shield-check" class="w-4 h-4 text-orange-600 mr-1.5"></i> 本單隨附之核心人壽與家庭保障
@@ -344,7 +344,7 @@
     <!-- STREAMING_CHUNK:Defining Module 2 - Accurate Projections with 5-Period Benchmark -->
     <div id="content-projection" class="tab-content hidden space-y-6">
       
-      <!-- 頂部指標看板 (加裝裝飾圖樣) -->
+      <!-- 頂部指標看板 -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover">
@@ -472,7 +472,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <!-- 獎賞 1: 享悅人生獎賞 (附圖標裝飾) -->
+        <!-- 獎賞 1: 享悅人生獎賞 -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover relative">
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 flex items-center">
@@ -631,7 +631,7 @@
           客戶可在生前預先設定：若被保人不幸身故，保單無須立刻終止賠付，而是依照客戶意願按百分比（如 25%、50% 等，總和 100%）<strong>自動分拆為多份指定新保單</strong>，並為每份保單指定<strong>最多 3 位順位後續被保人</strong>。
         </p>
 
-        <!-- 傳承流程架構圖展示 (豐富色彩與圖形) -->
+        <!-- 傳承流程架構圖展示 -->
         <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
           <div class="text-center font-bold text-sm text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center justify-center">
             <i data-lucide="workflow" class="w-4 h-4 mr-1.5 text-orange-500"></i> 原有保單（權益人兼被保人：George）身故時之自動執行架構
@@ -827,6 +827,7 @@
   <script>
     let currentPayPeriod = 3; // 預設 3 年繳
     const currentCurrency = 'USD'; // 固定為美元
+    const PDA_RATE = 0.055; // 一筆過預繳優惠保證年利率升級至 5.5% (0.055)
     let chartInstance = null;
 
     // 官方 5 個年期（整付、2年、3年、5年、10年）精確基準資料庫
@@ -1049,7 +1050,7 @@
       return officialMinPremiumsUSD[currentPayPeriod] || 10000;
     }
 
-    // STREAMING_CHUNK:Executing core calculation with validation and discount rules
+    // STREAMING_CHUNK:Executing core calculation with validation, discount rules and PDA 5.5%
     function calculateAll() {
       const annualPremInput = document.getElementById('annualPremium');
       const rawVal = annualPremInput.value.replace(/,/g, '');
@@ -1120,7 +1121,7 @@
         else if (annualPrem < 100000) d1 = 0.06;
         else if (annualPrem < 250000) d1 = 0.10;
         else d1 = 0.12;
-      } else if (currentPayPeriod === 3) { // 3年繳（Q4特惠大幅提升）
+      } else if (currentPayPeriod === 3) { // 3年繳
         if (annualPrem < 50000) d1 = 0.25;
         else if (annualPrem < 100000) d1 = 0.30;
         else d1 = 0.35;
@@ -1153,14 +1154,15 @@
         });
       }
 
-      // 2. 預繳 (PDA) 5.0% 保證優惠年利率精算
+      // 2. 預繳 (PDA) 5.5% 保證優惠年利率精算
       let pdaDepositNeeded = 0;
       let pdaInterestSaved = 0;
 
       if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
         for (let y = 2; y <= currentPayPeriod; y++) {
           let dueAmount = yearPremiums[y - 1].net;
-          let presentValue = dueAmount / Math.pow(1 + 0.05, y - 1);
+          // 按 5.5% p.a. 折現
+          let presentValue = dueAmount / Math.pow(1 + PDA_RATE, y - 1);
           pdaDepositNeeded += presentValue;
           pdaInterestSaved += (dueAmount - presentValue);
         }
@@ -1187,7 +1189,7 @@
       document.getElementById('cardDiscountRate').innerText = discDesc;
 
       document.getElementById('cardPdaInterest').innerText = isPDA ? ('-' + formatMoney(pdaInterestSaved)) : '$0';
-      document.getElementById('cardPdaDesc').innerText = isPDA ? '按 5.0% p.a. 保證年利率滾存' : '未選擇預繳利率優惠';
+      document.getElementById('cardPdaDesc').innerText = isPDA ? '按 5.5% p.a. 保證年利率滾存' : '未選擇預繳利率優惠';
 
       document.getElementById('cardActualPayment').innerText = formatMoney(actualFirstDayPayment);
       document.getElementById('cardTotalSavingsRate').innerText = totalSavingsRate + '%';
@@ -1204,7 +1206,7 @@
       updateProjectionSection(totalNominal);
     }
 
-    // STREAMING_CHUNK:Rendering breakdown table with formatted currency
+    // STREAMING_CHUNK:Rendering breakdown table with formatted currency and 5.5% note
     function renderBreakdownTable(yearPrems, isPDA, pdaDeposit, pdaSaved, totalPay) {
       const tbody = document.getElementById('breakdownTableBody');
       tbody.innerHTML = '';
@@ -1244,12 +1246,12 @@
           <tr class="hover:bg-slate-50 bg-emerald-50/20">
             <td class="py-2.5 font-medium text-emerald-900">
               第 2 至 ${currentPayPeriod} 年預繳保費儲備金 (PDA)
-              <span class="block text-[11px] text-emerald-600">享 5.0% p.a. 保證年利率滾存生息以扣付往後保費</span>
+              <span class="block text-[11px] text-emerald-600">享 5.5% p.a. 保證年利率滾存生息以扣付往後保費</span>
             </td>
             <td>${formatMoney(y1.nominal * (currentPayPeriod - 1))}</td>
             <td class="text-emerald-700 font-semibold">
               ${yearPrems[1]?.discRate > 0 ? `第2年享 ${(yearPrems[1].discRate * 100).toFixed(0)}% 折扣 + ` : ''}
-              5.0% 預繳利息增值省下 ${formatMoney(pdaSaved)}
+              5.5% 預繳利息增值省下 ${formatMoney(pdaSaved)}
             </td>
             <td class="text-right font-bold text-emerald-700">${formatMoney(pdaDeposit)}</td>
           </tr>
