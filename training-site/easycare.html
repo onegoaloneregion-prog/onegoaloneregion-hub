@@ -204,11 +204,11 @@
           <!-- Quick Presets -->
           <div class="flex items-center space-x-2 pt-1">
             <span class="text-xs text-slate-400">快速保額:</span>
-            <button type="button" onclick="setPresetSI(400000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">40萬</button>
-            <button type="button" onclick="setPresetSI(600000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">60萬</button>
-            <button type="button" onclick="setPresetSI(1000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">100萬</button>
-            <button type="button" onclick="setPresetSI(2000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">200萬</button>
-            <button type="button" onclick="setPresetSI(3000000)" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">300萬</button>
+            <button type="button" onclick="setPresetSI(400000)" id="btn-preset-40" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">40萬</button>
+            <button type="button" onclick="setPresetSI(600000)" id="btn-preset-60" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">60萬</button>
+            <button type="button" onclick="setPresetSI(1000000)" id="btn-preset-100" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">100萬</button>
+            <button type="button" onclick="setPresetSI(2000000)" id="btn-preset-200" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">200萬</button>
+            <button type="button" onclick="setPresetSI(3000000)" id="btn-preset-300" class="text-xs bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium transition">300萬</button>
           </div>
 
           <!-- Optional Medical Benefit Checkbox -->
@@ -787,30 +787,61 @@
 
     function setPresetSI(val) {
       const input = document.getElementById('calc-sum-insured');
+      if (!input) return;
+      const medEl = document.getElementById('opt-medical');
+      const hasMed = medEl ? medEl.checked : false;
+      
+      // 若附加醫療，HKD最低為60萬 / USD最低為7.5萬
+      if (currentCurrency === 'HKD' && hasMed && val < 600000) {
+        val = 600000;
+      } else if (currentCurrency === 'USD' && hasMed && val < 600000) {
+        val = 600000;
+      }
+
       const finalVal = currentCurrency === 'USD' ? Math.round(val / 8) : val;
       input.value = finalVal.toLocaleString('en-US');
       calculateAll();
     }
 
+    // 安全更新 DOM 輔助函數，避免 null 錯誤
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    }
+
+    function safeSetHTML(id, html) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    }
+
     function calculateAll() {
       let sumInsured = parseSumInsured();
-      const hasMed = document.getElementById('opt-medical').checked;
+      const medEl = document.getElementById('opt-medical');
+      const hasMed = medEl ? medEl.checked : false;
       
       let minVal = currentCurrency === 'HKD' ? (hasMed ? 600000 : 400000) : (hasMed ? 75000 : 50000);
       let maxVal = currentCurrency === 'HKD' ? 3000000 : 375000;
       
-      if (sumInsured < minVal) sumInsured = minVal;
-      if (sumInsured > maxVal) sumInsured = maxVal;
+      if (sumInsured === 0) {
+        sumInsured = minVal;
+      } else if (sumInsured < minVal) {
+        sumInsured = minVal;
+      } else if (sumInsured > maxVal) {
+        sumInsured = maxVal;
+      }
 
       const medKey = hasMed ? 'withMed' : 'noMed';
-      const ratePer1000 = RATES_TABLE[currentPlanType][medKey][currentOccClass];
+      const ratePer1000 = (RATES_TABLE[currentPlanType] && RATES_TABLE[currentPlanType][medKey])
+        ? RATES_TABLE[currentPlanType][medKey][currentOccClass]
+        : 2.0;
 
-      // For USD calculations, the formula calculates using rate x USD_SI
+      // 保費計算
       const annualPremium = Math.round((ratePer1000 * sumInsured) / 1000);
       const semiAnnualPremium = Math.round(annualPremium * 0.52);
       const monthlyPremium = Math.round(annualPremium * 0.09);
       const dailyEquivalent = (annualPremium / 365).toFixed(2);
 
+      // 各項權益計算嚴格依據當前 sumInsured (如 600,000)
       const deathBenefit = sumInsured;
       const scarBenefit = Math.round(sumInsured * 0.20);
       const doubleBenefit = sumInsured * 2;
@@ -823,27 +854,30 @@
       const sym = currentCurrency === 'HKD' ? 'HK$' : 'US$';
       const fmt = (n) => n.toLocaleString('en-US');
 
-      document.getElementById('res-annual-premium').innerText = fmt(annualPremium);
-      document.getElementById('res-semiannual-premium').innerText = `${sym} ${fmt(semiAnnualPremium)}`;
-      document.getElementById('res-monthly-premium').innerText = `${sym} ${fmt(monthlyPremium)}`;
-      document.getElementById('res-daily-amount').innerText = `${sym} ${dailyEquivalent}`;
-      document.getElementById('res-daily-rate').innerHTML = `相當於每日僅需約 <strong class="text-slate-900 font-bold">${sym} ${dailyEquivalent}</strong>，全方位構築意外金鐘罩`;
+      safeSetText('res-annual-premium', fmt(annualPremium));
+      safeSetText('res-semiannual-premium', `${sym} ${fmt(semiAnnualPremium)}`);
+      safeSetText('res-monthly-premium', `${sym} ${fmt(monthlyPremium)}`);
+      safeSetText('res-daily-amount', `${sym} ${dailyEquivalent}`);
+      safeSetHTML('res-daily-rate', `相當於每日僅需約 <strong class="text-slate-900 font-bold">${sym} ${dailyEquivalent}</strong>，全方位構築意外金鐘罩`);
 
-      document.getElementById('res-death-benefit').innerText = `${sym} ${fmt(deathBenefit)}`;
-      document.getElementById('res-scar-benefit').innerText = `${sym} ${fmt(scarBenefit)}`;
-      document.getElementById('res-double-benefit').innerText = `最高 ${sym} ${fmt(doubleBenefit)}`;
-      document.getElementById('res-disability-monthly').innerText = `${sym} ${fmt(disabilityMonthly)} / 月`;
-      document.getElementById('res-hospital-cash').innerText = `${sym} ${fmt(hospDaily)} / 日 (ICU ${sym}${fmt(hospICU)})`;
+      // 同步更新右側核心權益欄位的數值顯示
+      safeSetText('res-death-benefit', `${sym} ${fmt(deathBenefit)}`);
+      safeSetText('res-scar-benefit', `${sym} ${fmt(scarBenefit)}`);
+      safeSetText('res-double-benefit', `最高 ${sym} ${fmt(doubleBenefit)}`);
+      safeSetText('res-disability-monthly', `${sym} ${fmt(disabilityMonthly)} / 月`);
+      safeSetText('res-hospital-cash', `${sym} ${fmt(hospDaily)} / 日 (ICU ${sym} ${fmt(hospICU)})`);
       
       const rowMed = document.getElementById('row-medical-benefit');
-      if (hasMed) {
-        rowMed.style.display = 'flex';
-        document.getElementById('res-medical-benefit').innerText = `最高 ${sym} ${fmt(medicalLimit)}`;
-      } else {
-        rowMed.style.display = 'none';
+      if (rowMed) {
+        if (hasMed) {
+          rowMed.style.display = 'flex';
+          safeSetText('res-medical-benefit', `最高 ${sym} ${fmt(medicalLimit)}`);
+        } else {
+          rowMed.style.display = 'none';
+        }
       }
 
-      document.getElementById('res-max-renewal').innerText = `${sym} ${fmt(maxRenewal)} (+30%)`;
+      safeSetText('res-max-renewal', `${sym} ${fmt(maxRenewal)} (+30%)`);
     }
 
     function switchScheduleTab(tab) {
