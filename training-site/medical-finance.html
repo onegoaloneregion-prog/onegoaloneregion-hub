@@ -31,18 +31,24 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       border: 2px solid white;
     }
+    
+    /* 列印專用樣式優化 */
     @media print {
       .no-print { display: none !important; }
-      body { background: white !important; font-size: 12px; }
-      .shadow-sm, .shadow-xl { box-shadow: none !important; }
+      body { background: white !important; font-size: 11px; color: #0f172a !important; padding: 0 !important; }
+      .shadow-sm, .shadow-md, .shadow-xl { box-shadow: none !important; }
+      .print-border { border: 1px solid #cbd5e1 !important; }
+      .print-show { display: block !important; }
+      .page-break-inside-avoid { page-break-inside: avoid; }
     }
+    .print-show { display: none; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen">
   <div id="app" class="max-w-7xl mx-auto px-4 py-6">
     
-    <!-- 頂部 Navbar -->
-    <nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 mb-5 border-b border-slate-200 gap-3">
+    <!-- 頂部 Navbar (網頁瀏覽時顯示) -->
+    <nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 mb-5 border-b border-slate-200 gap-3 no-print">
       <div class="flex items-center gap-3.5">
         <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white font-black text-2xl shadow-md shadow-orange-500/20">
           F
@@ -52,7 +58,7 @@
           <p class="text-sm text-slate-600 mt-1.5 font-bold">盈聚·天下 II 儲蓄搭配醫療保單保費自動抵繳規劃</p>
         </div>
       </div>
-      <div class="flex items-center gap-3 no-print">
+      <div class="flex items-center gap-3">
         <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 text-emerald-800 text-xs sm:text-sm font-bold rounded-full border border-emerald-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           第 {{ offsetStartYear }} 年起全自動抵繳
@@ -63,6 +69,84 @@
         </button>
       </div>
     </nav>
+
+    <!-- 客戶提案抬頭與顧問聯絡資訊（編輯面板，螢幕顯示） -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 mb-6 no-print">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+          <h3 class="font-black text-sm sm:text-base text-slate-900 tracking-tight">客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)</h3>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-md">客製化設定</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5">客戶姓名 / 稱謂</label>
+          <input type="text" v-model="advisorInfo.clientName" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm" placeholder="陳大文 先生">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5">理財顧問姓名</label>
+          <input type="text" v-model="advisorInfo.advisorName" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm" placeholder="富衛策劃顧問">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5">顧問職位 / 職銜</label>
+          <select v-model="advisorInfo.position" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+            <option value="資深分區總監">資深分區總監</option>
+            <option value="團隊總監">團隊總監</option>
+            <option value="分區經理">分區經理</option>
+            <option value="業務經理">業務經理</option>
+            <option value="資深理財策劃顧問">資深理財策劃顧問</option>
+            <option value="理財策劃顧問">理財策劃顧問</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5">所屬分區 / 團隊</label>
+          <input type="text" v-model="advisorInfo.team" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm" placeholder="One Goal One Region">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5">顧問聯絡電話 / 微信</label>
+          <input type="text" v-model="advisorInfo.contact" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm" placeholder="+853 6688 8888">
+        </div>
+      </div>
+    </div>
+
+    <!-- ⭐⭐⭐ 列印/匯出 PDF 專屬頂部排版 (完全依照你提供的圖片 100% 還原) ⭐⭐⭐ -->
+    <div class="print-show mb-6 pb-4 border-b-2 border-slate-300 page-break-inside-avoid">
+      <div class="flex justify-between items-center">
+        
+        <!-- 左側：標題資訊 -->
+        <div class="w-7/12 pr-6">
+          <p class="text-orange-600 font-extrabold text-sm tracking-wider mb-1">澳門專屬保障建議書</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">
+            醫療融資策略 客戶專屬規劃方案
+          </h1>
+          <p class="text-xs text-slate-500 font-bold mt-2">
+            策劃日期：{{ currentDateFormatted }}
+          </p>
+        </div>
+
+        <!-- 中間垂直分隔線 -->
+        <div class="w-px h-20 bg-slate-200"></div>
+
+        <!-- 右側：顧問聯絡資訊 (文字靠右對齊) -->
+        <div class="w-5/12 pl-6 text-right flex flex-col justify-center space-y-1">
+          <h2 class="text-lg font-black text-slate-900 leading-tight">
+            {{ advisorInfo.advisorName || '富衛策劃顧問' }}
+          </h2>
+          <p class="text-sm font-extrabold text-slate-800">
+            {{ advisorInfo.position || '資深分區總監' }}
+          </p>
+          <p class="text-xs text-slate-500 font-medium">
+            {{ advisorInfo.team || 'One Goal One Region' }}
+          </p>
+          <p class="text-xs text-slate-700 font-bold tracking-wide">
+            電話 / 微信：{{ advisorInfo.contact || '+853 6688 8888' }}
+          </p>
+        </div>
+
+      </div>
+    </div>
 
     <!-- 方案架構橫幅 -->
     <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl shadow-slate-900/10 mb-7 border border-slate-800 relative overflow-hidden">
@@ -98,7 +182,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
       
       <!-- 左側：參數控制面板 -->
-      <div class="lg:col-span-4 space-y-5">
+      <div class="lg:col-span-4 space-y-5 no-print">
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 space-y-5">
           <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
             <span class="text-orange-500 font-black text-lg">⚙️</span>
@@ -125,7 +209,7 @@
           <!-- 抵繳目標年齡與抵繳開始年份 -->
           <div class="grid grid-cols-2 gap-3.5">
             <div>
-              <label class="block text-sm font-bold text-slate-800 mb-1.5">抵繳年齡 (下次生日)</label>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">抵繳目標年齡 (下次生日)</label>
               <select v-model.number="targetAgeNext" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
                 <option v-for="age in [55, 60, 65, 70, 75, 80, 85, 100]" :key="age" :value="age">{{ age }} 歲 (ANB)</option>
               </select>
@@ -243,13 +327,13 @@
         </div>
       </div>
 
-      <!-- 右側：數據指標與動態圖表 -->
+      <!-- 右側：數據指標與動態圖表 (粗體深黑) -->
       <div class="lg:col-span-8 space-y-5">
         
         <!-- 3 個 KPI 卡片 (選項 A：展示全期醫療保費總額，並標註代繳與自付拆解) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm">
-            <span class="text-xs sm:text-sm text-slate-600 font-bold block mb-1.5">醫療保費總額 ({{ startAgeNext }}-{{ targetAgeNext }}歲 ANB)</span>
+            <span class="text-xs sm:text-sm text-slate-600 font-bold block mb-1.5">醫療全期保費總額 ({{ startAgeNext }}-{{ targetAgeNext }}歲 ANB)</span>
             <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">HKD ${{ formatNumber(totalMedicalCostAllYears) }}</div>
             <div class="text-[11px] text-slate-600 font-semibold mt-1 space-y-0.5">
               <div>• 盈聚代繳: <span class="text-emerald-700 font-bold">${{ formatNumber(offsetMedicalTotal) }}</span></div>
@@ -349,6 +433,21 @@
       </div>
     </div>
 
+    <!-- 列印專用底部聲明與簽名區 (僅在列印/導出 PDF 時印出) -->
+    <div class="print-show mt-8 pt-4 border-t border-slate-300 page-break-inside-avoid">
+      <div class="text-[10px] text-slate-500 leading-relaxed mb-6 font-medium">
+        備註與聲明：本建議書所載之醫療保費乃依據富衛現行標準保費表計算。未來公佈之非保證歸原紅利及特別紅利並非保證金額，實際金額或會比所示者較高或較低。本融資方案說明旨在展示分紅保單之提取抵繳功能，具體條款及保障請參閱保單文件及產品小冊子。
+      </div>
+      <div class="grid grid-cols-2 gap-16 pt-4 text-xs font-bold">
+        <div class="border-t border-slate-800 pt-2 text-center">
+          客戶簽署：____________________
+        </div>
+        <div class="border-t border-slate-800 pt-2 text-center">
+          理財策劃顧問簽署：____________________
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -356,7 +455,22 @@
 
     createApp({
       setup() {
-        // ========== 1. 醫家保 (vFamily) 官方保費表 (港幣，索引 key = 下次生日年齡 ANB 1-81) ==========
+        // ========== 1. 客戶與顧問資訊狀態 ==========
+        const advisorInfo = ref({
+          clientName: '陳大文 先生',
+          advisorName: '富衛策劃顧問',
+          position: '資深分區總監',
+          team: 'One Goal One Region',
+          contact: '+853 6688 8888'
+        });
+
+        // 格式化日期：2026 年 11 月 9 日
+        const currentDateFormatted = computed(() => {
+          const now = new Date();
+          return `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+        });
+
+        // ========== 2. 醫家保 (vFamily) 官方保費表 (港幣，索引 key = 下次生日年齡 ANB 1-81) ==========
         const vFamilyRatesByANB = {
           male: {
             1: 5524, 2: 5524, 3: 5524, 4: 5524, 5: 4728, 6: 4728, 7: 4728, 8: 4728, 9: 4728, 10: 4728,
@@ -380,7 +494,7 @@
           }
         };
 
-        // ========== 2. 尊衛您 (寰譽版) 官方保費全量表 (港幣，索引 key = 下次生日年齡 ANB 1-100) ==========
+        // ========== 3. 尊衛您 (寰譽版) 官方保費全量表 (港幣，索引 key = 下次生日年齡 ANB 1-100) ==========
         const vPrimeTablesByANB = {
           standard: {
             0: {
@@ -452,8 +566,8 @@
               51: 4569, 52: 4800, 53: 5031, 54: 5262, 55: 5492, 56: 5814, 57: 6142, 58: 6385, 59: 6725, 60: 6971,
               61: 7360, 62: 7776, 63: 8230, 64: 8666, 65: 9166, 66: 9596, 67: 10139, 68: 10624, 69: 11387, 70: 12161,
               71: 12968, 72: 13743, 73: 14601, 74: 15405, 75: 16218, 76: 17089, 77: 17700, 78: 18588, 79: 18952, 80: 20043,
-              81: 21228, 82: 21793, 83: 22606, 84: 23479, 85: 24274, 86: 25154, 87: 25709, 88: 26355, 89: 26754, 90: 27480,
-              91: 27915, 92: 30342, 93: 30908, 94: 31585, 95: 32339, 96: 32948, 97: 33892, 98: 34899, 99: 35578, 100: 36355
+              81: 21228, 82: 21793, 83: 22606, 84: 23479, 85: 24274, 86: 25154, 87: 25709, 88: 30876, 89: 31343, 90: 32194,
+              91: 32704, 92: 35547, 93: 36209, 94: 37004, 95: 37886, 96: 38600, 97: 39706, 98: 40885, 99: 41679, 100: 42591
             }
           },
           superior: {
@@ -532,7 +646,7 @@
           }
         };
 
-        // ========== 3. 富衛官方盈聚·天下 II 最低年繳保費表 (港幣 HKD) ==========
+        // ========== 4. 富衛官方盈聚·天下 II 最低年繳保費表 (港幣 HKD) ==========
         const minPremiumTable = {
           2: 80000,
           3: 53300,
@@ -540,20 +654,20 @@
           10: 16000
         };
 
-        // ========== 4. 響應式狀態 (下次生日年齡 ANB 基準) ==========
+        // ========== 5. 響應式狀態 (下次生日年齡 ANB 基準) ==========
         const startAgeNext = ref(38);   // 投保時下次生日年齡 (ANB)
         const targetAgeNext = ref(65);  // 抵繳目標年齡 (ANB)
         const offsetStartYear = ref(10);
         const gender = ref('male');
         const selectedPlan = ref('vPrime_standard');
         const selectedDeductible = ref(50000);
-        const inflationRate = ref(0.0); // 預設 0%，與截圖完全對齊
+        const inflationRate = ref(0.0);
         const paymentTerm = ref(5);
         const balanceStrategy = ref('depleting'); // depleting (遞減消耗) / guarantee_principal (保本)
 
         let chartInstance = null;
 
-        // 防呆校驗判斷 (下次生日年齡計算抵繳年期跨度)
+        // 防呆校驗判斷
         const isInvalidRange = computed(() => {
           return (startAgeNext.value + offsetStartYear.value - 1) >= targetAgeNext.value;
         });
@@ -627,7 +741,7 @@
           return { schedule, finalValue: currentBalance, minBalance };
         };
 
-        // 二分逼近法求解最優年繳保費 (純精算需求)
+        // 二分逼近法求解最優年繳保費
         const rawRequiredAnnualPremium = computed(() => {
           if (isInvalidRange.value) return 0;
           let low = 1000;
@@ -680,7 +794,7 @@
           return activeSimulation.value.schedule;
         });
 
-        // ⭐【選項 A 核心修改】計算所有年度醫療保費總和 (全期 38-65 歲，0% 通脹下精確為 $202,328)
+        // 選項 A：全期醫療保費總額 (含自付期與代繳期)
         const totalMedicalCostAllYears = computed(() => {
           return scheduleData.value.reduce((sum, d) => sum + d.inflatedMedical, 0);
         });
@@ -704,7 +818,7 @@
           return scheduleData.value[scheduleData.value.length - 1].endPolicyValue;
         });
 
-        // 繪製與更新圖表 (粗體清晰座標)
+        // 繪製與更新圖表
         const updateChart = () => {
           const ctx = document.getElementById('flowChart');
           if (!ctx) return;
@@ -793,6 +907,8 @@
         });
 
         return {
+          advisorInfo,
+          currentDateFormatted,
           startAgeNext,
           targetAgeNext,
           offsetStartYear,
