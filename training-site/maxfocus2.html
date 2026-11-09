@@ -1,4 +1,3 @@
-<!-- STREAMING_CHUNK:Configuring document head, styling, and dependencies -->
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
@@ -33,21 +32,94 @@
       color: #E87722;
       font-weight: 700;
     }
+    
+    /* 列印與匯出 PDF 專屬排版優化：防止超出邊界與文字直行折行 */
+    @page {
+      size: A4 portrait;
+      margin: 8mm 8mm 10mm 8mm;
+    }
     @media print {
       .no-print { display: none !important; }
       .print-only { display: block !important; }
-      body { background-color: white !important; font-size: 11px; }
-      .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; }
+      body { 
+        background-color: white !important; 
+        font-size: 10px !important; 
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+      .border { border-color: #e2e8f0 !important; }
+      .tab-content { display: block !important; }
+      #content-milestones, #content-legacy, #content-comparison { display: none !important; }
+      #content-projection { display: block !important; margin-top: 1rem; page-break-before: auto; }
+      
+      /* 表格緊湊防溢出設定 */
+      table {
+        width: 100% !important;
+        table-layout: auto !important;
+        font-size: 9.5px !important;
+      }
+      th, td {
+        padding: 4px 4px !important;
+        white-space: nowrap !important;
+      }
+    }
+    @media screen {
+      .print-only { display: none !important; }
     }
   </style>
 </head>
 <body class="text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
 
-  <!-- STREAMING_CHUNK:Rendering navigation bar with new SVG emblem -->
+  <!-- 列印專屬頂部：客戶提案抬頭與顧問聯絡資訊 -->
+  <div class="print-only p-4 border-b-2 border-slate-800 bg-white mb-4">
+    <div class="flex justify-between items-start">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 flex items-center justify-center font-black">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8"/>
+            <path d="M9 12l3-3 3 3"/>
+            <circle cx="12" cy="7" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-black text-slate-900 tracking-tight">盈聚．天下 II 保險計劃</h1>
+          <p class="text-[10px] text-slate-500 font-medium">MaxFocus Legacy II | 尊尚財富增長與跨代傳承建議書</p>
+        </div>
+      </div>
+      <div class="text-right text-[10px] text-slate-500">
+        <p>提案日期：<span id="printDate" class="font-bold text-slate-800"></span></p>
+        <p>保單貨幣：<span class="font-bold text-slate-800">美元 (USD)</span></p>
+      </div>
+    </div>
+
+    <!-- 抬頭帶入資料卡片 -->
+    <div class="mt-3 pt-3 border-t border-slate-200 grid grid-cols-2 gap-3 text-xs">
+      <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+        <span class="text-slate-400 block text-[9px] font-bold uppercase tracking-wider">提案對象 (PROSPECT)</span>
+        <div class="text-xs font-bold text-slate-900 mt-0.5" id="printClientName">陳大文 先生</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">受保人年齡：<span id="printInsuredAge" class="font-semibold text-slate-700">20</span> 歲（下次生日年齡）</div>
+      </div>
+      <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+        <span class="text-slate-400 block text-[9px] font-bold uppercase tracking-wider">服務顧問資訊 (CONSULTANT)</span>
+        <div class="text-xs font-bold text-slate-900 mt-0.5 flex items-center justify-between">
+          <span id="printAdvisorName">資深策劃顧問</span>
+          <span class="text-[10px] font-semibold text-orange-600" id="printAdvisorTitle">資深分區總監</span>
+        </div>
+        <div class="text-[10px] text-slate-500 mt-0.5 flex justify-between">
+          <span>團隊：<strong id="printAdvisorRegion" class="text-slate-700">One Goal One Region</strong></span>
+          <span>聯絡：<strong id="printAdvisorContact" class="text-slate-700">+853 6688 8888</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 螢幕頂部導航 (no-print) -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
       <div class="flex items-center space-x-3.5">
-        <!-- 尊尚財富傳承徽章圖案 (Shield & Legacy Tree SVG) -->
         <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400 flex items-center justify-center text-white shadow-md shadow-orange-500/20">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -72,15 +144,65 @@
         <span class="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
           <i data-lucide="badge-check" class="w-4 h-4 mr-1.5 text-emerald-600"></i> 預繳 5.5% 保證年利率特惠已套用
         </span>
-        <button onclick="window.print()" class="inline-flex items-center px-3.5 py-1.5 border border-slate-300 text-xs sm:text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition">
-          <i data-lucide="printer" class="w-4 h-4 mr-1.5 text-slate-600"></i> 列印 / 導出建議書
+        <button onclick="triggerPrintProposal()" class="inline-flex items-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-xs sm:text-sm font-semibold rounded-lg text-white shadow-sm transition">
+          <i data-lucide="printer" class="w-4 h-4 mr-1.5 text-amber-400"></i> 列印 / 導出 PDF 建議書
         </button>
       </div>
     </div>
   </header>
 
-  <!-- STREAMING_CHUNK:Rendering main container and tab buttons -->
+  <!-- 主內容容器 -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- 1. 客戶提案抬頭與顧問聯絡資訊 -->
+    <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 mb-6 no-print">
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-theme-orange"></span>
+          <h2 class="text-sm sm:text-base font-bold text-slate-900">
+            客戶提案抬頭與顧問聯絡資訊 <span class="text-xs font-normal text-slate-500">（列印及匯出 PDF 時自動帶入）</span>
+          </h2>
+        </div>
+        <span class="text-xs px-2.5 py-1 bg-slate-100 text-slate-600 font-semibold rounded-md flex items-center">
+          <i data-lucide="badge-percent" class="w-3 h-3 mr-1 text-orange-500"></i> 客製化設定
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1">客戶姓名 / 稱謂</label>
+          <input type="text" id="cfgClientName" value="陳大文 先生" oninput="syncConsultantInfo()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-orange-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1">理財顧問姓名</label>
+          <input type="text" id="cfgAdvisorName" value="富衛策劃顧問" oninput="syncConsultantInfo()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1">顧問職位 / 職銜</label>
+          <select id="cfgAdvisorTitle" onchange="syncConsultantInfo()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 bg-white focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium">
+            <option value="資深分區總監" selected>資深分區總監</option>
+            <option value="分區總監">分區總監</option>
+            <option value="分區經理">分區經理</option>
+            <option value="資深業務總監">資深業務總監</option>
+            <option value="資深財富策劃經理">資深財富策劃經理</option>
+            <option value="資深私人財富策劃顧問">資深私人財富策劃顧問</option>
+            <option value="私人財富顧問">私人財富顧問</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1">所屬分區 / 團隊</label>
+          <input type="text" id="cfgAdvisorRegion" value="One Goal One Region" oninput="syncConsultantInfo()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-orange-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1">顧問聯絡電話 / 微信</label>
+          <input type="text" id="cfgAdvisorContact" value="+853 6688 8888" oninput="syncConsultantInfo()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-orange-500 focus:outline-none font-mono">
+        </div>
+      </div>
+    </section>
 
     <!-- 標籤頁選項卡 -->
     <div class="flex border-b border-slate-200 mb-6 bg-white rounded-t-xl px-4 pt-2 shadow-sm no-print overflow-x-auto">
@@ -116,7 +238,7 @@
       </button>
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Module 1 - Calculator & Pricing Engine with visuals -->
+    <!-- 模塊 1: 智能報價與優惠精算 -->
     <div id="content-calculator" class="tab-content space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
@@ -129,26 +251,17 @@
             <span class="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded">免體檢 / 免驗身</span>
           </h2>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">客戶尊稱 / 姓名</label>
-            <div class="relative">
-              <input type="text" id="clientName" value="陳先生 (Valued Client)" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 focus:outline-none">
-              <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-            </div>
-          </div>
-
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">被保人年齡</label>
               <div class="relative">
-                <input type="number" id="insuredAge" value="20" min="1" max="80" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 focus:outline-none font-mono">
+                <input type="number" id="insuredAge" value="20" min="1" max="80" oninput="syncConsultantInfo(); calculateAll();" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 focus:outline-none font-mono">
                 <i data-lucide="calendar" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
               </div>
               <span class="text-[10px] text-slate-400 mt-0.5 block">下次生日年齡</span>
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">保單貨幣</label>
-              <!-- 依指示只保留美元 (USD) -->
               <div class="w-full px-3 py-2 border border-slate-200 bg-slate-50 rounded-lg text-sm font-bold text-slate-800 flex items-center justify-between">
                 <span class="flex items-center">
                   <span class="w-4 h-4 rounded-full bg-emerald-600 text-white text-[10px] flex items-center justify-center font-bold mr-1.5">$</span>
@@ -221,7 +334,7 @@
         <!-- 中間與右側: 報價統計與明細表 -->
         <div class="lg:col-span-2 space-y-6">
           
-          <!-- 統計卡片組 (所有數字強制千分位格式化，預繳利息顯示 5.5%) -->
+          <!-- 統計卡片組 -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm card-hover relative overflow-hidden">
@@ -290,7 +403,7 @@
                 </tbody>
               </table>
 
-              <!-- 提示小註解 (更新推廣期與 5.5% 規定) -->
+              <!-- 提示小註解 -->
               <div class="mt-4 p-3 bg-slate-50 rounded-lg text-[11px] text-slate-500 space-y-1 border border-slate-100">
                 <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>保費折扣活動期</strong>：2026年10月1日至12月31日（保單需於2027年3月31日或之前繕發）。</p>
                 <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400 flex-shrink-0"></i> <strong>預繳 5.5% 保證優惠年利率</strong>：推廣期為 2026 年 11 月 1 日至 11 月 30 日（包括首尾兩天），保單必須於 2026 年 12 月 31 日或之前繕發，一筆過預繳金額須於合資格保單發出日起計 31 日內收妥。</p>
@@ -341,7 +454,7 @@
       </div>
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Module 2 - Accurate Projections with 5-Period Benchmark -->
+    <!-- 模塊 2: 官方精確回報投影 (IRR & 現金價值) -->
     <div id="content-projection" class="tab-content hidden space-y-6">
       
       <!-- 頂部指標看板 -->
@@ -393,8 +506,8 @@
 
       </div>
 
-      <!-- 圖表分析 -->
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+      <!-- 圖表分析 (列印時隱藏以節省頁面空間) -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4 no-print">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h3 class="text-base font-bold text-slate-900 flex items-center">
@@ -413,33 +526,33 @@
         </div>
       </div>
 
-      <!-- 現金價值詳細年期表 -->
+      <!-- 現金價值詳細年期表 (標題簡化、強制 whitespace-nowrap 避免斷行) -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+        <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
           <div class="flex items-center space-x-2">
             <div class="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center text-orange-600">
               <i data-lucide="table" class="w-3.5 h-3.5"></i>
             </div>
             <div>
-              <h3 class="text-sm font-bold text-slate-800">各主要保單年度退保價值與身故權益清單</h3>
-              <span class="text-xs text-slate-500">數據已按本單已繳保費總額比例精算，所有金額均以千分位逗號格式化</span>
+              <h3 class="text-xs sm:text-sm font-bold text-slate-800">各主要保單年度退保價值與身故權益清單</h3>
+              <span class="text-[10px] text-slate-500">數據已按本單已繳保費總額比例精算，所有金額均以千分位逗號格式化</span>
             </div>
           </div>
-          <span class="text-xs bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded font-mono font-semibold">USD</span>
+          <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono font-semibold">USD</span>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-xs sm:text-sm text-left">
+          <table class="w-full text-[11px] sm:text-xs text-left">
             <thead class="bg-slate-100 text-slate-600 border-b border-slate-200">
-              <tr>
-                <th class="py-2.5 px-3">保單年度完結</th>
-                <th class="py-2.5 px-3">被保人年齡</th>
-                <th class="py-2.5 px-3">已繳保費總額</th>
-                <th class="py-2.5 px-3">保證現金價值 (A)</th>
-                <th class="py-2.5 px-3 text-orange-600">歸原紅利現金價值 (B)</th>
-                <th class="py-2.5 px-3 text-orange-600">特別紅利現金價值 (C)</th>
-                <th class="py-2.5 px-3 font-bold text-slate-900 bg-orange-50/50">預期總退保價值 (A+B+C)</th>
-                <th class="py-2.5 px-3 font-bold text-slate-800">身故權益總額</th>
-                <th class="py-2.5 px-3 text-right">回本倍數</th>
+              <tr class="whitespace-nowrap">
+                <th class="py-2 px-2.5">年度</th>
+                <th class="py-2 px-2.5">年齡</th>
+                <th class="py-2 px-2.5">已繳保費總額</th>
+                <th class="py-2 px-2.5">保證現金價值 (A)</th>
+                <th class="py-2 px-2.5 text-orange-600">歸原紅利 (B)</th>
+                <th class="py-2 px-2.5 text-orange-600">特別紅利 (C)</th>
+                <th class="py-2 px-2.5 font-bold text-slate-900 bg-orange-50/70">預期退保總值 (A+B+C)</th>
+                <th class="py-2 px-2.5 font-bold text-slate-800">身故權益總額</th>
+                <th class="py-2 px-2.5 text-right">回本倍數</th>
               </tr>
             </thead>
             <tbody id="projectionTableBody" class="divide-y divide-slate-100 font-mono">
@@ -451,7 +564,7 @@
 
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Module 3 - Four Guaranteed Milestone Awards with rich artwork -->
+    <!-- 模塊 3: 四大里程碑保證獎賞 -->
     <div id="content-milestones" class="tab-content hidden space-y-6">
       
       <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-amber-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
@@ -466,7 +579,6 @@
             <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5 text-amber-200"></i> 最高可獲逾 HK$113,000+
           </span>
         </div>
-        <!-- 裝飾背景光暈圖 -->
         <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
       </div>
 
@@ -610,7 +722,7 @@
 
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Module 4 - Smart Legacy & Incapacity Benefit -->
+    <!-- 模塊 4: 富傳家與高階傳承功能 -->
     <div id="content-legacy" class="tab-content hidden space-y-6">
       
       <!-- 富傳家選項展示 -->
@@ -736,7 +848,7 @@
 
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Module 5 - Market Comparison -->
+    <!-- 模塊 5: 市場比較 -->
     <div id="content-comparison" class="tab-content hidden space-y-6">
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
@@ -817,23 +929,22 @@
 
   </main>
 
-  <!-- STREAMING_CHUNK:Rendering print footer -->
+  <!-- 列印與頁尾資訊 -->
   <footer class="max-w-7xl mx-auto px-6 py-4 text-center text-xs text-slate-400 border-t border-slate-200 mt-8">
     <p>盈聚．天下 II 保險計劃 (MaxFocus Legacy II Insurance Plan)</p>
     <p class="mt-1 text-[10px]">此報價及演示系統僅作客戶參考及銷售解說之用，所有保單條款、紅利分紅比率及保證權益概以正式發出之保單合約及建議書（Proposal）為準。</p>
   </footer>
 
-  <!-- STREAMING_CHUNK:JavaScript state definitions and comprehensive benchmark database -->
+  <!-- 邏輯引擎與數據庫 -->
   <script>
     let currentPayPeriod = 3; // 預設 3 年繳
     const currentCurrency = 'USD'; // 固定為美元
-    const PDA_RATE = 0.055; // 一筆過預繳優惠保證年利率升級至 5.5% (0.055)
+    const PDA_RATE = 0.055; // 一筆過預繳優惠保證年利率 5.5% (0.055)
     let chartInstance = null;
 
     // 官方 5 個年期（整付、2年、3年、5年、10年）精確基準資料庫
-    // 依據官方利益說明書（總繳保費 300,000 美元基準），計算出各年度各項價值相對於總繳保費的精確比率
     const officialBenchmarks = {
-      1: { // 整付 (1年) - 來源：PolicyIllustration_MaxFocus Legacy II Insurance Plan.pdf (整付 $300,000)
+      1: {
         totalTargetPremium: 300000,
         breakevenExp: 4,
         breakevenGtd: 16,
@@ -851,7 +962,7 @@
           [30, 1.0, 318531/300000, 267704/300000, 1417500/300000, 2003735/300000, 2003735/300000]
         ]
       },
-      2: { // 2年繳 - 來源：FWD_SI_M52VQA9XX9G80447.pdf (每年 $150,000, 總繳 $300,000)
+      2: {
         totalTargetPremium: 300000,
         breakevenExp: 5,
         breakevenGtd: 16,
@@ -869,7 +980,7 @@
           [30, 1.0, 318214/300000, 267704/300000, 1337700/300000, 1923618/300000, 1923618/300000]
         ]
       },
-      3: { // 3年繳 - 來源：FWD_SI_M52VQA9XX9G80447 (1).pdf (每年 $100,000, 總繳 $300,000)
+      3: {
         totalTargetPremium: 300000,
         breakevenExp: 6,
         breakevenGtd: 17,
@@ -887,7 +998,7 @@
           [30, 1.0,      316978/300000, 252038/300000, 1296600/300000, 1865616/300000, 1865616/300000]
         ]
       },
-      5: { // 5年繳 - 來源：FWD_SI_M52VQA9XX9G80447 (2).pdf (每年 $60,000, 總繳 $300,000)
+      5: {
         totalTargetPremium: 300000,
         breakevenExp: 6,
         breakevenGtd: 17,
@@ -905,7 +1016,7 @@
           [30, 1.0, 310791/300000, 226760/300000, 1218840/300000, 1756392/300000, 1756392/300000]
         ]
       },
-      10: { // 10年繳 - 來源：PolicyIllustration_MaxFocus Legacy II Insurance Plan 2.pdf (每年 $30,000, 總繳 $300,000)
+      10: {
         totalTargetPremium: 300000,
         breakevenExp: 9,
         breakevenGtd: 24,
@@ -925,7 +1036,6 @@
       }
     };
 
-    // 官方產品指引規定：最低名義金額／最低年繳保費 (新生意申請時 - 美元)
     const officialMinPremiumsUSD = {
       1: 20000,
       2: 10000,
@@ -934,18 +1044,15 @@
       10: 2000
     };
 
-    // 格式化數字為千分位逗號字串
     function formatWithCommas(num) {
       if (isNaN(num) || num === null || num === undefined) return '0';
       return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // 格式化金額包含美元符號
     function formatMoney(num) {
       return `$${formatWithCommas(num)}`;
     }
 
-    // STREAMING_CHUNK:Handling live comma input for premium field
     function handlePremiumInput(input) {
       const cursorPosition = input.selectionStart;
       const rawTextBeforeCursor = input.value.substring(0, cursorPosition);
@@ -978,15 +1085,40 @@
       calculateAll();
     }
 
-    // STREAMING_CHUNK:Initializing application on window load
+    function syncConsultantInfo() {
+      const cName = document.getElementById('cfgClientName').value || '貴客';
+      const aName = document.getElementById('cfgAdvisorName').value || '-';
+      const aTitle = document.getElementById('cfgAdvisorTitle').value || '-';
+      const aRegion = document.getElementById('cfgAdvisorRegion').value || '-';
+      const aContact = document.getElementById('cfgAdvisorContact').value || '-';
+      const iAge = document.getElementById('insuredAge').value || '20';
+
+      document.getElementById('printClientName').innerText = cName;
+      document.getElementById('printAdvisorName').innerText = aName;
+      document.getElementById('printAdvisorTitle').innerText = aTitle;
+      document.getElementById('printAdvisorRegion').innerText = aRegion;
+      document.getElementById('printAdvisorContact').innerText = aContact;
+      document.getElementById('printInsuredAge').innerText = iAge;
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+      document.getElementById('printDate').innerText = dateStr;
+    }
+
+    function triggerPrintProposal() {
+      syncConsultantInfo();
+      calculateAll();
+      window.print();
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       initChart();
       updateFastPremiumButtons();
+      syncConsultantInfo();
       calculateAll();
     });
 
-    // 切換選項卡
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
@@ -999,7 +1131,6 @@
       }
     }
 
-    // 設定年期
     function setPayPeriod(period) {
       currentPayPeriod = period;
       const btns = document.querySelectorAll('#payPeriodBtns button');
@@ -1008,7 +1139,6 @@
       });
       event.target.className = 'pp-btn py-2 text-xs font-semibold rounded-lg border-2 border-theme-orange bg-orange-50 text-orange-700 transition';
 
-      // 檢查 PDA 適用性（僅 2, 3, 5 年期支援）
       const pdaSection = document.getElementById('pdaSection');
       if ([2, 3, 5].includes(period)) {
         pdaSection.classList.remove('hidden');
@@ -1021,14 +1151,12 @@
       calculateAll();
     }
 
-    // 動態更新快捷按鈕以符合當前年期最低額
     function updateFastPremiumButtons() {
       const minVal = getMinPremium();
       const container = document.getElementById('fastPremiumButtons');
       container.innerHTML = '';
 
       let steps = [minVal, minVal * 2, 50000, 100000, 300000];
-      // 去重且排序
       steps = Array.from(new Set(steps)).filter(s => s >= minVal).sort((a,b) => a - b);
 
       steps.forEach(amt => {
@@ -1045,12 +1173,10 @@
       });
     }
 
-    // 取得當前年期的最低投保金額 (USD)
     function getMinPremium() {
       return officialMinPremiumsUSD[currentPayPeriod] || 10000;
     }
 
-    // STREAMING_CHUNK:Executing core calculation with validation, discount rules and PDA 5.5%
     function calculateAll() {
       const annualPremInput = document.getElementById('annualPremium');
       const rawVal = annualPremInput.value.replace(/,/g, '');
@@ -1058,10 +1184,8 @@
       const isPDA = document.getElementById('enablePDA').checked;
       const minRequired = getMinPremium();
 
-      // 顯示最低門檻文字 (千位逗號)
       document.getElementById('minPremiumNotice').innerText = `最低投保門檻: ${formatMoney(minRequired)}`;
 
-      // 驗證是否達到最低投保金額
       const minErrorAlert = document.getElementById('minErrorAlert');
       const minErrorMessage = document.getElementById('minErrorMessage');
 
@@ -1105,27 +1229,27 @@
       minErrorAlert.classList.add('hidden');
       annualPremInput.classList.remove('border-red-500', 'bg-red-50');
 
-      // 1. 計算保費折扣 (2026 Q4 Flash Report 政策)
-      let d1 = 0; // 首年折扣率
-      let d2 = 0; // 第二年折扣率
+      // 保費折扣計算
+      let d1 = 0;
+      let d2 = 0;
 
-      if (currentPayPeriod === 1) { // 整付
+      if (currentPayPeriod === 1) {
         if (annualPrem < 100000) d1 = 0.02;
         else if (annualPrem < 300000) d1 = 0.03;
         else if (annualPrem < 500000) d1 = 0.04;
         else if (annualPrem < 1000000) d1 = 0.05;
         else if (annualPrem < 2000000) d1 = 0.06;
         else d1 = 0.07;
-      } else if (currentPayPeriod === 2) { // 2年繳
+      } else if (currentPayPeriod === 2) {
         if (annualPrem < 50000) d1 = 0.04;
         else if (annualPrem < 100000) d1 = 0.06;
         else if (annualPrem < 250000) d1 = 0.10;
         else d1 = 0.12;
-      } else if (currentPayPeriod === 3) { // 3年繳
+      } else if (currentPayPeriod === 3) {
         if (annualPrem < 50000) d1 = 0.25;
         else if (annualPrem < 100000) d1 = 0.30;
         else d1 = 0.35;
-      } else if (currentPayPeriod === 5 || currentPayPeriod === 10) { // 5年或10年繳
+      } else if (currentPayPeriod === 5 || currentPayPeriod === 10) {
         if (annualPrem < 10000) { d1 = 0.08; d2 = 0; }
         else if (annualPrem < 30000) { d1 = 0.10; d2 = 0.04; }
         else if (annualPrem < 50000) { d1 = 0.10; d2 = 0.10; }
@@ -1137,7 +1261,6 @@
 
       const totalNominal = annualPrem * currentPayPeriod;
 
-      // 各年保費與折扣計算
       let yearPremiums = [];
       let totalDiscount = 0;
 
@@ -1154,21 +1277,19 @@
         });
       }
 
-      // 2. 預繳 (PDA) 5.5% 保證優惠年利率精算
+      // 預繳 5.5% 精算
       let pdaDepositNeeded = 0;
       let pdaInterestSaved = 0;
 
       if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
         for (let y = 2; y <= currentPayPeriod; y++) {
           let dueAmount = yearPremiums[y - 1].net;
-          // 按 5.5% p.a. 折現
           let presentValue = dueAmount / Math.pow(1 + PDA_RATE, y - 1);
           pdaDepositNeeded += presentValue;
           pdaInterestSaved += (dueAmount - presentValue);
         }
       }
 
-      // 實際首日總付出金額
       let actualFirstDayPayment = 0;
       if (isPDA && [2, 3, 5].includes(currentPayPeriod)) {
         actualFirstDayPayment = yearPremiums[0].net + pdaDepositNeeded;
@@ -1179,7 +1300,6 @@
       const totalSavingsAmt = totalDiscount + pdaInterestSaved;
       const totalSavingsRate = totalNominal > 0 ? ((totalSavingsAmt / totalNominal) * 100).toFixed(2) : 0;
 
-      // 更新看板數據
       document.getElementById('cardNominalTotal').innerText = formatMoney(totalNominal);
       document.getElementById('cardPayYearsInfo').innerText = `${currentPayPeriod === 1 ? '整付' : currentPayPeriod + '年供款期'} | 每期 ${formatMoney(annualPrem)}`;
       
@@ -1194,24 +1314,19 @@
       document.getElementById('cardActualPayment').innerText = formatMoney(actualFirstDayPayment);
       document.getElementById('cardTotalSavingsRate').innerText = totalSavingsRate + '%';
 
-      // 意外身故限額 (上限 200,000 美元)
       const familyMax = 200000;
       const calculatedFamilyCover = Math.min(totalNominal * 2, familyMax);
       document.getElementById('familyAccidentCap').innerText = formatMoney(calculatedFamilyCover);
 
-      // 渲染明細清單表格
       renderBreakdownTable(yearPremiums, isPDA, pdaDepositNeeded, pdaInterestSaved, actualFirstDayPayment);
-
-      // 更新投影圖表與詳細退保價值表
       updateProjectionSection(totalNominal);
     }
 
-    // STREAMING_CHUNK:Rendering breakdown table with formatted currency and 5.5% note
     function renderBreakdownTable(yearPrems, isPDA, pdaDeposit, pdaSaved, totalPay) {
       const tbody = document.getElementById('breakdownTableBody');
       tbody.innerHTML = '';
 
-      if (currentPayPeriod === 1) { // 整付
+      if (currentPayPeriod === 1) {
         const y1 = yearPrems[0];
         tbody.innerHTML = `
           <tr class="hover:bg-slate-50">
@@ -1230,7 +1345,6 @@
         return;
       }
 
-      // 多年期情況
       const y1 = yearPrems[0];
       tbody.innerHTML += `
         <tr class="hover:bg-slate-50">
@@ -1246,7 +1360,7 @@
           <tr class="hover:bg-slate-50 bg-emerald-50/20">
             <td class="py-2.5 font-medium text-emerald-900">
               第 2 至 ${currentPayPeriod} 年預繳保費儲備金 (PDA)
-              <span class="block text-[11px] text-emerald-600">享 5.5% p.a. 保證年利率滾存生息以扣付往後保費</span>
+              <span class="block text-[10px] text-emerald-600">享 5.5% p.a. 保證年利率滾存生息以扣付往後保費</span>
             </td>
             <td>${formatMoney(y1.nominal * (currentPayPeriod - 1))}</td>
             <td class="text-emerald-700 font-semibold">
@@ -1282,7 +1396,6 @@
       `;
     }
 
-    // STREAMING_CHUNK:Updating projections table and chart with precise benchmarks
     function updateProjectionSection(totalNominal) {
       const cfg = officialBenchmarks[currentPayPeriod] || officialBenchmarks[3];
 
@@ -1320,22 +1433,21 @@
         const multiple = (totalSurrender / totalNominal).toFixed(2);
 
         pBody.innerHTML += `
-          <tr class="hover:bg-orange-50/50 transition">
-            <td class="py-2.5 px-3 font-semibold text-slate-800">第 ${year} 年</td>
-            <td class="py-2.5 px-3 text-slate-600">${age} 歲</td>
-            <td class="py-2.5 px-3 text-slate-500">${formatMoney(paid)}</td>
-            <td class="py-2.5 px-3 text-blue-700 font-medium">${formatMoney(gtd)}</td>
-            <td class="py-2.5 px-3 text-orange-600">${formatMoney(rbCash)}</td>
-            <td class="py-2.5 px-3 text-orange-600">${formatMoney(tbCash)}</td>
-            <td class="py-2.5 px-3 font-extrabold text-slate-900 bg-orange-50/40">${formatMoney(totalSurrender)}</td>
-            <td class="py-2.5 px-3 font-medium text-slate-800">${formatMoney(deathBenefit)}</td>
-            <td class="py-2.5 px-3 text-right font-bold ${multiple >= 1.0 ? 'text-emerald-600' : 'text-slate-400'}">${multiple}x</td>
+          <tr class="hover:bg-orange-50/50 transition whitespace-nowrap">
+            <td class="py-2 px-2.5 font-semibold text-slate-800">第 ${year} 年</td>
+            <td class="py-2 px-2.5 text-slate-600">${age} 歲</td>
+            <td class="py-2 px-2.5 text-slate-500">${formatMoney(paid)}</td>
+            <td class="py-2 px-2.5 text-blue-700 font-medium">${formatMoney(gtd)}</td>
+            <td class="py-2 px-2.5 text-orange-600">${formatMoney(rbCash)}</td>
+            <td class="py-2 px-2.5 text-orange-600">${formatMoney(tbCash)}</td>
+            <td class="py-2 px-2.5 font-extrabold text-slate-900 bg-orange-50/40">${formatMoney(totalSurrender)}</td>
+            <td class="py-2 px-2.5 font-medium text-slate-800">${formatMoney(deathBenefit)}</td>
+            <td class="py-2 px-2.5 text-right font-bold ${multiple >= 1.0 ? 'text-emerald-600' : 'text-slate-400'}">${multiple}x</td>
           </tr>
         `;
       });
     }
 
-    // STREAMING_CHUNK:Configuring Chart.js with responsive tooltip formatters
     function initChart() {
       const ctx = document.getElementById('cashValueChart').getContext('2d');
       chartInstance = new Chart(ctx, {
