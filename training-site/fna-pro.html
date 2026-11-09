@@ -56,74 +56,12 @@
       background-color: #cbd5e1;
       border-radius: 9999px;
     }
-   /* ================= 橫向 A4 旗艦級原生列印規範 (fna-pro 專用) ================= */
-  @page {
-    size: A4 landscape; /* 鎖定為橫向 A4 (297mm x 210mm) */
-    margin: 8mm 10mm;   /* 上下 8mm，左右 10mm */
-  }
-
-  @media print {
-    /* 1. 隱藏不必要的按鈕與導航 */
-    .no-print, header, nav, button, input[type="button"] {
-      display: none !important;
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white; }
+      .card-shadow { box-shadow: none !important; border: 1px solid #e2e8f0; }
     }
-
-    .print-only {
-      display: block !important;
-    }
-
-    /* 2. 背景與文字保真 */
-    body {
-      background: #ffffff !important;
-      color: #0f172a !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      font-size: 11px !important;
-    }
-
-    main {
-      width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-    }
-
-    /* 3. 防止網格雙欄撞車疊圖，維持左右並列 */
-    .grid {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: wrap !important;
-      gap: 16px !important;
-    }
-
-    .grid > div, .grid > section {
-      flex: 1 1 45% !important;
-      min-width: 0 !important;
-      position: relative !important;
-    }
-
-    /* 4. Canvas 圖表自適應防覆蓋 */
-    canvas {
-      max-width: 100% !important;
-      height: auto !important;
-      display: block !important;
-      position: relative !important;
-    }
-
-    /* 5. 卡片防生硬腰斬跨頁 */
-    .card, .card-shadow, section, table, tr, .rounded-2xl, .rounded-3xl {
-      break-inside: avoid !important;
-      page-break-inside: avoid !important;
-      box-shadow: none !important;
-      border: 1px solid #e2e8f0 !important;
-      margin-bottom: 12px !important;
-    }
-  }
-
-  @media screen {
-    .print-only { display: none !important; }
-  }
   </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col bg-slate-50">
@@ -155,9 +93,9 @@
           <button onclick="clearAllInputs()" class="text-xs px-2 py-1 rounded bg-rose-900/60 hover:bg-rose-700 text-rose-200 transition" title="清空全部重填"><i class="fa-solid fa-rotate-left"></i> 重設清空</button>
         </div>
 
-       <button onclick="window.print()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 border border-white/20 cursor-pointer no-print">
-  <i class="fa-solid fa-file-pdf text-sm"></i> 匯出評估報告 / 列印 PDF
-</button>
+        <button onclick="openExportModal()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 border border-white/20">
+          <i class="fa-solid fa-file-pdf text-sm"></i> 匯出 PDF / 微信分享
+        </button>
       </div>
     </div>
   </header>
@@ -241,6 +179,45 @@
 
       <!-- Left / Main Working Area (Steps 1 to 4) -->
       <div id="inputFormContainer" class="lg:col-span-8 space-y-6">
+
+        <!-- Advisor Profile & Proposal Header Bar (Image 1) -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 no-print">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)
+            </h3>
+            <span class="text-[11px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md font-medium">客製化設定</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">客戶姓名 / 稱謂</label>
+              <input type="text" id="headerClientName" placeholder="例如：陳大文 先生" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500" oninput="syncClientName(this.value)">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">理財顧問姓名</label>
+              <input type="text" id="advisorName" placeholder="例如：富衛策劃顧問" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500" oninput="calculateAll()">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">顧問職位 / 職銜</label>
+              <select id="advisorTitle" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs bg-white focus:ring-2 focus:ring-brand-500" onchange="calculateAll()">
+                <option value="資深分區總監" selected>資深分區總監</option>
+                <option value="分區總監">分區總監</option>
+                <option value="資深業務經理">資深業務經理</option>
+                <option value="業務經理">業務經理</option>
+                <option value="高級財富策劃經理">高級財富策劃經理</option>
+                <option value="財富策劃顧問">財富策劃顧問</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">所屬分區 / 團隊</label>
+              <input type="text" id="advisorTeam" placeholder="例如：One Goal One Region" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500" oninput="calculateAll()">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">顧問聯絡電話 / 微信</label>
+              <input type="text" id="advisorContact" placeholder="例如：+853 6688 8888" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500" oninput="calculateAll()">
+            </div>
+          </div>
+        </section>
 
         <!-- ========================================== -->
         <!-- STEP 1: 客戶基本資料與家庭結構 -->
@@ -876,6 +853,31 @@
       <!-- ========================================== -->
       <section id="step-5" class="step-panel hidden lg:col-span-12 space-y-6">
         
+        <!-- Official Proposal Header Block (As shown in screenshot 2) -->
+        <div class="bg-white p-6 rounded-2xl border-b-2 border-slate-300 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">澳門專屬保障建議書</span>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
+              退休保障計劃 客戶專屬規劃方案
+            </h1>
+            <p class="text-xs text-slate-500 font-medium pt-0.5">
+              策劃日期：<span id="proposalDateDisplay">2026 年 11 月 9 日</span>
+            </p>
+          </div>
+
+          <!-- Vertical Divider & Advisor Block -->
+          <div class="flex items-center gap-6 sm:border-l-2 sm:border-slate-200 sm:pl-6 self-stretch justify-end">
+            <div class="text-right">
+              <h2 id="dispAdvisorName" class="text-base sm:text-lg font-bold text-slate-900 leading-snug">富衛策劃顧問</h2>
+              <div id="dispAdvisorTitle" class="text-xs font-semibold text-slate-600">資深分區總監</div>
+              <div id="dispAdvisorTeam" class="text-xs text-slate-500">One Goal One Region</div>
+              <div class="text-xs text-slate-600 font-medium mt-1">
+                電話 / 微信：<span id="dispAdvisorContact" class="font-bold text-slate-800">+853 6688 8888</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Client Proposal Banner -->
         <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
           <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
@@ -1124,6 +1126,15 @@
     let quickRadarChartInstance = null;
     let detailedBarChartInstance = null;
 
+    // Synchronize client name between top advisor bar and step 1 input
+    function syncClientName(val) {
+      const step1Input = document.getElementById('clientName');
+      const headerInput = document.getElementById('headerClientName');
+      if (step1Input && step1Input.value !== val) step1Input.value = val;
+      if (headerInput && headerInput.value !== val) headerInput.value = val;
+      calculateAll();
+    }
+
     // Formatting helper strictly ensuring commas everywhere
     function fmtMoney(amount) {
       if (!amount || isNaN(amount) || amount <= 0) return 'HK$ 0';
@@ -1183,6 +1194,13 @@
       switchStep(5);
       closeWechatShareModal();
 
+      // Give browser layout engine and Chart.js enough frames to render canvas with non-zero dimensions
+      await new Promise(resolve => setTimeout(resolve, 350));
+      if (detailedBarChartInstance) {
+        detailedBarChartInstance.resize();
+        detailedBarChartInstance.update();
+      }
+
       const clientName = document.getElementById('clientName')?.value.trim() || '客戶';
       const todayStr = new Date().toISOString().slice(0, 10);
       const filename = `退休及理財策劃報告_${clientName}_${todayStr}.pdf`;
@@ -1193,7 +1211,18 @@
         margin: [8, 8, 8, 8],
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          logging: false,
+          ignoreElements: (element) => {
+            // Ignore hidden canvas or 0-size elements that trigger drawImage errors
+            if (element.tagName === 'CANVAS' && (element.width === 0 || element.height === 0 || element.offsetWidth === 0 || element.offsetHeight === 0)) {
+              return true;
+            }
+            return false;
+          }
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
@@ -1807,44 +1836,68 @@
       const sRet = document.getElementById('sideRetireGap');
       if (sRet) sRet.innerText = fmtMoney(retirementGap);
 
+      // Update Step 5 Header & Advisor Info (Image 2)
+      const now = new Date();
+      const dateDisp = document.getElementById('proposalDateDisplay');
+      if (dateDisp) {
+        dateDisp.innerText = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+      }
+
+      const advNameVal = document.getElementById('advisorName')?.value.trim() || '富衛策劃顧問';
+      const advTitleVal = document.getElementById('advisorTitle')?.value || '資深分區總監';
+      const advTeamVal = document.getElementById('advisorTeam')?.value.trim() || 'One Goal One Region';
+      const advContactVal = document.getElementById('advisorContact')?.value.trim() || '+853 6688 8888';
+
+      const dName = document.getElementById('dispAdvisorName');
+      const dTitle = document.getElementById('dispAdvisorTitle');
+      const dTeam = document.getElementById('dispAdvisorTeam');
+      const dContact = document.getElementById('dispAdvisorContact');
+
+      if (dName) dName.innerText = advNameVal;
+      if (dTitle) dTitle.innerText = advTitleVal;
+      if (dTeam) dTeam.innerText = advTeamVal;
+      if (dContact) dContact.innerText = advContactVal;
+
       // Update Step 5 Report Cards
       const reportName = document.getElementById('reportClientName');
       if (reportName) reportName.innerText = clientName;
 
+      // Card 1: Life Coverage
       const cLifeGap = document.getElementById('cardLifeGap');
-      if (cLifeGap) cLifeGap.innerText = fmtMoney(lifeGap);
       const cLifeNeed = document.getElementById('cardLifeNeed');
-      if (cLifeNeed) cLifeNeed.innerText = fmtMoney(totalLifeObligationNeed);
       const cLifeExist = document.getElementById('cardLifeExist');
+      if (cLifeGap) cLifeGap.innerText = fmtMoney(lifeGap);
+      if (cLifeNeed) cLifeNeed.innerText = fmtMoney(totalLifeObligationNeed);
       if (cLifeExist) cLifeExist.innerText = fmtMoney(existLifeCover + Math.max(0, liquidAsset - totalMonthlyExpense * 6));
 
+      // Card 2: Critical Illness
       const cCIGap = document.getElementById('cardCIGap');
-      if (cCIGap) cCIGap.innerText = fmtMoney(ciGap);
       const cCINeed = document.getElementById('cardCINeed');
-      if (cCINeed) cCINeed.innerText = fmtMoney(suggestedCINeed);
       const cCIExist = document.getElementById('cardCIExist');
+      if (cCIGap) cCIGap.innerText = fmtMoney(ciGap);
+      if (cCINeed) cCINeed.innerText = fmtMoney(suggestedCINeed);
       if (cCIExist) cCIExist.innerText = fmtMoney(existCICover);
 
+      // Card 3: Education
       const cEduGap = document.getElementById('cardEduGap');
-      if (cEduGap) cEduGap.innerText = fmtMoney(educationGap);
       const cEduNeed = document.getElementById('cardEduNeed');
-      if (cEduNeed) cEduNeed.innerText = fmtMoney(totalInflatedEducationNeed);
       const cEduExist = document.getElementById('cardEduExist');
+      if (cEduGap) cEduGap.innerText = fmtMoney(educationGap);
+      if (cEduNeed) cEduNeed.innerText = fmtMoney(totalInflatedEducationNeed);
       if (cEduExist) cEduExist.innerText = fmtMoney(existingEduFund);
 
-      const cRetGap = document.getElementById('cardRetireGap');
-      if (cRetGap) cRetGap.innerText = fmtMoney(retirementGap);
-      const cRetNeed = document.getElementById('cardRetireNeed');
-      if (cRetNeed) cRetNeed.innerText = fmtMoney(totalRetirementNeed);
-      const cRetExist = document.getElementById('cardRetireExist');
-      if (cRetExist) cRetExist.innerText = fmtMoney(existingMPF);
+      // Card 4: Retirement
+      const cRetireGap = document.getElementById('cardRetireGap');
+      const cRetireNeed = document.getElementById('cardRetireNeed');
+      const cRetireExist = document.getElementById('cardRetireExist');
+      if (cRetireGap) cRetireGap.innerText = fmtMoney(retirementGap);
+      if (cRetireNeed) cRetireNeed.innerText = fmtMoney(totalRetirementNeed);
+      if (cRetireExist) cRetireExist.innerText = fmtMoney(existingMPF);
 
-      // Update Pyramid & Recommendations
+      // Visual updates
+      updateCharts(totalLifeObligationNeed, existLifeCover, suggestedCINeed, existCICover, totalInflatedEducationNeed, existingEduFund, totalRetirementNeed, existingMPF);
       updatePyramid(lifeGap, ciGap, educationGap, retirementGap);
       generateRecommendations(lifeGap, ciGap, educationGap, retirementGap, clientAge, monthlySurplus);
-
-      // Render Charts & update radar
-      updateCharts(totalLifeObligationNeed, existLifeCover, suggestedCINeed, existCICover, totalInflatedEducationNeed, existingEduFund, totalRetirementNeed, existingMPF);
     }
 
     function updateCharts(lifeNeed, lifeExist, ciNeed, ciExist, eduNeed, eduExist, retireNeed, retireExist) {
