@@ -39,9 +39,115 @@
     .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(232, 119, 34, 0.18); }
     .gradient-hero { background: linear-gradient(135deg, #1A2C3F 0%, #2A435D 60%, #E87722 100%); }
+
+    /* PDF 建議書列印專屬樣式 */
+    @media print {
+      body * { visibility: hidden; }
+      #pdf-proposal-area, #pdf-proposal-area * { visibility: visible; }
+      #pdf-proposal-area {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px 30px;
+        background: #ffffff;
+      }
+      nav, header, #features, #booster, #comparison, #faq, footer, .no-print {
+        display: none !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-orange-100 selection:text-orange-900">
+
+  <!-- PDF 專屬生成隱藏容器 (列印時呈現如附件樣式) -->
+  <div id="pdf-proposal-area" class="hidden font-sans text-slate-800">
+    <!-- Proposal Header -->
+    <div class="flex justify-between items-start border-b border-slate-300 pb-5 mb-5">
+      <div>
+        <div class="flex items-center space-x-2 text-slate-500 text-xs font-semibold tracking-wider mb-1.5">
+          <div class="w-5 h-5 rounded bg-fwd-orange text-white flex items-center justify-center text-[10px]">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <span>澳門專屬保障建議書</span>
+        </div>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight" id="pdf-plan-title">
+          自主保定期保障系列 客戶專屬規劃方案
+        </h1>
+        <div class="text-xs text-slate-500 mt-1">
+          策劃日期：<span id="pdf-current-date"></span>
+        </div>
+      </div>
+      
+      <!-- Advisor Info (右側附件樣式) -->
+      <div class="text-right border-l-2 border-slate-200 pl-4 space-y-0.5 min-w-[200px]">
+        <div class="font-bold text-slate-900 text-sm" id="pdf-adv-name">理財策劃顧問</div>
+        <div class="text-xs text-slate-600 font-medium" id="pdf-adv-title">資深分區總監</div>
+        <div class="text-xs text-slate-500" id="pdf-adv-team">One Goal One Region</div>
+        <div class="text-xs text-slate-500">電話 / 微信：<span id="pdf-adv-phone">+853 6688 8888</span></div>
+      </div>
+    </div>
+
+    <!-- Client Header Strip (附件底色卡片) -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 mb-6 flex justify-between items-center text-xs">
+      <div>
+        <span class="text-slate-500">尊敬的客戶：</span>
+        <strong class="text-slate-900 text-sm ml-1" id="pdf-client-name">陳大文 先生</strong>
+        <span class="mx-3 text-slate-300">|</span>
+        <span class="text-slate-500">投保年齡：</span>
+        <strong class="text-slate-800" id="pdf-client-age">30 歲</strong>
+        <span class="mx-3 text-slate-300">|</span>
+        <span class="text-slate-500">性別 / 吸煙：</span>
+        <strong class="text-slate-800" id="pdf-client-profile">男性 / 非吸煙</strong>
+      </div>
+      <div>
+        <span class="text-slate-500">保障方案：</span>
+        <strong class="text-fwd-orange" id="pdf-plan-mode-label">自主保定期保障（基本計劃）</strong>
+      </div>
+    </div>
+
+    <!-- Premium & Core Matrix in PDF -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="p-4 bg-orange-50/70 rounded-xl border border-orange-200">
+        <div class="text-xs text-orange-800 font-semibold mb-1">年度保費精算 (Annual Premium)</div>
+        <div class="text-2xl font-black text-fwd-orange" id="pdf-premium-display">HK$ 800 / 年</div>
+        <div class="text-[11px] text-slate-500 mt-1" id="pdf-premium-sub">半年繳：HK$ 416 | 月繳：HK$ 72</div>
+      </div>
+      <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+        <div class="text-xs text-slate-500 font-semibold mb-1">基本投保額 (Sum Insured)</div>
+        <div class="text-2xl font-black text-slate-900" id="pdf-sum-insured-display">HK$ 1,000,000</div>
+        <div class="text-[11px] text-slate-500 mt-1">續保年期：<span id="pdf-plan-term">5 年</span>・保障長至 100 歲</div>
+      </div>
+    </div>
+
+    <!-- Benefits Table in PDF -->
+    <div class="mb-6">
+      <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center">
+        <i class="fa-solid fa-shield-halved text-fwd-orange mr-1.5"></i> 核心身價保障與關愛權益總覽
+      </h3>
+      <table class="w-full text-left text-xs border border-slate-200 divide-y divide-slate-200">
+        <tbody class="divide-y divide-slate-100">
+          <tr class="bg-slate-50"><td class="py-2.5 px-3 font-semibold text-slate-700">身故權益 (100% 投保額)</td><td class="py-2.5 px-3 font-bold text-right" id="pdf-res-death">HK$ 1,000,000</td></tr>
+          <tr><td class="py-2.5 px-3 font-semibold text-amber-800">獨創父母關愛權益 (額外 20% 留給父母)</td><td class="py-2.5 px-3 font-bold text-amber-900 text-right" id="pdf-res-parents">+ HK$ 200,000</td></tr>
+          <tr class="bg-slate-50" id="pdf-row-advance"><td class="py-2.5 px-3 text-blue-700 font-medium">預支身故權益 (經西醫證明 12 個月內末期疾病，基本計劃專享)</td><td class="py-2.5 px-3 font-semibold text-blue-900 text-right" id="pdf-res-advance">最高 HK$ 1,000,000</td></tr>
+          <tr><td class="py-2.5 px-3 text-slate-600">享悅人生增值選項 (55歲前結婚/生子/置業等 5 大大事免體檢加保)</td><td class="py-2.5 px-3 font-semibold text-right">最高可增額 HK$ 1,500,000</td></tr>
+          <tr class="bg-slate-50"><td class="py-2.5 px-3 text-slate-600">終身壽險轉換權益 (70歲前可免體檢轉換指定終身壽險)</td><td class="py-2.5 px-3 font-semibold text-right">享免體檢保證轉換</td></tr>
+          <tr class="bg-orange-50/80"><td class="py-2.5 px-3 font-bold text-orange-950">父母在生時總身故理賠金額預算</td><td class="py-2.5 px-3 font-black text-fwd-orange text-right text-sm" id="pdf-res-total">HK$ 1,200,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PDF Footer Note -->
+    <div class="border-t border-slate-200 pt-3 text-[10px] text-slate-500 space-y-1">
+      <p>※ 本建議書之保障項目受澳門特別行政區法律規管。如需辦理索償、退保或保單服務，理財顧問與專線櫃檯為您全程協辦。</p>
+      <p>※ 本文件為專屬客製化試算方案，詳細保障範圍、不保事項及完整條款以正式保單為準。</p>
+    </div>
+  </div>
 
   <!-- Navigation Bar (純圖案 Logo，無熱線電話) -->
   <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
@@ -112,7 +218,62 @@
   </header>
 
   <!-- Main Content (正邊距 mt-8 sm:mt-10 避免排版重疊) -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-12 pb-20">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-8 sm:space-y-12 pb-20">
+
+    <!-- 附件樣式：客戶提案抬頭與顧問聯絡資訊（列印自動帶入） -->
+    <section class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm no-print">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-fwd-orange"></span>
+          <h3 class="text-sm sm:text-base font-bold text-slate-800">
+            客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)
+          </h3>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-500 font-medium px-2.5 py-1 rounded-md">
+          客製化設定
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 text-xs">
+        <!-- 1. 客戶姓名 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">客戶姓名 / 稱謂</label>
+          <input type="text" id="cust-name" value="陳大文 先生" placeholder="例如：陳大文 先生" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 2. 理財顧問姓名 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">理財顧問姓名</label>
+          <input type="text" id="cust-advisor" value="富衛策劃顧問" placeholder="例如：富衛策劃顧問" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 3. 顧問職位 / 職銜 (下拉選單) -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">顧問職位 / 職銜</label>
+          <select id="cust-title" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-fwd-orange" onchange="updatePDFProfile()">
+            <option value="資深分區總監" selected>資深分區總監</option>
+            <option value="分區總監">分區總監</option>
+            <option value="資深分區經理">資深分區經理</option>
+            <option value="分區經理">分區經理</option>
+            <option value="業務經理">業務經理</option>
+            <option value="資深理財策劃顧問">資深理財策劃顧問</option>
+            <option value="理財策劃顧問">理財策劃顧問</option>
+          </select>
+        </div>
+
+        <!-- 4. 所屬分區 / 團隊 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">所屬分區 / 團隊</label>
+          <input type="text" id="cust-team" value="One Goal One Region" placeholder="例如：One Goal One Region" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 5. 顧問聯絡電話 / 微信 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">顧問聯絡電話 / 微信</label>
+          <input type="text" id="cust-phone" value="+853 6688 8888" placeholder="例如：+853 6688 8888" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-fwd-orange focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+      </div>
+    </section>
     
     <!-- Premium Calculator Card -->
     <section id="calculator" class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
@@ -299,6 +460,14 @@
                   <span class="font-black text-fwd-orange text-sm" id="res-total-benefit">HK$ 1,200,000</span>
                 </div>
               </div>
+            </div>
+
+            <!-- 匯出 PDF 建議書按鈕 -->
+            <div class="mt-5">
+              <button type="button" onclick="exportProposalPDF()" class="w-full py-3 px-4 bg-fwd-orange hover:bg-fwd-darkorange text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>匯出專屬建議書 PDF (帶入上方顧問與客戶資訊)</span>
+              </button>
             </div>
           </div>
 
@@ -764,6 +933,99 @@
     let currentTerm = 5;
     let currentCurrency = 'HKD';
 
+    // 格式化當前日期 (例如：2026 年 11 月 9 日)
+    function getFormattedDate() {
+      const now = new Date();
+      return `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+    }
+
+    // 安全更新 DOM 輔助函數，避免 null 錯誤
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    }
+
+    function safeSetHTML(id, html) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    }
+
+    // 更新 PDF 隱藏區域中客戶與顧問的資料
+    function updatePDFProfile() {
+      const cNameEl = document.getElementById('cust-name');
+      const advNameEl = document.getElementById('cust-advisor');
+      const advTitleEl = document.getElementById('cust-title');
+      const advTeamEl = document.getElementById('cust-team');
+      const advPhoneEl = document.getElementById('cust-phone');
+      const ageEl = document.getElementById('calc-age');
+
+      const cName = cNameEl ? (cNameEl.value || '尊貴客戶') : '尊貴客戶';
+      const advName = advNameEl ? (advNameEl.value || '理財策劃顧問') : '理財策劃顧問';
+      const advTitle = advTitleEl ? (advTitleEl.value || '資深分區總監') : '資深分區總監';
+      const advTeam = advTeamEl ? (advTeamEl.value || 'One Goal One Region') : 'One Goal One Region';
+      const advPhone = advPhoneEl ? (advPhoneEl.value || '-') : '-';
+      const ageVal = ageEl ? ageEl.value : '30';
+
+      safeSetText('pdf-client-name', cName);
+      safeSetText('pdf-client-age', `${ageVal} 歲`);
+      safeSetText('pdf-client-profile', `${currentGender === 'male' ? '男性' : '女性'} / ${currentSmoking ? '吸煙' : '非吸煙'}`);
+      safeSetText('pdf-adv-name', advName);
+      safeSetText('pdf-adv-title', advTitle);
+      safeSetText('pdf-adv-team', advTeam);
+      safeSetText('pdf-adv-phone', advPhone);
+      safeSetText('pdf-current-date', getFormattedDate());
+    }
+
+    // 觸發列印 / 匯出 PDF (支援在 iFrame 或一般視窗中平穩觸發)
+    function exportProposalPDF() {
+      try {
+        updatePDFProfile();
+        calculateAll();
+
+        const pdfArea = document.getElementById('pdf-proposal-area');
+        if (!pdfArea) {
+          window.print();
+          return;
+        }
+
+        // 建立獨立預覽列印視窗，確保在 iFrame 或受限環境下也能 100% 彈出列印及儲存為 PDF
+        const printWindow = window.open('', '_blank', 'width=850,height=900');
+        if (printWindow) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="zh-HK">
+            <head>
+              <meta charset="UTF-8">
+              <title>自主保定期保障系列_客戶專屬建議書</title>
+              <script src="https://cdn.tailwindcss.com"><\/script>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+              <style>
+                @page { size: A4 portrait; margin: 12mm; }
+                body { font-family: Inter, system-ui, -apple-system, sans-serif; background: #ffffff; color: #1e293b; padding: 20px; }
+              </style>
+            </head>
+            <body>
+              ${pdfArea.innerHTML}
+              <script>
+                window.onload = function() {
+                  window.focus();
+                  window.print();
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+        } else {
+          // 若彈跳視窗被攔截，降級使用原頁面直接列印
+          window.print();
+        }
+      } catch (err) {
+        console.error('匯出 PDF 時發生錯誤:', err);
+        window.print();
+      }
+    }
+
     function updateButtonGroup(activeId, groupIds) {
       groupIds.forEach(id => {
         const el = document.getElementById(id);
@@ -887,15 +1149,35 @@
       const sym = currentCurrency === 'HKD' ? 'HK$' : 'US$';
       const fmt = (n) => n.toLocaleString('en-US');
 
-      document.getElementById('res-annual-premium').innerText = fmt(annualPremium);
-      document.getElementById('res-semiannual-premium').innerText = `${sym} ${fmt(semiAnnualPremium)}`;
-      document.getElementById('res-monthly-premium').innerText = `${sym} ${fmt(monthlyPremium)}`;
-      document.getElementById('res-daily-amount').innerText = `${sym} ${dailyEquivalent}`;
-      document.getElementById('res-daily-rate').innerHTML = `相當於每日僅需約 <strong class="text-slate-900 font-bold">${sym} ${dailyEquivalent}</strong>，即可享百萬身價保障`;
-      document.getElementById('res-death-benefit').innerText = `${sym} ${fmt(deathBenefit)}`;
-      document.getElementById('res-parents-benefit').innerText = `+ ${sym} ${fmt(parentsBenefit)}`;
-      document.getElementById('res-advance-benefit').innerText = currentPlanType === 'basic' ? `最高 ${sym} ${fmt(advanceBenefit)}` : '不適用於附約';
-      document.getElementById('res-total-benefit').innerText = `${sym} ${fmt(totalBenefitWithParents)}`;
+      safeSetText('res-annual-premium', fmt(annualPremium));
+      safeSetText('res-semiannual-premium', `${sym} ${fmt(semiAnnualPremium)}`);
+      safeSetText('res-monthly-premium', `${sym} ${fmt(monthlyPremium)}`);
+      safeSetText('res-daily-amount', `${sym} ${dailyEquivalent}`);
+      safeSetHTML('res-daily-rate', `相當於每日僅需約 <strong class="text-slate-900 font-bold">${sym} ${dailyEquivalent}</strong>，即可享百萬身價保障`);
+      safeSetText('res-death-benefit', `${sym} ${fmt(deathBenefit)}`);
+      safeSetText('res-parents-benefit', `+ ${sym} ${fmt(parentsBenefit)}`);
+      safeSetText('res-advance-benefit', currentPlanType === 'basic' ? `最高 ${sym} ${fmt(advanceBenefit)}` : '不適用於附約');
+      safeSetText('res-total-benefit', `${sym} ${fmt(totalBenefitWithParents)}`);
+
+      // 同步更新 PDF 預備區域的數據
+      safeSetText('pdf-plan-mode-label', currentPlanType === 'basic' ? '自主保定期保障（基本計劃）' : '自主保定期保障（附約）');
+      safeSetText('pdf-plan-term', `${currentTerm} 年`);
+      safeSetText('pdf-premium-display', `${sym} ${fmt(annualPremium)} / 年`);
+      safeSetText('pdf-premium-sub', `半年繳：${sym} ${fmt(semiAnnualPremium)} | 月繳：${sym} ${fmt(monthlyPremium)}`);
+      safeSetText('pdf-sum-insured-display', `${sym} ${fmt(sumInsured)}`);
+      safeSetText('pdf-res-death', `${sym} ${fmt(deathBenefit)}`);
+      safeSetText('pdf-res-parents', `+ ${sym} ${fmt(parentsBenefit)}`);
+      safeSetText('pdf-res-total', `${sym} ${fmt(totalBenefitWithParents)}`);
+
+      const pdfRowAdv = document.getElementById('pdf-row-advance');
+      if (pdfRowAdv) {
+        if (currentPlanType === 'basic') {
+          pdfRowAdv.style.display = 'table-row';
+          safeSetText('pdf-res-advance', `最高 ${sym} ${fmt(advanceBenefit)}`);
+        } else {
+          pdfRowAdv.style.display = 'none';
+        }
+      }
     }
 
     // Milestone selection logic
@@ -943,6 +1225,7 @@
     // Initialize on page load
     window.onload = function() {
       calculateAll();
+      updatePDFProfile();
     };
   </script>
 </body>
