@@ -39,9 +39,114 @@
     .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(42, 157, 143, 0.25); }
     .gradient-hero-easycare { background: linear-gradient(135deg, #0E3B43 0%, #1E555C 55%, #E87722 100%); }
+
+    /* PDF 建議書列印專屬樣式 */
+    @media print {
+      body * { visibility: hidden; }
+      #pdf-proposal-area, #pdf-proposal-area * { visibility: visible; }
+      #pdf-proposal-area {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px 30px;
+        background: #ffffff;
+      }
+      nav, header, #features, #schedule, #casestudy, #faq, footer, #calculator-inputs-col, #header-card-banner, .no-print {
+        display: none !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- PDF 專屬生成隱藏容器 (列印時呈現如附件樣式) -->
+  <div id="pdf-proposal-area" class="hidden font-sans text-slate-800">
+    <!-- Proposal Header -->
+    <div class="flex justify-between items-start border-b border-slate-300 pb-5 mb-5">
+      <div>
+        <div class="flex items-center space-x-2 text-slate-500 text-xs font-semibold tracking-wider mb-1.5">
+          <div class="w-5 h-5 rounded bg-teal-700 text-white flex items-center justify-center text-[10px]">
+            <i class="fa-solid fa-person-falling-burst"></i>
+          </div>
+          <span>澳門專屬保障建議書</span>
+        </div>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight" id="pdf-plan-title">
+          全意守護意外保障計劃 客戶專屬規劃方案
+        </h1>
+        <div class="text-xs text-slate-500 mt-1">
+          策劃日期：<span id="pdf-current-date"></span>
+        </div>
+      </div>
+      
+      <!-- Advisor Info (右側附件樣式) -->
+      <div class="text-right border-l-2 border-slate-200 pl-4 space-y-0.5 min-w-[200px]">
+        <div class="font-bold text-slate-900 text-sm" id="pdf-adv-name">理財策劃顧問</div>
+        <div class="text-xs text-slate-600 font-medium" id="pdf-adv-title">資深分區總監</div>
+        <div class="text-xs text-slate-500" id="pdf-adv-team">One Goal One Region</div>
+        <div class="text-xs text-slate-500">電話 / 微信：<span id="pdf-adv-phone">+853 6688 8888</span></div>
+      </div>
+    </div>
+
+    <!-- Client Header Strip (附件底色卡片) -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 mb-6 flex justify-between items-center text-xs">
+      <div>
+        <span class="text-slate-500">尊敬的客戶：</span>
+        <strong class="text-slate-900 text-sm ml-1" id="pdf-client-name">陳大文 先生</strong>
+        <span class="mx-3 text-slate-300">|</span>
+        <span class="text-slate-500">職業類別：</span>
+        <strong class="text-slate-800" id="pdf-occ-name">類別 1: 室內專業/行政管理</strong>
+      </div>
+      <div>
+        <span class="text-slate-500">保障方案：</span>
+        <strong class="text-teal-800" id="pdf-plan-mode-label">全意守護（基本計劃）</strong>
+      </div>
+    </div>
+
+    <!-- Premium & Core Matrix in PDF -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+        <div class="text-xs text-teal-800 font-semibold mb-1">年度保費精算 (Annual Premium)</div>
+        <div class="text-2xl font-black text-teal-900" id="pdf-premium-display">HK$ 4,480 / 年</div>
+        <div class="text-[11px] text-slate-500 mt-1" id="pdf-premium-sub">半年繳：HK$ 2,330 | 月繳：HK$ 403</div>
+      </div>
+      <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+        <div class="text-xs text-slate-500 font-semibold mb-1">基本投保額 (Sum Insured)</div>
+        <div class="text-2xl font-black text-slate-900" id="pdf-sum-insured-display">HK$ 1,000,000</div>
+        <div class="text-[11px] text-slate-500 mt-1">最高保障年期至 75 歲・保費不隨年齡遞增</div>
+      </div>
+    </div>
+
+    <!-- Benefits Table in PDF -->
+    <div class="mb-6">
+      <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center">
+        <i class="fa-solid fa-shield-halved text-teal-600 mr-1.5"></i> 核心權益及賠付額度總覽
+      </h3>
+      <table class="w-full text-left text-xs border border-slate-200 divide-y divide-slate-200">
+        <tbody class="divide-y divide-slate-100">
+          <tr class="bg-slate-50"><td class="py-2 px-3 font-semibold text-slate-700">意外身故 / 斷肢 (100% 投保額)</td><td class="py-2 px-3 font-bold text-right" id="pdf-res-death">HK$ 1,000,000</td></tr>
+          <tr><td class="py-2 px-3 font-semibold text-teal-800">市場首創・意外疤痕權益 (預支 20%)</td><td class="py-2 px-3 font-bold text-teal-800 text-right" id="pdf-res-scar">HK$ 200,000</td></tr>
+          <tr class="bg-slate-50"><td class="py-2 px-3 font-semibold text-amber-800">公共交通 / 火警 / 天災 雙倍賠償 (+100%)</td><td class="py-2 px-3 font-bold text-amber-900 text-right" id="pdf-res-double">最高 HK$ 2,000,000</td></tr>
+          <tr><td class="py-2 px-3 text-slate-600">永久完全傷殘每月入息 (1% x 最長18個月)</td><td class="py-2 px-3 font-semibold text-right" id="pdf-res-disability">HK$ 10,000 / 月</td></tr>
+          <tr class="bg-slate-50"><td class="py-2 px-3 text-slate-600">意外及特定傳染病留院現金 (0.1%/日，ICU雙倍)</td><td class="py-2 px-3 font-semibold text-right" id="pdf-res-hosp">HK$ 1,000 / 日 (ICU $2,000)</td></tr>
+          <tr id="pdf-row-med"><td class="py-2 px-3 text-teal-700 font-medium">額外意外醫療實報實銷 (7%/每宗，跌打針灸物理治療)</td><td class="py-2 px-3 font-bold text-teal-900 text-right" id="pdf-res-med">最高 HK$ 70,000</td></tr>
+          <tr class="bg-slate-50"><td class="py-2 px-3 text-purple-700 font-semibold">滿 6 年續保獎賞最高累計保障額度 (+30%)</td><td class="py-2 px-3 font-black text-purple-800 text-right" id="pdf-res-renewal">HK$ 1,300,000</td></tr>
+          <tr><td class="py-2 px-3 text-slate-500">身故體恤權益 (1%)</td><td class="py-2 px-3 text-slate-700 text-right" id="pdf-res-compassionate">HK$ 10,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PDF Footer Note -->
+    <div class="border-t border-slate-200 pt-3 text-[10px] text-slate-500 space-y-1">
+      <p>※ 本建議書之保障項目受澳門特別行政區法律規管。如需辦理索償、退保或保單服務，理財顧問與專線櫃檯為您全程協辦。</p>
+      <p>※ 本文件為專屬客製化試算方案，詳細保障範圍、不保事項及完整條款以正式保單為準。</p>
+    </div>
+  </div>
 
   <!-- Navigation Bar (純圖案 Logo，無熱線電話) -->
   <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
@@ -112,7 +217,62 @@
   </header>
 
   <!-- Main Body Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-12 pb-20">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 relative z-20 space-y-8 sm:space-y-12 pb-20">
+
+    <!-- 附件樣式：客戶提案抬頭與顧問聯絡資訊（列印自動帶入） -->
+    <section class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm no-print">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-fwd-orange"></span>
+          <h3 class="text-sm sm:text-base font-bold text-slate-800">
+            客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)
+          </h3>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-500 font-medium px-2.5 py-1 rounded-md">
+          客製化設定
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 text-xs">
+        <!-- 1. 客戶姓名 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">客戶姓名 / 稱謂</label>
+          <input type="text" id="cust-name" value="陳大文 先生" placeholder="例如：陳大文 先生" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 2. 理財顧問姓名 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">理財顧問姓名</label>
+          <input type="text" id="cust-advisor" value="富衛策劃顧問" placeholder="例如：富衛策劃顧問" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 3. 顧問職位 / 職銜 (下拉選單) -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">顧問職位 / 職銜</label>
+          <select id="cust-title" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500" onchange="updatePDFProfile()">
+            <option value="資深分區總監" selected>資深分區總監</option>
+            <option value="分區總監">分區總監</option>
+            <option value="資深分區經理">資深分區經理</option>
+            <option value="分區經理">分區經理</option>
+            <option value="業務經理">業務經理</option>
+            <option value="資深理財策劃顧問">資深理財策劃顧問</option>
+            <option value="理財策劃顧問">理財策劃顧問</option>
+          </select>
+        </div>
+
+        <!-- 4. 所屬分區 / 團隊 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">所屬分區 / 團隊</label>
+          <input type="text" id="cust-team" value="One Goal One Region" placeholder="例如：One Goal One Region" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+
+        <!-- 5. 顧問聯絡電話 / 微信 -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1.5">顧問聯絡電話 / 微信</label>
+          <input type="text" id="cust-phone" value="+853 6688 8888" placeholder="例如：+853 6688 8888" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" oninput="updatePDFProfile()">
+        </div>
+      </div>
+    </section>
     
     <!-- Calculator Card -->
     <section id="calculator" class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
@@ -308,6 +468,14 @@
                   <span class="font-black text-teal-700 text-sm" id="res-max-renewal">HK$ 1,300,000 (+30%)</span>
                 </div>
               </div>
+            </div>
+
+            <!-- 匯出 PDF 建議書按鈕 -->
+            <div class="mt-5">
+              <button type="button" onclick="exportProposalPDF()" class="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>匯出專屬建議書 PDF (帶入上方顧問與客戶資訊)</span>
+              </button>
             </div>
           </div>
 
@@ -696,6 +864,84 @@
     let currentOccClass = 1;
     let currentCurrency = 'HKD';
 
+    // 格式化當前日期 (例如：2026 年 11 月 9 日)
+    function getFormattedDate() {
+      const now = new Date();
+      return `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+    }
+
+    // 更新 PDF 隱藏區域中客戶與顧問的資料
+    function updatePDFProfile() {
+      const cNameEl = document.getElementById('cust-name');
+      const advNameEl = document.getElementById('cust-advisor');
+      const advTitleEl = document.getElementById('cust-title');
+      const advTeamEl = document.getElementById('cust-team');
+      const advPhoneEl = document.getElementById('cust-phone');
+
+      const cName = cNameEl ? (cNameEl.value || '尊貴客戶') : '尊貴客戶';
+      const advName = advNameEl ? (advNameEl.value || '理財策劃顧問') : '理財策劃顧問';
+      const advTitle = advTitleEl ? (advTitleEl.value || '資深分區總監') : '資深分區總監';
+      const advTeam = advTeamEl ? (advTeamEl.value || 'One Goal One Region') : 'One Goal One Region';
+      const advPhone = advPhoneEl ? (advPhoneEl.value || '-') : '-';
+
+      safeSetText('pdf-client-name', cName);
+      safeSetText('pdf-adv-name', advName);
+      safeSetText('pdf-adv-title', advTitle);
+      safeSetText('pdf-adv-team', advTeam);
+      safeSetText('pdf-adv-phone', advPhone);
+      safeSetText('pdf-current-date', getFormattedDate());
+    }
+
+    // 觸發列印 / 匯出 PDF (支援在 iFrame 或一般視窗中平穩觸發)
+    function exportProposalPDF() {
+      try {
+        updatePDFProfile();
+        calculateAll();
+
+        const pdfArea = document.getElementById('pdf-proposal-area');
+        if (!pdfArea) {
+          window.print();
+          return;
+        }
+
+        // 建立獨立預覽列印視窗，確保在 iFrame 或受限環境下也能 100% 彈出列印及儲存為 PDF
+        const printWindow = window.open('', '_blank', 'width=850,height=900');
+        if (printWindow) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="zh-HK">
+            <head>
+              <meta charset="UTF-8">
+              <title>全意守護意外保障計劃_客戶專屬建議書</title>
+              <script src="https://cdn.tailwindcss.com"><\/script>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+              <style>
+                @page { size: A4 portrait; margin: 12mm; }
+                body { font-family: Inter, system-ui, -apple-system, sans-serif; background: #ffffff; color: #1e293b; padding: 20px; }
+              </style>
+            </head>
+            <body>
+              ${pdfArea.innerHTML}
+              <script>
+                window.onload = function() {
+                  window.focus();
+                  window.print();
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+        } else {
+          // 若彈跳視窗被攔截，降級使用原頁面直接列印
+          window.print();
+        }
+      } catch (err) {
+        console.error('匯出 PDF 時發生錯誤:', err);
+        window.print();
+      }
+    }
+
     function setPlanType(type) {
       currentPlanType = type;
       const btnBasic = document.getElementById('btn-type-basic');
@@ -703,13 +949,13 @@
       const hint = document.getElementById('planTypeHint');
 
       if (type === 'basic') {
-        btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
-        btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
-        hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-slate-400"></i> 基本計劃為獨立保單，提供完整的意外及身故體恤保障。';
+        if (btnBasic) btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
+        if (btnRider) btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-slate-400"></i> 基本計劃為獨立保單，提供完整的意外及身故體恤保障。';
       } else {
-        btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
-        btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
-        hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-teal-600"></i> 附約形式附加於指定壽險或危疾主約，保費享專屬優惠。';
+        if (btnRider) btnRider.className = 'p-3 text-sm font-semibold rounded-xl text-center border-2 border-teal-600 bg-teal-50 text-teal-700 flex items-center justify-center space-x-2';
+        if (btnBasic) btnBasic.className = 'p-3 text-sm font-semibold rounded-xl text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300 flex items-center justify-center space-x-2';
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-teal-600"></i> 附約形式附加於指定壽險或危疾主約，保費享專屬優惠。';
       }
       calculateAll();
     }
@@ -718,19 +964,23 @@
       currentOccClass = cls;
       for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`btn-occ-${i}`);
+        if (!btn) continue;
         if (i === cls) {
           btn.className = 'py-2.5 rounded-xl font-bold text-xs text-center border-2 border-teal-600 bg-teal-50 text-teal-700';
         } else {
           btn.className = 'py-2.5 rounded-xl font-bold text-xs text-center border border-slate-200 bg-white text-slate-600 hover:border-slate-300';
         }
       }
-      document.getElementById('occ-desc-title').innerText = OCC_INFO[cls].title;
-      document.getElementById('occ-detail-desc').innerHTML = OCC_INFO[cls].desc;
+      const titleEl = document.getElementById('occ-desc-title');
+      const descEl = document.getElementById('occ-detail-desc');
+      if (titleEl && OCC_INFO[cls]) titleEl.innerText = OCC_INFO[cls].title;
+      if (descEl && OCC_INFO[cls]) descEl.innerHTML = OCC_INFO[cls].desc;
       calculateAll();
     }
 
     function toggleMedicalOption() {
-      const hasMed = document.getElementById('opt-medical').checked;
+      const medEl = document.getElementById('opt-medical');
+      const hasMed = medEl ? medEl.checked : false;
       const minSI = document.getElementById('min-si-hint');
       const heroMin = document.getElementById('hero-min-display');
       const input = document.getElementById('calc-sum-insured');
@@ -738,21 +988,21 @@
 
       if (currentCurrency === 'HKD') {
         if (hasMed) {
-          minSI.innerText = '最低門檻: HK$ 600,000 (附加醫療)';
-          heroMin.innerText = 'HK$ 600,000';
-          if (currentVal < 600000) input.value = '600,000';
+          if (minSI) minSI.innerText = '最低門檻: HK$ 600,000 (附加醫療)';
+          if (heroMin) heroMin.innerText = 'HK$ 600,000';
+          if (currentVal < 600000 && input) input.value = '600,000';
         } else {
-          minSI.innerText = '最低門檻: HK$ 400,000';
-          heroMin.innerText = 'HK$ 400,000';
+          if (minSI) minSI.innerText = '最低門檻: HK$ 400,000';
+          if (heroMin) heroMin.innerText = 'HK$ 400,000';
         }
       } else {
         if (hasMed) {
-          minSI.innerText = '最低門檻: US$ 75,000 (附加醫療)';
-          heroMin.innerText = 'US$ 75,000';
-          if (currentVal < 75000) input.value = '75,000';
+          if (minSI) minSI.innerText = '最低門檻: US$ 75,000 (附加醫療)';
+          if (heroMin) heroMin.innerText = 'US$ 75,000';
+          if (currentVal < 75000 && input) input.value = '75,000';
         } else {
-          minSI.innerText = '最低門檻: US$ 50,000';
-          heroMin.innerText = 'US$ 50,000';
+          if (minSI) minSI.innerText = '最低門檻: US$ 50,000';
+          if (heroMin) heroMin.innerText = 'US$ 50,000';
         }
       }
       calculateAll();
@@ -760,9 +1010,11 @@
 
     function onCurrencyChange() {
       const select = document.getElementById('calc-currency');
-      currentCurrency = select.value;
-      document.getElementById('currency-label').innerText = currentCurrency;
-      document.getElementById('res-curr-sym').innerText = currentCurrency === 'HKD' ? 'HK$' : 'US$';
+      if (select) currentCurrency = select.value;
+      const curLabel = document.getElementById('currency-label');
+      const symLabel = document.getElementById('res-curr-sym');
+      if (curLabel) curLabel.innerText = currentCurrency;
+      if (symLabel) symLabel.innerText = currentCurrency === 'HKD' ? 'HK$' : 'US$';
       toggleMedicalOption();
     }
 
@@ -774,6 +1026,7 @@
     }
 
     function handleSumInsuredInput(input) {
+      if (!input) return;
       const rawDigits = input.value.replace(/[^\d]/g, '');
       if (!rawDigits) {
         input.value = '';
@@ -878,6 +1131,30 @@
       }
 
       safeSetText('res-max-renewal', `${sym} ${fmt(maxRenewal)} (+30%)`);
+
+      // 同步更新 PDF 預備區域的數據
+      safeSetText('pdf-plan-mode-label', currentPlanType === 'basic' ? '全意守護（基本計劃）' : '全意守護（附加契約）');
+      if (OCC_INFO[currentOccClass]) safeSetText('pdf-occ-name', OCC_INFO[currentOccClass].title);
+      safeSetText('pdf-premium-display', `${sym} ${fmt(annualPremium)} / 年`);
+      safeSetText('pdf-premium-sub', `半年繳：${sym} ${fmt(semiAnnualPremium)} | 月繳：${sym} ${fmt(monthlyPremium)}`);
+      safeSetText('pdf-sum-insured-display', `${sym} ${fmt(sumInsured)}`);
+      safeSetText('pdf-res-death', `${sym} ${fmt(deathBenefit)}`);
+      safeSetText('pdf-res-scar', `${sym} ${fmt(scarBenefit)}`);
+      safeSetText('pdf-res-double', `最高 ${sym} ${fmt(doubleBenefit)}`);
+      safeSetText('pdf-res-disability', `${sym} ${fmt(disabilityMonthly)} / 月`);
+      safeSetText('pdf-res-hosp', `${sym} ${fmt(hospDaily)} / 日 (ICU ${sym} ${fmt(hospICU)})`);
+      safeSetText('pdf-res-renewal', `${sym} ${fmt(maxRenewal)}`);
+      safeSetText('pdf-res-compassionate', `${sym} ${fmt(Math.round(sumInsured * 0.01))}`);
+
+      const pdfRowMed = document.getElementById('pdf-row-med');
+      if (pdfRowMed) {
+        if (hasMed) {
+          pdfRowMed.style.display = 'table-row';
+          safeSetText('pdf-res-med', `最高 ${sym} ${fmt(medicalLimit)}`);
+        } else {
+          pdfRowMed.style.display = 'none';
+        }
+      }
     }
 
     function switchScheduleTab(tab) {
@@ -885,6 +1162,7 @@
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
         const panel = document.getElementById(`panel-${t}`);
+        if (!btn || !panel) return;
         if (t === tab) {
           btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-sm transition';
           panel.classList.remove('hidden');
@@ -897,6 +1175,7 @@
 
     window.onload = function() {
       calculateAll();
+      updatePDFProfile();
     };
   </script>
 </body>
