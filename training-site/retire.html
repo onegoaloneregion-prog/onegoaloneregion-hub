@@ -16,77 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<!-- 防止 PDF 截斷與排版擠壓修復 -->
- <style>
-  /* ================= 橫向 A4 旗艦級原生列印規範 ================= */
-  @page {
-    size: A4 landscape; /* 強制橫向 A4 (297mm x 210mm) */
-    margin: 8mm 10mm;   /* 上下 8mm，左右 10mm */
-  }
 
-  @media print {
-    /* 1. 隱藏不必要的網頁元素 */
-    .no-print, header, nav, #exportPdfBtn, button {
-      display: none !important;
-    }
-
-    .print-only {
-      display: block !important;
-    }
-
-    /* 2. 重置 Body 與 Main 尺寸 */
-    body {
-      background: #ffffff !important;
-      color: #0f172a !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      font-size: 11px !important;
-    }
-
-    main {
-      width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    /* 3. 核心修復：強制所有網格 (Grid) 恢復水平左右排列，禁止重疊撞車 */
-    .grid {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: wrap !important;
-      gap: 16px !important;
-    }
-
-    /* 雙欄容器各自佔 48% 寬度，整齊並列 */
-    .grid > div, .grid > section {
-      flex: 1 1 45% !important;
-      min-width: 0 !important;
-      position: relative !important;
-    }
-
-    /* 4. 強制 Canvas 圖表容器固定高度，防止 Chart.js 畫布覆蓋 */
-    canvas {
-      max-width: 100% !important;
-      height: auto !important;
-      display: block !important;
-      position: relative !important;
-    }
-
-    /* 5. 防止各區塊被生硬切開 */
-    .card, section, table, tr, .rounded-2xl, .rounded-3xl {
-      break-inside: avoid !important;
-      page-break-inside: avoid !important;
-      box-shadow: none !important;
-      border: 1px solid #e2e8f0 !important;
-      margin-bottom: 12px !important;
-    }
-  }
-
-  @media screen {
-    .print-only { display: none !important; }
-  }
-</style>
   <script>
     tailwind.config = {
       theme: {
@@ -180,14 +110,100 @@
         <button onclick="resetDefaults()" class="text-xs sm:text-sm px-3.5 py-2 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 font-medium">
           <i class="fa-solid fa-arrow-rotate-left"></i> 重設預設值
         </button>
-       <button id="exportPdfBtn" onclick="window.print()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
-  <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 列印報告</span>
-</button>
+        <button id="exportPdfBtn" onclick="exportAndSharePDF()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-md shadow-blue-500/25 transition-all flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出 PDF / 微信分享</span>
+        </button>
       </div>
     </div>
   </header>
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- PDF/Print Specific Letterhead (Shown only in Print/PDF Export) -->
+    <div id="pdfHeaderLetterhead" class="hidden print:block bg-white p-5 rounded-2xl border-b-2 border-slate-200 mb-4">
+      <div class="flex justify-between items-center">
+        <!-- Left: Proposal Title & Customer Info -->
+        <div>
+          <div class="text-xs text-amber-600 font-bold tracking-wide flex items-center gap-1.5 mb-1">
+            <i class="fa-solid fa-sparkles"></i> 澳門專屬保障建議書
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight" id="pdfProposalMainTitle">
+            全意守護退休保障計劃 客戶專屬規劃方案
+          </h2>
+          <div class="flex items-center gap-3 text-xs text-slate-500 mt-1.5 font-medium">
+            <span>尊貴客戶：<strong id="pdfClientNameDisplay" class="text-slate-800">陳大文 先生</strong></span>
+            <span>•</span>
+            <span>策劃日期：<span id="pdfPlanDateDisplay">2026 年 11 月 9 日</span></span>
+          </div>
+        </div>
+
+        <!-- Right: Advisor Business Card -->
+        <div class="border-l-2 border-slate-200 pl-6 text-right space-y-0.5">
+          <div class="text-sm font-black text-slate-900" id="pdfAdvisorNameDisplay">富衛策劃顧問</div>
+          <div class="text-xs font-semibold text-slate-600" id="pdfAdvisorTitleDisplay">資深分區總監</div>
+          <div class="text-xs text-slate-500" id="pdfAdvisorRegionDisplay">One Goal One Region</div>
+          <div class="text-xs text-slate-600 font-medium pt-0.5" id="pdfAdvisorPhoneDisplay">電話 / 微信：+853 6688 8888</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advisor & Client Profile Customization Card (Screen Input) -->
+    <div id="advisorConfigCard" class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm no-print">
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>
+          客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)
+        </h3>
+        <span class="text-xs px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg font-medium">客製化設定</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <div>
+          <label for="cfgClientName" class="block text-xs text-slate-500 font-semibold mb-1">客戶姓名 / 稱謂</label>
+          <input type="text" id="cfgClientName" value="陳大文 先生" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all"
+            oninput="syncAdvisorInfo()">
+        </div>
+
+        <div>
+          <label for="cfgAdvisorName" class="block text-xs text-slate-500 font-semibold mb-1">理財顧問姓名</label>
+          <input type="text" id="cfgAdvisorName" value="富衛策劃顧問" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all"
+            oninput="syncAdvisorInfo()">
+        </div>
+
+        <div>
+          <label for="cfgAdvisorTitle" class="block text-xs text-slate-500 font-semibold mb-1">顧問職位 / 職銜</label>
+          <select id="cfgAdvisorTitle" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all bg-white"
+            onchange="syncAdvisorInfo()">
+            <option value="資深分區總監" selected>資深分區總監</option>
+            <option value="分區總監">分區總監</option>
+            <option value="業務總監">業務總監</option>
+            <option value="高級分行經理">高級分行經理</option>
+            <option value="資深營業經理">資深營業經理</option>
+            <option value="業務經理">業務經理</option>
+            <option value="資深財富策劃經理">資深財富策劃經理</option>
+            <option value="財富策劃顧問">財富策劃顧問</option>
+            <option value="理財顧問">理財顧問</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="cfgAdvisorRegion" class="block text-xs text-slate-500 font-semibold mb-1">所屬分區 / 團隊</label>
+          <input type="text" id="cfgAdvisorRegion" value="One Goal One Region" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all"
+            oninput="syncAdvisorInfo()">
+        </div>
+
+        <div>
+          <label for="cfgAdvisorPhone" class="block text-xs text-slate-500 font-semibold mb-1">顧問聯絡電話 / 微信</label>
+          <input type="text" id="cfgAdvisorPhone" value="+853 6688 8888" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all"
+            oninput="syncAdvisorInfo()">
+        </div>
+      </div>
+    </div>
 
     <!-- Top Banner with Rich SVG Art & Financial Quote -->
     <div class="relative bg-gradient-to-r from-slate-950 via-indigo-950 to-blue-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl overflow-hidden border border-indigo-700/30">
@@ -201,7 +217,7 @@
             <i class="fa-solid fa-lightbulb text-amber-300"></i> 理財核心思考
           </div>
           <h2 class="text-xl sm:text-3xl font-black tracking-tight leading-snug">
-            「你有冇諗過退休唔係隨意即可，<br class="hidden sm:inline" />而係需要<span class="text-amber-300 font-black">刻意規劃</span>嘅一生大事？」
+            「你有冇諗過退休唔係隨意即可，<br class="hidden sm:inline" />而係需要<span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">刻意規劃</span>嘅一生大事？」
           </h2>
           <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
             核心思考提問：若儲蓄途中發生意外或疾病，如何不影響現有財富而保證退休計劃繼續實行？
@@ -621,12 +637,12 @@
           <!-- KPI 3 -->
           <div class="bg-gradient-to-br from-white to-emerald-50/70 p-5 rounded-3xl border border-emerald-100 shadow-sm relative overflow-hidden">
             <div class="text-xs font-bold text-emerald-800 tracking-wide mb-1 flex items-center justify-between">
-              <span>現時每月所需儲蓄</span>
+              <span>現時每月所需儲蓄 (7% 回報)</span>
               <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm"><i class="fa-solid fa-hand-holding-dollar"></i></span>
             </div>
             <div class="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight" id="kpiMonthlySave">$4,312</div>
             <div class="text-[11px] text-emerald-800 font-semibold mt-2 flex items-center gap-1">
-              <i class="fa-regular fa-circle-check"></i> 即時開始
+              <i class="fa-regular fa-circle-check"></i> 即時開始，享受最大複利效益
             </div>
           </div>
         </div>
@@ -1324,89 +1340,114 @@
 
     // Initialize on window load
     window.addEventListener('DOMContentLoaded', () => {
+      syncAdvisorInfo();
       calculate();
     });
 
-// Handle PDF Export and Direct iPhone/iPad Share (橫向 A4 完美居中旗艦版)
-async function exportAndSharePDF() {
-    const btn = document.getElementById('exportPdfBtn');
-    const btnText = document.getElementById('exportBtnText');
-    const originalText = btnText ? btnText.innerText : '匯出 PDF';
+    // Synchronize Advisor & Client Details for PDF Export
+    function syncAdvisorInfo() {
+      const clientName = document.getElementById('cfgClientName')?.value || '尊貴客戶';
+      const advisorName = document.getElementById('cfgAdvisorName')?.value || '理財顧問';
+      const advisorTitle = document.getElementById('cfgAdvisorTitle')?.value || '';
+      const advisorRegion = document.getElementById('cfgAdvisorRegion')?.value || '';
+      const advisorPhone = document.getElementById('cfgAdvisorPhone')?.value || '';
 
-    try {
-        if (btnText) btnText.innerText = '正在生成橫向 A4 報告...';
-        if (btn) btn.disabled = true;
+      const clientDisplay = document.getElementById('pdfClientNameDisplay');
+      if (clientDisplay) clientDisplay.innerText = clientName;
 
-        // 1. 確保視窗滾動歸零，避免頂部/左側截斷
-        window.scrollTo(0, 0);
+      const advisorNameDisplay = document.getElementById('pdfAdvisorNameDisplay');
+      if (advisorNameDisplay) advisorNameDisplay.innerText = advisorName;
+
+      const advisorTitleDisplay = document.getElementById('pdfAdvisorTitleDisplay');
+      if (advisorTitleDisplay) advisorTitleDisplay.innerText = advisorTitle;
+
+      const advisorRegionDisplay = document.getElementById('pdfAdvisorRegionDisplay');
+      if (advisorRegionDisplay) advisorRegionDisplay.innerText = advisorRegion;
+
+      const advisorPhoneDisplay = document.getElementById('pdfAdvisorPhoneDisplay');
+      if (advisorPhoneDisplay) advisorPhoneDisplay.innerText = '電話 / 微信：' + advisorPhone;
+
+      // Update proposal current date format: YYYY 年 M 月 D 日
+      const now = new Date();
+      const dateDisplay = document.getElementById('pdfPlanDateDisplay');
+      if (dateDisplay) {
+        dateDisplay.innerText = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+      }
+    }
+
+    // Handle PDF Export and Direct iPhone Share to WeChat
+    async function exportAndSharePDF() {
+      const btn = document.getElementById('exportPdfBtn');
+      const btnText = document.getElementById('exportBtnText');
+      const originalText = btnText.innerText;
+
+      try {
+        btnText.innerText = '正在生成 PDF...';
+        btn.disabled = true;
+
+        // Ensure info is updated
+        syncAdvisorInfo();
 
         const mainElement = document.querySelector('main');
-        const filename = `退休策劃報告_橫向A4_${new Date().toISOString().slice(0, 10)}.pdf`;
+        const pdfHeader = document.getElementById('pdfHeaderLetterhead');
+        const configCard = document.getElementById('advisorConfigCard');
+        
+        // Show the letterhead and hide the settings card during PDF generation
+        if (pdfHeader) pdfHeader.classList.remove('hidden');
+        if (configCard) configCard.style.display = 'none';
 
-        // 2. 備份原有樣式
-        const prevWidth = mainElement.style.width;
-        const prevMinWidth = mainElement.style.minWidth;
-        const prevMaxWidth = mainElement.style.maxWidth;
-        const prevMargin = mainElement.style.margin;
-        const prevPadding = mainElement.style.padding;
-        const prevBoxSizing = mainElement.style.boxSizing;
-        const prevBg = mainElement.style.backgroundColor;
+        const clientName = document.getElementById('cfgClientName')?.value || '客戶';
+        const filename = `${clientName}_退休保障規劃建議書_${new Date().toISOString().slice(0, 10)}.pdf`;
 
-        // 3. 核心鎖定：1120px + 左右各 20px 邊距 = 剛好 1160px，完美匹配橫向 A4 比例
-        mainElement.style.width = '1120px';
-        mainElement.style.minWidth = '1120px';
-        mainElement.style.maxWidth = '1120px';
-        mainElement.style.margin = '0 auto';
-        mainElement.style.padding = '20px';
-        mainElement.style.boxSizing = 'border-box';
-        mainElement.style.backgroundColor = '#ffffff';
-
-        // 觸發重新排版並等待圖表以 1120px 完成重繪
-        window.dispatchEvent(new Event('resize'));
-        await new Promise(resolve => setTimeout(resolve, 350));
-
-        // 4. 配置 html2pdf：等比例置中截取
         const opt = {
-            margin: [8, 8, 8, 8], // 上右下左均勻留白 8mm
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 1.5,             // 1.5倍清晰度，保證小字清晰且不爆邊
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff',
-                scrollX: 0,
-                scrollY: 0,
-                width: 1120,            // 與 mainElement 寬度完全一致
-                windowWidth: 1120
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-            pagebreak: { 
-                mode: ['css', 'legacy']
-            }
+          margin: [6, 6, 6, 6],
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        // 5. 輸出 PDF
-        await html2pdf().set(opt).from(mainElement).save();
+        // Generate PDF Blob
+        const pdfWorker = html2pdf().set(opt).from(mainElement);
+        const pdfBlob = await pdfWorker.outputPdf('blob');
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
 
-        // 6. 還原原始樣式
-        mainElement.style.width = prevWidth;
-        mainElement.style.minWidth = prevMinWidth;
-        mainElement.style.maxWidth = prevMaxWidth;
-        mainElement.style.margin = prevMargin;
-        mainElement.style.padding = prevPadding;
-        mainElement.style.boxSizing = prevBoxSizing;
-        mainElement.style.backgroundColor = prevBg;
-        window.dispatchEvent(new Event('resize'));
+        // Restore layout
+        if (pdfHeader) pdfHeader.classList.add('hidden');
+        if (configCard) configCard.style.display = '';
 
-    } catch (error) {
-        console.error('PDF 生成失敗:', error);
-        alert('匯出 PDF 失敗，請重試！');
-    } finally {
-        if (btnText) btnText.innerText = originalText;
-        if (btn) btn.disabled = false;
+        // Check if Web Share API with Files is supported (iOS Safari)
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({
+            files: [pdfFile],
+            title: `${clientName} 退休保障規劃方案`,
+            text: `為 ${clientName} 專屬精算的退休保障規劃建議書（PDF）`
+          });
+        } else {
+          // Fallback: Trigger standard download / iOS print view
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(pdfBlob);
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+        }
+      } catch (err) {
+        // Restore layout on error
+        const pdfHeader = document.getElementById('pdfHeaderLetterhead');
+        const configCard = document.getElementById('advisorConfigCard');
+        if (pdfHeader) pdfHeader.classList.add('hidden');
+        if (configCard) configCard.style.display = '';
+
+        if (err.name !== 'AbortError') {
+          window.print();
+        }
+      } finally {
+        btnText.innerText = originalText;
+        btn.disabled = false;
+      }
     }
-}
   </script>
 </body>
 </html>
