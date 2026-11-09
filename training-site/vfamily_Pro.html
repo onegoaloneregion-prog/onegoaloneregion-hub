@@ -41,6 +41,18 @@
     .badge-plain { background-color: #FFF3EB; color: #D9531E; border: 1px solid #FFD8BE; }
     .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); }
     .transition-all-custom { transition: all 0.25s ease-in-out; }
+
+    /* Print / PDF Export Styles */
+    @media print {
+      header, footer, .no-print, .tab-btn, .filter-btn, button { display: none !important; }
+      body { background-color: #fff !important; color: #000 !important; }
+      main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
+      .tab-content { display: none !important; }
+      #print-pdf-container { display: block !important; }
+      .page-break { page-break-after: always; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+    #print-pdf-container { display: none; }
   </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col">
@@ -65,7 +77,10 @@
           <span class="hidden md:inline-flex text-xs px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg border border-slate-200">
             <i class="fa-solid fa-shield-halved text-fwd-orange mr-1.5 mt-0.5"></i> 澳門適用標準保單 (V122024H)
           </span>
-          <button onclick="switchTab('calculator')" class="text-xs sm:text-sm bg-fwd-orange hover:bg-orange-600 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm">
+          <button type="button" onclick="printProposalPDF()" class="text-xs sm:text-sm bg-slate-800 hover:bg-slate-900 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm cursor-pointer active:scale-95">
+            <i class="fa-solid fa-file-pdf mr-1.5 text-red-400"></i> 匯出建議書 (PDF)
+          </button>
+          <button type="button" onclick="switchTab('calculator')" class="text-xs sm:text-sm bg-fwd-orange hover:bg-orange-600 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm cursor-pointer">
             <i class="fa-solid fa-calculator mr-1.5"></i> 保費試算
           </button>
         </div>
@@ -949,6 +964,46 @@
           </p>
         </div>
 
+        <!-- Custom Consultant & Client Header Card (如圖所示) -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm mb-6">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-fwd-orange"></span>
+              <h4 class="text-sm font-bold text-slate-900">客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)</h4>
+            </div>
+            <span class="text-xs text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">客製化設定</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">客戶姓名 / 稱謂</label>
+              <input type="text" id="consultant-client-name" placeholder="例如：陳大文 先生" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-fwd-orange focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">理財顧問姓名</label>
+              <input type="text" id="consultant-name" placeholder="例如：富衛策劃顧問" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-fwd-orange focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">顧問職位 / 職銜</label>
+              <select id="consultant-title" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-500 focus:text-slate-700 focus:bg-white focus:ring-1 focus:ring-fwd-orange focus:outline-none">
+                <option value="資深分區總監" selected class="text-slate-700">資深分區總監</option>
+                <option value="分區總監" class="text-slate-700">分區總監</option>
+                <option value="分行經理" class="text-slate-700">分行經理</option>
+                <option value="財富管理經理" class="text-slate-700">財富管理經理</option>
+                <option value="資深策劃顧問" class="text-slate-700">資深策劃顧問</option>
+                <option value="理財策劃顧問" class="text-slate-700">理財策劃顧問</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">所屬分區 / 團隊</label>
+              <input type="text" id="consultant-team" placeholder="例如：One Goal One Region" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-fwd-orange focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">顧問聯絡電話 / 微信</label>
+              <input type="text" id="consultant-contact" placeholder="例如：+853 6688 8888" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-fwd-orange focus:outline-none">
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <!-- Form Inputs -->
           <div class="lg:col-span-6 space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
@@ -1056,6 +1111,12 @@
                   <span class="text-3xl sm:text-4xl font-extrabold text-fwd-orange font-mono" id="res-final-premium">HK$ 4,751</span>
                   <span class="text-xs text-slate-400 font-medium" id="res-period-unit">/ 每年</span>
                 </div>
+              </div>
+
+              <div class="mt-5">
+                <button type="button" onclick="printProposalPDF()" class="w-full py-3 bg-fwd-orange hover:bg-orange-600 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer active:scale-98">
+                  <i class="fa-solid fa-file-pdf"></i> 將此預算輸出為 PDF 建議書
+                </button>
               </div>
             </div>
 
@@ -1246,6 +1307,151 @@
 
   </main>
 
+  <!-- ========================================== -->
+  <!-- DEDICATED PRINT / PDF EXPORT TEMPLATE      -->
+  <!-- ========================================== -->
+  <div id="print-pdf-container" class="p-8 max-w-4xl mx-auto bg-white text-slate-900">
+    <!-- Header Block (依據圖片版面排版) -->
+    <div class="border-b-2 border-slate-300 pb-6 mb-6">
+      <div class="flex justify-between items-start">
+        <div class="w-2/3 pr-4">
+          <div class="flex items-center gap-1.5 text-xs text-slate-500 font-semibold mb-1">
+            <i class="fa-solid fa-shield text-slate-400"></i>
+            <span>澳門專屬保障建議書</span>
+          </div>
+          <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-1">
+            醫家保醫療計劃 客戶專屬規劃方案
+          </h2>
+          <p class="text-xs text-slate-500 font-medium">策劃日期：<span id="pdf-date">2026 年 11 月 9 日</span></p>
+        </div>
+        <div class="w-1/3 text-right border-l-2 border-slate-200 pl-4 space-y-0.5">
+          <div class="font-bold text-slate-900 text-base" id="pdf-consultant-name">富衛策劃顧問</div>
+          <div class="text-xs text-slate-600" id="pdf-consultant-title">資深分區總監</div>
+          <div class="text-xs text-slate-500" id="pdf-consultant-team">One Goal One Region</div>
+          <div class="text-xs text-slate-600 font-medium pt-1" id="pdf-consultant-contact">電話 / 微信：+853 6688 8888</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client & Proposal Profile Table -->
+    <div class="mb-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div>
+          <span class="text-slate-400 block font-medium">尊貴客戶</span>
+          <span class="font-bold text-slate-900 text-sm" id="pdf-client-name">陳大文 先生</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block font-medium">受保人資料</span>
+          <span class="font-bold text-slate-900 text-sm" id="pdf-insured-info">男性 30歲 (下次生日)</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block font-medium">合資格病房</span>
+          <span class="font-bold text-slate-900 text-sm text-fwd-orange">標準普通病房 ($0 自付費)</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block font-medium">繳費週期</span>
+          <span class="font-bold text-slate-900 text-sm" id="pdf-pay-mode">年繳 (Annual)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary of Benefits -->
+    <div class="mb-6 space-y-3">
+      <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+        <span class="w-2 h-4 bg-fwd-orange rounded-full inline-block"></span>
+        核心保障權益摘要
+      </h3>
+      <table class="w-full text-xs border border-slate-200">
+        <tbody class="divide-y divide-slate-200">
+          <tr class="bg-slate-50/50">
+            <td class="p-2.5 font-bold w-1/3">每保單年度每傷病保障總額</td>
+            <td class="p-2.5 font-bold text-slate-900">HK$ 550,000 (相隔90日或不同疾病獨立重設，無每年及終身限額)</td>
+          </tr>
+          <tr>
+            <td class="p-2.5 font-bold">基本住院及手術全數保障</td>
+            <td class="p-2.5 text-slate-700">病房膳食、雜項開支、巡房費、ICU、外科手術費（小型至複雜全數包）、CT/MRI/PET診斷成像</td>
+          </tr>
+          <tr class="bg-slate-50/50">
+            <td class="p-2.5 font-bold">三大重疾額外加碼防線</td>
+            <td class="p-2.5 text-slate-700 font-semibold">額外 HK$ 550,000 (適用於非手術癌症治療、門診洗腎租機、器官或骨髓移植，年防線達 HK$ 1,100,000)</td>
+          </tr>
+          <tr>
+            <td class="p-2.5 font-bold">額外現金補貼 (Second Claim)</td>
+            <td class="p-2.5 text-slate-700 font-semibold text-amber-700">住院經公司或其他保險賠償後，憑單額外發放每日 HK$ 500 現金（每傷病最多 60 日，高達 HK$ 30,000）</td>
+          </tr>
+          <tr class="bg-slate-50/50">
+            <td class="p-2.5 font-bold">日間手術現金保障</td>
+            <td class="p-2.5 text-slate-700">指定網絡日間手術（如照腸胃鏡）每宗獲發 HK$ 1,000 現金；其他日間診所每宗 HK$ 500</td>
+          </tr>
+          <tr>
+            <td class="p-2.5 font-bold">自選保障：子女之家添守護選項</td>
+            <td class="p-2.5 text-slate-700" id="pdf-child-rider-status">未附加</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Premium Calculation Breakdown -->
+    <div class="mb-6 p-4 rounded-xl border-2 border-orange-200 bg-orange-50/30">
+      <h3 class="font-bold text-sm text-slate-900 mb-2">費用預算明細</h3>
+      <div class="space-y-1.5 text-xs">
+        <div class="flex justify-between py-1 border-b border-orange-100">
+          <span class="text-slate-600">醫家保基本計劃標準保費：</span>
+          <span class="font-bold font-mono" id="pdf-base-premium">HK$ 4,751</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-orange-100" id="pdf-row-child-rider" style="display:none;">
+          <span class="text-slate-600">子女之家添守護選項保費：</span>
+          <span class="font-bold font-mono text-pink-600" id="pdf-child-premium">HK$ 0</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-orange-100">
+          <span class="text-slate-600">無索償保費折扣（個人 + 家庭）：</span>
+          <span class="font-bold text-emerald-700" id="pdf-discount-pct">0%</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-orange-100">
+          <span class="text-slate-600">折扣減免金額：</span>
+          <span class="font-bold font-mono text-emerald-700" id="pdf-discount-val">- HK$ 0</span>
+        </div>
+        <div class="flex justify-between pt-2 text-sm font-black text-slate-900">
+          <span>應付實質保費：</span>
+          <span class="text-fwd-orange text-base font-mono" id="pdf-final-premium">HK$ 4,751 / 每年</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes & Disclaimer Footer -->
+    <div class="border-t border-slate-200 pt-4 text-[10px] text-slate-500 space-y-1 leading-normal">
+      <p>1. 本建議書內容以富衛人壽保險（澳門）股份有限公司官方條款 (LBC VHIS-FPF V122024H) 為準，標準保費按 2024 年 12 月 16 日公佈之保費表編印。</p>
+      <p>2. 標準保費為非保證，並將每年按照受保人續保時之實際年齡釐定。本文件僅供參考，並不構成保險合約的一部分。</p>
+      <div class="flex justify-between items-end pt-3">
+        <span>顧問簽署：_____________________</span>
+        <span>客戶簽署：_____________________</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Preview Modal (備用彈窗，防止 iframe 阻擋 window.print) -->
+  <div id="pdf-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-slate-900 text-white px-5 py-3.5 flex justify-between items-center">
+        <div class="flex items-center gap-2 font-bold text-sm">
+          <i class="fa-solid fa-file-pdf text-fwd-orange text-base"></i>
+          <span>客戶建議書預覽 (可直接列印或另存為 PDF)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="doModalPrint()" class="bg-fwd-orange hover:bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-print"></i> 立即列印 / 存為 PDF
+          </button>
+          <button type="button" onclick="closePdfModal()" class="text-slate-400 hover:text-white text-lg p-1">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-y-auto p-4 sm:p-8 flex-grow" id="modal-pdf-content">
+        <!-- Injected proposal content -->
+      </div>
+    </div>
+  </div>
+
   <!-- Footer Disclaimer -->
   <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
@@ -1418,6 +1624,124 @@
       document.getElementById('res-discount-pct').textContent = `${totalDiscountPct}% (個人 ${personalNcd}% + 家庭 ${familyNcd}%)`;
       document.getElementById('res-discount-val').textContent = '- HK$ ' + displayDiscountVal;
       document.getElementById('res-final-premium').textContent = 'HK$ ' + finalPayable;
+    }
+
+    // Function to populate and print the Proposal PDF with robust Fallback for iframe environments
+    function printProposalPDF() {
+      // 1. Ensure latest calculation is run
+      calculatePremium();
+
+      // 2. Fetch consultant inputs
+      const clientName = document.getElementById('consultant-client-name').value || '陳大文 先生';
+      const consultantName = document.getElementById('consultant-name').value || '富衛策劃顧問';
+      const consultantTitle = document.getElementById('consultant-title').value || '資深分區總監';
+      const consultantTeam = document.getElementById('consultant-team').value || 'One Goal One Region';
+      const consultantContact = document.getElementById('consultant-contact').value || '+853 6688 8888';
+
+      // 3. Fetch calculation states
+      const age = parseInt(document.getElementById('input-age').value) || 30;
+      const mode = document.getElementById('input-mode').value;
+      const hasChildRider = document.getElementById('input-child-rider').checked;
+      const basePremText = document.getElementById('res-base-premium').textContent;
+      const childPremText = document.getElementById('res-child-premium').textContent;
+      const discountPctText = document.getElementById('res-discount-pct').textContent;
+      const discountValText = document.getElementById('res-discount-val').textContent;
+      const finalPremText = document.getElementById('res-final-premium').textContent;
+      const periodUnitText = document.getElementById('res-period-unit').textContent;
+
+      // 4. Set current Date
+      const now = new Date();
+      const dateStr = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+      document.getElementById('pdf-date').textContent = dateStr;
+
+      // 5. Populate DOM
+      document.getElementById('pdf-client-name').textContent = clientName;
+      document.getElementById('pdf-consultant-name').textContent = consultantName;
+      document.getElementById('pdf-consultant-title').textContent = consultantTitle;
+      document.getElementById('pdf-consultant-team').textContent = consultantTeam;
+      document.getElementById('pdf-consultant-contact').textContent = '電話 / 微信：' + consultantContact;
+
+      document.getElementById('pdf-insured-info').textContent = `${currentGender === 'male' ? '男性' : '女性'} ${age}歲 (下次生日)`;
+      document.getElementById('pdf-pay-mode').textContent = mode === 'monthly' ? '月繳 (Monthly 0.09倍數)' : '年繳 (Annual)';
+
+      const childStatusElem = document.getElementById('pdf-child-rider-status');
+      const childRowElem = document.getElementById('pdf-row-child-rider');
+      if (hasChildRider) {
+        if (age >= 19 && age <= 56) {
+          childStatusElem.textContent = '已附加 (全數保障家中現有及未來子女至19歲，每名子女獨立 $80萬 危疾醫療限額 + $1,000 兒童發展活動)';
+          childRowElem.style.display = 'flex';
+          document.getElementById('pdf-child-premium').textContent = childPremText;
+        } else {
+          childStatusElem.textContent = '不適用（受保家長須為19-56歲）';
+          childRowElem.style.display = 'none';
+        }
+      } else {
+        childStatusElem.textContent = '未附加';
+        childRowElem.style.display = 'none';
+      }
+
+      document.getElementById('pdf-base-premium').textContent = basePremText;
+      document.getElementById('pdf-discount-pct').textContent = discountPctText;
+      document.getElementById('pdf-discount-val').textContent = discountValText;
+      document.getElementById('pdf-final-premium').textContent = finalPremText + ' ' + periodUnitText;
+
+      // 6. 避開 iframe 限制：嘗試透過新視窗列印，若被瀏覽器攔截彈窗，則自動打開站內預覽視窗
+      const printHtml = document.getElementById('print-pdf-container').innerHTML;
+      try {
+        const printWindow = window.open('', '_blank');
+        if (printWindow && printWindow.document) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="UTF-8">
+              <title>醫家保醫療計劃_專屬建議書</title>
+              <script src="https://cdn.tailwindcss.com"><\/script>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+              <style>
+                body { font-family: 'Noto Sans TC', sans-serif; background: #fff; padding: 24px; color: #111827; }
+                @media print {
+                  body { padding: 0 !important; }
+                  @page { margin: 1.2cm; }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="max-w-4xl mx-auto">
+                ${printHtml}
+              </div>
+              <script>
+                window.onload = function() {
+                  setTimeout(function() {
+                    window.print();
+                  }, 500);
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+          return;
+        }
+      } catch (e) {
+        console.warn('Pop-up window print blocked by iframe environment:', e);
+      }
+
+      // Fallback: 顯示頁內全屏預覽 Modal，並可點擊立即列印
+      openPdfModal(printHtml);
+    }
+
+    function openPdfModal(htmlContent) {
+      document.getElementById('modal-pdf-content').innerHTML = htmlContent;
+      document.getElementById('pdf-modal').classList.remove('hidden');
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdf-modal').classList.add('hidden');
+    }
+
+    function doModalPrint() {
+      window.print();
     }
 
     // Initialize calculation on page load
