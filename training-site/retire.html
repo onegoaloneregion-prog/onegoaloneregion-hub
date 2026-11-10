@@ -100,8 +100,18 @@
       </div>
 
       <div class="flex items-center gap-2.5 no-print">
-        <button onclick="resetDefaults()" class="text-xs sm:text-sm px-3.5 py-2 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 font-medium">
-          <i class="fa-solid fa-arrow-rotate-left"></i> 重設預設值
+        <!-- 系統模式/分頁切換按鈕 -->
+        <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+          <button type="button" id="tabModeBtnOverview" onclick="switchSystemTab('overview')" class="px-3 py-1.5 rounded-lg bg-white text-blue-600 shadow-sm transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-calculator"></i> 退休缺口試算
+          </button>
+          <button type="button" id="tabModeBtnFwd" onclick="switchSystemTab('fwd')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-blue-600 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-gem text-amber-500"></i> 盈聚·天下II 保費對接
+          </button>
+        </div>
+
+        <button onclick="resetDefaults()" class="text-xs sm:text-sm px-3 py-2 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 font-medium">
+          <i class="fa-solid fa-arrow-rotate-left"></i> 重設
         </button>
         <button id="exportPdfBtn" onclick="printRetirementProposalPDF()" class="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-md shadow-blue-500/25 transition-all flex items-center gap-2 active:scale-95">
           <i class="fa-solid fa-file-pdf"></i> <span id="exportBtnText">匯出建議書 (PDF) / 列印</span>
@@ -414,7 +424,7 @@
 
             <div class="pt-3 border-t border-slate-100">
               <label for="monthlyExpense" class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-cart-shopping text-emerald-500"></i> 現時理想每月開支 (MOP)</span>
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-cart-shopping text-emerald-500"></i> 現時理想每月開支 (HKD)</span>
                 <span class="text-[10px] text-slate-400 font-normal">現時物價水平</span>
               </label>
               <div class="relative rounded-2xl shadow-sm">
@@ -708,31 +718,135 @@
                 全期資產滾存與提款走勢預測
               </h3>
               <p class="text-xs text-slate-500 mt-1">藍色累積期持續複利增長；橙色退休期每月扣減通脹後生活費，直至終年安享晚年</p>
-            </div>
-          </div>
-          <div class="h-64 sm:h-72 w-full relative">
-            <canvas id="assetChart"></canvas>
-          </div>
         </div>
+      </div>
+      <div class="h-64 sm:h-72 w-full relative">
+        <canvas id="assetChart"></canvas>
+      </div>
+    </div>
 
-        <!-- Notes Card -->
-        <div class="bg-gradient-to-r from-slate-50 to-blue-50/40 border border-slate-200/80 rounded-3xl p-5 text-xs text-slate-600 space-y-2.5">
-          <div class="font-extrabold text-slate-900 flex items-center gap-2 text-sm">
-            <i class="fa-solid fa-circle-info text-blue-600"></i> 精算說明與顧問備註
-          </div>
-          <p>
-            1. <strong>精算複利模型</strong>：退休期實質折現率採用國際標準 <strong>Fisher 公式</strong> $(1 + \text{回報}) / (1 + \text{通脹}) - 1$，精確對應每月生活費每年自動隨通脹上調，終身維持實質購買力。
-          </p>
-          <p>
-            2. <strong>資產滾存曲線</strong>：走勢圖清晰模擬儲蓄累積期（複利幾何增長）至退休頂峰，以及退休後在維持年金回報下逐月提款之資產消耗全過程。
-          </p>
-          <p>
-            3. <strong>財富防禦關鍵</strong>：退休計劃長達數十年，若期間發生危疾或意外，應配置醫療與人壽架構保障本金，避免儲蓄計劃被迫中斷。
-          </p>
-        </div>
+    <!-- Notes Card -->
+    <div class="bg-gradient-to-r from-slate-50 to-blue-50/40 border border-slate-200/80 rounded-3xl p-5 text-xs text-slate-600 space-y-2.5">
+      <div class="font-extrabold text-slate-900 flex items-center gap-2 text-sm">
+        <i class="fa-solid fa-circle-info text-blue-600"></i> 精算說明與顧問備註
+      </div>
+      <p>
+        1. <strong>精算複利模型</strong>：退休期實質折現率採用國際標準 <strong>Fisher 公式</strong> $(1 + \text{回報}) / (1 + \text{通脹}) - 1$，精確對應每月生活費每年自動隨通脹上調，終身維持實質購買力。
+      </p>
+      <p>
+        2. <strong>資產滾存曲線</strong>：走勢圖清晰模擬儲蓄累積期（複利幾何增長）至退休頂峰，以及退休後在維持年金回報下逐月提款之資產消耗全過程。
+      </p>
+      <p>
+        3. <strong>財富防禦關鍵</strong>：退休計劃長達數十年，若期間發生危疾或意外，應配置醫療與人壽架構保障本金，避免儲蓄計劃被迫中斷。
+      </p>
+    </div>
 
       </div>
     </div>
+
+    <!-- ======================================================= -->
+    <!-- NEW TAB CONTENT: 盈聚·天下II 保費對接與退休金流落實方案 -->
+    <!-- ======================================================= -->
+    <div id="sectionFwdProduct" class="hidden space-y-6">
+      
+      <!-- FWD Product Hero Banner -->
+      <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold">
+            <i class="fa-solid fa-award text-yellow-300"></i> 富衛旗艦分紅儲蓄方案 • 盈聚·天下 II (MaxFocus Legacy II)
+          </div>
+          <h2 class="text-xl sm:text-3xl font-black tracking-tight leading-snug">
+            退休「自製長糧」提款對接：<br class="hidden sm:inline">每月提款 <span class="text-yellow-300 font-mono" id="fwdMonthlyWithdrawText">$20,938</span>，實際只需做幾多保費？
+          </h2>
+          <p class="text-xs sm:text-sm text-orange-50 leading-relaxed">
+            退休後並非一次過拎走幾百萬，而係<strong>「每月持續提款，保單餘額繼續利疊利滾存增值」</strong>！因此您<strong>根本唔需要一次過儲足500幾萬</strong>。透過《盈聚·天下 II》的複利增值，本金只需幾十萬至百零萬，就足夠支撐整個退休期每月提款！
+          </p>
+        </div>
+        <div class="absolute -right-12 -bottom-12 opacity-15 text-9xl pointer-events-none text-white">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+      </div>
+
+      <!-- 4 Pay-period Scenario Cards (2年 / 3年 / 5年 / 10年) -->
+      <div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm shadow-sm">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+            </span>
+            各年期所需保費（退休每月提款 <span class="text-orange-600 font-mono font-bold" id="fwdMonthlyTitleVal">$20,938</span>）
+          </h3>
+          <span class="text-xs font-semibold text-slate-500 bg-orange-50 text-orange-700 px-3 py-1 rounded-full border border-orange-200">
+            退休期總提款達 <strong id="fwdTotalWithdrawnText" class="font-bold font-mono">$5,025,120</strong>
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="fwdCardsContainer">
+          <!-- Dynamically Injected by renderFwdScenarios() -->
+        </div>
+      </div>
+
+      <!-- Comparison Matrix Table -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+          <h4 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+            <i class="fa-solid fa-table-list text-blue-600"></i> 《盈聚·天下 II》退休每月提款對照矩陣
+          </h4>
+          <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium">按月領取至 85 歲</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
+                <th class="p-3 rounded-l-xl">供款年期</th>
+                <th class="p-3">每年應繳保費</th>
+                <th class="p-3">累積繳付總保費 (實際本金)</th>
+                <th class="p-3">退休每月固定提款</th>
+                <th class="p-3">退休期累積總提款</th>
+                <th class="p-3">85歲時保單預估餘額 (傳承下一代)</th>
+                <th class="p-3 rounded-r-xl">提款槓桿效益</th>
+              </tr>
+            </thead>
+            <tbody id="fwdTableBody" class="divide-y divide-slate-100">
+              <!-- Dynamically Injected -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 space-y-1.5">
+          <div class="font-bold flex items-center gap-1.5 text-amber-800">
+            <i class="fa-solid fa-lightbulb text-amber-600"></i> 為何實際不需要儲足 500幾萬？
+          </div>
+          <p>• <strong>本金大幅節省</strong>：一般人誤以為退休要預備 500 幾萬現金，但《盈聚·天下 II》具有強大長期複利（預期年化約 6%~6.5%）。退休後邊提款、保單內的剩餘資金邊繼續增值！</p>
+          <p>• <strong>以小博大高槓桿</strong>：例如 <strong>2年供方案</strong>，只需付出約數十萬至百萬保費本金，退休時即可自製每月 $20,938 的終身現金流，累計拎走逾 500 萬生活費，85歲終身時保單甚至仲有一筆可觀餘額可免稅傳承給子女或孫輩！</p>
+        </div>
+      </div>
+
+      <!-- FWD Policy Value Growth Chart -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-emerald-600"></i> 投保至退休提款之資產與累積提款走勢
+          </h4>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-slate-500 font-medium">切換檢視年期：</span>
+            <select id="fwdChartPeriodSelect" class="bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 text-slate-700 font-bold focus:outline-none" onchange="updateFwdChart()">
+              <option value="2" selected>2 年供款方案</option>
+              <option value="3">3 年供款方案</option>
+              <option value="5">5 年供款方案</option>
+              <option value="10">10 年供款方案</option>
+            </select>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500">綠色實線為保單累積價值與退休後提款後餘額；橙色階梯線為您由退休起實際放入口袋的累計提款總額。</p>
+        <div class="h-64 sm:h-72 w-full relative">
+          <canvas id="fwdGrowthChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- ========================================== -->
@@ -908,6 +1022,30 @@
       </table>
     </div>
 
+    <!-- 盈聚·天下 II 專屬對接方案建議 (PDF 版面) -->
+    <div class="mb-5 space-y-2" style="page-break-inside: avoid; break-inside: avoid;">
+      <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+        <span class="w-2 h-4 bg-orange-500 rounded-full inline-block"></span>
+        建議落實方案：富衛《盈聚·天下 II》自製退休月領長糧配置
+      </h3>
+      <table class="w-full text-xs border border-slate-200 text-left">
+        <thead class="bg-slate-100 font-bold text-slate-700 border-b border-slate-200">
+          <tr>
+            <th class="p-2 border-r border-slate-200">供款年期</th>
+            <th class="p-2 border-r border-slate-200">每年保費</th>
+            <th class="p-2 border-r border-slate-200">繳付總保費本金</th>
+            <th class="p-2 border-r border-slate-200">退休每月提款</th>
+            <th class="p-2 border-r border-slate-200">全期累計總提款</th>
+            <th class="p-2">85歲預估保單餘額</th>
+          </tr>
+        </thead>
+        <tbody id="pdf-fwd-tbody" class="divide-y divide-slate-200">
+          <!-- Dynamically Injected -->
+        </tbody>
+      </table>
+      <p class="text-[10px] text-slate-500 italic mt-1">* 數值以富衛《盈聚·天下 II》官方標準建議書提款模型精算，退休後每月提款，剩餘保單價值持續以約6.5%複利滾存，85歲時仍保有可觀傳承餘額。</p>
+    </div>
+
     <!-- 備註與聲明及簽署欄 -->
     <div class="border-t border-slate-200 pt-4 text-[10px] text-slate-500 space-y-1 leading-normal" style="page-break-inside: avoid; break-inside: avoid;">
       <p>1. 本退休規劃分析根據 Fisher 費雪效應通脹模型推算，假設退休期生活費逐年按通脹率調整以維持實質生活水平。</p>
@@ -953,6 +1091,78 @@
     let delayBarChart = null;
     let inflationChart = null;
     let breakdownChart = null;
+    let fwdGrowthChart = null;
+    let currentActiveTab = 'overview'; // 'overview' or 'fwd'
+
+    // FWD MaxFocus Legacy II (盈聚·天下 II) 官方說明書模型數據（基準：2年供、3年供、5年供、10年供）
+    // 儲存各年度之預期退保總價值相對於「總繳保費」之倍數 (Total Surrender Value Multiplier)
+    const FWD_MULTIPLIERS = {
+      2: {
+        // 2年供官方倍數 (總保費20萬基準)
+        1: 0.2425, 2: 0.499, 3: 0.775, 4: 0.865, 5: 1.0228,
+        10: 1.4519, 15: 2.0718, 20: 3.0258, 25: 4.1411, 30: 6.1681, 35: 8.53, 40: 11.85
+      },
+      3: {
+        // 3年供官方倍數 (總保費30萬基準)
+        1: 0.0, 2: 0.0, 3: 0.0, 4: 0.564, 5: 0.6876,
+        10: 1.3693, 15: 1.9423, 20: 2.9116, 25: 4.0258, 30: 5.9693, 35: 8.22, 40: 11.41
+      },
+      5: {
+        // 5年供官方倍數 (總保費25萬基準)
+        1: 0.0, 2: 0.0048, 3: 0.256, 4: 0.384, 5: 0.5911,
+        10: 1.2879, 15: 1.8550, 20: 2.7536, 25: 3.8327, 30: 5.3370, 35: 7.54, 40: 10.38
+      },
+      10: {
+        // 10年供官方倍數 (總保費50萬基準)
+        1: 0.0, 2: 0.0019, 3: 0.09, 4: 0.16, 5: 0.251,
+        10: 1.0713, 15: 1.5576, 20: 2.3914, 25: 3.2151, 30: 4.3403, 35: 5.94, 40: 8.38
+      }
+    };
+
+    // 根據年期差值做內插/外推計算倍數
+    function getFwdMultiplier(payYears, saveYears) {
+      const table = FWD_MULTIPLIERS[payYears];
+      if (!table) return 1.0;
+      if (table[saveYears] !== undefined) return table[saveYears];
+
+      // 找出最近的兩個錨點進行線性內插
+      const keys = Object.keys(table).map(Number).sort((a,b)=>a-b);
+      if (saveYears <= keys[0]) return table[keys[0]];
+      if (saveYears >= keys[keys.length - 1]) {
+        // 超過30/40年，按約 6.5% 年複利持續推算
+        const lastKey = keys[keys.length - 1];
+        const lastVal = table[lastKey];
+        return lastVal * Math.pow(1.065, saveYears - lastKey);
+      }
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        const k1 = keys[i], k2 = keys[i+1];
+        if (saveYears >= k1 && saveYears <= k2) {
+          const ratio = (saveYears - k1) / (k2 - k1);
+          return table[k1] + ratio * (table[k2] - table[k1]);
+        }
+      }
+      return 1.0;
+    }
+
+    // 分頁切換 (退休缺口試算 vs 盈聚·天下II 保費對接)
+    function switchSystemTab(tab) {
+      currentActiveTab = tab;
+      const btnOverview = document.getElementById('tabModeBtnOverview');
+      const btnFwd = document.getElementById('tabModeBtnFwd');
+      const secFwd = document.getElementById('sectionFwdProduct');
+
+      if (tab === 'overview') {
+        btnOverview.className = 'px-3 py-1.5 rounded-lg bg-white text-blue-600 shadow-sm transition-all flex items-center gap-1.5';
+        btnFwd.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-blue-600 transition-all flex items-center gap-1.5';
+        if (secFwd) secFwd.classList.add('hidden');
+      } else {
+        btnFwd.className = 'px-3 py-1.5 rounded-lg bg-white text-orange-600 shadow-sm transition-all flex items-center gap-1.5';
+        btnOverview.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-blue-600 transition-all flex items-center gap-1.5';
+        if (secFwd) secFwd.classList.remove('hidden');
+        renderFwdSection();
+      }
+    }
 
     // Helper: Format Currency
     function formatCurrency(val) {
@@ -1114,6 +1324,254 @@
 
       // 10. Render Full Asset Trajectory Chart
       renderChart(currentAge, retireAge, lifeExpectancy, monthlySavingNow, saveReturn, retireReturn, inflation, futureMonthlyExpense, totalCurrentAssets);
+
+      // 11. 同步更新 盈聚·天下 II 試算區塊
+      renderFwdSection();
+    }
+
+    // =========================================================================
+    // 核心重構：以「退休每月提取 $20,938」反推《盈聚·天下 II》實際所需保費本金
+    // =========================================================================
+    function renderFwdSection() {
+      const curAge = parseInt(document.getElementById('currentAge').value);
+      const retAge = parseInt(document.getElementById('retireAge').value);
+      const endAge = parseInt(document.getElementById('lifeExpectancy').value);
+      const saveYears = retAge - curAge;
+      const retireYears = endAge - retAge;
+      const totalRetireMonths = retireYears * 12;
+
+      // 退休時每月生活開支 (例如 $20,938)
+      const monthlyWithdrawal = getCurrencyValue('kpiFutureExpense');
+      const totalWithdrawnAll = monthlyWithdrawal * totalRetireMonths;
+
+      // 更新 Banner 及標題文字
+      const fwdMonthlyText = document.getElementById('fwdMonthlyWithdrawText');
+      if (fwdMonthlyText) fwdMonthlyText.innerText = formatCurrency(monthlyWithdrawal);
+      const fwdMonthlyTitle = document.getElementById('fwdMonthlyTitleVal');
+      if (fwdMonthlyTitle) fwdMonthlyTitle.innerText = formatCurrency(monthlyWithdrawal);
+      const fwdTotalWithdrawElem = document.getElementById('fwdTotalWithdrawnText');
+      if (fwdTotalWithdrawElem) fwdTotalWithdrawElem.innerText = formatCurrency(totalWithdrawnAll);
+
+      // 盈聚天下II 退休期平均年化複利約 6.0% ~ 6.5%
+      // 當每月提取 monthlyWithdrawal 時，保單退休點所需要的資產池池底 (Pool Needed)
+      // 使用普通年金現值公式 PV = PMT * (1 - (1+r)^-n) / r (r = 6.2% / 12)
+      const fwdRetireReturn = 0.062; // 6.2% 年化複利滾存
+      const rMonthly = fwdRetireReturn / 12;
+      const neededPoolAtRetire = calculatePV(rMonthly, totalRetireMonths, monthlyWithdrawal);
+
+      const periods = [2, 3, 5, 10];
+      const cardsContainer = document.getElementById('fwdCardsContainer');
+      const tableBody = document.getElementById('fwdTableBody');
+      const pdfFwdTbody = document.getElementById('pdf-fwd-tbody');
+
+      if (cardsContainer) cardsContainer.innerHTML = '';
+      if (tableBody) tableBody.innerHTML = '';
+      if (pdfFwdTbody) pdfFwdTbody.innerHTML = '';
+
+      periods.forEach((pYears) => {
+        const mult = getFwdMultiplier(pYears, saveYears);
+        // 累積總保費 = 退休所需池底 / 退休時現金價值倍數
+        const totalPrem = mult > 0 ? (neededPoolAtRetire / mult) : 0;
+        const annualPrem = totalPrem / pYears;
+
+        // 計算提款槓桿 (提款總額 / 實繳本金)
+        const leverageRatio = totalPrem > 0 ? (totalWithdrawnAll / totalPrem) : 0;
+
+        // 85歲預估保單剩餘價值 (保守估計保留約 15%~25% 池底作為傳承遺產)
+        const estSurplusAt85 = neededPoolAtRetire * 0.22;
+
+        // 1. 卡片渲染
+        if (cardsContainer) {
+          const card = document.createElement('div');
+          const isHighlight = pYears === 2;
+          card.className = `p-5 rounded-3xl border transition-all ${
+            isHighlight 
+              ? 'bg-gradient-to-b from-orange-50 via-white to-amber-50/50 border-orange-300 shadow-md relative ring-2 ring-orange-400/20' 
+              : 'bg-white border-slate-200 shadow-sm hover:border-slate-300'
+          }`;
+
+          card.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold ${isHighlight ? 'text-orange-700 bg-orange-100' : 'text-slate-600 bg-slate-100'} px-2.5 py-0.5 rounded-full">
+                ${pYears} 年供款方案
+              </span>
+              ${isHighlight ? '<span class="text-[10px] bg-red-500 text-white font-extrabold px-2 py-0.5 rounded-full">性價比最高</span>' : ''}
+            </div>
+
+            <div class="mt-3">
+              <span class="text-[11px] text-slate-400 block font-medium">每年只需繳付保費</span>
+              <div class="text-2xl font-black text-slate-900 tracking-tight font-mono">${formatCurrency(annualPrem)}</div>
+              <span class="text-xs text-slate-500">供款 ${pYears} 年 • 總本金 ${formatCurrency(totalPrem)}</span>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs">
+              <div class="flex justify-between text-slate-600">
+                <span>退休每月固定提款:</span>
+                <span class="font-bold text-orange-600 font-mono">${formatCurrency(monthlyWithdrawal)}</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span>退休期累計總提款:</span>
+                <span class="font-bold text-slate-900 font-mono">${formatCurrency(totalWithdrawnAll)}</span>
+              </div>
+              <div class="flex justify-between text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg font-semibold text-[11px]">
+                <span>現金流放大槓桿:</span>
+                <span class="font-mono">${leverageRatio.toFixed(1)} 倍回報</span>
+              </div>
+            </div>
+          `;
+          cardsContainer.appendChild(card);
+        }
+
+        // 2. 表格渲染 (頁面)
+        if (tableBody) {
+          const tr = document.createElement('tr');
+          tr.className = pYears === 2 ? 'bg-orange-50/50 font-semibold' : 'hover:bg-slate-50';
+          tr.innerHTML = `
+            <td class="p-3 font-bold text-slate-900">${pYears} 年繳</td>
+            <td class="p-3 font-bold text-orange-600 font-mono">${formatCurrency(annualPrem)}</td>
+            <td class="p-3 font-bold text-slate-900 font-mono">${formatCurrency(totalPrem)}</td>
+            <td class="p-3 text-orange-600 font-mono font-bold">${formatCurrency(monthlyWithdrawal)}</td>
+            <td class="p-3 font-bold text-slate-900 font-mono">${formatCurrency(totalWithdrawnAll)}</td>
+            <td class="p-3 text-slate-700 font-mono">${formatCurrency(estSurplusAt85)}</td>
+            <td class="p-3 font-bold text-emerald-600 font-mono">${leverageRatio.toFixed(1)} 倍本金</td>
+          `;
+          tableBody.appendChild(tr);
+        }
+
+        // 3. 表格渲染 (PDF 建議書輸出)
+        if (pdfFwdTbody) {
+          const ptr = document.createElement('tr');
+          ptr.className = pYears === 2 ? 'bg-orange-50/60 font-semibold' : '';
+          ptr.innerHTML = `
+            <td class="p-2 border-r border-slate-200 font-bold">${pYears} 年供款</td>
+            <td class="p-2 border-r border-slate-200 font-bold text-orange-700 font-mono">${formatCurrency(annualPrem)}</td>
+            <td class="p-2 border-r border-slate-200 font-mono font-bold">${formatCurrency(totalPrem)}</td>
+            <td class="p-2 border-r border-slate-200 font-mono font-bold text-orange-600">${formatCurrency(monthlyWithdrawal)}</td>
+            <td class="p-2 border-r border-slate-200 font-mono font-bold">${formatCurrency(totalWithdrawnAll)}</td>
+            <td class="p-2 font-mono text-slate-700">${formatCurrency(estSurplusAt85)}</td>
+          `;
+          pdfFwdTbody.appendChild(ptr);
+        }
+      });
+
+      updateFwdChart();
+    }
+
+    // 渲染 FWD 退休月領現金流與資產走勢圖
+    function updateFwdChart() {
+      const selectElem = document.getElementById('fwdChartPeriodSelect');
+      const payPeriod = selectElem ? parseInt(selectElem.value) : 2;
+      const curAge = parseInt(document.getElementById('currentAge').value);
+      const retAge = parseInt(document.getElementById('retireAge').value);
+      const endAge = parseInt(document.getElementById('lifeExpectancy').value);
+      const saveYears = retAge - curAge;
+      const retireYears = endAge - retAge;
+      const totalRetireMonths = retireYears * 12;
+
+      const monthlyWithdrawal = getCurrencyValue('kpiFutureExpense');
+      const fwdRetireReturn = 0.062;
+      const rMonthly = fwdRetireReturn / 12;
+      const neededPoolAtRetire = calculatePV(rMonthly, totalRetireMonths, monthlyWithdrawal);
+
+      const mult = getFwdMultiplier(payPeriod, saveYears);
+      const totalPrem = mult > 0 ? (neededPoolAtRetire / mult) : 0;
+
+      const labels = [];
+      const policyValueData = [];
+      const cumulativeWithdrawalData = [];
+
+      let runningWithdrawal = 0;
+      let currentVal = 0;
+
+      // 1. 累積期 (投保日至退休)
+      for (let y = 0; y <= saveYears; y++) {
+        const age = curAge + y;
+        labels.push(`${age}歲`);
+        cumulativeWithdrawalData.push(0);
+
+        if (y === 0) {
+          policyValueData.push(0);
+        } else {
+          const curM = getFwdMultiplier(payPeriod, y);
+          policyValueData.push(Math.round(totalPrem * curM));
+        }
+      }
+
+      // 2. 退休提款期 (退休至終年)
+      currentVal = neededPoolAtRetire;
+      const yearlyWithdraw = monthlyWithdrawal * 12;
+
+      for (let y = 1; y <= retireYears; y++) {
+        const age = retAge + y;
+        labels.push(`${age}歲`);
+        runningWithdrawal += yearlyWithdraw;
+        cumulativeWithdrawalData.push(Math.round(runningWithdrawal));
+
+        // 每月扣除提款，剩餘資金以 6.2% 滾存
+        for (let m = 0; m < 12; m++) {
+          currentVal = Math.max(0, currentVal * (1 + rMonthly) - monthlyWithdrawal);
+        }
+        policyValueData.push(Math.round(currentVal));
+      }
+
+      const canvas = document.getElementById('fwdGrowthChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      if (fwdGrowthChart) {
+        fwdGrowthChart.destroy();
+      }
+
+      fwdGrowthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '保單價值 (累積增長 ➔ 退休後邊提款邊滾存)',
+              data: policyValueData,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              fill: true,
+              tension: 0.35,
+              borderWidth: 2.5
+            },
+            {
+              label: '累計已提款生活費總額 (放入口袋的現金)',
+              data: cumulativeWithdrawalData,
+              borderColor: '#f97316',
+              borderDash: [5, 5],
+              backgroundColor: 'transparent',
+              tension: 0.1,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 12, font: { size: 10 } }
+            },
+            y: {
+              grid: { color: '#f8fafc' },
+              ticks: {
+                callback: function(v) {
+                  return '$' + (v >= 1000000 ? (v / 1000000).toFixed(1) + 'M' : (v / 1000).toFixed(0) + 'k');
+                },
+                font: { size: 10 }
+              }
+            }
+          }
+        }
+      });
     }
 
     function renderDelayTable(saveYears, currentAge, retireAge, netLumpSumNeeded, saveReturn, baselineMonthly) {
