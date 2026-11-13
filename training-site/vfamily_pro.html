@@ -1310,121 +1310,262 @@
   <!-- ========================================== -->
   <!-- DEDICATED PRINT / PDF EXPORT TEMPLATE      -->
   <!-- ========================================== -->
-  <div id="print-pdf-container" class="p-8 max-w-4xl mx-auto bg-white text-slate-900">
-    <!-- Header Block (依據圖片版面排版) -->
-    <div class="border-b-2 border-slate-300 pb-6 mb-6">
-      <div class="flex justify-between items-start">
-        <div class="w-2/3 pr-4">
-          <div class="flex items-center gap-1.5 text-xs text-slate-500 font-semibold mb-1">
-            <i class="fa-solid fa-shield text-slate-400"></i>
-            <span>澳門專屬保障建議書</span>
+  <div id="print-pdf-container" class="p-8 max-w-4xl mx-auto bg-white text-slate-900 space-y-6">
+    <!-- Page 1: Cover Header, Client Profile, Premium Budget & Core Highlights -->
+    <div>
+      <!-- Header Block -->
+      <div class="border-b-2 border-slate-300 pb-5 mb-5">
+        <div class="flex justify-between items-start">
+          <div class="w-2/3 pr-4">
+            <div class="flex items-center gap-1.5 text-xs text-slate-500 font-semibold mb-1">
+              <i class="fa-solid fa-shield text-slate-400"></i>
+              <span>澳門專屬保障建議書</span>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-1">
+              醫家保醫療計劃 客戶專屬規劃方案
+            </h2>
+            <p class="text-xs text-slate-500 font-medium">策劃日期：<span id="pdf-date">2026 年 11 月 9 日</span></p>
           </div>
-          <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-1">
-            醫家保醫療計劃 客戶專屬規劃方案
-          </h2>
-          <p class="text-xs text-slate-500 font-medium">策劃日期：<span id="pdf-date">2026 年 11 月 9 日</span></p>
+          <div class="w-1/3 text-right border-l-2 border-slate-200 pl-4 space-y-0.5">
+            <div class="font-bold text-slate-900 text-base" id="pdf-consultant-name">富衛策劃顧問</div>
+            <div class="text-xs text-slate-600" id="pdf-consultant-title">資深分區總監</div>
+            <div class="text-xs text-slate-500" id="pdf-consultant-team">One Goal One Region</div>
+            <div class="text-xs text-slate-600 font-medium pt-1" id="pdf-consultant-contact">電話 / 微信：+853 6688 8888</div>
+          </div>
         </div>
-        <div class="w-1/3 text-right border-l-2 border-slate-200 pl-4 space-y-0.5">
-          <div class="font-bold text-slate-900 text-base" id="pdf-consultant-name">富衛策劃顧問</div>
-          <div class="text-xs text-slate-600" id="pdf-consultant-title">資深分區總監</div>
-          <div class="text-xs text-slate-500" id="pdf-consultant-team">One Goal One Region</div>
-          <div class="text-xs text-slate-600 font-medium pt-1" id="pdf-consultant-contact">電話 / 微信：+853 6688 8888</div>
+      </div>
+
+      <!-- Client & Proposal Profile Table -->
+      <div class="mb-5 bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <div class="grid grid-cols-4 gap-4 text-xs">
+          <div>
+            <span class="text-slate-400 block font-medium">尊貴客戶</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-client-name">陳大文 先生</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">受保人資料</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-insured-info">男性 30歲 (下次生日)</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">合資格病房</span>
+            <span class="font-bold text-slate-900 text-sm text-orange-600">標準普通病房 ($0 自付費)</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">繳費週期</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-pay-mode">年繳 (Annual)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium Calculation Breakdown -->
+      <div class="mb-6 p-4 rounded-xl border-2 border-orange-200 bg-orange-50/30">
+        <h3 class="font-bold text-sm text-slate-900 mb-2 flex items-center gap-1.5">
+          <i class="fa-solid fa-calculator text-orange-600"></i> 一、費用預算明細
+        </h3>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between py-1 border-b border-orange-100">
+            <span class="text-slate-600">醫家保基本計劃標準保費：</span>
+            <span class="font-bold font-mono" id="pdf-base-premium">HK$ 4,751</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-orange-100" id="pdf-row-child-rider" style="display:none;">
+            <span class="text-slate-600">子女之家添守護選項保費 (HVI3)：</span>
+            <span class="font-bold font-mono text-pink-600" id="pdf-child-premium">HK$ 0</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-orange-100">
+            <span class="text-slate-600">無索償保費折扣（個人 + 家庭）：</span>
+            <span class="font-bold text-emerald-700" id="pdf-discount-pct">0%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-orange-100">
+            <span class="text-slate-600">折扣減免金額：</span>
+            <span class="font-bold font-mono text-emerald-700" id="pdf-discount-val">- HK$ 0</span>
+          </div>
+          <div class="flex justify-between pt-2 text-sm font-black text-slate-900">
+            <span>應付實質保費：</span>
+            <span class="text-orange-600 text-base font-mono" id="pdf-final-premium">HK$ 4,751 / 每年</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Plain Language Core Highlights -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+          <span class="w-2 h-4 bg-orange-600 rounded-full inline-block"></span>
+          二、計劃亮點與核心保障重點詳解
+        </h3>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">1. 額外現金補貼 (Second Claim 雙重賠償)</div>
+            <p class="text-slate-600 leading-relaxed">公司團體醫保或其他保險賠完（即使已賠足100%），憑單富衛額外發放<b>每日 $500 現金津貼</b>，每傷病最多 <b>60 日（高達 $30,000）</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">2. 每保單年度每傷病獨立 $55萬</div>
+            <p class="text-slate-600 leading-relaxed">不同疾病享有各自獨立 $55萬額度；同一傷病只要兩次入院相隔 <b>90日以上</b>，額度即重新計算重設。不設每年及終身總上限。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">3. 三大重病額外加碼 $55萬 (年防線 $110萬)</div>
+            <p class="text-slate-600 leading-relaxed">患癌接受電療/化療/標靶/質子治療、嚴重腎病洗腎（連家中租機費亦包）或器官骨髓移植，基本額用盡自動疊加額外 <b>$55萬</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">4. 日間手術現金保障 (照腸胃鏡有錢拎)</div>
+            <p class="text-slate-600 leading-relaxed">免留院做息肉切除、照胃鏡腸鏡，去指定合作診所做額外獲發 <b>$1,000 現金</b>；其他日間診所亦有 <b>$500 現金</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">5. 投保前未知的已有病症 (第31日全保)</div>
+            <p class="text-slate-600 leading-relaxed">投保時未知悉的已存在疾病或先天性疾病，僅設首30日等候期，<b>第31日起即按保障限額100%全數賠償</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">6. 樂賞健康保障 ($1,000 現金報銷)</div>
+            <p class="text-slate-600 leading-relaxed">保單每連續生效滿5年，緊接下年度憑機票酒店收據、健身運動課程或體檢單據，實報實銷高達 <b>$1,000</b>。</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Client & Proposal Profile Table -->
-    <div class="mb-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-        <div>
-          <span class="text-slate-400 block font-medium">尊貴客戶</span>
-          <span class="font-bold text-slate-900 text-sm" id="pdf-client-name">陳大文 先生</span>
-        </div>
-        <div>
-          <span class="text-slate-400 block font-medium">受保人資料</span>
-          <span class="font-bold text-slate-900 text-sm" id="pdf-insured-info">男性 30歲 (下次生日)</span>
-        </div>
-        <div>
-          <span class="text-slate-400 block font-medium">合資格病房</span>
-          <span class="font-bold text-slate-900 text-sm text-fwd-orange">標準普通病房 ($0 自付費)</span>
-        </div>
-        <div>
-          <span class="text-slate-400 block font-medium">繳費週期</span>
-          <span class="font-bold text-slate-900 text-sm" id="pdf-pay-mode">年繳 (Annual)</span>
+    <!-- Page 2: Detailed Benefit Schedule & Child Option -->
+    <div style="page-break-before: always;">
+      <div class="space-y-4">
+        <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+          <span class="w-2 h-4 bg-orange-600 rounded-full inline-block"></span>
+          三、完整保障項目明細表（受限於每傷病每年度 $550,000 總額）
+        </h3>
+        <table class="w-full text-[11px] border border-slate-200">
+          <thead class="bg-slate-100 text-slate-800 font-bold">
+            <tr>
+              <th class="p-2 text-left w-1/3 border-r border-slate-200">保障類別及項目</th>
+              <th class="p-2 text-left border-r border-slate-200">保障內容細節</th>
+              <th class="p-2 text-right w-1/4">賠償限額 (港元)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">I. 基本住院及手術費用</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">病房膳食、雜項開支(包出院4星期西藥)、主診/專科巡房費、深切治療(ICU)、外科醫生費、麻醉科及手術室費(小型至複雜全數包)</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">訂明診斷成像檢測</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">電腦斷層掃描(CT)、磁力共振(MRI)、正電子掃描(PET)、PET-CT及PET-MRI（無共同保險）</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障 (0%共同保險)</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">入院前 / 出院後門診</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">入院/手術前最多3次門診；出院/手術後90日內最多20次跟進門診（物理治療/脊醫每次最多$600）</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">精神科住院治療</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">專科醫生建議於澳門或香港境內住院接受精神科治療</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障 (限港澳)</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">II. 升級保障：緊急門診及洗腎</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">意外後72小時內急症室/診所門診；門診血液/腹膜透析及在家租借腎臟透析機費用</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">私家看護及陪床費</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">手術或ICU後住院私家看護(最多30日) + 出院後30日內家居私家看護(最多30日)；住院1位陪床費</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">復康治療 / 出院後中醫</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">出院後90日內註冊復康中心治療($10,000/年)；出院/日間手術後90日內中醫跟進門診(最多10次)</td>
+              <td class="p-2 text-right font-bold text-slate-800">復康$10,000 | 中醫$600/次</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">妊娠併發症保障 (12個月等候期)</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">涵蓋12項特定妊娠併發症手術（異位妊娠、先兆子癇、流產、產後出血切除子宮等）</td>
+              <td class="p-2 text-right font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">III. 現金津貼及身故保障</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">
+                • 額外現金補貼 (Second Claim)：每日 $500 (最多60日)<br>
+                • 大型手術現金 $3,000 / 複雜手術現金 $6,000；港澳連住ICU 3日或以上 $6,000（妊娠併發症雙倍 $12,000）<br>
+                • 身故保障 $20,000 / 意外身故額外 $20,000 / 妊娠併發症身故額外 $20,000
+              </td>
+              <td class="p-2 text-right font-bold text-amber-700">按表定額現金發放</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Section 4: Child Option -->
+        <div class="pt-2">
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5 mb-2">
+            <span class="w-2 h-4 bg-pink-500 rounded-full inline-block"></span>
+            四、自選保障：子女之家添守護選項（現況：<span id="pdf-child-rider-status" class="text-pink-600">未附加</span>）
+          </h3>
+          <div class="bg-pink-50/40 border border-pink-200 rounded-xl p-3.5 text-xs space-y-1.5">
+            <p><strong>免健康核保 • 受保子女數目不限（保障至19歲）：</strong>基本保單生效首180天內或子女出生後180天內遞交出生證明即可受保。</p>
+            <p>• <b>子女守護保障 ($80萬終身限額/每位子女)：</b>生效滿2年後（意外傷病即時豁免2年等候期），首次確診62種危疾或13種兒童特別疾病，住院及治療全數報銷。</p>
+            <p>• <b>兒童發展保障 (每5年$1,000/每位子女)：</b>報銷兒童發展評估、言語/物理訓練治療或健康體檢。</p>
+            <p>• <b>指定年齡免核保轉單：</b>子女滿 <b>5、10、15或18歲</b> 時，保證可免健康證明投保一份獨立醫家保保單。</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Summary of Benefits -->
-    <div class="mb-6 space-y-3">
-      <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
-        <span class="w-2 h-4 bg-fwd-orange rounded-full inline-block"></span>
-        核心保障權益摘要
-      </h3>
-      <table class="w-full text-xs border border-slate-200">
-        <tbody class="divide-y divide-slate-200">
-          <tr class="bg-slate-50/50">
-            <td class="p-2.5 font-bold w-1/3">每保單年度每傷病保障總額</td>
-            <td class="p-2.5 font-bold text-slate-900">HK$ 550,000 (相隔90日或不同疾病獨立重設，無每年及終身限額)</td>
-          </tr>
-          <tr>
-            <td class="p-2.5 font-bold">基本住院及手術全數保障</td>
-            <td class="p-2.5 text-slate-700">病房膳食、雜項開支、巡房費、ICU、外科手術費（小型至複雜全數包）、CT/MRI/PET診斷成像</td>
-          </tr>
-          <tr class="bg-slate-50/50">
-            <td class="p-2.5 font-bold">三大重疾額外加碼防線</td>
-            <td class="p-2.5 text-slate-700 font-semibold">額外 HK$ 550,000 (適用於非手術癌症治療、門診洗腎租機、器官或骨髓移植，年防線達 HK$ 1,100,000)</td>
-          </tr>
-          <tr>
-            <td class="p-2.5 font-bold">額外現金補貼 (Second Claim)</td>
-            <td class="p-2.5 text-slate-700 font-semibold text-amber-700">住院經公司或其他保險賠償後，憑單額外發放每日 HK$ 500 現金（每傷病最多 60 日，高達 HK$ 30,000）</td>
-          </tr>
-          <tr class="bg-slate-50/50">
-            <td class="p-2.5 font-bold">日間手術現金保障</td>
-            <td class="p-2.5 text-slate-700">指定網絡日間手術（如照腸胃鏡）每宗獲發 HK$ 1,000 現金；其他日間診所每宗 HK$ 500</td>
-          </tr>
-          <tr>
-            <td class="p-2.5 font-bold">自選保障：子女之家添守護選項</td>
-            <td class="p-2.5 text-slate-700" id="pdf-child-rider-status">未附加</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Page 3: Claim Rules, Room Factor & Exclusions -->
+    <div style="page-break-before: always;">
+      <div class="space-y-4">
+        <!-- Section 5: Room Upgrade Adjustment & Claim Rules -->
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5 mb-2">
+            <span class="w-2 h-4 bg-blue-600 rounded-full inline-block"></span>
+            五、理賠規則與病房級別調整因子
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs mb-2">
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="font-bold text-slate-800 mb-1">自願升級病房賠償調整比例</div>
+              <p class="text-slate-600 leading-relaxed">
+                若因個人偏好自願入住高於「標準普通病房」級別，當日合資格費用按以下比率計算：<br>
+                • 入住<b>標準半私家病房</b>：<b>50%</b><br>
+                • 入住<b>標準私家病房</b>：<b>25%</b><br>
+                • 入住<b>標準私家以上</b>：<b>12.5%</b><br>
+                <span class="text-emerald-700 font-semibold">*註：若因急症病房爆滿或醫療需要隔離則按 100% 賠償，不受影響。</span>
+              </p>
+            </div>
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="font-bold text-slate-800 mb-1">索償申請時限與冷靜期權益</div>
+              <p class="text-slate-600 leading-relaxed">
+                • <b>冷靜期：</b>保單交付日起計 <b>21 個曆日內</b>，未曾索償可書面取消並獲全數退還已繳保費。<br>
+                • <b>索償時限：</b>出院或完成醫療服務日起計 <b>90 個曆日內</b> 遞交收據正本及醫生診斷證明。<br>
+                • <b>預先估算：</b>入院前可附上醫生預算向富衛申請預先賠償金額估算。
+              </p>
+            </div>
+          </div>
+        </div>
 
-    <!-- Premium Calculation Breakdown -->
-    <div class="mb-6 p-4 rounded-xl border-2 border-orange-200 bg-orange-50/30">
-      <h3 class="font-bold text-sm text-slate-900 mb-2">費用預算明細</h3>
-      <div class="space-y-1.5 text-xs">
-        <div class="flex justify-between py-1 border-b border-orange-100">
-          <span class="text-slate-600">醫家保基本計劃標準保費：</span>
-          <span class="font-bold font-mono" id="pdf-base-premium">HK$ 4,751</span>
+        <!-- Section 6: General Exclusions -->
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5 mb-2">
+            <span class="w-2 h-4 bg-red-600 rounded-full inline-block"></span>
+            六、一般不保事項及特定例外受保說明（保單條款第七部分）
+          </h3>
+          <div class="border border-slate-200 rounded-xl p-3.5 text-[11px] text-slate-700 space-y-1.5 leading-relaxed bg-slate-50/40">
+            <p><strong>1. 非醫療所需服務：</strong>純為休息、舒適或方便家屬/醫生而住院之費用不保。</p>
+            <p><strong>2. 純粹為診斷或專職醫療住院：</strong>純入院做檢查或物理治療不保（除非醫學上無法在日間門診安全進行且屬醫療所需）。</p>
+            <p><strong>3. 愛滋病及HIV：</strong>保單生效前已感染不保（生效2年內發病推定為生效前存在）；但因輸血、器官移植、醫療援助、性侵犯或出生感染則全數受保。</p>
+            <p><strong>4. 濫用藥物酒精及非法行為：</strong>酗酒、吸毒、蓄意自殘、企圖自殺、參與非法活動及性接觸傳染病不保。</p>
+            <p><strong>5. 美容整容及視力矯視：</strong>純美容手術、配眼鏡及激光矯視 (LASIK) 不保；<strong>例外：因意外受傷並於90日內接受之必要整容重建受保</strong>。</p>
+            <p><strong>6. 預防性體檢及疫苗：</strong>無症狀常規體檢、疫苗及健康補品不保；<strong>例外：切除癌前病變或預防過往傷病復發之治療受保</strong>。</p>
+            <p><strong>7. 牙科治療：</strong>常規洗牙、補牙、鑲牙矯齒不保；<strong>例外：意外住院急症牙科手術，及意外後3個月內健全自然牙急症門診受保</strong>。</p>
+            <p><strong>8. 產科及不育：</strong>一般懷孕分娩、墮胎、結紮、人工受孕及性機能失常不保；<strong>例外：保單滿12個月後之12項指定妊娠併發症受保</strong>。</p>
+            <p><strong>9. 購買耐用醫療器材：</strong>買斷輪椅、呼吸機、助聽器、非處方成藥不保；<strong>例外：住院/手術當日租用器材或租用家用洗腎機受保</strong>。</p>
+            <p><strong>10. 傳統中醫及另類療法：</strong>常規中醫、針灸跌打推拿、氣功香薰等不保；<strong>例外：出院/日間手術後90日內中醫跟進門診每次包 $600（最多10次）</strong>。</p>
+            <p><strong>11-13. 其他不保：</strong>未經當地認可之實驗性醫療技術；已獲政府/僱主/第三方全額賠償之重複費用（但可領取每日$500額外現金津貼）；戰爭暴亂引致之治療。</p>
+          </div>
         </div>
-        <div class="flex justify-between py-1 border-b border-orange-100" id="pdf-row-child-rider" style="display:none;">
-          <span class="text-slate-600">子女之家添守護選項保費：</span>
-          <span class="font-bold font-mono text-pink-600" id="pdf-child-premium">HK$ 0</span>
-        </div>
-        <div class="flex justify-between py-1 border-b border-orange-100">
-          <span class="text-slate-600">無索償保費折扣（個人 + 家庭）：</span>
-          <span class="font-bold text-emerald-700" id="pdf-discount-pct">0%</span>
-        </div>
-        <div class="flex justify-between py-1 border-b border-orange-100">
-          <span class="text-slate-600">折扣減免金額：</span>
-          <span class="font-bold font-mono text-emerald-700" id="pdf-discount-val">- HK$ 0</span>
-        </div>
-        <div class="flex justify-between pt-2 text-sm font-black text-slate-900">
-          <span>應付實質保費：</span>
-          <span class="text-fwd-orange text-base font-mono" id="pdf-final-premium">HK$ 4,751 / 每年</span>
-        </div>
-      </div>
-    </div>
 
-    <!-- Notes & Disclaimer Footer -->
-    <div class="border-t border-slate-200 pt-4 text-[10px] text-slate-500 space-y-1 leading-normal">
-      <p>1. 本建議書內容以富衛人壽保險（澳門）股份有限公司官方條款 (LBC VHIS-FPF V122024H) 為準，標準保費按 2024 年 12 月 16 日公佈之保費表編印。</p>
-      <p>2. 標準保費為非保證，並將每年按照受保人續保時之實際年齡釐定。本文件僅供參考，並不構成保險合約的一部分。</p>
-      <div class="flex justify-between items-end pt-3">
-        <span>顧問簽署：_____________________</span>
-        <span>客戶簽署：_____________________</span>
+        <!-- Notes & Disclaimer Footer -->
+        <div class="border-t border-slate-300 pt-3 text-[10px] text-slate-500 space-y-1 leading-normal">
+          <p>1. 本建議書內容以富衛人壽保險（澳門）股份有限公司官方保單條款 (LBC VHIS-FPF V122024H) 為準，標準保費按 2024 年 12 月 16 日公佈之保費表編印。</p>
+          <p>2. 標準保費為非保證，並將每年按照受保人續保時之實際年齡釐定。本文件僅供參考，並不構成保險合約的一部分。</p>
+          <div class="flex justify-between items-end pt-4 text-xs font-semibold text-slate-700">
+            <span>理財顧問簽署：_____________________</span>
+            <span>尊貴客戶簽署：_____________________</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
