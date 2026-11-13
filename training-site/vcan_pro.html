@@ -64,7 +64,10 @@
           <span class="hidden md:inline-flex text-xs px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg border border-slate-200">
             <i class="fa-solid fa-shield-halved text-teal-700 mr-1.5 mt-0.5"></i> 澳門適用標準保單 (V022026H)
           </span>
-          <button onclick="switchTab('calculator')" class="text-xs sm:text-sm bg-teal-700 hover:bg-teal-800 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm">
+          <button type="button" onclick="printProposalPDF()" class="text-xs sm:text-sm bg-slate-800 hover:bg-slate-900 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm cursor-pointer active:scale-95">
+            <i class="fa-solid fa-file-pdf mr-1.5 text-red-400"></i> 匯出建議書 (PDF)
+          </button>
+          <button type="button" onclick="switchTab('calculator')" class="text-xs sm:text-sm bg-teal-700 hover:bg-teal-800 text-white font-medium px-3.5 py-2 rounded-xl transition-all flex items-center shadow-sm cursor-pointer">
             <i class="fa-solid fa-calculator mr-1.5"></i> 保費試算
           </button>
         </div>
@@ -802,6 +805,46 @@
           </p>
         </div>
 
+        <!-- Custom Consultant & Client Header Card -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm mb-6">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-700"></span>
+              <h4 class="text-sm font-bold text-slate-900">客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)</h4>
+            </div>
+            <span class="text-xs text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">客製化設定</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">客戶姓名 / 稱謂</label>
+              <input type="text" id="consultant-client-name" placeholder="例如：陳大文 先生" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-teal-700 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">理財顧問姓名</label>
+              <input type="text" id="consultant-name" placeholder="例如：富衛策劃顧問" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-teal-700 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">顧問職位 / 職銜</label>
+              <select id="consultant-title" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-500 focus:text-slate-700 focus:bg-white focus:ring-1 focus:ring-teal-700 focus:outline-none">
+                <option value="資深分區總監" selected class="text-slate-700">資深分區總監</option>
+                <option value="分區總監" class="text-slate-700">分區總監</option>
+                <option value="分行經理" class="text-slate-700">分行經理</option>
+                <option value="財富管理經理" class="text-slate-700">財富管理經理</option>
+                <option value="資深策劃顧問" class="text-slate-700">資深策劃顧問</option>
+                <option value="理財策劃顧問" class="text-slate-700">理財策劃顧問</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">所屬分區 / 團隊</label>
+              <input type="text" id="consultant-team" placeholder="例如：One Goal One Region" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-teal-700 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1 font-medium">顧問聯絡電話 / 微信</label>
+              <input type="text" id="consultant-contact" placeholder="例如：+853 6688 8888" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-teal-700 focus:outline-none">
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <!-- Form Inputs -->
           <div class="lg:col-span-6 space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
@@ -906,6 +949,12 @@
                   <span class="text-3xl sm:text-4xl font-extrabold text-teal-400 font-mono" id="res-final-premium">HK$ 4,887</span>
                   <span class="text-xs text-slate-400 font-medium" id="res-period-unit">/ 每年</span>
                 </div>
+              </div>
+
+              <div class="mt-5">
+                <button type="button" onclick="printProposalPDF()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer active:scale-98">
+                  <i class="fa-solid fa-file-pdf"></i> 將此預算輸出為 PDF 建議書
+                </button>
               </div>
             </div>
 
@@ -1089,6 +1138,291 @@
     </div>
 
   </main>
+
+  <!-- ========================================== -->
+  <!-- DEDICATED PRINT / PDF EXPORT TEMPLATE      -->
+  <!-- ========================================== -->
+  <div id="print-pdf-container" class="p-8 max-w-4xl mx-auto bg-white text-slate-900 space-y-6">
+    <!-- Page 1: Cover Header, Client Profile, Premium Budget & Core Highlights -->
+    <div>
+      <!-- Header Block -->
+      <div class="border-b-2 border-slate-300 pb-5 mb-5">
+        <div class="flex justify-between items-start">
+          <div class="w-2/3 pr-4">
+            <div class="flex items-center gap-1.5 text-xs text-slate-500 font-semibold mb-1">
+              <i class="fa-solid fa-shield text-slate-400"></i>
+              <span>澳門專屬保障建議書</span>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-1">
+              易衛您醫療計劃 客戶專屬規劃方案
+            </h2>
+            <p class="text-xs text-slate-500 font-medium">策劃日期：<span id="pdf-date">2026 年 11 月 9 日</span></p>
+          </div>
+          <div class="w-1/3 text-right border-l-2 border-slate-200 pl-4 space-y-0.5">
+            <div class="font-bold text-slate-900 text-base" id="pdf-consultant-name">富衛策劃顧問</div>
+            <div class="text-xs text-slate-600" id="pdf-consultant-title">資深分區總監</div>
+            <div class="text-xs text-slate-500" id="pdf-consultant-team">One Goal One Region</div>
+            <div class="text-xs text-slate-600 font-medium pt-1" id="pdf-consultant-contact">電話 / 微信：+853 6688 8888</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client & Proposal Profile Table -->
+      <div class="mb-5 bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <div class="grid grid-cols-4 gap-4 text-xs">
+          <div>
+            <span class="text-slate-400 block font-medium">尊貴客戶</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-client-name">陳大文 先生</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">受保人資料</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-insured-info">男性 30歲 (下次生日)</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">保障級別</span>
+            <span class="font-bold text-slate-900 text-sm text-teal-700" id="pdf-plan-tier-info">標準計劃 (普通房)</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block font-medium">繳費週期</span>
+            <span class="font-bold text-slate-900 text-sm" id="pdf-pay-mode">年繳 (Annual)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium Calculation Breakdown -->
+      <div class="mb-6 p-4 rounded-xl border-2 border-teal-200 bg-teal-50/30">
+        <h3 class="font-bold text-sm text-slate-900 mb-2 flex items-center gap-1.5">
+          <i class="fa-solid fa-calculator text-teal-700"></i> 一、費用預算明細
+        </h3>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between py-1 border-b border-teal-100">
+            <span class="text-slate-600">易衛您官方標準保費：</span>
+            <span class="font-bold font-mono" id="pdf-base-premium">HK$ 5,522</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-teal-100">
+            <span class="text-slate-600">無索償保費折扣（個人 + 家庭）：</span>
+            <span class="font-bold text-emerald-700" id="pdf-discount-pct">0%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-teal-100">
+            <span class="text-slate-600">折扣減免金額：</span>
+            <span class="font-bold font-mono text-emerald-700" id="pdf-discount-val">- HK$ 0</span>
+          </div>
+          <div class="flex justify-between pt-2 text-sm font-black text-slate-900">
+            <span>應付實質保費：</span>
+            <span class="text-teal-700 text-base font-mono" id="pdf-final-premium">HK$ 5,522 / 每年</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Plain Language Core Highlights -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+          <span class="w-2 h-4 bg-teal-700 rounded-full inline-block"></span>
+          二、計劃亮點與核心保障重點詳解
+        </h3>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">1. 額外現金補貼 (Second Claim 雙重賠償)</div>
+            <p class="text-slate-600 leading-relaxed">公司團體醫保或其他保險賠完（即使已賠足100%），憑單富衛額外發放<b>每日 $500 現金津貼</b>，每傷病最多 <b>60 日（高達 $30,000）</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">2. 每保單年度每傷病獨立 $65萬 / $85萬</div>
+            <p class="text-slate-600 leading-relaxed">標準級別每傷病 <b>$65萬</b>，特等級別達 <b>$85萬</b>；不同疾病獨立額度，同一疾病兩次入院相隔 <b>90日以上</b>即重新計算重設。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">3. 三大重病額外加碼防線 (最高 $170萬/年)</div>
+            <p class="text-slate-600 leading-relaxed">患癌接受電療/化療/標靶/質子治療、洗腎（連家中租機費亦包）或器官骨髓移植，基本額用盡自動加碼額外 <b>$65萬(標準) / $85萬(特等)</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">4. 日間手術現金保障 (不影響無索償折扣)</div>
+            <p class="text-slate-600 leading-relaxed">去合作診所做指定日間手術（如照腸胃鏡）額外獲發 <b>$1,000 現金</b>，且<b>完全不影響個人無索償折扣</b>；其他日間診所亦有 <b>$500</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">5. 特等專享：入住普通房每日派 $800 現金</div>
+            <p class="text-slate-600 leading-relaxed">特等級別（半私家房級別）若於港澳私家醫院自願入住普通病房，醫療費全數報銷外，額外派發<b>每日 $800 現金（最多30日，高達 $24,000）</b>。</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            <div class="font-bold text-slate-900 mb-1">6. 嬰兒特別保障 & 樂賞健康津貼</div>
+            <p class="text-slate-600 leading-relaxed">保單滿2年後生育，出生180日內申報<b>免費送BB一年醫保</b>；保單每滿5年報銷旅遊、運動課程或體檢高達 <b>$1,000(標準) / $2,000(特等)</b>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page 2: Detailed Benefit Schedule -->
+    <div style="page-break-before: always;">
+      <div class="space-y-4">
+        <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+          <span class="w-2 h-4 bg-teal-700 rounded-full inline-block"></span>
+          三、完整保障項目明細表（標準級別 vs 特等級別）
+        </h3>
+        <table class="w-full text-[11px] border border-slate-200">
+          <thead class="bg-slate-100 text-slate-800 font-bold">
+            <tr>
+              <th class="p-2 text-left w-1/4 border-r border-slate-200">保障類別及項目</th>
+              <th class="p-2 text-left border-r border-slate-200">保障內容細節</th>
+              <th class="p-2 text-center w-1/6 border-r border-slate-200">標準保障級別</th>
+              <th class="p-2 text-center w-1/6">特等保障級別</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="bg-teal-50/40">
+              <td class="p-2 font-bold border-r border-slate-200">每保單年度每傷病保障總額</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">不設每年及終身保障總上限；不同傷病或相隔90日重設</td>
+              <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">HK$ 650,000</td>
+              <td class="p-2 text-center font-bold text-teal-800">HK$ 850,000</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">合資格病房級別</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">住院病房及膳食全數保障級別標準</td>
+              <td class="p-2 text-center font-bold text-slate-800 border-r border-slate-200">標準普通病房</td>
+              <td class="p-2 text-center font-bold text-teal-700">標準半私家病房</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">I. 基本住院及手術費用</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">病房膳食、雜項開支(包出院4星期西藥)、巡房費、ICU、外科/麻醉/手術室費(小型至複雜全包)、CT/MRI/PET成像(0%共同保險)、精神科住院(限港澳)</td>
+              <td class="p-2 text-center font-bold text-emerald-700 border-r border-slate-200">全數保障</td>
+              <td class="p-2 text-center font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">入院前 / 出院後門診</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">住院/手術前最多3次門診；出院/手術後90日內最多20次跟進門診（物理治療/脊醫每次最多$600）</td>
+              <td class="p-2 text-center font-bold text-emerald-700 border-r border-slate-200">全數保障</td>
+              <td class="p-2 text-center font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">II. 升級：門診洗腎 / 私家看護 / 陪床</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">意外後72小時門診；門診洗腎及家用洗腎機租費；住院及出院後私家看護各最多30日；住院陪床費</td>
+              <td class="p-2 text-center font-bold text-emerald-700 border-r border-slate-200">全數保障</td>
+              <td class="p-2 text-center font-bold text-emerald-700">全數保障</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">復康治療 / 出院後中醫</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">出院後90日內註冊復康中心治療；出院/日間手術後90日內中醫跟進門診（每次$600，最多10次）</td>
+              <td class="p-2 text-center font-bold text-slate-800 border-r border-slate-200">復康 $10,000<br>中醫 $600/次</td>
+              <td class="p-2 text-center font-bold text-teal-800">復康 $30,000<br>中醫 $600/次</td>
+            </tr>
+            <tr class="bg-teal-50/40">
+              <td class="p-2 font-bold border-r border-slate-200">三大重病額外加碼保障</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">非手術癌症治療、腎臟透析及器官/骨髓移植超出基本額度後的額外加碼（每年每傷病獨立計算）</td>
+              <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">額外 $650,000</td>
+              <td class="p-2 text-center font-bold text-teal-800">額外 $850,000</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">III. 額外現金補貼 (Second Claim)</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">獲其他實報實銷醫保賠償後，每日住院額外發放現金（每傷病最多60日）</td>
+              <td class="p-2 text-center font-bold text-amber-700 border-r border-slate-200">每日 $500</td>
+              <td class="p-2 text-center font-bold text-amber-700">每日 $500</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">大型及複雜手術現金保障</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">按手術表分類發放額外現金（每日最多1宗）</td>
+              <td class="p-2 text-center font-bold text-slate-800 border-r border-slate-200">大型 $3,000<br>複雜 $6,000</td>
+              <td class="p-2 text-center font-bold text-teal-800">大型 $4,000<br>複雜 $8,000</td>
+            </tr>
+            <tr>
+              <td class="p-2 font-bold border-r border-slate-200">港澳入住ICU現金 / 降級病房現金</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">連續住ICU 3日或以上現金；特等專享港澳私院住普通病房現金(最多30日)</td>
+              <td class="p-2 text-center font-bold text-slate-800 border-r border-slate-200">ICU $6,000<br>降級房 不適用</td>
+              <td class="p-2 text-center font-bold text-teal-800">ICU $8,000<br>降級房 $800/日</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-2 font-bold border-r border-slate-200">身故及意外身故保障</td>
+              <td class="p-2 text-slate-600 border-r border-slate-200">身故保障及額外意外身故保障（可疊加發放）</td>
+              <td class="p-2 text-center font-bold text-slate-800 border-r border-slate-200">各 $20,000</td>
+              <td class="p-2 text-center font-bold text-teal-800">各 $30,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Page 3: Claim Rules, Room Factor & Exclusions -->
+    <div style="page-break-before: always;">
+      <div class="space-y-4">
+        <!-- Section 4: Room Upgrade Adjustment & Claim Rules -->
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5 mb-2">
+            <span class="w-2 h-4 bg-blue-600 rounded-full inline-block"></span>
+            四、理賠規則與病房級別調整因子
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs mb-2">
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="font-bold text-slate-800 mb-1">自願升級病房賠償調整比例</div>
+              <p class="text-slate-600 leading-relaxed">
+                若因個人偏好自願入住高於合資格級別之病房，當日合資格費用按以下比率計算：<br>
+                • <b>標準計劃 (普通房)：</b>住半私家房 <b>50%</b> / 私家房 <b>25%</b> / 套房 <b>12.5%</b><br>
+                • <b>特等計劃 (半私家房)：</b>住私家房 <b>50%</b> / 套房 <b>25%</b><br>
+                <span class="text-emerald-700 font-semibold">*註：若因急症病房爆滿或醫療需要隔離則按 100% 賠償，不受影響。</span>
+              </p>
+            </div>
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="font-bold text-slate-800 mb-1">索償申請時限與冷靜期權益</div>
+              <p class="text-slate-600 leading-relaxed">
+                • <b>冷靜期：</b>保單交付日起計 <b>21 個曆日內</b>，未曾索償可書面取消並獲全數退還已繳保費。<br>
+                • <b>索償時限：</b>出院或完成醫療服務日起計 <b>90 個曆日內</b> 遞交收據正本及醫生診斷證明。<br>
+                • <b>未知已有病症：</b>投保時未知悉之已有病症或先天性疾病，首個保單年度<b>第31日起 100% 全保</b>。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: General Exclusions -->
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-1.5 mb-2">
+            <span class="w-2 h-4 bg-red-600 rounded-full inline-block"></span>
+            五、一般不保事項及特定例外受保說明（保單條款第七部分）
+          </h3>
+          <div class="border border-slate-200 rounded-xl p-3.5 text-[11px] text-slate-700 space-y-1.5 leading-relaxed bg-slate-50/40">
+            <p><strong>1. 非醫療所需服務：</strong>純為休息、舒適或方便家屬/醫生而住院之費用不保。</p>
+            <p><strong>2. 純粹為診斷或專職醫療住院：</strong>純入院做檢查或物理治療不保（除非醫學上無法在日間門診安全進行且屬醫療所需）。</p>
+            <p><strong>3. 愛滋病及HIV：</strong>保單生效前已感染不保（生效2年內發病推定為生效前存在）；但因輸血、器官移植、醫療援助、性侵犯或出生感染則全數受保。</p>
+            <p><strong>4. 濫用藥物酒精及非法行為：</strong>酗酒、吸毒、蓄意自殘、企圖自殺、參與非法活動及性接觸傳染病不保。</p>
+            <p><strong>5. 美容整容及視力矯視：</strong>純美容手術、配眼鏡及激光矯視 (LASIK) 不保；<strong>例外：因意外受傷並於90日內接受之必要整容重建受保</strong>。</p>
+            <p><strong>6. 預防性體檢及疫苗：</strong>無症狀常規體檢、疫苗及健康補品不保；<strong>例外：切除癌前病變或預防過往傷病復發之治療受保</strong>。</p>
+            <p><strong>7. 牙科治療：</strong>常規洗牙、補牙、鑲牙矯齒不保；<strong>例外：意外住院急症牙科手術，及意外後3個月內健全自然牙急症門診受保</strong>。</p>
+            <p><strong>8. 產科、節育及不育：</strong>產科狀況及其併發症、懷孕分娩、墮胎、結紮、人工受孕 (IVF) 及性機能失常不保。</p>
+            <p><strong>9. 購買耐用醫療器材：</strong>買斷輪椅、呼吸機、助聽器、非處方成藥不保；<strong>例外：住院/手術當日租用器材或租用家用洗腎機受保</strong>。</p>
+            <p><strong>10. 傳統中醫及另類療法：</strong>常規中醫、針灸跌打推拿、氣功香薰等不保；<strong>例外：出院/日間手術後90日內中醫跟進門診每次包 $600（最多10次）</strong>。</p>
+            <p><strong>11-13. 其他不保：</strong>未經當地認可之實驗性醫療技術；已獲政府/僱主/第三方全額賠償之重複費用（但可領取每日$500額外現金津貼）；戰爭暴亂引致之治療。</p>
+          </div>
+        </div>
+
+        <!-- Notes & Disclaimer Footer -->
+        <div class="border-t border-slate-300 pt-3 text-[10px] text-slate-500 space-y-1 leading-normal">
+          <p>1. 本建議書內容以富衛人壽保險（澳門）股份有限公司官方保單條款 (LBC VHIS-FPC V022026H) 為準，標準保費按 2026 年 2 月 25 日生效之保費表編印。</p>
+          <p>2. 標準保費為非保證，並將每年按照受保人續保時之實際年齡釐定。本文件僅供參考，並不構成保險合約的一部分。</p>
+          <div class="flex justify-between items-end pt-4 text-xs font-semibold text-slate-700">
+            <span>理財顧問簽署：_____________________</span>
+            <span>尊貴客戶簽署：_____________________</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Preview Modal -->
+  <div id="pdf-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-slate-900 text-white px-5 py-3.5 flex justify-between items-center">
+        <div class="flex items-center gap-2 font-bold text-sm">
+          <i class="fa-solid fa-file-pdf text-teal-400 text-base"></i>
+          <span>客戶建議書預覽 (可直接列印或另存為 PDF)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="doModalPrint()" class="bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-print"></i> 立即列印 / 存為 PDF
+          </button>
+          <button type="button" onclick="closePdfModal()" class="text-slate-400 hover:text-white text-lg p-1">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-y-auto p-4 sm:p-8 flex-grow" id="modal-pdf-content">
+        <!-- Injected content -->
+      </div>
+    </div>
+  </div>
 
   <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
@@ -1287,6 +1621,117 @@
       document.getElementById('res-discount-pct').textContent = `${totalDiscountPct}% (個人 ${personalNcd}% + 家庭 ${familyNcd}%)`;
       document.getElementById('res-discount-val').textContent = '- HK$ ' + displayDiscountVal;
       document.getElementById('res-final-premium').textContent = 'HK$ ' + finalPayable;
+    }
+
+    // Function to populate and print the Proposal PDF with robust Fallback for iframe environments
+    function printProposalPDF() {
+      // 1. Ensure latest calculation is run
+      calculatePremium();
+
+      // 2. Fetch consultant inputs
+      const clientName = document.getElementById('consultant-client-name').value || '陳大文 先生';
+      const consultantName = document.getElementById('consultant-name').value || '富衛策劃顧問';
+      const consultantTitle = document.getElementById('consultant-title').value || '資深分區總監';
+      const consultantTeam = document.getElementById('consultant-team').value || 'One Goal One Region';
+      const consultantContact = document.getElementById('consultant-contact').value || '+853 6688 8888';
+
+      // 3. Fetch calculation states
+      const age = parseInt(document.getElementById('input-age').value) || 30;
+      const mode = document.getElementById('input-mode').value;
+      const basePremText = document.getElementById('res-base-premium').textContent;
+      const discountPctText = document.getElementById('res-discount-pct').textContent;
+      const discountValText = document.getElementById('res-discount-val').textContent;
+      const finalPremText = document.getElementById('res-final-premium').textContent;
+      const periodUnitText = document.getElementById('res-period-unit').textContent;
+
+      // 4. Set current Date
+      const now = new Date();
+      const dateStr = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+      document.getElementById('pdf-date').textContent = dateStr;
+
+      // 5. Populate PDF DOM
+      document.getElementById('pdf-client-name').textContent = clientName;
+      document.getElementById('pdf-consultant-name').textContent = consultantName;
+      document.getElementById('pdf-consultant-title').textContent = consultantTitle;
+      document.getElementById('pdf-consultant-team').textContent = consultantTeam;
+      document.getElementById('pdf-consultant-contact').textContent = '電話 / 微信：' + consultantContact;
+
+      document.getElementById('pdf-insured-info').textContent = `${currentGender === 'male' ? '男性' : '女性'} ${age}歲 (下次生日)`;
+      document.getElementById('pdf-plan-tier-info').textContent = currentPlanTier === 'standard' ? '標準計劃 (普通房，每傷病 $65萬)' : '特等計劃 (半私家房，每傷病 $85萬)';
+      document.getElementById('pdf-pay-mode').textContent = mode === 'monthly' ? '月繳 (0.09倍數)' : (mode === 'semiannual' ? '半年繳 (0.52倍數)' : '年繳 (Annual)');
+
+      if (currentPlanTier === 'standard') {
+        document.getElementById('pdf-per-disability-limit').textContent = 'HK$ 650,000 / 每傷病每保單年度 (相隔90日重設)';
+        document.getElementById('pdf-heavy-disability-limit').textContent = '額外加碼 HK$ 650,000 (三大重疾年防線達 HK$ 1,300,000)';
+        document.getElementById('pdf-room-downgrade-status').textContent = '不適用（標準計劃合資格病房為普通病房）';
+      } else {
+        document.getElementById('pdf-per-disability-limit').textContent = 'HK$ 850,000 / 每傷病每保單年度 (相隔90日重設)';
+        document.getElementById('pdf-heavy-disability-limit').textContent = '額外加碼 HK$ 850,000 (三大重疾年防線達 HK$ 1,700,000)';
+        document.getElementById('pdf-room-downgrade-status').textContent = '適用：若自願入住澳門或香港私家醫院普通房，每日額外發放 HK$ 800 現金（最多 30 日，高達 HK$ 24,000）';
+      }
+
+      document.getElementById('pdf-base-premium').textContent = basePremText;
+      document.getElementById('pdf-discount-pct').textContent = discountPctText;
+      document.getElementById('pdf-discount-val').textContent = discountValText;
+      document.getElementById('pdf-final-premium').textContent = finalPremText + ' ' + periodUnitText;
+
+      // 6. 避開 iframe 限制：嘗試透過新視窗列印，若被攔截則彈出頁內全屏預覽
+      const printHtml = document.getElementById('print-pdf-container').innerHTML;
+      try {
+        const printWindow = window.open('', '_blank');
+        if (printWindow && printWindow.document) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="UTF-8">
+              <title>易衛您醫療計劃_專屬建議書</title>
+              <script src="https://cdn.tailwindcss.com"><\/script>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+              <style>
+                body { font-family: 'Noto Sans TC', sans-serif; background: #fff; padding: 24px; color: #111827; }
+                @media print {
+                  body { padding: 0 !important; }
+                  @page { margin: 1.2cm; }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="max-w-4xl mx-auto">
+                ${printHtml}
+              </div>
+              <script>
+                window.onload = function() {
+                  setTimeout(function() {
+                    window.print();
+                  }, 500);
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+          return;
+        }
+      } catch (e) {
+        console.warn('Pop-up window print blocked by iframe environment:', e);
+      }
+
+      // Fallback
+      openPdfModal(printHtml);
+    }
+
+    function openPdfModal(htmlContent) {
+      document.getElementById('modal-pdf-content').innerHTML = htmlContent;
+      document.getElementById('pdf-modal').classList.remove('hidden');
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdf-modal').classList.add('hidden');
+    }
+
+    function doModalPrint() {
+      window.print();
     }
 
     // Initialize calculation on load
