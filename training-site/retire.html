@@ -612,7 +612,7 @@
           <!-- KPI 3 -->
           <div class="bg-gradient-to-br from-white to-emerald-50/70 p-5 rounded-3xl border border-emerald-100 shadow-sm relative overflow-hidden">
             <div class="text-xs font-bold text-emerald-800 tracking-wide mb-1 flex items-center justify-between">
-              <span>現時每月所需儲蓄</span>
+              <span>現時每月所需儲蓄 </span>
               <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm"><i class="fa-solid fa-hand-holding-dollar"></i></span>
             </div>
             <div class="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight" id="kpiMonthlySave">$4,312</div>
@@ -756,10 +756,10 @@
             <i class="fa-solid fa-award text-yellow-300"></i> 富衛旗艦分紅儲蓄方案 • 盈聚·天下 II (MaxFocus Legacy II)
           </div>
           <h2 class="text-xl sm:text-3xl font-black tracking-tight leading-snug">
-            退休「自製長糧」提款對接：<br class="hidden sm:inline">每月提款 <span class="text-yellow-300 font-mono" id="fwdMonthlyWithdrawText">$20,938</span>，實際只需做幾多保費？
+            退休「自製長糧」淨缺口對接：<br class="hidden sm:inline">每月需補充提款 <span class="text-yellow-300 font-mono" id="fwdMonthlyWithdrawText">$20,938</span>，實際只需做幾多保費？
           </h2>
           <p class="text-xs sm:text-sm text-orange-50 leading-relaxed">
-            退休後並非一次過拎走幾百萬，而係<strong>「每月持續提款，保單餘額繼續利疊利滾存增值」</strong>！因此您<strong>根本唔需要一次過儲足500幾萬</strong>。透過《盈聚·天下 II》的複利增值，本金只需幾十萬至百零萬，就足夠支撐整個退休期每月提款！
+            已自動扣除您的<strong>現有已備資產（強積金、儲蓄保險及其他儲備）</strong>所能支撐的退休金流，只針對<strong>實際每月退休淨缺口</strong>進行《盈聚·天下 II》複利配置！
           </p>
         </div>
         <div class="absolute -right-12 -bottom-12 opacity-15 text-9xl pointer-events-none text-white">
@@ -774,10 +774,10 @@
             <span class="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm shadow-sm">
               <i class="fa-solid fa-hand-holding-dollar"></i>
             </span>
-            各年期所需保費（退休每月提款 <span class="text-orange-600 font-mono font-bold" id="fwdMonthlyTitleVal">$20,938</span>）
+            各年期所需保費（填補每月淨缺口 <span class="text-orange-600 font-mono font-bold" id="fwdMonthlyTitleVal">$20,938</span>）
           </h3>
           <span class="text-xs font-semibold text-slate-500 bg-orange-50 text-orange-700 px-3 py-1 rounded-full border border-orange-200">
-            退休期總提款達 <strong id="fwdTotalWithdrawnText" class="font-bold font-mono">$5,025,120</strong>
+            退休期總補充提款達 <strong id="fwdTotalWithdrawnText" class="font-bold font-mono">$5,025,120</strong>
           </span>
         </div>
 
@@ -1330,7 +1330,7 @@
     }
 
     // =========================================================================
-    // 核心重構：以「退休每月提取 $20,938」反推《盈聚·天下 II》實際所需保費本金
+    // 核心重構：以「扣除現有資產後的每月實際缺口」反推《盈聚·天下 II》實際所需保費本金
     // =========================================================================
     function renderFwdSection() {
       const curAge = parseInt(document.getElementById('currentAge').value);
@@ -1340,8 +1340,14 @@
       const retireYears = endAge - retAge;
       const totalRetireMonths = retireYears * 12;
 
-      // 退休時每月生活開支 (例如 $20,938)
-      const monthlyWithdrawal = getCurrencyValue('kpiFutureExpense');
+      // 1. 取得退休總儲備要求 vs 扣除現有資產後的「淨缺口」比例
+      const requiredLumpSum = getCurrencyValue('kpiLumpSum');
+      const netLumpSumNeeded = getCurrencyValue('kpiNetLumpSum');
+      const totalFutureMonthlyExp = getCurrencyValue('kpiFutureExpense');
+
+      // 計算現有資產已覆蓋的比例，得出《盈聚·天下 II》實際需要每月補充提款的金額（淨缺口月提款）
+      const gapRatio = requiredLumpSum > 0 ? (netLumpSumNeeded / requiredLumpSum) : 0;
+      const monthlyWithdrawal = totalFutureMonthlyExp * gapRatio;
       const totalWithdrawnAll = monthlyWithdrawal * totalRetireMonths;
 
       // 更新 Banner 及標題文字
@@ -1352,10 +1358,8 @@
       const fwdTotalWithdrawElem = document.getElementById('fwdTotalWithdrawnText');
       if (fwdTotalWithdrawElem) fwdTotalWithdrawElem.innerText = formatCurrency(totalWithdrawnAll);
 
-      // 盈聚天下II 退休期平均年化複利約 6.0% ~ 6.5%
-      // 當每月提取 monthlyWithdrawal 時，保單退休點所需要的資產池池底 (Pool Needed)
-      // 使用普通年金現值公式 PV = PMT * (1 - (1+r)^-n) / r (r = 6.2% / 12)
-      const fwdRetireReturn = 0.062; // 6.2% 年化複利滾存
+      // 盈聚天下II 退休期平均年化複利約 6.2%
+      const fwdRetireReturn = 0.062;
       const rMonthly = fwdRetireReturn / 12;
       const neededPoolAtRetire = calculatePV(rMonthly, totalRetireMonths, monthlyWithdrawal);
 
@@ -1370,14 +1374,14 @@
 
       periods.forEach((pYears) => {
         const mult = getFwdMultiplier(pYears, saveYears);
-        // 累積總保費 = 退休所需池底 / 退休時現金價值倍數
+        // 累積總保費 = 淨缺口所需池底 / 退休時現金價值倍數
         const totalPrem = mult > 0 ? (neededPoolAtRetire / mult) : 0;
         const annualPrem = totalPrem / pYears;
 
         // 計算提款槓桿 (提款總額 / 實繳本金)
         const leverageRatio = totalPrem > 0 ? (totalWithdrawnAll / totalPrem) : 0;
 
-        // 85歲預估保單剩餘價值 (保守估計保留約 15%~25% 池底作為傳承遺產)
+        // 85歲預估保單剩餘價值
         const estSurplusAt85 = neededPoolAtRetire * 0.22;
 
         // 1. 卡片渲染
@@ -1406,7 +1410,7 @@
 
             <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs">
               <div class="flex justify-between text-slate-600">
-                <span>退休每月固定提款:</span>
+                <span>每月補充提款(淨缺口):</span>
                 <span class="font-bold text-orange-600 font-mono">${formatCurrency(monthlyWithdrawal)}</span>
               </div>
               <div class="flex justify-between text-slate-600">
@@ -1415,7 +1419,7 @@
               </div>
               <div class="flex justify-between text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg font-semibold text-[11px]">
                 <span>現金流放大槓桿:</span>
-                <span class="font-mono">${leverageRatio.toFixed(1)} 倍回報</span>
+                <span class="font-mono">${totalPrem > 0 ? leverageRatio.toFixed(1) + ' 倍回報' : '已無缺口'}</span>
               </div>
             </div>
           `;
@@ -1433,7 +1437,7 @@
             <td class="p-3 text-orange-600 font-mono font-bold">${formatCurrency(monthlyWithdrawal)}</td>
             <td class="p-3 font-bold text-slate-900 font-mono">${formatCurrency(totalWithdrawnAll)}</td>
             <td class="p-3 text-slate-700 font-mono">${formatCurrency(estSurplusAt85)}</td>
-            <td class="p-3 font-bold text-emerald-600 font-mono">${leverageRatio.toFixed(1)} 倍本金</td>
+            <td class="p-3 font-bold text-emerald-600 font-mono">${totalPrem > 0 ? leverageRatio.toFixed(1) + ' 倍本金' : '已達標'}</td>
           `;
           tableBody.appendChild(tr);
         }
@@ -1468,7 +1472,12 @@
       const retireYears = endAge - retAge;
       const totalRetireMonths = retireYears * 12;
 
-      const monthlyWithdrawal = getCurrencyValue('kpiFutureExpense');
+      const requiredLumpSum = getCurrencyValue('kpiLumpSum');
+      const netLumpSumNeeded = getCurrencyValue('kpiNetLumpSum');
+      const totalFutureMonthlyExp = getCurrencyValue('kpiFutureExpense');
+      const gapRatio = requiredLumpSum > 0 ? (netLumpSumNeeded / requiredLumpSum) : 0;
+      const monthlyWithdrawal = totalFutureMonthlyExp * gapRatio;
+
       const fwdRetireReturn = 0.062;
       const rMonthly = fwdRetireReturn / 12;
       const neededPoolAtRetire = calculatePV(rMonthly, totalRetireMonths, monthlyWithdrawal);
