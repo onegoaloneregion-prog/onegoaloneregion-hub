@@ -527,6 +527,7 @@ window.adminResetPassword = async function(docId, userCode) {
                <p class="text-xs sm:text-sm text-slate-400 font-normal pt-1">數據來源：2026年第4季 Flash Report 客戶優惠 (MATA261002) · 實際保費以最新報價單為準</p>
             </div>
 
+        
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-4 space-y-5 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm border-b pb-3 flex items-center gap-2"><span>⚙️</span> 選擇條件</h3>
@@ -3797,9 +3798,9 @@ var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pNa
         }
 
         var isPro = (p.indexOf('pro') !== -1 || pName.indexOf('升級') !== -1);
-        if (typeof calcCrisisFullPremium === 'function') {
-           // 修改後：
-annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro, curr);
+       if (typeof calcCrisisFullPremium === 'function') {
+            // calcCrisisFullPremium 內部已直接按對應貨幣(HKD/USD)及附加保障精算，無需再除 7.8
+            annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro, curr);
         } else {
             var bRate = (gender === 'female' || gender === '女') ? 31.37 : 32.14;
             bRate += (age - 30) * 1.05;
@@ -3808,10 +3809,11 @@ annual = calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
             else if (payTerm === '25') bRate *= 0.88;
             if (rateType === 'standard') bRate *= 1.28;
             annual = (baseHkdSum / 1000) * Math.max(10, bRate);
+
+            var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
+            if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10;
+            if (curr === 'USD') annual = annual / 7.8;
         }
-        var selectedCrisisRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
-        if (selectedCrisisRider && selectedCrisisRider.value === 'family') annual = annual * 1.10;
-        if (curr === 'USD') annual = annual / 7.8;
     } else if (isPrime) {
         if (typeof calcVPrimeFullPremium === 'function') annual = calcVPrimeFullPremium(age, gender, ded);
         if (curr === 'USD') annual = annual / 7.8;
