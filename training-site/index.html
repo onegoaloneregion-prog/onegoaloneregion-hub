@@ -729,17 +729,17 @@ window.adminResetPassword = async function(docId, userCode) {
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
        
           
-          <!-- 尊衛您旗艦指南入口卡片 (保持原版簡潔統一風格 + 2026.11保障升級版) -->
-<div onclick="window.open('vprime.html', '_blank')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
+         <!-- 尊衛您旗艦指南入口卡片 (點擊進入三合一獨立分頁) -->
+<div onclick="switchPage('page-vprime-hub')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
     <div class="flex items-center justify-between">
         <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow">🛡️</div>
-        <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟指南 ↗</span>
+        <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟專區 ↗</span>
     </div>
     <div>
-        <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold text-[10px] mb-1">2026.11 保障升級對比</span>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold text-[10px] mb-1">2026.11 保障升級專區</span>
         <h3 class="font-black text-slate-900 text-base group-hover:text-orange-600 transition-colors">尊衛您（寰譽版）保障指南 &amp; 市場PK</h3>
     </div>
-    <p class="text-xs text-slate-500 leading-relaxed">涵蓋 2026年11月最新升級保障（標準 1,500萬 / 特等 1,850萬）、同業四大旗艦橫向對比、0-80歲自選保費試算器及特色保障圖表。</p>
+    <p class="text-xs text-slate-500 leading-relaxed">涵蓋 2026年11月最新升級保障（標準 1,500萬 / 特等 1,850萬）、同業四大旗艦橫向對比、0-80歲自選保費試算器及官方文件[cite: 283, 558]。</p>
 </div>
             <!-- 醫家保家庭保障指南入口卡片 -->
            <div onclick="openVfamilySelectorModal()" class="p-6 rounded-3xl border-2 border-emerald-200 bg-emerald-50/40 shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all cursor-pointer space-y-3 relative group">
@@ -896,6 +896,77 @@ window.adminResetPassword = async function(docId, userCode) {
     </div>
 
 </div>
+</div>
+    <!-- ================= PAGE: 尊衛您（寰譽版）專屬分頁 ================= -->
+<div id="page-vprime-hub" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8">
+
+  <!-- 頂部返回列 -->
+  <div class="flex items-center justify-between">
+    <button type="button" onclick="switchPage('page-fwd')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs shadow-sm transition cursor-pointer">
+      ← 返回 FWD 專區
+    </button>
+    <span class="text-xs font-bold text-orange-700 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+      2026年11月18日保障升級版
+    </span>
+  </div>
+
+  <!-- 標題區 -->
+  <div class="text-center space-y-2">
+    <span class="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 font-black text-xs">
+      🛡️ vPrime Signature Medical Plan
+    </span>
+    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+      尊衛您（寰譽版）醫療計劃專區
+    </h2>
+    <p class="text-xs sm:text-sm text-slate-500">
+      請選擇下方工具或官方文件以展開詳細分析與試算
+    </p>
+  </div>
+
+  <!-- 三卡片雙欄網格 (完全統一等高精簡風格) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- 卡片 1：尊衛您（寰譽版）保障指南 & 市場PK -->
+    <div onclick="window.open('vprime.html', '_blank')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
+      <div class="flex items-center justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow">🛡️</div>
+        <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟系統 ↗</span>
+      </div>
+      <div>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold text-[10px] mb-1">2026.11 旗艦橫向對比</span>
+        <h3 class="font-black text-slate-900 text-base group-hover:text-orange-600 transition-colors">尊衛您（寰譽版）保障指南 &amp; 市場PK</h3>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">標準 1,500萬 / 特等 1,850萬，同業四大旗艦醫療橫向對比、16種危疾豁免自付費及兩年免費初生嬰兒保障圖解。</p>
+    </div>
+
+    <!-- 卡片 2：官方產品小冊子（附保費表 V202611） -->
+    <div onclick="window.open('https://drive.google.com/file/d/1gVF2vmnboHC4sowJn38mHz79aPOVbhRZ/view?usp=drive_link', '_blank')" class="p-6 rounded-3xl border-2 border-amber-300 bg-amber-50/40 shadow-sm hover:shadow-lg hover:border-amber-400 transition-all cursor-pointer space-y-3 relative group">
+      <div class="flex items-center justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow">📄</div>
+        <span class="text-xs font-black text-amber-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">查看檔案 ↗</span>
+      </div>
+      <div>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] mb-1">V202611 官方正本</span>
+        <h3 class="font-black text-slate-900 text-base group-hover:text-amber-700 transition-colors">產品小冊子 &amp; 2026.11 最新保費表</h3>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">2026年11月18日起生效最新版，完整保障項目一覽及 0–100歲標準/特等 6 種自付費官方年供/月供保費表。</p>
+    </div>
+
+    <!-- 卡片 3：尊衛您（寰譽版）即時保費精算器 -->
+    <div onclick="switchPage('page-fwd-calc')" class="p-6 rounded-3xl border-2 border-indigo-200 bg-indigo-50/40 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-3 relative group">
+      <div class="flex items-center justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl shadow">🧮</div>
+        <span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟系統 ↗</span>
+      </div>
+      <div>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px] mb-1">顧問會客專用</span>
+        <h3 class="font-black text-slate-900 text-base group-hover:text-indigo-600 transition-colors">尊衛您（寰譽版）保費精算與優惠試算器</h3>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">已同步 2026年11月最新費率，支援下次生日年齡 1–81歲，一鍵切換 6 種自付費、年供/月供及客戶推廣折扣試算。</p>
+    </div>
+
+  </div>
+
 </div>
   <!-- PAGE: 全方位保障缺口診斷系統專頁 -->
     <div id="page-fna-hub" class="page-view hidden py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
