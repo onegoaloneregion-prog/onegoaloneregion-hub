@@ -729,19 +729,18 @@ window.adminResetPassword = async function(docId, userCode) {
             <div onclick="window.open('https://irisplus.fwd.com.hk/business-training-zh/%E5%BD%B1%E8%A6%96%E9%A0%BB%E9%81%93/', '_blank')" class="p-8 rounded-3xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm hover:shadow-lg hover:border-indigo-400 transition-all cursor-pointer space-y-4 relative group"><div class="flex items-center justify-between"><div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl">📺</div><span class="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟影音頻道 ↗</span></div><h3 class="font-black text-slate-900 text-lg group-hover:text-indigo-700 transition-colors">培訓頻道</h3><p class="text-xs text-slate-500 leading-relaxed">連結至 FWD 官方影音頻道，隨時隨地線上複習實戰銷售影片與專業培訓課堂。</p></div>
        
           
-            <!-- 尊衛您旗艦指南入口卡片 -->
-            <div onclick="window.open('vprime.html', '_blank')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
-                <div class="flex items-center justify-between">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow">🛡️</div>
-                    <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟指南 ↗</span>
-                </div>
-                <div>
-                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold text-[10px] mb-1">2026 旗艦對比</span>
-                    <h3 class="font-black text-slate-900 text-base group-hover:text-orange-600 transition-colors">尊衛您（寰譽版）保障指南 & 市場PK</h3>
-                </div>
-                <p class="text-xs text-slate-500 leading-relaxed">涵蓋同業四大旗艦橫向對比、0-80歲自選保費試算器及特色保障圖表。</p>
-            </div>
-
+          <!-- 尊衛您旗艦指南入口卡片 (保持原版簡潔統一風格 + 2026.11保障升級版) -->
+<div onclick="window.open('vprime.html', '_blank')" class="p-6 rounded-3xl border-2 border-orange-200 bg-orange-50/40 shadow-sm hover:shadow-lg hover:border-orange-400 transition-all cursor-pointer space-y-3 relative group">
+    <div class="flex items-center justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow">🛡️</div>
+        <span class="text-xs font-black text-orange-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">開啟指南 ↗</span>
+    </div>
+    <div>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold text-[10px] mb-1">2026.11 保障升級對比</span>
+        <h3 class="font-black text-slate-900 text-base group-hover:text-orange-600 transition-colors">尊衛您（寰譽版）保障指南 &amp; 市場PK</h3>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">涵蓋 2026年11月最新升級保障（標準 1,500萬 / 特等 1,850萬）、同業四大旗艦橫向對比、0-80歲自選保費試算器及特色保障圖表。</p>
+</div>
             <!-- 醫家保家庭保障指南入口卡片 -->
            <div onclick="openVfamilySelectorModal()" class="p-6 rounded-3xl border-2 border-emerald-200 bg-emerald-50/40 shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all cursor-pointer space-y-3 relative group">
                 <div class="flex items-center justify-between">
@@ -1369,7 +1368,7 @@ window.adminResetPassword = async function(docId, userCode) {
                     <div class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition-colors flex items-center justify-center gap-1">📥 開啟 / 下載官方 PDF 檔</div>
                 </div>
                 <!-- 2. 尊衛您 (寰譽版) 醫療計劃 (2026年11月18日最新版 V202611) -->
-<div onclick="window.open('https://drive.google.com/file/d/1gVF2vmnboHC4sowJn38mHz79aPOVbhRZ/view?usp=drive_link', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group">
+<div onclick="window.open('https://drive.google.com/file/d/13rs-U7evZBZB18aFKeQ8_-1bal35h91D/view?usp=sharing', '_blank')" class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all cursor-pointer group">
     <div class="space-y-2">
         <div class="flex items-center justify-between border-b pb-2">
             <h3 class="font-bold text-slate-900 text-sm group-hover:text-purple-700 transition-colors">2. 尊衛您 (寰譽版) 醫療計劃</h3>
@@ -4309,34 +4308,55 @@ function getAiKnowledgeResponse(query) {
         return "💖 <b>【危疾理賠機制與應援保核心賣點】</b><br><br>1️⃣ <b>點樣賠？（一筆過現金）：</b>只要專科醫生確診符合保單定義之危疾，即時支取 100% 現金賠償，不限用途（填補停工收入、自費標靶藥、私家護工）。<br>2️⃣ <b>富衛《危疾應援保》王牌優勢：</b><br>• 首15年加碼：額外獲贈 75% 保額！<br>• 多重守護：高達 7 次指定危疾多重保障（涵蓋癌/心/中風及腦退化等）。<br>• 供款安全網：累計賠償達 100% 原有保額後，即時豁免後續所有未繳保費，保障終身有效！";
     }
 
-    if (q.indexOf('醫療') !== -1 || q.indexOf('醫保') !== -1 || q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1 || q.indexOf('醫家保') !== -1 || q.indexOf('自付費') !== -1) {
-        if (q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1) {
-            return `🩺 <b>【富衛頂級醫療旗艦 · 尊衛您（寰譽版）核心優勢】</b><br><br>
-1️⃣ <b>超高保額 · 無終身限額：</b><br>
-• <b>標準級別（亞洲含澳紐）：</b>每年高達 <b>1,100 萬港元</b>，全數保障一系列住院及手術費用！<br>
-• <b>特等級別（全球除美）：</b>每年高達 <b>1,600 萬港元</b>（急症全球全數保障）。<br>
-• <b>突破上限：</b>不設終身保障限額，每年保額自動重設；保證續保至 <b>100 歲</b>！<br><br>
-2️⃣ <b>極速覆蓋已有病症：</b><br>
-• 投保時未知的已有病症及先天性疾病，於首個保單年度<b>第 31 日起即刻全面保障</b>！<br><br>
-3️⃣ <b>市場罕有尊貴權益：</b><br>
-• <b>額外防癌防護：</b>非手術癌症、洗腎及骨髓移植，每年額外加碼高達 150 萬至 200 萬保障額！<br>
-• <b>家庭傳承：</b>生效滿 2 年後，免費贈送新生嬰兒<b>為期 2 年指定醫療保障</b>（名額不設上限）。<br>
-• <b>無索償折扣：</b>個人無索償保費折扣高達 15%，家庭同行總折扣高達 25%！`;
+   if (q.indexOf('醫療') !== -1 || q.indexOf('醫保') !== -1 || q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1 || q.indexOf('醫家保') !== -1 || q.indexOf('自付費') !== -1 || q.indexOf('初生') !== -1 || q.indexOf('嬰兒') !== -1 || q.indexOf('無索償') !== -1 || q.indexOf('免找數') !== -1) {
+            // 1. 專門查詢：2026年11月18日升級及保費調整
+            if (q.indexOf('調整') !== -1 || q.indexOf('升級') !== -1 || q.indexOf('2026') !== -1 || q.indexOf('加價') !== -1 || q.indexOf('11月') !== -1) {
+                return "📢 <b>【尊衛您（寰譽版）2026年11月18日保障升級摘要】</b><br><br>" +
+                "1️⃣ <b>每年保障限額大幅提升：</b><br>• 標準級別（亞洲含澳紐）：由 1,100萬 升至 <b>1,500萬港元</b><br>• 特等級別（全球除美國）：由 1,600萬 升至 <b>1,850萬港元</b><br><br>" +
+                "2️⃣ <b>指定治療額外保障加碼：</b><br>• 非手術癌症治療、腎臟透析及器官/骨髓移植額外保障：標準升至 <b>200萬</b> / 特等升至 <b>250萬港元</b><br><br>" +
+                "3️⃣ <b>三大現金保障全面提升：</b><br>• 指定日間手術（指定網絡或內地）：$0–$5萬自付費升至 <b>每宗 $3,600</b>（$10萬/$25萬自付費為 $1,800）<br>• 額外現金補貼（已有其他醫保賠償）：$0–$5萬自付費升至 <b>每日 $1,000</b>（最多60日）<br>• 入住低於合資格病房（港澳私家醫院）：$0–$5萬自付費升至 <b>每日 $1,700</b>（最多30日）<br><br>" +
+                "4️⃣ <b>無索償折扣優化（高達 25%）：</b><br>• 於指定醫療服務提供者進行<b>腸鏡、胃鏡或白內障日間手術</b>並獲賠償，<b>不會影響</b>無索償保費折扣資格！<br><br>" +
+                "5️⃣ <b>保費調整：</b>平均調整幅度約 <b>+3% 至 +5%</b>（2026年11月18日起生效），可於「保費計算器」即時精算最新保費！";
+            }
+
+            // 2. 專門查詢：自付費選項、指定危疾豁免、免核保減自付費
+            if (q.indexOf('自付費') !== -1 || q.indexOf('墊底') !== -1 || q.indexOf('豁免') !== -1) {
+                return "🛡️ <b>【尊衛您（寰譽版）自付費與靈活升級機制】</b><br><br>" +
+                "• <b>6種自付費選項：</b>$0 / $16,000 / $25,000 / $50,000 / $100,000 / $250,000 港元（適合配合公司團體醫保作 Top-up）。<br>" +
+                "• <b>16種指定危疾豁免自付費：</b>確診指定癌症、急性心肌梗塞、中風、腎衰竭等 16 種指定危疾，相關醫療服務<b>餘下自付費直接減至 $0</b>（設 90日等候期，不適用於 $0 自付費保單）。<br>" +
+                "• <b>指定年齡免核保減/免自付費：</b>保單連續生效滿 2 年後，於受保人實際年齡緊接 <b>50、55、60、65、70、75 或 80 歲</b>，可終身行使 <b>1次</b> 減少或免除自付費，<b>毋須提交健康證明</b>！";
+            }
+
+            // 3. 專門查詢：兩年免費初生嬰兒醫療保障 / 兒童發展保障
+            if (q.indexOf('初生') !== -1 || q.indexOf('嬰兒') !== -1 || q.indexOf('兒童') !== -1 || q.indexOf('生仔') !== -1) {
+                return "👶 <b>【尊衛您（寰譽版）新生兒及兒童專屬守護】</b><br><br>" +
+                "• <b>嬰兒之特別保障（2年免費醫療）：</b>保單連續生效滿 <b>2個保單年度</b>後，受保人或其配偶生育子女，富衛即免費送出 <b>2年指定醫療保險保障</b>（每年限額 <b>$420,000 港元</b>，不設終身限額），<b>毋須核保及額外收費</b>，子女數目不設上限（須於出生後 180日內申請）。<br>" +
+                "• <b>兒童發展保障：</b>每連續 5個保單年度後支付 1次直至實際年齡 25歲，賠償兒童發展評估、訓練治療或健康檢查開支（$0–$5萬自付費上限 <b>$2,000</b>；$10萬/$25萬自付費上限 <b>$500</b>）。";
+            }
+
+            // 4. 尊衛您（寰譽版）全面核心賣點（2026年11月18日升級版）
+            if (q.indexOf('尊衛您') !== -1 || q.indexOf('寰譽') !== -1) {
+                return "🏥 <b>【皇牌高端醫療：尊衛您（寰譽版）核心賣點 (2026.11升級版)】</b><br><br>" +
+                "1️⃣ <b>全數保障，不設終身限額：</b><br>• 標準級別（亞洲含澳紐）：每年高達 <b>1,500萬港元</b>（港澳內地標準半私家病房）<br>• 特等級別（全球除美國）：每年高達 <b>1,850萬港元</b>（海外標準私家病房）<br>• 投保年齡：下次生日年齡 <b>1歲（15日）至 81歲</b>，保證續保至實際年齡 <b>100歲</b>！<br><br>" +
+                "2️⃣ <b>寬鬆既往症保障：</b><br>• 投保時未知的已有病症，首個保單年度<b>第 31日</b>起全數賠償；先天性疾病不設年齡限制。<br><br>" +
+                "3️⃣ <b>三大重病額外保障 & 16種危疾豁免自付費：</b><br>• 訂明非手術癌症治療、腎臟透析（含家用租機）及器官/骨髓移植，每年額外高達 <b>200萬（標準）/ 250萬（特等）</b>。<br>• 設 6 種自付費（$0 至 $25萬），患上 16 種指定危疾全額豁免自付費；50–80歲指定年齡可終身 1 次免核保減/免自付費。<br><br>" +
+                "4️⃣ <b>家庭傳承與中風復康：</b><br>• 保單生效滿 2 年後生育，送 <b>2年免費初生嬰兒醫療保障</b>（每年限額 $420,000，不限胎數）+ 兒童發展保障。<br>• 中風復康涵蓋家居設備提升（$8萬）、中風輔助（每次 $1,000）及傷殘津貼（每月 $1萬，最多24個月）。<br><br>" +
+                "5️⃣ <b>無索償折扣高達 25% & FWD Care：</b><br>• 個人無索償最高 15% + 家庭保單最高 10% = <b>高達 25%</b>（指定網絡做腸鏡/胃鏡/白內障日間手術不影響折扣）；兼享臻一出院免找數及跨境癌症管理。";
+            }
+
+            // 5. 整體醫療險銷售話術與產品配搭
+            return "🩺 <b>【皇牌醫療保障：高客成交 3 步曲】</b><br><br>" +
+            "1️⃣ <b>先診斷痛點：</b>詢問客人現時有否公司團體醫保，預算及病房要求（標準半私家房 / 澳門私家房）。<br><br>" +
+            "2️⃣ <b>推介王牌方案：</b><br>• <b>尊衛您（寰譽版）（2026.11升級版）：</b>標準亞洲每年 <b>1,500萬</b> / 特等全球（除美國）每年 <b>1,850萬</b>，不設終身限額，第 31日保未知既往症，更送 2年免費初生嬰兒保障！<br>• <b>醫家保：</b>性價比首選，每傷病每年 <b>55萬</b> + 50萬癌症透析保障，性價比極高。<br><br>" +
+            "3️⃣ <b>促成話術切入：</b>「醫療通脹每年超過雙位數，直接用『尊衛您』配合公司醫保做自付費選項，保費極平之餘仲有高達 25% 無索償折扣，一世無憂！」";
         }
-        return `🩺 <b>【客想買醫療保險 · 實戰成交 3 步法】</b><br><br>
-1️⃣ <b>先摸清底牌：</b>詢問客人目前有冇公司團體醫保？預算及病房要求（標準半私家房 / 私家房）？<br>
-2️⃣ <b>推介王牌方案：</b><br>
-• <b>頂級全數保障：</b>首推《尊衛您（寰譽版）》（標準亞洲每年 1,100 萬 / 特等全球每年 1,600 萬，無終身限額，第 31 日包未知病症）。<br>
-• <b>家庭親民首選：</b>推《醫家保》（每傷病 55 萬 + 55 萬重設機制，免體檢全家守護）。<br>
-3️⃣ <b>促成話術切入：</b>「醫保係買病房手術開銷，要趁健康鎖定。公司醫保離職即斷，個人《尊衛您》先係保證續保到 100 歲嘅終身隨身護盾！」`;
-    }
-    if (q.indexOf('車保') !== -1 || q.indexOf('車險') !== -1 || q.indexOf('電單車') !== -1 || q.indexOf('私家車') !== -1) {
-        return "🚗 <b>【澳門車險即時試算提示】</b><br><br>• <b>法定基金：</b>所有報價均自動計入 2.5% 汽車及航海保障基金。<br>• <b>高車齡優勢：</b>亞洲保險 10 年或以上車齡加幅僅 50%（市場常規為 +100%）。<br>• <b>系統工具：</b>可直接使用一般保險專區的「車保計算器」為客戶即時報價！";
-    }
-    if (q.indexOf('旅遊') !== -1 || q.indexOf('旅行') !== -1) {
-        return "✈️ <b>【澳門旅遊保險即時比較重點】</b><br><br>• <b>四大公司涵蓋：</b>MIC 澳門保險、AIG 美亞、MSIG 三井住友、中國太平。<br>• <b>關鍵優勢：</b>熱門休閒運動（滑雪、潛水、笨豬跳）全部免加費承保；AIG 海外緊急醫療運送高達 3,500 萬！<br>• <b>工具入口：</b>可於「一般保險」點擊「旅遊及出行保障」進行四合一橫向對比！";
-    }
-    return "手足！呢個問題超出了保險業務範疇喔～我支援以下查詢，請輸入關鍵字：<br><br>👉 <b>儲蓄傳承：</b>輸入「盈聚天下特色」、「預繳利息」<br>👉 <b>危疾保障：</b>輸入「危疾點賠」、「應援保特色」<br>👉 <b>醫療保險：</b>輸入「尊衛您賣點」、「自付費豁免」<br>👉 <b>一般保險：</b>輸入「車保試算」、「旅遊保險對比」";
+        if (q.indexOf('車保') !== -1 || q.indexOf('車險') !== -1 || q.indexOf('電單車') !== -1 || q.indexOf('私家車') !== -1) {
+            return "🚗 <b>【澳門車保即時試算攻略】</b><br><br>• <b>法定基金：</b>所有保費均自動計入 2.5% 汽保及航海保障基金。<br>• <b>無索償折扣：</b>私家車連續 10 年或以上無索償最高享 <b>50%</b>（商用車最高為 <b>-30%</b>）。<br>• <b>系統工具：</b>可直接使用一般保險專區的「車保計算器」為客戶即時報價！";
+        }
+        if (q.indexOf('旅遊') !== -1 || q.indexOf('旅行') !== -1) {
+            return "✈️ <b>【澳門旅遊保險即時比較重點】</b><br><br>• <b>四大公司覆蓋：</b>聯豐亨、澳門保險、AIG 美亞、MSIG 三井住友、中國太平。<br>• <b>高危運動：</b>熱門高危運動（滑雪、潛水、熱氣球）全部包生保保障；AIG 海外緊急醫療最高達 <b>3,500 萬</b>。<br>• <b>工具入口：</b>可於「一般保險」點擊「旅遊及出行保險」進行四合一橫向對比！";
+        }
+        return "抱歉！呢個問題超出了我現有嘅知識庫範圍～不如你問下直屬經理睇下有咩睇法，或者輸入以下關鍵字查詢：<br><br>👉 <b>儲蓄傳承：</b>輸入「盈聚天下特色」、「預繳優惠」<br>👉 <b>危疾保障：</b>輸入「危疾應援保」、「連家添守護」<br>👉 <b>醫療保障：</b>輸入「尊衛您賣點」、「2026升級」、「自付費」、「初生嬰兒」<br>👉 <b>一般保險：</b>輸入「車保試算」、「旅遊保險對比」";
 }
 
 function submitAiQuery() {
