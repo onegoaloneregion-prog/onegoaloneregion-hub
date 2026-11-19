@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高端醫保客觀對比系統 (保費試算 & 特點對比)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Print / PDF Export Styling */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm;
+      }
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11px !important;
+      }
+      header, #viewFeatures, #proposalConfigSection, .no-print, button, nav {
+        display: none !important;
+      }
+      #printProposalHeader {
+        display: flex !important;
+      }
+      #viewCalculator {
+        display: block !important;
+        space-y: 4 !important;
+      }
+      .bg-white {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+      .max-h-96 {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      thead {
+        display: table-header-group;
+      }
+      tfoot {
+        display: table-footer-group;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-lg shadow-sm">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            高端醫保總保費與特點對比系統
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300">中立客觀版</span>
+          </h1>
+          <p class="text-xs text-slate-500">涵蓋友邦 AIA、安盛 AXA、富衛 FWD、萬通 YF Life、保誠 Prudential 及宏利 Manulife</p>
+        </div>
+      </div>
+      
+      <!-- Top Navigation Tabs & PDF Export Button -->
+      <div class="flex items-center gap-2">
+        <nav class="flex bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+          <button id="tabBtnCalc" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition flex items-center gap-1.5">
+            <i class="fa-solid fa-calculator text-blue-600"></i> 保費試算
+          </button>
+          <button id="tabBtnFeatures" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-list-check text-indigo-600"></i> 計劃特點對比
+          </button>
+        </nav>
+        <button id="btnExportPDF" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-red-200 bg-red-600 hover:bg-red-700 text-white shadow-xs transition cursor-pointer">
+          <i class="fa-solid fa-file-pdf"></i> 匯出 PDF 建議書
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
+    
+    <!-- Printable Proposal Header (Shown only when printing/exporting PDF) -->
+    <div id="printProposalHeader" class="hidden mb-6 pb-4 border-b-2 border-slate-800 justify-between items-start">
+      <div class="space-y-1">
+        <div class="text-xs font-medium tracking-wide text-slate-500">
+          富衛人壽保險（澳門）• 專屬保障建議書
+        </div>
+        <h1 class="text-2xl font-black text-slate-950 tracking-tight" id="pdfTitleDisplay">
+          高端醫療保 / 升級版 客戶專屬規劃方案
+        </h1>
+        <div class="text-xs text-slate-600 font-medium pt-0.5">
+          尊榮客戶：<strong class="text-slate-900 text-sm" id="pdfClientNameDisplay">陳大文 先生</strong> 
+          <span class="mx-2 text-slate-300">|</span> 
+          製定日期：<span id="pdfDateDisplay">2026 年 11 月 11 日</span>
+        </div>
+      </div>
+      <div class="text-right border-l border-slate-300 pl-6 space-y-0.5">
+        <div class="text-sm font-bold text-slate-900" id="pdfAdvisorNameDisplay">富衛策劃顧問</div>
+        <div class="text-xs font-medium text-slate-600" id="pdfAdvisorTitleDisplay">資深分區總監</div>
+        <div class="text-xs text-slate-500 font-semibold" id="pdfAdvisorTeamDisplay">One Goal One Region</div>
+        <div class="text-xs text-slate-500" id="pdfAdvisorPhoneDisplay">電話：+853 6688 8888</div>
+      </div>
+    </div>
+    
+    <!-- Proposal & Advisor Info Configuration Section (Exact Match to User Image 1) -->
+    <section id="proposalConfigSection" class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 mb-6 no-print">
+      <div class="flex items-center justify-between mb-3.5">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <h2 class="text-sm font-bold text-slate-900">客戶提案抬頭與顧問聯絡資訊 (列印自動帶入)</h2>
+        </div>
+        <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">客製化設定</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <!-- Field 1: Client Name -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">客戶姓名 / 稱謂</label>
+          <input type="text" id="inputClientName" value="陳大文 先生" placeholder="例如：陳大文 先生"
+            class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition">
+        </div>
+
+        <!-- Field 2: Advisor Name -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">理財顧問姓名</label>
+          <input type="text" id="inputAdvisorName" value="富衛策劃顧問" placeholder="例如：富衛策劃顧問"
+            class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition">
+        </div>
+
+        <!-- Field 3: Title (Dropdown) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">顧問職位 / 職銜</label>
+          <div class="relative">
+            <select id="selectAdvisorTitle"
+              class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition appearance-none font-medium">
+              <option value="資深分區總監" selected>資深分區總監</option>
+              <option value="分區總監">分區總監</option>
+              <option value="分行經理">分行經理</option>
+              <option value="資深區域經理">資深區域經理</option>
+              <option value="高級業務經理">高級業務經理</option>
+              <option value="資深財富策劃師">資深財富策劃師</option>
+              <option value="理財顧問">理財顧問</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 pointer-events-none text-[10px]"></i>
+          </div>
+        </div>
+
+        <!-- Field 4: Team / Region -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">所屬分區 / 團隊</label>
+          <input type="text" id="inputAdvisorTeam" value="One Goal One Region" placeholder="例如：One Goal One Region"
+            class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition">
+        </div>
+
+        <!-- Field 5: Phone / WeChat -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">顧問聯絡電話 / 微信</label>
+          <input type="text" id="inputAdvisorPhone" value="+853 6688 8888" placeholder="例如：+853 6688 8888"
+            class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition">
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 1: PREMIUM CALCULATOR (Default Active) -->
+    <div id="viewCalculator" class="space-y-6">
+      
+      <!-- Filter & Parameter Panel -->
+      <section class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 no-print">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 items-start">
+          
+          <!-- Age Range Selection (Col 4) -->
+          <div class="lg:col-span-4 space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <i class="fa-regular fa-calendar-days mr-1.5 text-blue-600"></i> 1. 投保年齡區間 (歲)
+            </label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <span class="absolute left-3 top-2.5 text-xs text-slate-400">由</span>
+                <input type="number" id="startAgeInput" min="0" max="99" value="0" 
+                  class="w-full pl-8 pr-2 py-2 text-sm font-semibold border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+              </div>
+              <span class="text-slate-400 font-bold">-</span>
+              <div class="relative flex-1">
+                <span class="absolute left-3 top-2.5 text-xs text-slate-400">至</span>
+                <input type="number" id="endAgeInput" min="0" max="99" value="85" 
+                  class="w-full pl-8 pr-2 py-2 text-sm font-semibold border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+              </div>
+            </div>
+            <!-- Quick Range Presets -->
+            <div class="flex flex-wrap gap-1 pt-1">
+              <button class="preset-btn px-2.5 py-1 text-[11px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" data-start="0" data-end="85">0-85歲 (完整)</button>
+              <button class="preset-btn px-2.5 py-1 text-[11px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" data-start="0" data-end="18">0-18歲 (少兒)</button>
+              <button class="preset-btn px-2.5 py-1 text-[11px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" data-start="30" data-end="65">30-65歲 (職場)</button>
+              <button class="preset-btn px-2.5 py-1 text-[11px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" data-start="60" data-end="85">60-85歲 (退休)</button>
+            </div>
+          </div>
+
+          <!-- Target Deductible Level (Col 4) -->
+          <div class="lg:col-span-4 space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <i class="fa-solid fa-shield-halved mr-1.5 text-blue-600"></i> 2. 目標自付額級別 (Deductible)
+            </label>
+            <div class="relative">
+              <select id="deductibleSelect" class="w-full px-3.5 py-2 text-sm font-semibold border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition appearance-none">
+                <option value="0" selected>全數保障 - $0 自付費 (無自付額)</option>
+                <option value="16000">低自付額級別 (~$1.6萬 - $2.28萬)</option>
+                <option value="25000">中自付額級別 (~$2.5萬 - $3萬)</option>
+                <option value="50000">高自付額級別 (~$4.5萬 - $5萬 / 配合公司醫保)</option>
+                <option value="100000">特高自付額級別 (~$9.6萬 - $10萬)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down absolute right-3.5 top-3 text-slate-400 pointer-events-none text-xs"></i>
+            </div>
+            <p id="deductibleDesc" class="text-[11px] text-slate-500 leading-relaxed pt-0.5">
+              * 各公司自付檔次將自動精準匹配
+            </p>
+          </div>
+
+          <!-- Individual Plan Details (Col 4) -->
+          <div class="lg:col-span-4 space-y-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                <i class="fa-solid fa-sliders mr-1 text-slate-500"></i> 3. 產品版本及保障選項
+              </label>
+              <button id="btnResetFilters" class="text-[11px] text-blue-600 hover:underline">重設選項</button>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">FWD 級別</span>
+                <select id="fwdTier" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="standard" selected>標準</option>
+                  <option value="superior">特等</option>
+                </select>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">AIA 形式</span>
+                <select id="aiaPlanType" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="basic" selected>基本</option>
+                  <option value="rider">附加契約</option>
+                </select>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">AIA 地域</span>
+                <select id="aiaRegion" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="asia" selected>亞洲</option>
+                  <option value="global">全球除美</option>
+                </select>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">AXA 級別</span>
+                <select id="axaTier" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="Regular">標準</option>
+                  <option value="Enhance" selected>卓越</option>
+                  <option value="Premier">優尚</option>
+                  <option value="Noble">尊貴</option>
+                </select>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">保誠 地域</span>
+                <select id="pruRegion" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="asia" selected>亞洲</option>
+                  <option value="global">全球除美</option>
+                </select>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">宏利 級別</span>
+                <select id="manuTier" class="w-full px-1.5 py-1 text-[11px] font-medium border border-slate-300 rounded-lg bg-white outline-none">
+                  <option value="smart">智選</option>
+                  <option value="advance" selected>精選</option>
+                  <option value="deluxe">優選</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Balanced 6-Company Total Cards Grid -->
+      <section>
+        <div class="flex items-center justify-between mb-3 px-1">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+            <i class="fa-solid fa-wallet text-slate-400"></i> 各公司在指定年齡區間之總保費統計
+          </h2>
+          <span id="summaryRangeTag" class="text-xs text-slate-500 font-medium">0 - 85 歲 (共 86 年)</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+          
+          <!-- Card 1: FWD -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-amber-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">FWD 富衛</span>
+              <span id="fwdDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">尊衛您 (寰譽版)</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="fwdTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="fwdAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankFWD" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+          <!-- Card 2: AIA -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-red-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-800 border border-red-200">AIA 友邦</span>
+              <span id="aiaDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">自願醫保尊耀</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="aiaTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="aiaAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankAIA" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+          <!-- Card 3: AXA -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-blue-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200">AXA 安盛</span>
+              <span id="axaDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">智尊守慧</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="axaTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="axaAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankAXA" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+          <!-- Card 4: YF Life -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-cyan-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200">YF 萬通</span>
+              <span id="yfDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">優裕醫療保</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="yfTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="yfAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankYF" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Prudential -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-rose-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">保誠 Prudential</span>
+              <span id="pruDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">自願醫保尚賓</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="pruTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="pruAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankPru" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Manulife -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between hover:border-emerald-400 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">宏利 Manulife</span>
+              <span id="manuDeductibleTag" class="text-[10px] text-slate-500 font-medium">$0</span>
+            </div>
+            <div class="my-1">
+              <span class="text-[10px] text-slate-400 block">晉悅自願醫保</span>
+              <div class="text-lg font-black text-slate-900 mt-0.5">
+                <span class="text-xs text-slate-400 font-normal">HK$</span>
+                <span id="manuTotalDisplay">0</span>
+              </div>
+              <span class="text-[10px] text-slate-500 mt-0.5 block">年均: <strong id="manuAvgDisplay">$0</strong></span>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">排名</span>
+              <span id="rankManu" class="font-bold text-slate-700">-</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Bar Chart -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-column text-blue-600"></i> 六間公司總保費橫向比照
+            </h3>
+            <span class="text-xs text-slate-400 font-normal" id="chartRangeLabel">0 - 85 歲</span>
+          </div>
+          <div class="relative flex-1 min-h-[260px]">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Line Chart -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs lg:col-span-2 flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-line text-blue-600"></i> 逐年保費增長趨勢曲線
+            </h3>
+            <span class="text-xs text-slate-400 font-normal">隨年齡增長各公司保費跳檔幅度</span>
+          </div>
+          <div class="relative flex-1 min-h-[260px]">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Detailed Year-by-Year Table -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-table-list text-slate-500"></i> 各年齡詳細年繳保費清單 (HKD)
+            </h3>
+            <p class="text-xs text-slate-400">綠色徽章自動標示該年齡之最低保費者</p>
+          </div>
+          <div class="text-xs text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg">
+            顯示年齡：<strong id="tableRangeLabel" class="text-slate-800 font-semibold">0 - 85 歲</strong>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto max-h-96 custom-scrollbar">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-50 text-slate-600 sticky top-0 border-b border-slate-200 uppercase font-semibold tracking-wider">
+              <tr>
+                <th class="py-3 px-3">實際年齡</th>
+                <th class="py-3 px-3 text-right">FWD 尊衛您</th>
+                <th class="py-3 px-3 text-right">AIA 尊耀</th>
+                <th class="py-3 px-3 text-right">AXA 守慧</th>
+                <th class="py-3 px-3 text-right">YF 優裕</th>
+                <th class="py-3 px-3 text-right">保誠 尚賓</th>
+                <th class="py-3 px-3 text-right">宏利 晉悅</th>
+                <th class="py-3 px-3 text-right">當年度最平</th>
+              </tr>
+            </thead>
+            <tbody id="premiumTableBody" class="divide-y divide-slate-100 font-medium">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+            <tfoot class="bg-slate-100 text-slate-900 sticky bottom-0 font-bold border-t-2 border-slate-300">
+              <tr>
+                <td class="py-3.5 px-3 font-black">合計總保費</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootFWD">$0</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootAIA">$0</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootAXA">$0</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootYF">$0</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootPru">$0</td>
+                <td class="py-3.5 px-3 text-right font-black" id="tfootManu">$0</td>
+                <td class="py-3.5 px-3 text-right text-emerald-700 font-black" id="tfootWinner">-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- VIEW 2: PRODUCT FEATURES & BENEFITS MATRIX (Tab Content) -->
+    <div id="viewFeatures" class="hidden space-y-6">
+      
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-blue-600"></i> 六大高端醫療計劃主要條款及特色橫向對比
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">基於各保險公司最新自願醫保靈活計劃（Flexi Plan）產品說明書及保障表客觀整理</p>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+            全數賠償・不設細項上限 (Full Reimbursement)
+          </span>
+        </div>
+
+        <!-- Responsive Comparison Matrix Table -->
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-xs text-left border-collapse min-w-[900px]">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-700">
+                <th class="py-3 px-3.5 w-44 font-bold">比較維度 / 保障項目</th>
+                <th class="py-3 px-3 w-40 font-bold text-amber-800 bg-amber-50/50">FWD 尊衛您 (寰譽版)</th>
+                <th class="py-3 px-3 w-40 font-bold text-red-800 bg-red-50/50">AIA 自願醫保尊耀</th>
+                <th class="py-3 px-3 w-40 font-bold text-blue-800 bg-blue-50/50">AXA 智尊守慧</th>
+                <th class="py-3 px-3 w-40 font-bold text-cyan-800 bg-cyan-50/50">YF 萬通優裕醫療保</th>
+                <th class="py-3 px-3 w-40 font-bold text-rose-800 bg-rose-50/50">保誠 自願醫保尚賓</th>
+                <th class="py-3 px-3 w-40 font-bold text-emerald-800 bg-emerald-50/50">宏利 晉悅自願醫保</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              
+              <!-- Row: Annual & Lifetime Limit -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">保障額上限</span>
+                  <span class="text-[10px] text-slate-400 font-normal">每年 / 終身保障</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$1,500萬 - $1,850萬</div>
+                  <div class="text-emerald-600 font-semibold text-[11px] mt-0.5">終身不設上限 (無限制)</div>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$1,200萬</div>
+                  <div class="text-slate-600 text-[11px] mt-0.5">終身限額 HK$6,000萬</div>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$500萬 - $4,000萬</div>
+                  <div class="text-emerald-600 font-semibold text-[11px] mt-0.5">終身不設上限 (無限制)</div>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$1,000萬 - $1,200萬</div>
+                  <div class="text-slate-600 text-[11px] mt-0.5">終身限額 HK$3,000萬 - $6,000萬</div>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$1,200萬</div>
+                  <div class="text-slate-600 text-[11px] mt-0.5">終身限額 HK$5,600萬</div>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <div class="font-bold text-slate-800">每年 HK$500萬 - $1,200萬</div>
+                  <div class="text-slate-600 text-[11px] mt-0.5">終身 HK$2,000萬 - $6,000萬</div>
+                </td>
+              </tr>
+
+              <!-- Row: Room & Territory -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">受保病房級別</span>
+                  <span class="text-[10px] text-slate-400 font-normal">港澳地區對應標準</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <span class="font-semibold text-slate-800">半私家房</span>
+                  <span class="text-[10px] text-slate-500 block">其餘地區標準私家房</span>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <span class="font-semibold text-slate-800">半私家房</span>
+                  <span class="text-[10px] text-slate-500 block">其餘地區標準私家房</span>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <span class="font-semibold text-slate-800">標準: 普通房 / 卓越: 半私家 / 優尚&尊貴: 私家房</span>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <span class="font-semibold text-slate-800">半私家房</span>
+                  <span class="text-[10px] text-slate-500 block">亞洲其他地區標準私家房</span>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <span class="font-semibold text-slate-800">半私家房</span>
+                  <span class="text-[10px] text-slate-500 block">其餘地區標準私家房</span>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <span class="font-semibold text-slate-800">智選: 普通房 / 精選: 半私家 / 優選: 標準私家房</span>
+                </td>
+              </tr>
+
+              <!-- Row: Cancer & Clinical Trial Drugs -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">癌症治療特點</span>
+                  <span class="text-[10px] text-slate-400 font-normal">標靶/免疫/藥物延伸</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <div class="font-semibold text-slate-800">全數賠償</div>
+                  <div class="text-slate-500 text-[10px]">設癌症額外保障限額 (每年額外高達$200萬-$250萬)</div>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <div class="font-semibold text-slate-800">全數賠償 + 臨床藥物</div>
+                  <div class="text-red-700 font-semibold text-[10px]">特設第三期臨床試驗藥物賠償 (每年高達$50萬)</div>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <div class="font-semibold text-slate-800">全額支付</div>
+                  <div class="text-slate-500 text-[10px]">訂明非手術癌症治療受每年限額保障</div>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <div class="font-semibold text-slate-800">全數賠償</div>
+                  <div class="text-slate-500 text-[10px]">涵蓋化療、電療、標靶、免疫及質子重離子治療</div>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <div class="font-semibold text-slate-800">全數賠償</div>
+                  <div class="text-slate-500 text-[10px]">訂明非手術治療不設個別項目限額</div>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <div class="font-semibold text-slate-800">全數賠償</div>
+                  <div class="text-slate-500 text-[10px]">包括質子治療、放射、化療、標靶及免疫</div>
+                </td>
+              </tr>
+
+              <!-- Row: Deductible Waiver for Critical Illness -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">危疾豁免自付額</span>
+                  <span class="text-[10px] text-slate-400 font-normal">指定大病自負歸零</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <span class="font-bold text-emerald-600"><i class="fa-solid fa-check mr-1"></i>有 (全額賠償)</span>
+                  <span class="text-[10px] text-slate-500 block">涵蓋癌症、心臟病、中風等16項指定危疾</span>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <span class="font-bold text-slate-700">75歲起特設</span>
+                  <span class="text-[10px] text-slate-500 block">年滿75歲以上確診指定癌症可豁免自付費</span>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <span class="text-slate-400 font-medium">一般不設</span>
+                  <span class="text-[10px] text-slate-400 block">須如常扣除年度自付額</span>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <span class="font-bold text-emerald-600"><i class="fa-solid fa-check mr-1"></i>有 (全額豁免)</span>
+                  <span class="text-[10px] text-slate-500 block">患上指定16種嚴重疾病入院免扣自付額</span>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <span class="text-slate-400 font-medium">一般不設</span>
+                  <span class="text-[10px] text-slate-400 block">提供額外復康治療及設備支援</span>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <span class="text-slate-400 font-medium">一般不設</span>
+                  <span class="text-[10px] text-slate-400 block">可於指定年齡無條件下調自付額</span>
+                </td>
+              </tr>
+
+              <!-- Row: Stroke / Rehabilitation -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">中風及復康支援</span>
+                  <span class="text-[10px] text-slate-400 font-normal">家居改造 / 津貼</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <div class="font-semibold text-slate-800">全面復康組合</div>
+                  <div class="text-[10px] text-slate-500">家居改造($8萬) + 復康診療 + 傷殘津貼(每月$1萬，最長24個月)</div>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <div class="font-semibold text-slate-800">中風專屬保障</div>
+                  <div class="text-[10px] text-slate-500">家居改裝($5萬) + 專科門診輔助 + 傷殘津貼(每月$5千，最長24個月)</div>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <div class="font-semibold text-slate-800">復康及護理保障</div>
+                  <div class="text-[10px] text-slate-500">家中看護(每年度90日) + 出院復康中心(優尚/尊貴達$8萬)</div>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <div class="font-semibold text-slate-800">出院專職輔助</div>
+                  <div class="text-[10px] text-slate-500">出院後門診物理/中醫/言語治療(每年達$4.5萬) + 復康中心($5萬-$8萬)</div>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <div class="font-semibold text-slate-800">大病復康保障</div>
+                  <div class="text-[10px] text-slate-500">涵蓋癌症/心臟病/中風之家居設備提升($5萬) + 額外復康診療</div>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <div class="font-semibold text-slate-800">出院專職護理</div>
+                  <div class="text-[10px] text-slate-500">出院私家看護 + 門診輔助/中醫 + 復康治療每年度$5萬</div>
+                </td>
+              </tr>
+
+              <!-- Row: No Claim Discount -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">無索償保費折扣</span>
+                  <span class="text-[10px] text-slate-400 font-normal">健康獎賞優惠</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <div class="font-bold text-slate-800">個人最高 15%</div>
+                  <div class="text-[10px] text-amber-700 font-medium">家庭成員同行額外加達 10% (總額最高 25%)</div>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <div class="font-bold text-slate-800">AIA Vitality 體系</div>
+                  <div class="text-[10px] text-slate-500">加入即享首年9折，後續依運動步數維持9折至更多折扣</div>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <div class="font-bold text-slate-800">最高達 15%</div>
+                  <div class="text-[10px] text-slate-500">連續無索償達指定年期提供保費折扣或 AXA Goal 回贈</div>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <div class="font-bold text-slate-800">最高達 15%</div>
+                  <div class="text-[10px] text-slate-500">連續3年無索償 5%，4年 10%，5年或以上 15%</div>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <div class="font-bold text-slate-800">體檢 / 疫苗獎勵</div>
+                  <div class="text-[10px] text-slate-500">每3個連續保單年度提供1次指定免費健康檢查或疫苗服務</div>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <div class="font-bold text-slate-800">最高達 16%</div>
+                  <div class="text-[10px] text-slate-500">連續2-4年無索償享8%，連續5年或以上享16% (配合MOVE步數可疊加)</div>
+                </td>
+              </tr>
+
+              <!-- Row: Cash Benefits & Extra Features -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">特色現金保障 & 增值</span>
+                  <span class="text-[10px] text-slate-400 font-normal">自願醫保額外權益</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 日間手術現金津貼 (指定院所雙倍)<br>
+                    • 大型/複雜手術現金保障<br>
+                    • 3天或以上ICU現金保障<br>
+                    • 新生兒免費2年指定醫療保障
+                  </div>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 人生階段定期免費身體檢查<br>
+                    • 個人療程管理與復康專案管理<br>
+                    • 日間手術現金保障<br>
+                    • 專屬禮賓及內地家訪支援
+                  </div>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 免找數出院直付服務<br>
+                    • 中國內地住院免押金保證<br>
+                    • 香港及澳門較低病房級別現金補貼<br>
+                    • 專案護士及第二醫療諮詢
+                  </div>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 病房下調現金保障 (每天$1,000)<br>
+                    • 日間手術現金津貼<br>
+                    • 身故保障金 HK$80,000<br>
+                    • 善終護理及愛滋病特定治療保障
+                  </div>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 每3次續保提供指定體檢/疫苗<br>
+                    • 綠色醫療通道 (預約內地約1,200間醫院)<br>
+                    • 安心醫國際專家第二意見<br>
+                    • 「智安排」精神失去行為能力預設代索償
+                  </div>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <div class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                    • 指定日間手術免找數電子服務<br>
+                    • 內地指定醫院 (涵蓋全部三甲公立醫院)<br>
+                    • 門診癌症化療/電療直接免找數<br>
+                    • 專屬醫療專案經理全程跟進
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row: Right to Lower Deductible -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3 px-3.5 font-bold text-slate-900 bg-slate-50/30">
+                  <span class="block">自付額免核保調低權</span>
+                  <span class="text-[10px] text-slate-400 font-normal">人生里程碑鎖定</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/20">
+                  <span class="font-semibold text-slate-800">50, 55, 60, 65, 70, 75 或 80 歲</span>
+                  <span class="text-[10px] text-slate-500 block">生效滿2年後可免核保調低一次</span>
+                </td>
+                <td class="py-3 px-3 bg-red-50/20">
+                  <span class="font-semibold text-slate-800">50, 55, 60, 65, 70, 75 或 81 歲</span>
+                  <span class="text-[10px] text-slate-500 block">保單週年日可免重新提交健康狀況調低一次</span>
+                </td>
+                <td class="py-3 px-3 bg-blue-50/20">
+                  <span class="font-semibold text-slate-800">搬遷至保障地域外</span>
+                  <span class="text-[10px] text-slate-500 block">因地址變更移居可免核保升級至尊貴級別</span>
+                </td>
+                <td class="py-3 px-3 bg-cyan-50/20">
+                  <span class="font-semibold text-slate-800">50, 55, 60 或 65 歲</span>
+                  <span class="text-[10px] text-slate-500 block">保單週年日可免提交健康申報調低一次</span>
+                </td>
+                <td class="py-3 px-3 bg-rose-50/20">
+                  <span class="font-semibold text-slate-800">50, 55, 60, 65, 70, 75, 80 或 85 歲</span>
+                  <span class="text-[10px] text-slate-500 block">終身可享一次權利免醫療檢查調低自付費</span>
+                </td>
+                <td class="py-3 px-3 bg-emerald-50/20">
+                  <span class="font-semibold text-slate-800">50, 55, 60, 65, 70, 75, 80 或 85 歲</span>
+                  <span class="text-[10px] text-slate-500 block">滿期前31天可申請一次免額外證明下調自付費</span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // --- 完整六大保險公司年繳保費數據庫 (0-99歲) ---
+
+    // 1. FWD 富衛 尊衛您 (寰譽版)
+    const fwdData = {
+      standard: {
+        0: [9059,9059,9059,9059,9059,8282,8282,8282,8282,8282,8282,8282,8282,8282,8282,8282,8282,8282,8512,8581,8782,9053,9313,9505,9646,10120,10672,11217,11622,11882,12058,12331,12435,12702,12944,13405,13430,13705,14064,14175,14368,14646,15010,15709,16665,17498,18499,19079,19827,20657,21066,21857,23671,24722,25758,26869,28578,30231,31800,33968,35683,37461,40666,44904,50243,54572,58991,61317,62707,64776,66552,73579,77656,81663,85029,86577,92056,98428,101189,104385,106034,112174,115438,117485,119345,121485,123717,125670,127624,129670,131718,133856,135809,137856,140089,142134,144275,146864,149449,155620],
+        16000: [4695,4695,4695,4695,4695,4002,4002,4002,4002,4002,4002,4002,4002,4002,4002,4002,4002,4002,4033,4197,4275,4346,4624,4638,5016,5032,5032,5392,5502,5613,5722,5830,5936,6001,6147,6231,6569,6569,6737,6737,6821,7242,7410,7748,8000,8417,8834,9335,9823,10321,10933,11280,11540,12060,12578,13027,13915,14803,15694,16849,17993,19003,20353,22401,24961,27440,29924,30461,31255,32304,33324,36852,38987,40729,42787,43798,46092,49213,50225,53158,54356,55597,57416,58352,59567,60316,61736,63238,64133,65703,66901,68293,69731,71001,72716,73867,75180,75948,77344,77805],
+        25000: [4134,4134,4134,4134,4134,3541,3541,3541,3541,3541,3541,3541,3541,3541,3541,3541,3541,3541,3541,3636,3636,3636,3924,4020,4304,4304,4486,4584,4692,4791,4885,4893,5043,5164,5255,5422,5589,5589,5672,5672,5839,6089,6298,6657,6673,7406,7768,8320,8670,9005,9171,9515,9699,10387,10815,11085,11703,12494,13375,14257,15141,16206,17341,19093,21290,23156,25361,25805,26502,27455,28296,31270,33022,34722,36288,37198,39110,41838,42656,45115,46117,47279,48728,49469,50840,52683,53846,55199,56034,57555,58411,59484,60264,61239,61948,62577,63823,64623,65334,66213],
+        50000: [3272,3272,3272,3272,3272,2770,2770,2770,2770,2770,2770,2770,2770,2770,2770,2770,2770,2770,2800,2860,2946,3023,3122,3209,3296,3370,3445,3518,3519,3546,3735,3735,3753,3783,3783,3888,4008,4008,4068,4091,4371,4683,4853,5130,5221,5708,5987,6412,6682,7002,7487,7866,8244,8623,9000,9391,9782,10175,10567,10962,11578,12242,12963,13858,14667,15366,16487,17547,18820,20111,21445,22728,24146,25474,26819,28259,29271,30740,31340,33146,35105,36040,37382,38828,40141,41596,42513,43583,44243,45443,46162,50176,51112,52232,53477,54486,56047,57712,58833,60120],
+        100000: [2567,2567,2567,2567,2567,2293,2293,2293,2293,2293,2293,2293,2293,2293,2293,2293,2293,2293,2311,2354,2404,2461,2533,2597,2645,2703,2761,2818,2818,2836,2985,2985,2995,3018,3018,3094,3183,3183,3223,3236,3451,3691,3821,4032,4097,4480,4698,5031,5244,5494,5875,6172,6468,6765,7061,7449,7754,8060,8463,8773,9261,9786,10357,10939,11570,12115,12990,13657,14641,15635,16671,17670,18772,19805,20850,21970,22757,23898,24366,25769,27293,28020,29064,30187,31207,32339,33053,33883,34396,35330,35889,39009,39737,40608,41576,42360,43574,44868,45740,46741]
+      },
+      superior: {
+        0: [10786,10786,10786,10786,10786,9862,9862,9862,9862,9862,9862,9862,9862,9862,9862,9862,9862,9862,10135,10218,10457,10779,11090,11317,11487,12051,12708,13357,13841,14150,14362,14688,14812,15132,15419,15969,15999,16326,16753,16884,17114,17446,17878,18712,19850,20843,22035,22724,23616,24604,25093,26034,28195,29446,30682,32004,34040,36009,37878,40460,42502,44619,48437,53484,59843,64998,70261,73031,74686,77150,79265,87634,92489,97263,101272,103115,109641,117231,120519,124326,126290,133603,137491,139927,142143,144692,147351,149677,152004,154441,156879,159426,161753,164191,166850,169286,171835,174919,177998,185349],
+        16000: [5574,5574,5574,5574,5574,4752,4752,4752,4752,4752,4752,4752,4752,4752,4752,4752,4752,4752,4787,4983,5076,5160,5491,5508,5957,5975,5975,6403,6534,6666,6795,6923,7049,7127,7302,7402,7802,7802,8002,8002,8102,8601,8802,9202,9502,9997,10492,11086,11667,12258,12986,13399,13707,14324,14940,15473,16527,17583,18641,20013,21370,22570,24174,26606,29645,32590,35540,36177,37118,38365,39576,43766,46301,48370,50813,52014,54740,58446,59648,63130,64553,66028,68188,69298,70743,71631,73319,75102,76166,78029,79452,81106,82813,84322,86358,87726,89285,90196,91856,92403],
+        25000: [4882,4882,4882,4882,4882,4181,4181,4181,4181,4181,4181,4181,4181,4181,4181,4181,4181,4181,4181,4294,4294,4294,4633,4747,5082,5082,5298,5413,5541,5657,5769,5780,5956,6099,6207,6405,6601,6601,6699,6699,6897,7193,7439,7863,7882,8748,9175,9827,10240,10635,10832,11240,11456,12269,12774,13094,13823,14758,15798,16840,17883,19142,20481,22550,25146,27349,29953,30478,31301,32425,33420,36930,39000,41008,42858,43932,46190,49413,50378,53282,54467,55838,57550,58424,60044,62221,63593,65192,66179,67976,68985,70252,71173,72325,73163,73906,75377,76322,77162,78201],
+        50000: [3841,3841,3841,3841,3841,3253,3253,3253,3253,3253,3253,3253,3253,3253,3253,3253,3253,3253,3286,3357,3458,3549,3665,3767,3869,3956,4044,4131,4133,4165,4385,4385,4408,4442,4442,4565,4707,4707,4778,4805,5133,5499,5699,6026,6131,6703,7030,7530,7848,8223,8792,9238,9682,10126,10569,11029,11488,11950,12410,12873,13597,14376,15224,16274,17224,18044,19361,20605,22100,23616,25182,26689,28354,29913,31492,33184,34373,36097,36802,38922,41224,42321,43898,45595,47137,48845,49923,51178,51954,53363,54207,58921,60020,61335,62798,63981,65815,67770,69087,70598],
+        100000: [2994,2994,2994,2994,2994,2672,2672,2672,2672,2672,2672,2672,2672,2672,2672,2672,2672,2672,2693,2744,2802,2868,2953,3027,3082,3150,3218,3284,3284,3306,3479,3479,3492,3517,3517,3607,3712,3712,3757,3773,4024,4305,4455,4701,4777,5224,5478,5866,6114,6405,6850,7196,7541,7888,8233,8686,9041,9399,9868,10229,10798,11410,12076,12755,13491,14125,15146,15924,17071,18229,19438,20602,21887,23092,24310,25616,26533,27864,28410,30045,31821,32669,33887,35197,36387,37706,38537,39506,40105,41193,41845,45483,46331,47347,48476,49390,50804,52315,53330,54497]
+      }
+    };
+
+    // 2. AIA 友邦 尊耀計劃
+    const aiaData = {
+      basic: {
+        asia: {
+          0: [12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12336,12472,12728,12856,13248,13760,14160,15192,16104,17008,17792,18304,18568,19088,19352,19872,20648,21024,21040,21424,21960,22080,22328,22960,23944,25008,26752,28368,29712,30960,32176,33704,35208,37136,38720,40144,42008,43712,46288,49280,51560,55000,58576,62272,66488,71992,78960,85336,92600,98056,102144,107440,112416,119776,126416,132936,139720,146248,154096,160256,166280,167520,170992,182616,186144,189448,192448,195896,199496,202656,205792,209096,212400,215848,218992,222296,225904,229200,232648,235504,238936,242400],
+          16000: [5320,5320,5320,5320,5320,5024,5024,5024,5024,5024,5024,5024,5024,5024,5024,5024,5024,5024,5024,5216,5216,5216,5600,5720,6304,6544,6744,7360,7568,7824,7976,8056,8168,8296,8520,8632,9088,9088,9336,9336,9464,10136,10576,11056,11536,12232,12736,13608,14216,14880,15624,16440,16816,17720,18488,19128,20416,21704,22984,24648,26056,27608,29576,32168,35128,37816,41208,43576,45536,47896,50328,53640,56752,59280,62856,66152,68992,71632,73800,76272,78376,80920,82768,84120,85880,86952,88440,89784,91272,92744,94232,95984,97464,98688,100432,101248,103272,104480,106096,107448],
+          25000: [5160,5160,5160,5160,5160,4776,4776,4776,4776,4776,4776,4776,4776,4776,4776,4776,4776,4776,4776,4904,4904,4904,5288,5416,5880,5984,6312,6840,7088,7344,7376,7448,7736,7984,8120,8352,8640,8640,8760,8760,9024,9496,9824,10344,10728,11632,12192,13000,13392,13992,14608,15464,15888,16992,17720,18144,19144,20416,21832,23248,24672,26168,28008,30560,33392,35576,38928,41160,43032,45376,47640,50728,53576,56328,59424,62616,65240,67880,69856,72152,74112,76704,78304,79504,81136,82168,83528,84864,86352,87984,89168,90816,92008,93496,95128,96024,97816,98848,100496,101680],
+          50000: [4032,4032,4032,4032,4032,3736,3736,3736,3736,3736,3736,3736,3736,3736,3736,3736,3736,3736,3736,3832,3832,3832,4136,4240,4592,4672,4928,5336,5536,5736,5752,5816,6040,6232,6336,6520,6744,6744,6848,6848,7048,7424,7672,8064,8360,9080,9520,10144,10456,10928,11400,12056,12400,13264,13824,14160,14936,15920,17040,18136,19256,20416,21856,23840,26048,27744,30360,32104,33576,35400,37152,39568,41784,43944,46352,48848,50896,52944,54488,56288,57808,59840,61080,62008,63296,64104,65152,66200,67352,68632,69560,70840,71776,72928,74200,74904,76288,77112,78384,79328]
+        },
+        global: {
+          0: [13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13568,13728,14008,14128,14568,15136,15568,16704,17720,18712,19568,20128,20424,21000,21288,21864,22704,23128,23144,23576,24144,24296,24568,25256,26344,27504,29416,31200,32680,34048,35400,37072,38720,40856,42592,44160,46208,48080,50920,54216,56720,60496,64432,68496,73144,79192,86840,93864,101856,107856,112360,118184,123664,131752,139056,146232,153696,160872,169496,176280,182912,184288,188088,200872,204760,208392,211688,215488,219448,222928,226368,230000,233632,237416,240896,244536,248496,252112,255904,259048,262840,266640],
+          16000: [5840,5840,5840,5840,5840,5512,5512,5512,5512,5512,5512,5512,5512,5512,5512,5512,5512,5512,5512,5736,5736,5736,6168,6288,6920,7192,7424,8096,8328,8600,8776,8856,9000,9120,9368,9496,10008,10008,10264,10264,10400,11152,11632,12176,12680,13456,14024,14960,15624,16368,17208,18088,18496,19496,20336,21048,22456,23872,25280,27120,28672,30360,32528,35384,38640,41600,45328,47936,50088,52696,55376,59000,62416,65200,69144,72776,75880,78792,81176,83896,86216,89008,91056,92536,94464,95648,97280,98760,100392,102032,103656,105584,107224,108568,110480,111384,113592,114928,116712,118192],
+          25000: [5680,5680,5680,5680,5680,5240,5240,5240,5240,5240,5240,5240,5240,5240,5240,5240,5240,5240,5240,5392,5392,5392,5816,5952,6464,6568,6944,7520,7808,8080,8112,8200,8512,8784,8928,9192,9496,9496,9648,9648,9944,10448,10808,11376,11800,12800,13432,14304,14728,15408,16072,16992,17472,18704,19496,19976,21056,22456,24024,25576,27136,28784,30808,33624,36736,39128,42808,45264,47344,49920,52408,55808,58928,61952,65368,68888,71776,74664,76832,79360,81512,84376,86128,87448,89248,90384,91872,93360,94984,96792,98080,99904,101208,102840,104648,105624,107584,108728,110544,111848],
+          50000: [4432,4432,4432,4432,4432,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4200,4200,4200,4544,4656,5040,5136,5416,5872,6088,6304,6336,6400,6648,6856,6968,7176,7424,7424,7528,7528,7752,8152,8440,8880,9200,9984,10480,11160,11504,12016,12536,13264,13640,14592,15208,15592,16432,17520,18736,19960,21176,22456,24040,26232,28664,30528,33392,35304,36928,38944,40880,43528,45968,48328,50992,53736,55992,58248,59944,61912,63592,65816,67176,68216,69624,70512,71664,72816,74096,75496,76512,77920,78944,80224,81624,82392,83920,84808,86232,87256]
+        }
+      },
+      rider: {
+        asia: {
+          0: [10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10752,10872,11096,11200,11552,12008,12336,13240,14040,14848,15520,15968,16200,16656,16872,17328,18008,18352,18352,18680,19144,19256,19472,20016,20888,21816,23312,24736,25912,27000,28056,29376,30696,32392,33760,35008,36624,38120,40360,42976,44960,47968,51072,54304,57976,62776,68832,74400,80744,85512,89064,93680,98040,104456,110232,115920,121840,127536,134376,139760,145000,146088,149112,159232,162312,165208,167816,170824,173960,176704,179456,182328,185216,188224,190968,193848,196976,199864,202872,205352,208360,211368],
+          16000: [4704,4704,4704,4704,4704,4400,4400,4400,4400,4400,4400,4400,4400,4400,4400,4400,4400,4400,4400,4600,4600,4600,4896,5016,5520,5736,5936,6448,6648,6848,6992,7056,7152,7264,7456,7568,7984,7984,8184,8184,8288,8888,9264,9688,10104,10744,11168,11912,12456,13056,13704,14400,14744,15520,16200,16760,17888,19016,20144,21608,22840,24192,25920,28184,30776,33136,36112,38192,39896,41984,44104,47000,49720,51960,55096,57968,60448,62776,64664,66832,68688,70928,72528,73728,75256,76200,77512,78688,79984,81288,82584,84120,85432,86480,88016,88728,90504,91560,92992,94168],
+          25000: [4480,4480,4480,4480,4480,4152,4152,4152,4152,4152,4152,4152,4152,4152,4152,4152,4152,4152,4152,4248,4248,4248,4592,4696,5144,5256,5488,5936,6152,6384,6424,6504,6720,6944,7048,7272,7496,7496,7616,7616,7840,8256,8536,9000,9312,10104,10600,11280,11640,12160,12696,13424,13792,14784,15400,15768,16632,17728,18976,20200,21432,22728,24328,26552,29008,30896,33824,35752,37384,39424,41384,44064,46536,48936,51624,54392,56680,58968,60680,62680,64392,66640,68024,69064,70496,71400,72560,73728,75008,76432,77464,78880,79928,81216,82648,83408,84976,85880,87296,88336],
+          50000: [3504,3504,3504,3504,3504,3248,3248,3248,3248,3248,3248,3248,3248,3248,3248,3248,3248,3248,3248,3320,3320,3320,3584,3672,4016,4112,4288,4632,4808,4976,5024,5072,5248,5424,5504,5680,5856,5856,5936,5936,6120,6448,6664,7024,7272,7896,8272,8808,9080,9488,9912,10472,10768,11536,12016,12312,12976,13840,14800,15768,16728,17744,18984,20720,22632,24112,26384,27896,29168,30760,32272,34384,36304,38176,40280,42432,44224,46000,47336,48896,50232,51976,53064,53864,54992,55688,56608,57520,58512,59624,60424,61528,62344,63344,64472,65072,66288,66992,68096,68904]
+        },
+        global: {
+          0: [11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11832,11952,12192,12328,12704,13216,13584,14568,15456,16320,17056,17568,17816,18312,18560,19072,19800,20176,20176,20544,21048,21184,21432,22024,22968,23992,25640,27208,28496,29696,30872,32320,33768,35640,37120,38512,40280,41936,44392,47264,49464,52760,56184,59736,63784,69056,75720,81832,88816,94064,97968,103048,107848,114888,121264,127512,134024,140296,147808,153728,159488,160680,164008,175160,178560,181728,184600,187912,191360,194384,197408,200560,203736,207040,210080,213232,216680,219848,223160,225888,229192,232504],
+          16000: [5184,5184,5184,5184,5184,4840,4840,4840,4840,4840,4840,4840,4840,4840,4840,4840,4840,4840,4840,5064,5064,5064,5400,5512,6064,6296,6520,7088,7312,7544,7680,7768,7872,7992,8208,8320,8768,8768,9000,9000,9120,9776,10200,10656,11112,11816,12280,13120,13704,14368,15064,15840,16216,17080,17816,18440,19672,20912,22160,23760,25128,26600,28520,31000,33856,36456,39720,42016,43888,46176,48520,51704,54696,57152,60600,63760,66488,69056,71128,73520,75552,78008,79800,81096,82784,83824,85256,86552,87984,89408,90840,92552,93960,95128,96816,97600,99544,100728,102288,103584],
+          25000: [4920,4920,4920,4920,4920,4560,4560,4560,4560,4560,4560,4560,4560,4560,4560,4560,4560,4560,4560,4672,4672,4672,5056,5168,5664,5792,6040,6520,6768,7016,7080,7144,7392,7640,7752,8000,8256,8256,8384,8384,8632,9072,9376,9896,10240,11128,11656,12408,12800,13392,13968,14768,15184,16248,16936,17344,18296,19512,20872,22224,23576,25008,26760,29200,31912,34008,37208,39328,41128,43368,45512,48464,51184,53840,56792,59824,62352,64856,66736,68952,70816,73296,74832,75976,77536,78520,79800,81096,82504,84072,85208,86784,87912,89352,90896,91752,93472,94456,96024,97168],
+          50000: [3848,3848,3848,3848,3848,3568,3568,3568,3568,3568,3568,3568,3568,3568,3568,3568,3568,3568,3568,3640,3640,3640,3944,4040,4416,4520,4712,5096,5296,5480,5520,5576,5776,5968,6048,6240,6448,6448,6544,6544,6744,7080,7320,7728,7992,8680,9104,9688,9984,10448,10896,11528,11848,12680,13224,13528,14280,15224,16280,17344,18392,19512,20872,22784,24904,26528,29024,30680,32080,33832,35512,37816,39928,41992,44296,46664,48640,50592,52064,53784,55240,57176,58376,59264,60488,61256,62248,63256,64360,65576,66472,67696,68584,69696,70920,71568,72920,73680,74912,75800]
+        }
+      }
+    };
+
+    // 3. AXA 安盛 智尊守慧醫療保障
+    const axaData = {
+      0: {
+        Regular: [8856,8856,8856,8856,8856,8695,8587,8454,8325,8243,8048,7938,7833,7731,7588,7451,7347,7283,7321,7401,7538,7737,7923,8121,8358,8628,8932,9258,9573,9884,10246,10569,10820,11110,11434,11682,11943,12321,12718,13123,13647,14092,14561,15047,15552,16073,16740,17343,18158,18939,19661,20433,21258,22157,23253,24451,26007,27705,29650,31773,33786,36134,38547,41040,43663,46393,49197,52009,54824,57629,60416,62899,65385,67888,70767,73731,76796,79988,83274,86656,90162,93798,97514,101345,105208,108342,111505,114808,118253,121939,126618,130901,134737,138565,140867,143074,145493,147606,150098,152677],
+        Enhance: [10383,10383,10383,10357,10331,10303,10276,10249,10223,10198,10125,10053,9981,9909,9838,9765,9741,9715,9691,9733,10013,10242,10589,11035,11570,12179,12840,13504,14090,14629,15093,15447,15823,16294,16630,16983,17329,17630,17940,18375,18931,19481,20104,20834,21711,22660,23659,24638,25608,26481,27155,27991,28900,29935,31344,32921,34477,36626,39069,41833,45221,48748,52639,57561,62950,68210,72896,76966,80721,83972,87719,91313,95563,99713,104086,108726,113179,117409,122152,126852,131222,135127,138444,141929,143933,147658,152089,155722,159423,162447,164716,166701,168602,170427,172589,175296,178026,180706,183365,185950],
+        Premier: [13997,13997,13997,13800,13496,13293,13126,12750,12455,12152,11817,11534,11593,11701,11894,12179,12519,12854,13343,13707,13954,14345,14700,15081,15470,15880,16298,16707,17118,17516,18079,18515,18989,19421,19893,20189,20733,21231,21748,22072,22516,23223,23985,24799,25779,26798,27847,29293,30518,31418,33076,34540,35960,37842,39729,41771,44012,46646,49199,52310,55690,59078,62686,66777,71132,75785,80621,85771,91257,96784,102189,107595,112998,118610,123560,128685,134028,139622,145465,151570,157294,162631,167748,172820,175718,179101,182917,186709,190366,194154,198078,202072,206170,210614,215244,219880,224712,229419,234290,239410],
+        Noble:   [17459,17459,17459,17269,16929,16731,16585,16128,15774,15421,15087,14752,14821,14956,15197,15551,15946,16330,16938,17408,17906,18442,18937,19424,19893,20407,20901,21384,21832,22289,22743,23236,23759,24228,24717,24989,25563,26083,26770,27209,28054,28972,29952,30923,32104,33330,34587,36328,37859,38969,41027,42834,44594,46877,49145,51598,54306,57467,60513,64192,68172,72210,76503,81231,86261,91637,97232,103189,109533,115910,122119,128318,134499,140917,146539,152358,158429,164788,171430,178376,184864,190891,196657,202365,205680,209554,213930,218287,222486,226832,231333,235916,240627,245734,251053,256383,261932,267349,272942,278824]
+      },
+      20000: {
+        Regular: [4458,4458,4458,4458,4458,4154,4154,4154,4154,4154,3837,3819,3801,3784,3716,3748,3803,3867,3964,4056,4148,4278,4445,4605,4767,4920,5059,5183,5290,5404,5541,5703,5869,6058,6277,6512,6756,7002,7240,7466,7697,7943,8222,8537,8902,9310,9756,10228,10722,11233,11618,12038,12480,12947,13448,14126,15002,15910,16928,18193,19418,20812,22240,23967,25599,27248,28940,30704,32270,33904,35530,37148,38855,40690,42869,45228,47755,50415,53153,55756,58045,59865,61380,62556,63523,64492,65635,66756,67928,69133,70364,71574,72826,74017,75259,76484,77763,79028,80364,81698],
+        Enhance: [4941,4941,4941,4941,4941,4719,4719,4719,4719,4719,4521,4501,4480,4459,4372,4460,4528,4528,4595,4595,4647,4725,4902,5041,5232,5449,5659,5873,6106,6266,6431,6597,6777,7026,7270,7508,7783,8054,8372,8629,8884,9309,9651,10006,10412,10873,11407,11880,12351,12821,13181,13603,14073,14591,15269,15944,16813,17845,18990,20188,21838,23581,25613,27713,29986,32445,35104,37129,39352,41411,43453,45815,48339,50148,51920,53572,55413,57301,59590,62229,64556,66501,68601,69841,70766,71737,72670,73291,74573,75893,77228,78515,79923,81045,82470,83281,84910,86024,87349,88574],
+        Premier: [9654,9654,9654,9397,9195,8667,8411,8266,8182,8090,7762,7569,7664,7681,7828,8006,8167,8385,8604,8739,8783,8942,9113,9365,9605,9859,10125,10396,10631,10955,11427,11826,12224,12712,13142,13545,13931,14356,14757,15197,15531,16125,16788,17495,18208,18928,19705,20524,21384,22371,23308,24309,25239,26427,27759,29126,30447,32002,33832,36096,38641,40727,42955,45301,47787,50841,54419,58137,62114,66232,70332,74340,78050,81573,84958,88432,92148,96281,100417,105536,109024,111297,114332,117342,118457,119870,122279,124639,126903,129258,131703,134181,136697,139442,142329,145188,148197,151066,154087,157269],
+        Noble:   [12464,12464,12464,12185,11961,11326,11045,10871,10777,10687,10319,10087,10208,10226,10415,10643,10825,11075,11352,11536,11716,11958,12220,12552,12849,13176,13495,13824,14068,14454,14896,15371,15822,16392,16855,17284,17687,18140,18693,19290,19932,20729,21608,22475,23351,24232,25180,26175,27284,28536,29732,31000,32187,33652,35284,36950,38570,40455,42678,45393,48433,50945,53622,56306,59153,62686,66867,71201,75833,80617,85362,89979,94222,98227,102061,105990,110206,114910,119607,125465,129377,131845,135215,138555,139798,141386,144145,146854,149452,152150,154951,157791,160681,163835,167148,170433,173888,177189,180656,184307]
+      },
+      50000: {
+        Regular: [2440,2440,2440,2440,2440,2440,2440,2440,2440,2440,2407,2395,2384,2373,2403,2434,2482,2552,2639,2719,2804,2892,2946,3012,3087,3190,3270,3365,3436,3499,3573,3647,3708,3763,3833,3879,3971,4084,4232,4389,4570,4778,5006,5248,5484,5716,5939,6166,6430,6731,7040,7382,7761,8137,8558,9065,9718,10406,11209,12073,12871,13696,14556,15421,16354,17358,18474,19558,20629,21680,22710,23627,24549,25471,26533,27639,28810,30055,31413,32890,34452,36107,37765,39410,40580,41614,42563,43463,44748,46203,47707,49366,50938,51762,52645,53508,54438,55441,56578,57718],
+        Enhance: [3219,3219,3219,3219,3219,3219,3219,3219,3219,3219,3203,3189,3174,3160,3201,3260,3328,3371,3422,3482,3588,3691,3800,3923,4049,4177,4290,4437,4583,4717,4849,4938,5006,5089,5192,5267,5385,5524,5689,5878,6116,6347,6583,6835,7083,7333,7593,7865,8210,8618,8983,9420,9887,10358,10915,11516,12213,13078,14060,15186,16537,17615,18773,20004,21263,22542,24062,25382,26676,27828,29102,30295,31507,32706,33905,35072,36215,37339,38741,40244,41834,43488,45202,46885,48485,50047,51209,52327,53433,54538,55651,57128,58155,59135,60138,61146,62203,63729,65388,66982],
+        Premier: [6727,6727,6727,6727,6469,6469,6209,6209,5947,5840,5709,5607,5507,5408,5492,5705,5873,5927,6071,6204,6278,6435,6608,6807,6998,7205,7425,7673,7898,8110,8401,8607,8793,9055,9333,9632,9974,10187,10496,10776,10996,11269,11701,12179,12672,13182,13707,14266,14860,15493,16138,16841,17562,18367,19251,20219,21224,22354,23669,25153,26769,28353,30034,31785,33689,35713,37759,39955,42276,44685,47190,49832,52435,55025,57646,60315,63019,65861,68791,71748,74769,77833,80896,84111,85393,86930,88680,90350,91956,93641,95410,97184,98962,100921,103013,105070,107268,109312,111536,113893],
+        Noble:   [9450,9450,9450,9450,9225,9225,8967,8967,8620,8498,8367,8249,8095,7946,8061,8363,8569,8601,8796,8996,9201,9466,9760,10052,10299,10588,10673,10993,11237,11491,11750,11986,12171,12465,12748,13062,13423,13615,14081,14499,14968,15376,15993,16603,17231,17876,18537,19240,20051,20899,21767,22704,23679,24711,25828,27055,28338,29757,31407,33224,35181,37153,39237,41257,43461,45802,48177,50727,53422,56211,59105,62155,65142,68103,71087,74122,77190,80417,83736,87084,90498,93956,97404,101028,102482,104235,106236,108154,109992,111920,113944,115976,118017,120268,122669,125031,127553,129905,132455,135157]
+      }
+    };
+
+    // 4. YF Life 萬通 優裕醫療保 (PMC)
+    const yfData = {
+      0: [16501,16182,15881,15446,15011,14573,14137,13703,13580,13460,13318,13200,13079,12958,12841,12720,12503,12289,12074,11857,11740,11617,11396,12193,12990,13787,14585,15378,16176,16700,17150,17669,18197,18718,18887,19053,19223,19390,19560,20585,21479,22497,23519,24540,25661,26786,27909,29031,30153,31583,33320,34762,36204,37645,39847,42047,44249,46448,48650,52283,55586,59196,62806,66420,70655,74936,79170,83447,87685,90751,93603,96677,99740,102756,106342,109914,113487,117070,120644,124869,126184,129162,132797,136394,140736,145002,149243,153450,157629,162604,164497,169287,174633,179981,184736,189490,194234,199030,203784,203784],
+      15000: [9080,8906,8741,8501,8262,8022,7782,7542,7476,7411,7330,7266,7199,7133,7067,7002,6882,6766,6645,6527,6473,6412,6293,6730,7169,7609,8046,8489,8927,9218,9447,9733,10022,10310,10403,10496,10588,10680,10771,11336,11831,12396,12957,13521,14137,14756,15376,15993,16612,17401,18398,19194,19991,20786,22001,23216,24430,25645,26860,28866,30582,32567,34556,36542,38870,41224,43554,45909,48238,49926,51448,53141,54821,56478,58451,60413,62377,64349,66311,68633,69358,70994,72990,74968,77355,79699,82030,84342,86637,89371,90416,93042,95983,98922,101533,104151,106757,109393,112007,112007],
+      30000: [7123,6986,6855,6668,6479,6293,6105,5916,5865,5811,5748,5696,5645,5593,5542,5488,5397,5303,5213,5119,5080,5042,4948,5292,5638,5982,6325,6672,7022,7248,7419,7645,7874,8098,8170,8244,8316,8390,8462,8905,9288,9728,10169,10609,11093,11580,12064,12550,13037,13653,14465,15090,15717,16342,17297,18250,19204,20162,21118,22693,24041,25600,27164,28723,30554,32407,34240,36089,37922,39247,40302,41624,42944,44243,45785,47320,48861,50406,51944,53763,54330,55609,57175,58722,60593,62431,64257,66066,67864,70008,70826,72883,75188,77489,79537,81583,83627,85690,87739,87739],
+      100000: [5120,5021,4927,4795,4658,4525,4388,4255,4218,4178,4131,4097,4058,4019,3986,3946,3878,3812,3747,3680,3656,3633,3563,3812,4059,4309,4559,4808,5056,5219,5341,5505,5666,5829,5881,5934,5987,6037,6091,6410,6672,6990,7305,7621,7972,8318,8667,9017,9365,9807,10415,10868,11318,11766,12456,13146,13831,14522,15207,16342,17302,18427,19551,20673,21994,23323,24640,25976,27293,28247,29009,29963,30911,31847,32956,34061,35169,36282,37389,38697,39104,40028,41153,42267,43612,44936,46252,47553,48848,50387,50978,52459,54117,55776,57248,58723,60191,61678,63152,63152]
+    };
+
+    // 5. Prudential 保誠 尚賓計劃 (PRUHealth VHIS VIP Plan)
+    const pruData = {
+      asia: {
+        0: [13278,13278,13278,13278,13278,13179,13081,12998,12898,12801,12701,12603,12503,12404,12306,12192,12093,11995,11895,11797,11698,11599,11954,12544,12899,13727,14436,15382,16091,16562,16919,17274,17510,17864,18573,18930,19046,19401,19874,19992,20229,21470,22713,23954,25195,26439,27682,28922,30164,31408,32959,34212,34916,36795,38674,39749,42164,45118,47802,51025,54226,56797,61062,65510,72476,79035,85700,91777,93815,96874,101787,107963,111658,115227,119249,127812,132693,137578,142461,148099,154884,160495,166093,171704,178098,185708,192102,198498,204894,212152,218242,225484,232729,239970,248108,250138,258290,266430,274567,282954],
+        20000: [5446,5446,5446,5446,5446,5287,5129,4975,4922,4871,4819,4765,4714,4662,4610,4553,4499,4448,4396,4342,4291,4202,4457,4714,4969,5224,5482,5735,5992,6247,6483,6595,6696,6827,6957,7088,7248,7400,7594,7649,7714,8128,8426,8614,9086,9566,10038,10550,11059,12002,13065,14018,14306,15077,15846,16285,17275,18485,19585,20905,22217,23267,24320,25372,26762,29444,32690,34442,36397,38113,40825,43409,45126,46842,48842,52349,54346,56349,58347,60657,63436,65733,68025,70322,72942,76058,78677,81297,83914,86888,89381,92348,95314,98279,101611,102443,105783,109115,112447,115880],
+        50000: [4369,4369,4369,4369,4369,4244,4116,3993,3952,3909,3868,3825,3783,3741,3698,3653,3611,3570,3528,3485,3445,3373,3577,3782,3988,4193,4398,4602,4807,5013,5218,5323,5428,5533,5639,5745,5850,5955,6112,6176,6253,6559,6802,6953,7210,7590,7965,8346,8722,9466,10138,10876,11099,11695,12294,12635,13401,14340,15191,16215,17232,18050,18866,20007,21104,23218,25774,27158,28699,30053,32190,34229,35583,36934,38513,41277,42854,44430,46006,47827,50017,51830,53636,55450,57514,59972,62035,64098,66165,68510,70474,72814,75152,77490,80118,80774,83406,86032,88662,91370],
+        96000: [3286,3286,3286,3286,3286,3191,3094,3002,2972,2939,2909,2876,2846,2814,2782,2747,2717,2686,2654,2622,2592,2537,2690,2845,2999,3153,3307,3461,3616,3770,3924,4002,4081,4160,4239,4318,4398,4478,4594,4642,4701,4932,5113,5226,5421,5706,5988,6273,6555,7114,7618,8172,8342,8789,9238,9494,10070,10775,11415,12185,12947,13562,14174,15032,15858,17444,19365,20405,21562,22579,24185,25715,26734,27748,28934,31010,32194,33380,34562,35931,37576,38937,40294,41658,43208,45053,46605,48155,49706,51466,52943,54700,56457,58214,60187,60681,62658,64630,66606,68640]
+      },
+      global: {
+        0: [14606,14606,14606,14606,14606,14496,14388,14297,14188,14080,13970,13861,13751,13643,13534,13410,13301,13193,13084,12974,12867,12758,13148,13797,14189,15099,15878,16919,17699,18218,18610,19000,19260,19649,20429,20822,20950,21340,21860,21990,22251,23615,24983,26350,27714,29082,30450,31814,33181,34546,36253,37632,38405,40472,42539,43722,46380,49629,52581,56126,59648,62475,67167,72060,79722,86936,94269,100953,103196,106561,111966,118758,122824,126750,131173,140591,145962,151334,156706,162908,170372,176544,182701,188874,195907,204277,211310,218347,225381,233366,240064,248032,256001,263965,272918,275150,284118,293072,302022,311248],
+        20000: [5990,5990,5990,5990,5990,5814,5640,5471,5413,5358,5299,5241,5183,5128,5070,5007,4947,4891,4834,4775,4718,4621,4902,5183,5464,5746,6028,6308,6590,6871,7131,7254,7366,7510,7651,7796,7971,8139,8353,8413,8484,8940,9268,9474,9994,10522,11040,11604,12165,13202,14369,15418,15735,16582,17428,17912,19002,20332,21542,22993,24437,25593,26751,27907,29437,32387,35958,37885,40035,41923,44906,47748,49637,51526,53726,57583,59780,61982,64182,66721,69778,72306,74826,77354,80236,83663,86544,89425,92304,95575,98318,101582,104843,108106,111771,112686,116360,120026,123692,127467],
+        50000: [4805,4805,4805,4805,4805,4666,4526,4390,4346,4299,4253,4206,4161,4113,4068,4017,3972,3925,3880,3832,3789,3708,3934,4159,4385,4612,4836,5062,5287,5514,5738,5854,5970,6085,6202,6317,6434,6550,6722,6793,6877,7214,7481,7647,7930,8349,8761,9179,9592,10410,11150,11962,12208,12865,13522,13898,14740,15772,16710,17836,18954,19854,20750,22006,23214,25539,28350,29873,31569,33058,35409,37650,39140,40627,42362,45404,47138,48874,50606,52608,55018,57011,58999,60994,63265,65966,68238,70508,72780,75358,77520,80094,82666,85238,88128,88850,91746,94634,97526,100505],
+        96000: [3612,3612,3612,3612,3612,3509,3402,3302,3268,3231,3198,3164,3128,3094,3060,3021,2987,2952,2918,2882,2849,2790,2958,3127,3298,3467,3636,3806,3975,4146,4315,4400,4487,4574,4662,4749,4838,4924,5052,5106,5170,5424,5623,5749,5961,6275,6586,6899,7210,7823,8379,8989,9175,9667,10162,10442,11077,11852,12555,13402,14242,14917,15590,16534,17441,19188,21300,22444,23718,24837,26603,28285,29405,30522,31826,34110,35414,36715,38018,39522,41332,42830,44322,45822,47528,49558,51264,52970,54675,56613,58238,60170,62101,64034,66205,66747,68922,71093,73265,75502]
+      }
+    };
+
+    // 6. Manulife 宏利 晉悅自願醫保靈活計劃 (Supreme VHIS Flexi Plan)
+    const manulifeData = {
+      smart: {
+        0: [7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7003,7200,7617,7620,7879,8147,8423,8653,9146,9763,10315,10721,10980,11397,11664,12092,12278,12380,12512,12892,12952,13011,13073,13533,13993,14482,14988,15734,16866,17998,18438,18888,19349,20847,21934,22751,23126,23502,25273,27177,29223,30754,32281,35188,37758,41156,44861,48897,53298,57063,58479,60542,62371,67984,72127,76052,79401,81061,87443,95313,99549,104112,107918,113746,116021,118342,120709,123123,124775,126445,128130,129833,131552,134183,136869,139605,142397,145246,148150,151112,154136,157218],
+        22800: [3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3401,3459,3518,3621,3730,3841,3953,4071,4262,4629,4825,4926,4937,5151,5380,5612,5751,5824,5983,6214,6249,6284,6318,6592,6867,7084,7309,7540,8219,8907,9050,9196,9343,9873,10400,11141,11240,11338,12251,13237,14303,15006,15712,17126,18667,20347,22179,24175,26350,28665,29492,30608,31630,34477,36657,38655,40507,41626,43775,46824,47734,50488,51616,52650,53702,54775,55873,56989,58130,59292,60479,61687,62921,64179,65464,66772,68108,69469,70859,72277,73722,75197],
+        45000: [2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2494,2675,2697,2763,2798,2832,2864,2864,3026,3138,3227,3279,3286,3353,3439,3545,3569,3589,3732,3780,3850,3873,3942,4166,4392,4589,4791,5000,5450,5940,6146,6292,6595,6967,7509,8186,8480,8738,9242,9772,10328,10591,10835,11683,12355,13311,14354,15080,16437,17917,19530,21287,23203,25291,27567,29311,30714,31564,33194,35505,36197,38285,39662,40987,42893,44859,46886,48976,49955,50955,51973,53013,54073,58399,59568,60759,61973,64618,65911,68324,70437,72225],
+        100000: [2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2234,2257,2266,2299,2329,2359,2386,2420,2497,2595,2662,2697,2698,2787,2844,2922,2926,2961,3149,3245,3290,3308,3353,3554,3761,3939,4125,4320,4708,5132,5413,5578,5667,6113,6483,6992,7102,7307,7684,7965,8247,8407,8865,9663,10500,11446,12368,13136,14319,15608,17012,18528,19627,21392,22654,23887,25032,25939,27278,28937,29500,31461,32431,33350,34571,35827,36830,37860,38915,40000,41111,42251,43422,46935,47873,49174,50508,51518,52731,53971,55241,56540]
+      },
+      advance: {
+        0: [12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12099,12347,12602,12863,13129,13398,13677,13957,14247,14542,14842,15146,15459,15780,16105,16437,16776,17124,17477,17836,18207,18361,18475,18631,19479,20328,21177,22026,22875,23804,24729,25693,26618,27546,28742,29940,31794,33765,35857,38080,40442,42948,45610,48437,51438,54626,58014,61609,65428,69481,73790,78365,81886,85405,88924,93080,97778,102712,107896,113339,119056,127549,132391,137229,142071,145629,150843,154070,157933,161855,165842,170746,175783,180946,186244,191675,197240,202950,208796,214785,220922,227205,233636,240220,246956],
+        22800: [4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4724,4828,4936,5046,5157,5274,5390,5510,5633,5760,5887,6017,6152,6289,6429,6569,6720,6870,7021,7180,7338,7493,7607,7761,7946,8128,8438,8749,9072,9440,9856,10342,10770,11196,11625,12060,12506,13001,13668,14465,15309,16213,17173,18195,19252,20636,22393,24008,26045,28233,30601,32795,34960,36801,38276,40024,42005,44089,46274,48569,50975,53407,55393,57378,60002,61722,63688,64805,66178,67565,68822,70088,71366,72650,73946,75250,76560,77878,79201,80530,81860,83193,84607,86048,87510],
+        45000: [4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4119,4211,4305,4401,4497,4598,4701,4805,4911,5022,5133,5248,5366,5486,5606,5729,5859,5991,6122,6261,6399,6535,6634,6769,6928,7088,7358,7629,7911,8231,8594,9019,9391,9763,10137,10517,10905,11339,11918,12614,13349,14139,14976,15867,16787,17995,19528,20934,22711,24620,26686,28600,30487,32091,33379,34902,36629,38446,40354,42353,44453,46573,48303,50035,52324,53824,55538,56512,57709,58920,60014,61118,62232,63354,64482,65620,66763,67911,69064,70224,71384,72547,73781,75035,76311],
+        100000: [2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2794,2843,2890,3010,3134,3263,3398,3447,3555,3749,3845,3896,3899,4055,4171,4318,4357,4376,4551,4688,4752,4780,4845,5135,5433,5690,5960,6241,6803,7415,7820,8058,8188,8830,9366,10102,10260,10556,11182,11679,12185,12328,13098,14277,15058,16361,17227,17427,18995,20409,21894,22723,23482,25593,27101,28579,29949,31033,32634,34620,35292,37638,38799,39899,41358,42862,44062,45295,46557,47854,49185,50548,51947,56151,57272,58830,60426,61633,63086,64570,66088,67641]
+      },
+      deluxe: {
+        0: [21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21443,21991,22539,23087,23635,24183,24731,25279,25653,26028,26682,27336,27990,28644,29297,29949,30601,31253,31783,32522,33262,34187,35113,36039,37160,38671,40430,42776,45107,46762,48418,50072,51728,53864,57201,60748,64510,68513,72291,76628,81226,86099,91265,96741,102062,107675,113597,119845,125837,132129,138736,145673,152956,159855,167976,176083,184132,192544,201697,211274,221294,231778,242163,252392,263039,272799,282907,292443,302081,310191,316394,322722,329178,335762,342476,349325,356313,363438,370707,378122,385683,393399],
+        22800: [9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9022,9278,9534,9890,10246,10485,10727,10979,11236,11623,11898,12175,12460,12898,13337,13590,13843,14242,14642,14879,15288,15696,16275,16813,17351,18018,18864,19711,20406,21102,21797,22804,23865,24939,26208,27477,29180,31191,33328,35465,38020,40574,43129,46410,49692,53367,57043,61144,65245,69346,73447,76801,80155,83627,87151,90728,94358,98100,100935,103424,106261,109098,112973,116881,120879,124931,129037,133198,136174,138369,140563,143491,146419,150130,154485,158893,164070,169246,174057,178986,184032,189192],
+        45000: [7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,7926,8031,8135,8240,8345,8519,8652,8806,8961,9116,9271,9472,9693,9889,10042,10408,10774,11300,11827,12353,12923,13348,13773,14270,14818,15416,16018,16619,17204,17844,18603,19197,20070,20810,21550,22290,23260,24635,26488,28469,30738,33271,35804,38587,41370,44154,46937,49720,51791,54495,57471,60465,63482,67012,70735,74666,78812,83187,87844,92500,95886,99266,102802,106338,109357,112377,115725,119162,122690,126307,130020,133828,137730,141731,145833,150034,154338,158751,163264,167887,172620,177460],
+        100000: [6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6148,6434,6720,7006,7150,7267,7384,7469,7555,7640,7784,7928,8069,8210,8351,8491,8691,8880,9059,9239,9485,9731,10043,10325,10606,11109,11611,12286,12961,13551,14141,14755,15632,16396,17161,17988,19214,20439,21665,22891,24116,25949,27781,29614,30666,31719,32946,34682,36418,38643,40869,43535,46200,49076,52379,55682,59412,63142,66872,70602,73877,77152,80428,83703,86978,90542,93445,96347,99250,102152,103965,105778,107553,109388,111429,113567,115935,118515,121136,123405,125674,127943]
+      }
+    };
+
+    // Chart 實例
+    let barChartInstance = null;
+    let trendChartInstance = null;
+
+    // --- DOM Elements ---
+    const startAgeInput = document.getElementById('startAgeInput');
+    const endAgeInput = document.getElementById('endAgeInput');
+    const deductibleSelect = document.getElementById('deductibleSelect');
+    const deductibleDesc = document.getElementById('deductibleDesc');
+    const summaryRangeTag = document.getElementById('summaryRangeTag');
+
+    const aiaPlanType = document.getElementById('aiaPlanType');
+    const aiaRegion = document.getElementById('aiaRegion');
+    const axaTier = document.getElementById('axaTier');
+    const fwdTier = document.getElementById('fwdTier');
+    const pruRegion = document.getElementById('pruRegion');
+    const manuTier = document.getElementById('manuTier');
+
+    const fwdTotalDisplay = document.getElementById('fwdTotalDisplay');
+    const aiaTotalDisplay = document.getElementById('aiaTotalDisplay');
+    const axaTotalDisplay = document.getElementById('axaTotalDisplay');
+    const yfTotalDisplay = document.getElementById('yfTotalDisplay');
+    const pruTotalDisplay = document.getElementById('pruTotalDisplay');
+    const manuTotalDisplay = document.getElementById('manuTotalDisplay');
+
+    const fwdAvgDisplay = document.getElementById('fwdAvgDisplay');
+    const aiaAvgDisplay = document.getElementById('aiaAvgDisplay');
+    const axaAvgDisplay = document.getElementById('axaAvgDisplay');
+    const yfAvgDisplay = document.getElementById('yfAvgDisplay');
+    const pruAvgDisplay = document.getElementById('pruAvgDisplay');
+    const manuAvgDisplay = document.getElementById('manuAvgDisplay');
+
+    const fwdDeductibleTag = document.getElementById('fwdDeductibleTag');
+    const aiaDeductibleTag = document.getElementById('aiaDeductibleTag');
+    const axaDeductibleTag = document.getElementById('axaDeductibleTag');
+    const yfDeductibleTag = document.getElementById('yfDeductibleTag');
+    const pruDeductibleTag = document.getElementById('pruDeductibleTag');
+    const manuDeductibleTag = document.getElementById('manuDeductibleTag');
+
+    const rankFWD = document.getElementById('rankFWD');
+    const rankAIA = document.getElementById('rankAIA');
+    const rankAXA = document.getElementById('rankAXA');
+    const rankYF = document.getElementById('rankYF');
+    const rankPru = document.getElementById('rankPru');
+    const rankManu = document.getElementById('rankManu');
+
+    const chartRangeLabel = document.getElementById('chartRangeLabel');
+    const tableRangeLabel = document.getElementById('tableRangeLabel');
+    const premiumTableBody = document.getElementById('premiumTableBody');
+
+    const tfootAIA = document.getElementById('tfootAIA');
+    const tfootAXA = document.getElementById('tfootAXA');
+    const tfootFWD = document.getElementById('tfootFWD');
+    const tfootYF = document.getElementById('tfootYF');
+    const tfootPru = document.getElementById('tfootPru');
+    const tfootManu = document.getElementById('tfootManu');
+    const tfootWinner = document.getElementById('tfootWinner');
+
+    // 視圖切換 Tab
+    const tabBtnCalc = document.getElementById('tabBtnCalc');
+    const tabBtnFeatures = document.getElementById('tabBtnFeatures');
+    const viewCalculator = document.getElementById('viewCalculator');
+    const viewFeatures = document.getElementById('viewFeatures');
+
+    tabBtnCalc.addEventListener('click', () => {
+      tabBtnCalc.className = "px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition flex items-center gap-1.5";
+      tabBtnFeatures.className = "px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+      viewCalculator.classList.remove('hidden');
+      viewFeatures.classList.add('hidden');
+    });
+
+    tabBtnFeatures.addEventListener('click', () => {
+      tabBtnFeatures.className = "px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition flex items-center gap-1.5";
+      tabBtnCalc.className = "px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+      viewFeatures.classList.remove('hidden');
+      viewCalculator.classList.add('hidden');
+    });
+
+    // 格式化千分位
+    function formatMoney(num) {
+      return Math.round(num).toLocaleString('en-US');
+    }
+
+    // 計算函數
+    function calculate() {
+      let startAge = parseInt(startAgeInput.value);
+      let endAge = parseInt(endAgeInput.value);
+
+      // 邊界保護
+      if (isNaN(startAge)) startAge = 0;
+      if (isNaN(endAge)) endAge = 85;
+      if (startAge < 0) startAge = 0;
+      if (endAge > 99) endAge = 99;
+      if (startAge > endAge) {
+        const temp = startAge;
+        startAge = endAge;
+        endAge = temp;
+      }
+
+      startAgeInput.value = startAge;
+      endAgeInput.value = endAge;
+
+      const totalYears = endAge - startAge + 1;
+      const targetLevel = parseInt(deductibleSelect.value);
+
+      // 各公司自付額對應字典
+      let fwdDeductKey = 0;
+      let aiaDeductKey = 0;
+      let axaDeductKey = 0;
+      let yfDeductKey = 0;
+      let pruDeductKey = 0;
+      let manuDeductKey = 0;
+
+      if (targetLevel === 0) {
+        fwdDeductKey = 0; aiaDeductKey = 0; axaDeductKey = 0; yfDeductKey = 0; pruDeductKey = 0; manuDeductKey = 0;
+      } else if (targetLevel === 16000) {
+        fwdDeductKey = 16000; aiaDeductKey = 16000; axaDeductKey = 20000; yfDeductKey = 15000; pruDeductKey = 20000; manuDeductKey = 22800;
+      } else if (targetLevel === 25000) {
+        fwdDeductKey = 25000; aiaDeductKey = 25000; axaDeductKey = 20000; yfDeductKey = 30000; pruDeductKey = 20000; manuDeductKey = 22800;
+      } else if (targetLevel === 50000) {
+        fwdDeductKey = 50000; aiaDeductKey = 50000; axaDeductKey = 50000; yfDeductKey = 30000; pruDeductKey = 50000; manuDeductKey = 45000;
+      } else if (targetLevel === 100000) {
+        fwdDeductKey = 100000; aiaDeductKey = 50000; axaDeductKey = 50000; yfDeductKey = 100000; pruDeductKey = 96000; manuDeductKey = 100000;
+      }
+
+      // 更新卡片上的自付額提示
+      fwdDeductibleTag.textContent = `$${formatMoney(fwdDeductKey)}`;
+      aiaDeductibleTag.textContent = `$${formatMoney(aiaDeductKey)}`;
+      axaDeductibleTag.textContent = `$${formatMoney(axaDeductKey)}`;
+      yfDeductibleTag.textContent = `$${formatMoney(yfDeductKey)}`;
+      pruDeductibleTag.textContent = `$${formatMoney(pruDeductKey)}`;
+      manuDeductibleTag.textContent = `$${formatMoney(manuDeductKey)}`;
+
+      deductibleDesc.innerHTML = `* 當前各公司對齊檔次：FWD <strong>$${formatMoney(fwdDeductKey)}</strong> | AIA <strong>$${formatMoney(aiaDeductKey)}</strong> | AXA <strong>$${formatMoney(axaDeductKey)}</strong> | 萬通 <strong>$${formatMoney(yfDeductKey)}</strong> | 保誠 <strong>$${formatMoney(pruDeductKey)}</strong> | 宏利 <strong>$${formatMoney(manuDeductKey)}</strong>`;
+
+      summaryRangeTag.textContent = `${startAge} - ${endAge} 歲 (共 ${totalYears} 年)`;
+      chartRangeLabel.textContent = `${startAge} - ${endAge} 歲`;
+      tableRangeLabel.textContent = `${startAge} - ${endAge} 歲 (共 ${totalYears} 年)`;
+
+      // 提取保費列表
+      const fwdSelectedTier = fwdTier.value;
+      const pType = aiaPlanType.value;
+      const pRegion = aiaRegion.value;
+      const axaSelectedTier = axaTier.value;
+      const pruSelectedRegion = pruRegion.value;
+      const manuSelectedTier = manuTier.value;
+
+      const fwdFullList = fwdData[fwdSelectedTier][fwdDeductKey] || [];
+      const aiaFullList = aiaData[pType][pRegion][aiaDeductKey] || [];
+      const axaFullList = axaData[axaDeductKey][axaSelectedTier] || [];
+      const yfFullList = yfData[yfDeductKey] || [];
+      const pruFullList = pruData[pruSelectedRegion][pruDeductKey] || [];
+      const manuFullList = manulifeData[manuSelectedTier][manuDeductKey] || [];
+
+      let fwdTotal = 0;
+      let aiaTotal = 0;
+      let axaTotal = 0;
+      let yfTotal = 0;
+      let pruTotal = 0;
+      let manuTotal = 0;
+
+      const ageLabels = [];
+      const fwdYearly = [];
+      const aiaYearly = [];
+      const axaYearly = [];
+      const yfYearly = [];
+      const pruYearly = [];
+      const manuYearly = [];
+
+      let tableHtml = '';
+
+      for (let age = startAge; age <= endAge; age++) {
+        const fwdPrem = fwdFullList[age] || 0;
+        const aiaPrem = aiaFullList[age] || 0;
+        const axaPrem = axaFullList[age] || 0;
+        const yfPrem = yfFullList[age] || 0;
+        const pruPrem = pruFullList[age] || 0;
+        const manuPrem = manuFullList[age] || 0;
+
+        fwdTotal += fwdPrem;
+        aiaTotal += aiaPrem;
+        axaTotal += axaPrem;
+        yfTotal += yfPrem;
+        pruTotal += pruPrem;
+        manuTotal += manuPrem;
+
+        ageLabels.push(`${age}歲`);
+        fwdYearly.push(fwdPrem);
+        aiaYearly.push(aiaPrem);
+        axaYearly.push(axaPrem);
+        yfYearly.push(yfPrem);
+        pruYearly.push(pruPrem);
+        manuYearly.push(manuPrem);
+
+        // 尋找當年度最低價
+        const prices = [
+          { name: 'FWD',  val: fwdPrem },
+          { name: 'AIA',  val: aiaPrem },
+          { name: 'AXA',  val: axaPrem },
+          { name: '萬通', val: yfPrem },
+          { name: '保誠', val: pruPrem },
+          { name: '宏利', val: manuPrem }
+        ];
+        prices.sort((a, b) => a.val - b.val);
+        const minPlan = prices[0];
+
+        tableHtml += `
+          <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="py-2.5 px-3 font-semibold text-slate-700">${age} 歲</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === 'FWD' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(fwdPrem)}</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === 'AIA' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(aiaPrem)}</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === 'AXA' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(axaPrem)}</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === '萬通' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(yfPrem)}</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === '保誠' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(pruPrem)}</td>
+            <td class="py-2.5 px-3 text-right ${minPlan.name === '宏利' ? 'font-bold text-emerald-600 bg-emerald-50/40' : 'text-slate-700'}">$${formatMoney(manuPrem)}</td>
+            <td class="py-2.5 px-3 text-right">
+              <span class="inline-block px-2 py-0.5 rounded text-[11px] bg-slate-100 text-slate-800 font-semibold">
+                ${minPlan.name} ($${formatMoney(minPlan.val)})
+              </span>
+            </td>
+          </tr>
+        `;
+      }
+
+      premiumTableBody.innerHTML = tableHtml;
+
+      // 更新總保費與年均
+      fwdTotalDisplay.textContent = formatMoney(fwdTotal);
+      aiaTotalDisplay.textContent = formatMoney(aiaTotal);
+      axaTotalDisplay.textContent = formatMoney(axaTotal);
+      yfTotalDisplay.textContent = formatMoney(yfTotal);
+      pruTotalDisplay.textContent = formatMoney(pruTotal);
+      manuTotalDisplay.textContent = formatMoney(manuTotal);
+
+      fwdAvgDisplay.textContent = `$${formatMoney(fwdTotal / totalYears)}`;
+      aiaAvgDisplay.textContent = `$${formatMoney(aiaTotal / totalYears)}`;
+      axaAvgDisplay.textContent = `$${formatMoney(axaTotal / totalYears)}`;
+      yfAvgDisplay.textContent = `$${formatMoney(yfTotal / totalYears)}`;
+      pruAvgDisplay.textContent = `$${formatMoney(pruTotal / totalYears)}`;
+      manuAvgDisplay.textContent = `$${formatMoney(manuTotal / totalYears)}`;
+
+      // 計算各公司排名 (由低至高)
+      const rankedList = [
+        { code: 'FWD', total: fwdTotal, el: rankFWD },
+        { code: 'AIA', total: aiaTotal, el: rankAIA },
+        { code: 'AXA', total: axaTotal, el: rankAXA },
+        { code: 'YF',  total: yfTotal,  el: rankYF },
+        { code: 'Pru', total: pruTotal, el: rankPru },
+        { code: 'Manu',total: manuTotal,el: rankManu }
+      ];
+      rankedList.sort((a, b) => a.total - b.total);
+
+      rankedList.forEach((item, idx) => {
+        const rank = idx + 1;
+        if (rank === 1) {
+          item.el.innerHTML = `<span class="text-emerald-600 font-bold">第 1 名 (最低)</span>`;
+        } else {
+          item.el.innerHTML = `<span class="text-slate-600">第 ${rank} 名</span>`;
+        }
+      });
+
+      // 表尾合計更新
+      tfootFWD.textContent = `$${formatMoney(fwdTotal)}`;
+      tfootAIA.textContent = `$${formatMoney(aiaTotal)}`;
+      tfootAXA.textContent = `$${formatMoney(axaTotal)}`;
+      tfootYF.textContent = `$${formatMoney(yfTotal)}`;
+      tfootPru.textContent = `$${formatMoney(pruTotal)}`;
+      tfootManu.textContent = `$${formatMoney(manuTotal)}`;
+
+      const winner = rankedList[0];
+      tfootWinner.textContent = `最低: ${winner.code}`;
+
+      // 繪製客觀中立圖表
+      renderCharts(ageLabels, fwdYearly, aiaYearly, axaYearly, yfYearly, pruYearly, manuYearly, fwdTotal, aiaTotal, axaTotal, yfTotal, pruTotal, manuTotal);
+    }
+
+    // 圖表渲染 (中立配色、同等粗細)
+    function renderCharts(ageLabels, fwdYearly, aiaYearly, axaYearly, yfYearly, pruYearly, manuYearly, fwdTotal, aiaTotal, axaTotal, yfTotal, pruTotal, manuTotal) {
+      // 1. Bar Chart
+      const barCanvas = document.getElementById('barChart');
+      if (barCanvas) {
+        const barCtx = barCanvas.getContext('2d');
+        if (barChartInstance) barChartInstance.destroy();
+
+        barChartInstance = new Chart(barCtx, {
+          type: 'bar',
+          data: {
+            labels: ['FWD 富衛', 'AIA 友邦', 'AXA 安盛', '萬通 YF', '保誠 Pru', '宏利 Manu'],
+            datasets: [{
+              label: '總保費 (HKD)',
+              data: [fwdTotal, aiaTotal, axaTotal, yfTotal, pruTotal, manuTotal],
+              backgroundColor: [
+                'rgba(245, 158, 11, 0.75)',  // FWD Amber
+                'rgba(239, 68, 68, 0.75)',   // AIA Red
+                'rgba(37, 99, 235, 0.75)',   // AXA Blue
+                'rgba(8, 145, 178, 0.75)',   // YF Cyan
+                'rgba(225, 29, 72, 0.75)',   // Pru Rose
+                'rgba(16, 185, 129, 0.75)'   // Manu Emerald
+              ],
+              borderColor: [
+                '#d97706',
+                '#dc2626',
+                '#1d4ed8',
+                '#0e7490',
+                '#be123c',
+                '#047857'
+              ],
+              borderWidth: 1.5,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(ctx) {
+                    return ' 總保費: HK$ ' + formatMoney(ctx.raw);
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function(val) {
+                    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
+                    if (val >= 1000) return (val / 1000).toFixed(0) + 'K';
+                    return val;
+                  },
+                  font: { size: 10 }
+                },
+                grid: { color: '#f1f5f9' }
+              },
+              x: {
+                ticks: { font: { size: 10, weight: '600' } },
+                grid: { display: false }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Trend Line Chart (六條曲線客觀中立顯示)
+      const lineCanvas = document.getElementById('trendChart');
+      if (lineCanvas) {
+        const lineCtx = lineCanvas.getContext('2d');
+        if (trendChartInstance) trendChartInstance.destroy();
+
+        trendChartInstance = new Chart(lineCtx, {
+          type: 'line',
+          data: {
+            labels: ageLabels,
+            datasets: [
+              {
+                label: 'FWD 富衛',
+                data: fwdYearly,
+                borderColor: '#f59e0b',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              },
+              {
+                label: 'AIA 友邦',
+                data: aiaYearly,
+                borderColor: '#ef4444',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              },
+              {
+                label: 'AXA 安盛',
+                data: axaYearly,
+                borderColor: '#2563eb',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              },
+              {
+                label: '萬通 YF Life',
+                data: yfYearly,
+                borderColor: '#0891b2',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              },
+              {
+                label: '保誠 Prudential',
+                data: pruYearly,
+                borderColor: '#e11d48',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              },
+              {
+                label: '宏利 Manulife',
+                data: manuYearly,
+                borderColor: '#10b981',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { 
+                  boxWidth: 12, 
+                  font: { size: 11 },
+                  usePointStyle: true
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(ctx) {
+                    return ' ' + ctx.dataset.label + ': HK$ ' + formatMoney(ctx.raw);
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                ticks: {
+                  callback: function(val) {
+                    return '$' + (val >= 1000 ? (val/1000).toFixed(0) + 'K' : val);
+                  },
+                  font: { size: 10 }
+                },
+                grid: { color: '#f1f5f9' }
+              },
+              x: {
+                ticks: { maxTicksLimit: 14, font: { size: 10 } },
+                grid: { display: false }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // 匯出 PDF 建議書功能 (調用列印並帶入抬頭)
+    const exportPDFBtn = document.getElementById('btnExportPDF');
+    if (exportPDFBtn) {
+      exportPDFBtn.addEventListener('click', () => {
+        try {
+          // 同步客戶與顧問資訊至建議書抬頭
+          const clientName = document.getElementById('inputClientName')?.value || '陳大文 先生';
+          const advisorName = document.getElementById('inputAdvisorName')?.value || '富衛策劃顧問';
+          const advisorTitle = document.getElementById('selectAdvisorTitle')?.value || '資深分區總監';
+          const advisorTeam = document.getElementById('inputAdvisorTeam')?.value || 'One Goal One Region';
+          const advisorPhone = document.getElementById('inputAdvisorPhone')?.value || '+853 6688 8888';
+
+          const clientNameEl = document.getElementById('pdfClientNameDisplay');
+          const advisorNameEl = document.getElementById('pdfAdvisorNameDisplay');
+          const advisorTitleEl = document.getElementById('pdfAdvisorTitleDisplay');
+          const advisorTeamEl = document.getElementById('pdfAdvisorTeamDisplay');
+          const advisorPhoneEl = document.getElementById('pdfAdvisorPhoneDisplay');
+          const dateEl = document.getElementById('pdfDateDisplay');
+
+          if (clientNameEl) clientNameEl.textContent = clientName;
+          if (advisorNameEl) advisorNameEl.textContent = advisorName;
+          if (advisorTitleEl) advisorTitleEl.textContent = advisorTitle;
+          if (advisorTeamEl) advisorTeamEl.textContent = advisorTeam;
+          if (advisorPhoneEl) advisorPhoneEl.textContent = `電話：${advisorPhone}`;
+
+          // 動態生成當天日期
+          const today = new Date();
+          const year = today.getFullYear();
+          const month = today.getMonth() + 1;
+          const day = today.getDate();
+          if (dateEl) dateEl.textContent = `${year} 年 ${month} 月 ${day} 日`;
+
+          // 切換回保費試算頁面
+          if (tabBtnCalc) tabBtnCalc.click();
+
+          // 檢查是否能正常調用 window.print()，並加入新視窗獨立備用方案（防止 iFrame 沙盒限制阻擋）
+          let printSuccess = false;
+          try {
+            printSuccess = window.print();
+          } catch (err) {
+            console.warn("直接調用 window.print() 失敗，改用獨立彈窗列印：", err);
+          }
+
+          // 如果是在受限 iFrame 內，開啟獨立專屬列印預覽視窗
+          if (!printSuccess) {
+            const printWindow = window.open('', '_blank', 'width=1000,height=800');
+            if (printWindow) {
+              const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                  <title>高端醫療專屬保障建議書 - ${clientName}</title>
+                  <script src="https://cdn.tailwindcss.com"><\/script>
+                  <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 25px; }
+                    @media print { body { padding: 0; } button { display: none !important; } }
+                  </style>
+                </head>
+                <body class="bg-white text-slate-800">
+                  <div class="mb-4 flex justify-between items-center no-print border-b pb-3">
+                    <span class="text-xs text-slate-500 font-medium">提示：請在彈出的列印介面選擇「另存為 PDF (Save as PDF)」</span>
+                    <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow hover:bg-blue-700">立即列印 / 存為 PDF</button>
+                  </div>
+                  <!-- 建議書頂部 Header -->
+                  <div class="mb-6 pb-4 border-b-2 border-slate-800 flex justify-between items-start">
+                    <div class="space-y-1">
+                      <div class="text-xs font-medium tracking-wide text-slate-500">富衛人壽保險（澳門）• 專屬保障建議書</div>
+                      <h1 class="text-2xl font-black text-slate-950 tracking-tight">高端醫療保 / 升級版 客戶專屬規劃方案</h1>
+                      <div class="text-xs text-slate-600 font-medium pt-0.5">
+                        尊榮客戶：<strong class="text-slate-900 text-sm">${clientName}</strong> 
+                        <span class="mx-2 text-slate-300">|</span> 
+                        製定日期：${year} 年 ${month} 月 ${day} 日
+                      </div>
+                    </div>
+                    <div class="text-right border-l border-slate-300 pl-6 space-y-0.5">
+                      <div class="text-sm font-bold text-slate-900">${advisorName}</div>
+                      <div class="text-xs font-medium text-slate-600">${advisorTitle}</div>
+                      <div class="text-xs text-slate-500 font-semibold">${advisorTeam}</div>
+                      <div class="text-xs text-slate-500">電話：${advisorPhone}</div>
+                    </div>
+                  </div>
+                  <!-- 表格與總額數據 -->
+                  <div class="mb-4">
+                    <h3 class="font-bold text-sm text-slate-800 mb-2">【各公司總保費摘要】</h3>
+                    <div class="grid grid-cols-6 gap-2 text-center text-xs">
+                      <div class="p-2 border rounded bg-amber-50"><strong>FWD</strong><br><span class="font-bold text-slate-900">$${fwdTotalDisplay.textContent}</span></div>
+                      <div class="p-2 border rounded bg-slate-50"><strong>AIA</strong><br><span class="font-bold text-slate-900">$${aiaTotalDisplay.textContent}</span></div>
+                      <div class="p-2 border rounded bg-slate-50"><strong>AXA</strong><br><span class="font-bold text-slate-900">$${axaTotalDisplay.textContent}</span></div>
+                      <div class="p-2 border rounded bg-slate-50"><strong>萬通</strong><br><span class="font-bold text-slate-900">$${yfTotalDisplay.textContent}</span></div>
+                      <div class="p-2 border rounded bg-slate-50"><strong>保誠</strong><br><span class="font-bold text-slate-900">$${pruTotalDisplay.textContent}</span></div>
+                      <div class="p-2 border rounded bg-slate-50"><strong>宏利</strong><br><span class="font-bold text-slate-900">$${manuTotalDisplay.textContent}</span></div>
+                    </div>
+                  </div>
+                  <div class="mt-6">
+                    <h3 class="font-bold text-sm text-slate-800 mb-2">【逐年保費詳細對比表】</h3>
+                    <table class="w-full text-xs text-left border-collapse border border-slate-200">
+                      <thead class="bg-slate-100 font-bold border-b border-slate-300">
+                        <tr>
+                          <th class="p-2 border">年齡</th>
+                          <th class="p-2 border text-right">FWD</th>
+                          <th class="p-2 border text-right">AIA</th>
+                          <th class="p-2 border text-right">AXA</th>
+                          <th class="p-2 border text-right">萬通</th>
+                          <th class="p-2 border text-right">保誠</th>
+                          <th class="p-2 border text-right">宏利</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${premiumTableBody.innerHTML.replace(/<span class="inline-block[^>]*>.*?<\/span>/g, '')}
+                      </tbody>
+                    </table>
+                  </div>
+                </body>
+                </html>
+              `;
+              printWindow.document.write(htmlContent);
+              printWindow.document.close();
+              printWindow.focus();
+              setTimeout(() => {
+                printWindow.print();
+              }, 400);
+            }
+          }
+        } catch (e) {
+          console.error("列印出錯：", e);
+        }
+      });
+    }
+
+    // 重設按鈕
+    const resetBtn = document.getElementById('btnResetFilters');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        startAgeInput.value = 0;
+        endAgeInput.value = 85;
+        deductibleSelect.value = '0';
+        fwdTier.value = 'standard';
+        aiaPlanType.value = 'basic';
+        aiaRegion.value = 'asia';
+        axaTier.value = 'Enhance';
+        pruRegion.value = 'asia';
+        manuTier.value = 'advance';
+        calculate();
+      });
+    }
+
+    // 快捷區間按鈕
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        startAgeInput.value = e.target.getAttribute('data-start');
+        endAgeInput.value = e.target.getAttribute('data-end');
+        calculate();
+      });
+    });
+
+    // 監聽各項輸入變更
+    const controlElements = [
+      startAgeInput, 
+      endAgeInput, 
+      deductibleSelect, 
+      fwdTier,
+      aiaPlanType, 
+      aiaRegion, 
+      axaTier, 
+      pruRegion, 
+      manuTier
+    ];
+
+    controlElements.forEach(el => {
+      if (el) {
+        el.addEventListener('change', calculate);
+        if (el.tagName === 'INPUT') {
+          el.addEventListener('keyup', calculate);
+        }
+      }
+    });
+
+    // 初始化執行
+    window.addEventListener('DOMContentLoaded', () => {
+      calculate();
+    });
+  </script>
+</body>
+</html>
+
+
+高端醫療對比
