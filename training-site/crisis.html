@@ -1418,10 +1418,13 @@
       modal.querySelector('div').classList.add('scale-100');
       document.body.style.overflow = 'hidden';
     }
-    function closeDiseaseModal() {
-      const modal = document.getElementById('diseaseDetailModal');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-    }
+  function closeDiseaseModal() {
+  const modal = document.getElementById('diseaseDetailModal');
+  modal.classList.add('opacity-0', 'pointer-events-none');
+  modal.querySelector('div').classList.remove('scale-100');
+  modal.querySelector('div').classList.add('scale-95');
+  document.body.style.overflow = '';
+}
 
     let currentGender = 'Male';
     let cashValueChartInstance = null;
