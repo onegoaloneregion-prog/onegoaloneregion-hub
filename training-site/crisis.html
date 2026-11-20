@@ -1311,34 +1311,33 @@
     OFFICIAL_ILLUSTRATION_DATA[30] = OFFICIAL_ILLUSTRATION_DATA[20];
 
     const RAW_DISEASES_DATA = [
-      ['cancer', '癌症 (惡性腫瘤)', 'Cancer', 'major', 'cancer', '100% 原有保額', '組織學確診惡性腫瘤侵蝕正常組織。', '體內正常細胞失控狂生並擴散全身，包括肺癌、大腸癌、乳癌、肝癌等。', '經組織學報告證實為惡性腫瘤、白血病、淋巴瘤或肉瘤。'],
-      ['carcinoma_in_situ', '特定器官之原位癌', 'Carcinoma in situ', 'early', 'cancer', '20% 預支賠償', '第0期癌，未穿透基底膜。', '癌細胞局限於表層，手術完整切除治癒率高。最多索償2次。', '經病史證實局限在侵入性前病變，無穿透基膜。皮膚除外。'],
-      ['early_cancer', '特定器官之早期癌症', 'Early Stage Cancer', 'early', 'cancer', '20% 預支賠償', '微小甲狀腺癌、前列腺癌等。', '體積極小或低度惡性腫瘤，及早治療預後極佳。', '微小甲狀腺癌、T1期前列腺癌、早期白血病等。'],
-      ['aplastic_anaemia', '再生障礙性貧血', 'Aplastic Anaemia', 'major', 'organ', '100% 原有保額', '骨髓造血衰竭致全血球減少。', '造血工廠停工，紅血球白血球血小板大跌，引致極度嚴重貧血與感染出血。', '慢性骨髓再生障礙致全血細胞減少，需輸血、免疫抑制劑或骨髓移植。'],
-      ['chronic_liver_disease', '慢性肝病 (末期肝衰竭)', 'Chronic Liver Disease', 'major', 'organ', '100% 原有保額', '不可逆肝硬化伴腹水或肝昏迷。', '肝臟纖維化萎縮徹底失靈，引發全身黃疸、腹部大量積水或肝昏迷。', '末期肝衰竭伴黃疸增加，無好轉可能並已出現腹水或肝性腦病。'],
-      ['chronic_lung_disease', '慢性肺病', 'Chronic Lung Disease', 'major', 'organ', '100% 原有保額', '間質性肺病致肺活量嚴重下跌。', '肺部組織結疤變硬，失去吸氧彈性，活動時極度氣喘需間歇吸氧。', '間質性肺纖維化，需間歇氧療且FEV1每秒持續減至1公升或更少。'],
-      ['end_stage_lung_disease', '末期肺病', 'End Stage Lung Disease', 'major', 'organ', '100% 原有保額', '慢阻肺病致嚴重缺氧及呼吸困難。', '長年煙癮或肺病致肺泡破壞殆盡，坐喺度都喘氣，需全天候吸氧。', '慢性呼吸衰竭，FEV1少於1公升，血氧分壓PaO2≤55mmHg。'],
-      ['fulminant_hepatitis', '暴發性肝炎', 'Fulminant Hepatitis', 'major', 'organ', '100% 原有保額', '病毒感染數日內大面積急性肝壞死。', '肝炎病毒突襲令肝細胞幾日內大面積壞死，死亡率極高需換肝。', '肝炎病毒造成大面積肝壞死、急速萎縮伴隨肝性腦病。'],
-      ['transplant_lung_pancreas_liver_bone_marrow', '主要器官移植 (肺/胰/肝/骨髓)', 'Major Organ Transplantation', 'major', 'organ', '100% 原有保額', '接受異體器官全面移植。', '自身器官完全報廢，必須接受他人捐贈器官或骨髓移植以挽救生命。', '確實已接受肺、胰、肝或骨髓移植，或已列入認可器官輪候名冊。'],
-      ['medullary_cystic_disease', '囊腫性腎髓病', 'Medullary Cystic Disease', 'major', 'organ', '100% 原有保額', '腎髓質長滿囊腫致腎功能衰退。', '先天罕見腎病，腎臟深層長出無數小囊腫壓壞正常組織。', '影像證實多個髓質囊腫伴皮質萎縮，引致不可逆腎衰竭。'],
-      ['severe_pulmonary_fibrosis', '嚴重肺纖維化', 'Severe Pulmonary Fibrosis', 'major', 'organ', '100% 原有保額', '瀰漫型肺纖維化需每日吸氧8小時。', '俗稱菜瓜布肺，肺組織像絲瓜絡般纖維化變硬，每日需長時間吸氧。', '瀰漫型肺纖維化，需永久每日大劑量吸氧至少8小時，肺活檢證實。'],
-      ['sle_nephritis', '有狼瘡性腎炎的紅斑狼瘡', 'SLE with Lupus Nephritis', 'major', 'organ', '100% 原有保額', '自身抗體破壞腎功能致清除率≤30。', '免疫系統失調產生大量抗體攻擊腎臟微血管，引致嚴重腎小球壞死。', '符合狼瘡診斷標準，陽性自體抗體並引致肌酸酐清除率降至每分鐘30ml或以下。'],
-      ['pneumonectomy', '單肺切除手術', 'Pneumonectomy', 'major', 'organ', '100% 原有保額', '外科手術切除整個左肺或右肺。', '因嚴重腫瘤或外傷，開胸將其中一邊成個肺臟徹底切除，肺活量永久減半。', '因疾病或意外經胸腔外科手術完全切除右全肺或左全肺。'],
-      ['stroke', '中風 (引致永久性機能損害)', 'Stroke', 'major', 'heart', '100% + 現金津貼', '腦血管爆裂或堵塞致機能受損。', '腦細胞缺血壞死，殘留肢體偏癱或言語吞嚥障礙。', '腦血管病變引起梗塞出血，4週後由神經專科證實永久性受損。'],
-      ['heart_attack', '急性心肌梗塞 (心臟病發)', 'Heart Attack', 'major', 'heart', '100% + 現金津貼', '心臟動脈阻塞致心肌壞死。', '供應心臟血流之血管塞死，胸痛劇烈需緊急通波仔。', '供血不足致心肌壞死，需符合胸痛、心電圖心梗改變及酵素升高。'],
-      ['kidney_failure', '腎衰竭 (末期尿毒症)', 'End Stage Kidney Failure', 'major', 'heart', '100% 原有保額', '雙腎失去排毒功能需長期洗腎。', '雙腎慢性壞死，需定期進行血液透析或換腎維生。', '末期腎衰竭，雙腎不可逆功能喪失需長期透析。'],
-      ['alzheimer', '阿爾茲海默氏病 (認知障礙)', "Alzheimer's Disease", 'major', 'neuro', '100% 原有保額', '大腦神經元退化智力全失。', '俗稱腦退化症，記憶思維嚴重衰退需全天候照護。', '思維進行性退化致精神社會功能顯著衰退需持續監護。'],
-      ['parkinson', '柏金遜症 (特發性)', "Parkinson's Disease", 'major', 'neuro', '100% 原有保額', '缺乏多巴胺致顫抖僵硬。', '肢體不自覺震顫，肌肉僵直如機械人，失日常自理。', '特發性帕金森，無法控制且呈進行性損害失3項自理。'],
-      ['angioplasty', '冠狀動脈成形術 (通波仔)', 'Angioplasty & Stenting', 'early', 'heart', '20% 預支 (上限20萬)', '微創球囊或支架撐開狹窄動脈。', '心臟動脈狹窄達50%以上，經微創置入支架恢復血流。', '造影證實冠狀動脈狹窄≥50%並實施支架手術。'],
-      ['icu_benefit', '深切治療生活守護 (未知重疾)', 'ICU Life Support Benefit', 'major', 'organ', '額外高達 100%', '未知重疾住 ICU 達 3 天並符設備。', '面對未定義未知病毒或意外，住私立ICU滿3天插喉用呼吸機即賠。', '同一病症住ICU連續3天並用侵入性維生設備且符狀況。'],
-      ['child_autism', '兒童自閉症 (嚴重孤獨症)', 'Severe Autism', 'child', 'child', '20% 預支賠償', '大腦發育障礙，社交溝通缺陷。', '缺乏眼神對視與語言互動，需早期積極特殊教育訓練。', '兒童精神科專科確診，符合診斷標準且徵狀持續超6個月。'],
-      ['kawasaki_disease', '川崎病 (伴心臟動脈瘤)', 'Kawasaki Disease', 'child', 'child', '20% 預支賠償', '幼童急性血管炎侵蝕動脈瘤。', '幼兒持續高燒草莓舌，併發冠狀動脈瘤需手術治療。', '血液測試證實血管炎，心臟超聲波確診動脈瘤並需手術。']
+      ['cancer', '癌症 (惡性腫瘤)', 'Cancer', 'major', 'cancer', '100% 原有保額', '組織學確診惡性腫瘤侵蝕正常組織。', '體內正常細胞失控狂生並擴散全身，包括肺癌、大腸癌、乳癌、肝癌等。', '經組織學報告證實為惡性腫瘤、白血病、淋巴瘤或肉瘤。', '不包括原位癌、癌前病變；厚度不超過1.5mm之惡性黑色素瘤或未轉移皮膚癌；T1a/T1b前列腺癌；微小甲狀腺乳頭狀癌；非侵入性膀胱癌(Ta)；RAI-1/Binet-A1白血病。'],
+      ['carcinoma_in_situ', '特定器官之原位癌', 'Carcinoma in situ', 'early', 'cancer', '20% 預支賠償', '第0期癌，未穿透基底膜。', '癌細胞局限於表層，手術完整切除治癒率高。最多索償2次。', '經病史證實局限在侵入性前病變，無穿透基膜，涵蓋乳房、大腸、肺、子宮頸等器官。', '必須以活組織檢查術確定。皮膚原位癌明確除外。'],
+      ['early_cancer', '特定器官之早期癌症', 'Early Stage Cancer', 'early', 'cancer', '20% 預支賠償', '微小甲狀腺癌、前列腺癌等。', '體積極小或低度惡性腫瘤，及早治療預後極佳。', '微小甲狀腺乳頭狀癌、T1a/T1b前列腺癌、RAI 1級慢性淋巴性白血病、非黑色素瘤皮膚癌或厚度≤1.5mm黑色素瘤。', '診斷必須以組織病理學特徵為準。除上述列明外，其他癌症前病變不受保障。'],
+      ['aplastic_anaemia', '再生障礙性貧血', 'Aplastic Anaemia', 'major', 'organ', '100% 原有保額', '骨髓造血衰竭致全血球減少。', '造血工廠停工，紅血球白血球血小板大跌，引致極度嚴重貧血與感染出血。', '慢性骨髓再生障礙致全血細胞減少，需輸血、骨髓刺激藥劑、免疫抑制劑或骨髓移植。', '短暫或可逆轉之暫時性骨髓抑制除外。'],
+      ['chronic_liver_disease', '慢性肝病 (末期肝衰竭)', 'Chronic Liver Disease', 'major', 'organ', '100% 原有保額', '不可逆肝硬化伴腹水或肝昏迷。', '肝臟纖維化萎縮徹底失靈，引發全身黃疸、腹部大量積水或肝昏迷。', '末期肝衰竭伴黃疸增加，普遍醫學觀點認為無好轉可能並已出現腹水或肝性腦病。', '由於長期酗酒或濫用藥物引起的肝病明確除外。'],
+      ['chronic_lung_disease', '慢性肺病', 'Chronic Lung Disease', 'major', 'organ', '100% 原有保額', '間質性肺病致肺活量嚴重下跌。', '肺部組織結疤變硬，失去吸氧彈性，活動時極度氣喘需間歇吸氧。', '間質性肺纖維化，需間歇氧療且FEV1每秒持續減至1公升或更少。', '必須由專科醫生確定診斷及測試結果。'],
+      ['end_stage_lung_disease', '末期肺病', 'End Stage Lung Disease', 'major', 'organ', '100% 原有保額', '慢阻肺病致嚴重缺氧及呼吸困難。', '長年煙癮或肺病致肺泡破壞殆盡，坐喺度都喘氣，需全天候吸氧。', '慢性呼吸衰竭，FEV1少於1公升，需長期氧療，動脈血氧分壓PaO2≤55mmHg及靜止時呼吸困難。', '短暫性哮喘發作或未達持續低氧血症標準者除外。'],
+      ['fulminant_hepatitis', '暴發性肝炎', 'Fulminant Hepatitis', 'major', 'organ', '100% 原有保額', '病毒感染數日內大面積急性肝壞死。', '肝炎病毒突襲令肝細胞幾日內大面積壞死，死亡率極高需換肝。', '肝炎病毒造成大面積肝壞死、急速萎縮、肝功能急速退化並出現肝性腦病客觀症狀。', '非病毒感染所致（如服藥過量或中毒）之急性肝壞死除外。'],
+      ['transplant_lung_pancreas_liver_bone_marrow', '主要器官移植 (肺/胰/肝/骨髓)', 'Major Organ Transplantation', 'major', 'organ', '100% 原有保額', '接受異體器官全面移植。', '自身器官完全報廢，必須接受他人捐贈器官或骨髓移植以挽救生命。', '確實已接受肺、胰、肝或骨髓移植，或已列入認可器官移植輪候名冊。', '幹細胞或胰島細胞移植除外。'],
+      ['medullary_cystic_disease', '囊腫性腎髓病', 'Medullary Cystic Disease', 'major', 'organ', '100% 原有保額', '腎髓質長滿囊腫致腎功能衰退。', '先天罕見腎病，腎臟深層長出無數小囊腫壓壞正常組織。', '遺傳性疾病，影像證實多個髓質囊腫伴皮質萎縮，引致漸進性失去腎功能。', '單純性良性腎囊腫除外。'],
+      ['severe_pulmonary_fibrosis', '嚴重肺纖維化', 'Severe Pulmonary Fibrosis', 'major', 'organ', '100% 原有保額', '瀰漫型肺纖維化需每日吸氧8小時。', '俗稱菜瓜布肺，肺組織像絲瓜絡般纖維化變硬，每日需長時間吸氧。', '瀰漫型肺纖維化，需永久每日大劑量吸氧至少8小時，須由呼吸系統科專科醫生以肺活檢證實。', '無肺活檢組織病理學報告確診者除外。'],
+      ['sle_nephritis', '有狼瘡性腎炎的紅斑狼瘡', 'SLE with Lupus Nephritis', 'major', 'organ', '100% 原有保額', '自身抗體破壞腎功能致清除率≤30。', '免疫系統失調產生大量抗體攻擊腎臟微血管，引致嚴重腎小球壞死。', '符合美國風濕病學院至少4項標準，陽性自體抗體並引致肌酸酐清除率降至每分鐘30ml或以下。', '無顯著腎損傷或肌酸酐清除率大於30ml/min之輕度紅斑狼瘡除外。'],
+      ['pneumonectomy', '單肺切除手術', 'Pneumonectomy', 'major', 'organ', '100% 原有保額', '外科手術切除整個左肺或右肺。', '因嚴重腫瘤或外傷，開胸將其中一邊成個肺臟徹底切除，肺活量永久減半。', '因疾病或意外經胸腔外科手術完全切除右全肺或左全肺，經專科醫生確定屬醫療需要。', '部分肺葉切除或局部肺段切除除外。'],
+      ['stroke', '中風 (引致永久性機能損害)', 'Stroke', 'major', 'heart', '100% + 現金津貼', '腦血管爆裂或堵塞致機能受損。', '腦細胞缺血壞死，殘留肢體偏癱或言語吞嚥障礙。', '腦血管病變引起梗塞或出血，事發4週後由神經專科證實具永久性神經損害，並有MRI/CT證明。', '短暫性腦缺血發作(TIA/小中風)、眼或視神經血管疾病、前庭系統缺血除外。'],
+      ['heart_attack', '急性心肌梗塞 (心臟病發)', 'Heart Attack', 'major', 'heart', '100% + 現金津貼', '心臟動脈阻塞致心肌壞死。', '供應心臟血流之血管塞死，胸痛劇烈需緊急通波仔。', '供血不足致心肌壞死，需符合典型胸痛、新發生心電圖心梗變化及心臟酵素(CK-MB/肌鈣蛋白)升高。', '心絞痛及未達心肌壞死指標之其他急性冠狀動脈綜合徵除外。'],
+      ['kidney_failure', '腎衰竭 (末期尿毒症)', 'End Stage Kidney Failure', 'major', 'heart', '100% 原有保額', '雙腎失去排毒功能需長期洗腎。', '雙腎慢性壞死，需定期進行血液透析或換腎維生。', '末期腎衰竭，雙腎不可逆功能喪失，導致需定期接受長期腎臟透析或已實施腎移植。', '暫時性或可逆性急性腎衰竭除外。'],
+      ['alzheimer', '阿爾茲海默氏病 (認知障礙)', "Alzheimer's Disease", 'major', 'neuro', '100% 原有保額', '大腦神經元退化智力全失。', '俗稱腦退化症，記憶思維嚴重衰退需全天候照護。', '思維能力進行性退化或喪失，致精神和社會活動能力顯著減退，從而需要持續的社會監護。', '神經官能症、精神病以及任何藥物或酒精相關的器質性疾病除外。'],
+      ['parkinson', '柏金遜症 (特發性)', "Parkinson's Disease", 'major', 'neuro', '100% 原有保額', '缺乏多巴胺致顫抖僵硬。', '肢體不自覺震顫，肌肉僵直如機械人，失日常自理。', '特發性帕金森，症狀無法用藥物控制且呈進行性損害，永久失去6項日常活動中最少3項能力。', '因藥物或中毒導致的繼發性柏金遜症除外。'],
+      ['angioplasty', '冠狀動脈成形術 (通波仔)', 'Angioplasty & Stenting', 'early', 'heart', '20% 預支 (上限20萬)', '微創球囊或支架撐開狹窄動脈。', '心臟動脈狹窄達50%以上，經微創置入支架恢復血流。', '冠狀動脈血管造影證明主要冠狀動脈狹窄至少50%，並實施球囊擴張或支架植入術。', '純診斷性心導管檢查或分支血管手術除外。'],
+      ['icu_benefit', '深切治療生活守護 (未知重疾)', 'ICU Life Support Benefit', 'major', 'organ', '額外高達 100%', '未知重疾住 ICU 達 3 天並符設備。', '面對未定義未知病毒或意外，住私立ICU滿3天插喉用呼吸機即賠。', '同一病症或創傷於120日內入住ICU連續3天或以上並用侵入性維生支持，且符合住院10天等指定狀況。', '美容整容、減重、精神病住院、器官捐贈或使用非侵入性面罩呼吸機(CPAP/BiPAP)除外。'],
+      ['child_autism', '兒童自閉症 (嚴重孤獨症)', 'Severe Autism', 'child', 'child', '20% 預支賠償', '大腦發育障礙，社交溝通缺陷。', '缺乏眼神對視與語言互動，需早期積極特殊教育訓練。', '兒童精神科專科醫生確診，在社交互動、溝通及刻板行為三大範疇符合診斷標準且徵狀持續超6個月。', '阿斯伯格綜合症(Asperger)以及非典型自閉症不在受保障範圍內。'],
+      ['kawasaki_disease', '川崎病 (伴心臟動脈瘤)', 'Kawasaki Disease', 'child', 'child', '20% 預支賠償', '幼童急性血管炎侵蝕動脈瘤。', '幼兒持續高燒草莓舌，併發冠狀動脈瘤需手術治療。', '血液測試證實貧血、白血球及血沉升高、血小板急升，心臟超聲波確診冠狀動脈瘤並需手術治療。', '未併發冠狀動脈瘤或其他心血管異常之輕微川崎病除外。']
     ];
 
     const DISEASES_DATABASE = RAW_DISEASES_DATA.map(d => ({
-      id: d[0], name: d[1], eng: d[2], type: d[3], cat: d[4], payout: d[5], desc: d[6], intro: d[7], fullDef: d[8]
+      id: d[0], name: d[1], eng: d[2], type: d[3], cat: d[4], payout: d[5], desc: d[6], intro: d[7], fullDef: d[8], exclusion: d[9]
     }));
-
     let currentDiseaseFilter = 'all';
 
     function setDiseaseFilter(filterKey) {
@@ -1388,18 +1387,37 @@
       if (badge) badge.innerText = `顯示 ${count} 種符合疾病`;
     }
 
-    function openDiseaseModal(diseaseId) {
+   function openDiseaseModal(diseaseId) {
       const disease = DISEASES_DATABASE.find(d => d.id === diseaseId);
       if (!disease) return;
+
       document.getElementById('modalDiseaseName').innerText = disease.name;
       document.getElementById('modalDiseaseEng').innerText = disease.eng;
       document.getElementById('modalDiseaseBadge').innerText = disease.payout;
+
+      let catText = '重大危疾組別 (100%)';
+      if (disease.type === 'early') catText = '特別疾病 / 早期疾病 (20%)';
+      if (disease.type === 'child') catText = '兒童特定重疾 (1-18歲)';
+      document.getElementById('modalDiseaseCat').innerText = catText;
+
       document.getElementById('modalDiseaseMedicalIntro').innerText = disease.intro || disease.desc;
       document.getElementById('modalDiseaseFullDef').innerText = disease.fullDef || disease.desc;
+
+      const exclContainer = document.getElementById('modalExclusionContainer');
+      const exclText = document.getElementById('modalDiseaseExclusion');
+      if (disease.exclusion) {
+        exclText.innerText = disease.exclusion;
+        exclContainer.style.display = 'block';
+      } else {
+        exclContainer.style.display = 'none';
+      }
+
       const modal = document.getElementById('diseaseDetailModal');
       modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('scale-95');
+      modal.querySelector('div').classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
     }
-
     function closeDiseaseModal() {
       const modal = document.getElementById('diseaseDetailModal');
       modal.classList.add('opacity-0', 'pointer-events-none');
