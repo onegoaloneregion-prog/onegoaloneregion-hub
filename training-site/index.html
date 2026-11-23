@@ -531,7 +531,7 @@ window.adminResetPassword = async function(docId, userCode) {
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-4 space-y-5 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm border-b pb-3 flex items-center gap-2"><span>⚙️</span> 選擇條件</h3>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcansurance">易衛您</option><option value="myterm">自主保定期保障計劃 (MyTerm)</option><option value="lifepromise">衛你所愛壽險計劃 (Life Promise)</option></select></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1.5">商品</label><select id="calcProduct" onchange="updateCalcOptions()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="crisis_supporter" selected>危疾應援保</option><option value="crisis_supporter_pro">危疾應援保 (升級版)</option><option value="vprime">尊衛您 (寰譽版)</option><option value="vfamily">醫家保</option><option value="vcare">更衛您 (優越版) 醫療計劃</option><option value="vcansurance">易衛您</option><option value="myterm">自主保定期保障計劃 (MyTerm)</option><option value="lifepromise">衛你所愛壽險計劃 (Life Promise)</option></select></div>
                   <div><label id="ageLabel" class="block text-xs font-bold text-slate-600 mb-1.5">投保年齡 (下次生日 <span id="ageRangeNotice">0-80歲</span>)</label><input id="calcAge" type="number" value="30" min="0" max="80" oninput="runPremiumQuery()" onkeyup="runPremiumQuery()" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-black focus:outline-none focus:border-[#E87722] bg-white"></div>
                     <div><label class="block text-xs font-bold text-slate-600 mb-1.5">性別</label><select id="calcGender" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="female" selected>女性</option><option value="male">男性</option></select></div>
                     <div id="payTermBlock"><label class="block text-xs font-bold text-slate-600 mb-1.5">繳費年期</label><select id="calcPayTerm" onchange="runPremiumQuery()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-[#E87722] bg-white"><option value="10">10年繳 (最高70歲)</option><option value="15">15年繳 (最高60歲)</option><option value="20" selected>20年繳 (最高55歲)</option><option value="25">25年繳 (最高50歲)</option><option value="30">30年繳 (最高50歲)</option></select></div>
@@ -2734,20 +2734,66 @@ function copyVideoStyleResult() {
         }
     }
 
-    var periodLine = (!isMedicalPlan && periodText) ? ("繳費期：" + periodText + "\n") : "";
+var extraLines = "";
+        var summaryTags = [];
+        var calcContainer = document.getElementById('page-fwd-calc') || document;
 
-    var copyText = "🟢 FWD 保費快算試算\n" +
-                   "產品：" + pNameText + "\n" +
-                   saLine +
-                   periodLine +
-                   "條件：" + title + "\n\n" +
-                   "💵 預估保費：\n" +
-                   "年供：" + annual + "\n" +
-                   "月供：" + monthly + "\n\n" +
-                   "數據來源：2026年第4季富衛客戶優惠 (MATA261002)，實際保費以最新報價單為準";
+        // 掃描畫面上目前可見的「繳費年期」與「自付費選項」
+        var labels = calcContainer.querySelectorAll('label');
+        for (var i = 0; i < labels.length; i++) {
+            var labelText = (labels[i].textContent || '').trim();
+            var wrapper = labels[i].parentElement;
+            if (!wrapper || wrapper.offsetParent === null) continue;
 
-    performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
-            performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
+            var selectEl = wrapper.querySelector('select');
+            if (!selectEl || selectEl.selectedIndex < 0) continue;
+
+            var selectedText = (selectEl.options[selectEl.selectedIndex].text || '').trim();
+            if (!selectedText) continue;
+
+            // 1. 繳費年期 / 續保年期（危疾應援保、衛你所愛、自主保等）
+            if (labelText.indexOf('繳費年期') !== -1) {
+                extraLines += "繳費期：" + selectedText + "\n";
+                var shortTerm = selectedText.replace(/\(.*?\)/g, '').trim();
+                summaryTags.push(shortTerm);
+            }
+
+            // 2. 自付費選項（尊衛您寰譽版）
+            if (labelText.indexOf('自付費') !== -1) {
+                var formattedDed = selectedText.replace(/^\$\s*/, (currency || 'HKD') + ' ');
+                extraLines += "自付費選項：" + formattedDed + "\n";
+                summaryTags.push(selectedText + "自付費");
+            }
+        }
+
+        // 3. 檢查是否有勾選附加保障（如：住院現金保障附約）
+        var checkboxes = calcContainer.querySelectorAll('input[type="checkbox"]:checked');
+        for (var j = 0; j < checkboxes.length; j++) {
+            var box = checkboxes[j].closest('label') || checkboxes[j].parentElement;
+            if (!box || box.offsetParent === null) continue;
+            var riderText = (box.textContent || '').trim();
+            if (riderText) {
+                extraLines += "附加保障：" + riderText + "\n";
+            }
+        }
+
+        // 將年期或自付費同步嵌入「條件」括號內
+        var finalTitle = title;
+        if (summaryTags.length > 0 && finalTitle.slice(-1) === ')') {
+            finalTitle = finalTitle.slice(0, -1) + " · " + summaryTags.join(" · ") + ")";
+        }
+
+        var copyText = "🟢 FWD 保費快算試算\n" +
+                       "產品：" + pNameText + "\n" +
+                       saLine +
+                       extraLines +
+                       "條件：" + finalTitle + "\n\n" +
+                       "💵 預估保費：\n" +
+                       "年供：" + annual + "\n" +
+                       "月供：" + monthly + "\n\n" +
+                       "數據來源：2026年第4季富衛客戶優惠 (MATA261002)，實際保費以最新報價單為準";
+
+        performCopyText(copyText, "已複製保費試算結果！可直接貼到 WeChat 分享");
 
             var btn = document.getElementById('copyResultBtn');
             if (btn) {
@@ -3286,6 +3332,42 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     return table[queryAge] !== undefined ? table[queryAge] : 3709;
 }
         // =========================================================================
+// 3. 更衛您（優越版）醫療計劃 - 1-81歲 (下次生日年齡) 官方標準保費表 (港元 HKD)
+// 來源：FWD 官方 vCare Supreme Standard Schedule (2026.02.25 生效)
+// =========================================================================
+var vCareSupremeExactEveryYear = {
+  male: {
+    1:6587, 2:6587, 3:6587, 4:6587, 5:2953, 6:2953, 7:2953, 8:2953, 9:2953, 10:2953,
+    11:2953, 12:2953, 13:2953, 14:2953, 15:2953, 16:3036, 17:3193, 18:3222, 19:3238, 20:3260,
+    21:3310, 22:3326, 23:3395, 24:3467, 25:3585, 26:3684, 27:3777, 28:3908, 29:4002, 30:4160,
+    31:4276, 32:4400, 33:4520, 34:4682, 35:4881, 36:5023, 37:5119, 38:5297, 39:5473, 40:5571,
+    41:5817, 42:5980, 43:6270, 44:6593, 45:6955, 46:7304, 47:7647, 48:7984, 49:8381, 50:8706,
+    51:9129, 52:9655, 53:10159, 54:10695, 55:11301, 56:11964, 57:12498, 58:13159, 59:13823, 60:14557,
+    61:15230, 62:16078, 63:16946, 64:17841, 65:18957, 66:20003, 67:21113, 68:22293, 69:23531, 70:24824,
+    71:26073, 72:27324, 73:28577, 74:29551, 75:30471, 76:31564, 77:32820, 78:33903, 79:34701, 80:35498,
+    81:36799
+  },
+  female: {
+    1:5091, 2:5091, 3:5091, 4:5091, 5:3544, 6:3544, 7:3544, 8:3544, 9:3544, 10:3544,
+    11:3544, 12:3544, 13:3544, 14:3544, 15:3544, 16:3752, 17:3950, 18:4103, 19:4250, 20:4375,
+    21:4486, 22:4571, 23:4663, 24:4817, 25:4963, 26:5061, 27:5174, 28:5298, 29:5426, 30:5581,
+    31:5744, 32:5914, 33:6102, 34:6289, 35:6496, 36:6695, 37:6890, 38:7095, 39:7196, 40:7249,
+    41:7606, 42:7996, 43:8273, 44:8629, 45:9006, 46:9352, 47:9733, 48:10050, 49:10221, 50:10253,
+    51:10846, 52:11252, 53:11616, 54:11974, 55:12451, 56:12969, 57:13476, 58:13978, 59:14522, 60:15228,
+    61:15987, 62:16779, 63:17573, 64:18372, 65:19148, 66:19932, 67:20770, 68:21661, 69:22600, 70:23576,
+    71:24499, 72:25413, 73:26306, 74:27166, 75:28399, 76:29534, 77:30709, 78:31837, 79:32765, 80:33535,
+    81:34733
+  }
+};
+
+function calcVCareSupremeFullPremium(age, gender) {
+  var nextBdayAge = parseInt(age, 10) || 1;
+  if (nextBdayAge < 1) nextBdayAge = 1;
+  if (nextBdayAge > 81) nextBdayAge = 81;
+  var gKey = (gender === 'female' || gender === 'F' || gender === '女性') ? 'female' : 'male';
+  return vCareSupremeExactEveryYear[gKey][nextBdayAge] || 0;
+}
+        // =========================================================================
         // 3. 醫家保 (vFamily) - 標準保障級別 官方標準保費表 (港元 HKD)
         // 來源：vFamily Medical Plan Standard Schedule (2024.12.16 生效)[cite: 4]
         // =========================================================================
@@ -3467,6 +3549,7 @@ function calcMyTermPremium(age, gender, termKey, isSmoker, sumInsured) {
     return (sumInsured / 1000) * (rate || 0);
 }
 
+        
 // =========================================================
 // 2. 衛你所愛壽險計劃 (Life Promise) 官方費率表 (5/10/15/20年繳)
 // =========================================================
@@ -3894,13 +3977,17 @@ var isVcan = (p.indexOf('vcansurance') !== -1 || p.indexOf('vcan') !== -1 || pNa
  } else if (isVcan) {
     annual = calcVcansuranceFullPremium(age, gender);
     if (curr === 'USD') annual = annual / 7.8;
-} else if (isCare) {
+} else if ((document.getElementById('calcProduct') && document.getElementById('calcProduct').value === 'vcare_supreme') || pName.indexOf('優越版') !== -1) {
+    if (typeof calcVCareSupremeFullPremium === 'function') annual = calcVCareSupremeFullPremium(age, gender);
+    if (curr === 'USD') annual = annual / 7.8;
+  } else if (isCare) {
     annual = getVCarePremium(age, gender);
     if (curr === 'USD') annual = annual / 7.8;
-}
-    // 附加保障計算 (住院現金保障附約 標準 每日 HKD 800)
-    var hospCashCb = document.getElementById('hospCashCheckbox');
-   if (hospCashCb && hospCashCb.checked && (isPrime || isFamily || isCare || isVcan)) {
+  }
+  // 附加保障計算 (住院現金保障附約 標準 每日 HKD 800)
+  var isVCareSup = (document.getElementById('calcProduct') && document.getElementById('calcProduct').value === 'vcare_supreme') || pName.indexOf('優越版') !== -1;
+  var hospCashCb = document.getElementById('hospCashCheckbox');
+  if (hospCashCb && hospCashCb.checked && (isPrime || isFamily || isCare || isVcan || isVCareSup)) {
         var riderPrem = getHospitalCashRiderPrem(age, gender);
         if (curr === 'USD') riderPrem = riderPrem / 7.8;
         annual += riderPrem;
