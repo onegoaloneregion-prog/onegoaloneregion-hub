@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>尊衛您（寰譽版）醫療計劃 • 客戶專屬互動系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fwd: {
+              orange: '#F37021',
+              dark: '#0A2433',
+              navy: '#0E2938',
+              light: '#FFF5F0',
+              accent: '#E65C00'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+    }
+    .print-only { display: none; }
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
+      }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { 
+        background: white !important; 
+        color: #111827 !important; 
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      main {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      /* 每個 Part 獨立成頁，並壓縮排版確保同一 Part 完整收納在同一版內 */
+      .tab-content { 
+        display: block !important; 
+        page-break-after: always; 
+        break-after: page;
+        padding-top: 2px !important;
+        margin-bottom: 0 !important;
+      }
+      #tab-highlights {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+      }
+      #tab-highlights section:first-child {
+        padding: 0.75rem 1.25rem !important;
+      }
+      #tab-highlights h2 {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+      #tab-highlights p {
+        margin-bottom: 0.4rem !important;
+        line-height: 1.35 !important;
+      }
+      .tab-content:last-of-type {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      /* 防止單張小卡片內部被切斷 */
+      .tab-content .grid > div,
+      #tab-details .space-y-4 > div {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      /* 針對列印模式微調間距與字體大小，保證單頁完美納容 */
+      .tab-content .grid {
+        gap: 0.55rem !important;
+      }
+      .tab-content:last-of-type {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      /* 防止卡片內部被切斷 */
+      .tab-content .rounded-2xl, 
+      .tab-content .rounded-3xl, 
+      .tab-content .rounded-xl {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      /* 針對列印模式微調間距與字體大小，保證單頁完美納容 */
+      .tab-content .grid {
+        gap: 0.65rem !important;
+      }
+      .tab-content .p-6, 
+      .tab-content .p-8,
+      .tab-content .sm\:p-8,
+      .tab-content .sm\:p-10 {
+        padding: 0.85rem 1rem !important;
+      }
+      .tab-content .space-y-8 > :not([hidden]) ~ :not([hidden]),
+      .tab-content .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0.65rem !important;
+      }
+      /* 保障表列表在列印時改為緊湊雙欄排列，令一、二、三保障完整放於同一版 */
+      #tab-details .space-y-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.6rem !important;
+      }
+      #tab-details .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0 !important;
+      }
+      #tab-details .space-y-4 > div:first-child {
+        grid-column: span 2 / span 2;
+      }
+      #tab-details .py-2\.5 {
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+        font-size: 10.5px !important;
+      }
+      /* 13大不保事項在列印時強制三欄緊湊排版，完整放於同一版 */
+      #tab-exclusions .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.5rem !important;
+      }
+      #tab-exclusions .p-4 {
+        padding: 0.55rem 0.65rem !important;
+        font-size: 10.5px !important;
+        line-height: 1.35 !important;
+      }
+      /* 試算頁面在列印時保持左右並排，完整放於同一版 */
+      #tab-calculator .grid.lg\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+
+  <!-- 頂部置頂 Header 識別列 -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-fwd-orange text-white flex items-center justify-center font-bold text-xl shadow-md">
+          尊
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-xl font-bold text-gray-900 tracking-tight">尊衛您（寰譽版）醫療計劃</h1>
+            <span class="bg-fwd-light text-fwd-orange text-xs font-semibold px-2.5 py-0.5 rounded-full border border-fwd-orange/20">客戶專屬手冊</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-0.5">避繁就簡 • 貼地白話詳解 • 官方條款逐字對照 (2026年11月升級版)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+        <span class="inline-flex items-center bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1.5 text-emerald-600"></i>
+          澳門適用標準保單 (LBC VHIS-FPG V112026H)
+        </span>
+        <button onclick="switchTab('calculator')" class="bg-fwd-orange hover:bg-fwd-accent text-white font-medium text-xs px-4 py-2 rounded-lg shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
+          <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+          <span>保費試算</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 標籤導航選單列 (分頁切換) -->
+    <nav class="bg-gray-900 text-white shadow-inner">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex space-x-1 overflow-x-auto py-2.5 scrollbar-none text-sm font-medium">
+          <button onclick="switchTab('tab-highlights')" id="btn-tab-highlights" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 bg-fwd-orange text-white shadow-sm cursor-pointer">
+            <i data-lucide="sparkles" class="w-4 h-4"></i><span>計劃亮點與特色</span>
+          </button>
+          <button onclick="switchTab('tab-details')" id="btn-tab-details" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+            <i data-lucide="file-text" class="w-4 h-4"></i><span>詳細保障表 (基本/升級/現金)</span>
+          </button>
+          <button onclick="switchTab('tab-family')" id="btn-tab-family" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+            <i data-lucide="baby" class="w-4 h-4"></i><span>嬰兒特別保障及兒童發展保障</span>
+          </button>
+          <button onclick="switchTab('tab-claims')" id="btn-tab-claims" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i><span>理賠機制與90日重設</span>
+          </button>
+          <button onclick="switchTab('tab-calculator')" id="btn-tab-calculator" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+            <i data-lucide="percent" class="w-4 h-4"></i><span>保費及無索償折扣計算</span>
+          </button>
+          <button onclick="switchTab('tab-exclusions')" id="btn-tab-exclusions" class="tab-btn px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-1.5 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i><span>不保事項全面解密</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 客戶提案抬頭與顧問聯絡資訊設定 (支援列印與PDF匯出) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 no-print">
+    <div class="bg-white rounded-2xl p-5 shadow-sm border border-orange-100">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-sm font-bold text-gray-800 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-fwd-orange mr-2"></span>
+          客戶提案抬頭與顧問聯絡資訊 (列印/匯出PDF自動帶入)
+        </h2>
+        <button onclick="resetProposalHeader()" class="text-xs text-gray-500 hover:text-fwd-orange flex items-center space-x-1 cursor-pointer">
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i><span>重設預設值</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">客戶姓名 / 稱謂</label>
+          <input type="text" id="propClientName" value="尊貴客戶" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-fwd-orange focus:bg-white" placeholder="例如：陳大文 先生">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">理財顧問姓名</label>
+          <input type="text" id="propAdvisorName" value="富衛策劃顧問" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-fwd-orange focus:bg-white" placeholder="例如：富衛策劃顧問">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">顧問職位 / 職銜</label>
+          <select id="propAdvisorTitle" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-fwd-orange focus:bg-white">
+            <option value="資深分區總監">資深分區總監</option>
+            <option value="資深業務總監">資深業務總監</option>
+            <option value="高級分區經理">高級分區經理</option>
+            <option value="高級財富管理經理">高級財富管理經理</option>
+            <option value="專業理財顧問">專業理財顧問</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">所屬分區 / 團隊</label>
+          <input type="text" id="propTeamName" value="One Goal One Region" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-fwd-orange focus:bg-white" placeholder="例如：One Goal">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">顧問聯絡電話 / 微信</label>
+          <input type="text" id="propAdvisorPhone" value="+853 8988 6060" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-fwd-orange focus:bg-white" placeholder="例如：+853...">
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">
+        <button onclick="exportToPDF()" class="bg-gray-900 hover:bg-gray-800 text-white font-medium text-xs px-5 py-2.5 rounded-lg shadow transition flex items-center space-x-2 cursor-pointer">
+          <i data-lucide="printer" class="w-4 h-4 text-fwd-orange"></i>
+          <span>一鍵列印 / 匯出完整多頁 PDF 方案手冊</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 列印專用精美抬頭 (PDF 預覽模式顯示) -->
+  <div class="print-only max-w-7xl mx-auto px-4 pt-2 pb-2 mb-2">
+    <div class="flex justify-between items-end border-b-2 border-fwd-orange pb-2">
+      <div>
+        <div class="text-[10px] font-bold text-fwd-orange tracking-widest uppercase">FWD 富衛人壽保險（澳門）</div>
+        <h1 class="text-xl font-bold text-gray-900">尊衛您（寰譽版）醫療計劃 • 客戶專屬規劃方案</h1>
+        <p class="text-[11px] text-gray-500">策劃日期：<span id="printDate">2026年11月18日</span></p>
+      </div>
+      <div class="text-right">
+        <div class="text-xs font-bold text-gray-900" id="printAdvisorName">富衛策劃顧問</div>
+        <div class="text-[11px] text-fwd-orange font-semibold" id="printAdvisorTitle">資深分區總監</div>
+        <div class="text-[11px] text-gray-600" id="printTeamName">One Goal One Region</div>
+        <div class="text-[11px] text-gray-500">電話：<span id="printAdvisorPhone">+853 8988 6060</span></div>
+      </div>
+    </div>
+    <div class="mt-2 bg-orange-50 border border-orange-200 rounded-lg px-3 py-1.5 flex justify-between items-center text-[11px] text-gray-800">
+      <div><strong>尊敬的客戶：</strong> <span id="printClientName" class="font-bold text-fwd-orange">尊貴客戶</span></div>
+      <div><strong>計劃版本：</strong> 2026年11月最新升級版 (保障額度提升、日間手術雙倍現金)</div>
+    </div>
+  </div>
+
+  <!-- 主體內容區 (分頁區塊) -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+    <!-- 標籤 1：計劃亮點與特色 -->
+    <div id="tab-highlights" class="tab-content space-y-8">
+      <!-- 頂部宣傳橫幅 Hero Banner -->
+      <section class="bg-gradient-to-r from-fwd-dark to-fwd-navy rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-fwd-orange/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-3xl">
+          <span class="bg-fwd-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-4 shadow-sm">
+            全數賠償 • 殿堂級高端醫療
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+            為您與全家打造無後顧之憂的終身健康盾
+          </h2>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6">
+            每年高達 <strong class="text-white underline decoration-fwd-orange decoration-2">HK$ 1,500萬 (標準) 至 1,850萬 (特等)</strong> 醫療保障，全數賠償一系列合資格費用，且不設終身保障限額。獨家 16 種指定危疾豁免自付費、無年齡限制受保先天性疾病、守護跨越世代。
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="switchTab('tab-details')" class="bg-fwd-orange hover:bg-fwd-accent text-white font-semibold text-sm px-6 py-3 rounded-xl shadow transition flex items-center space-x-2 cursor-pointer">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+              <span>查閱詳細保障表</span>
+            </button>
+            <button onclick="switchTab('tab-calculator')" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-6 py-3 rounded-xl backdrop-blur-md transition border border-white/20 flex items-center space-x-2 cursor-pointer">
+              <i data-lucide="calculator" class="w-4 h-4"></i>
+              <span>試算最新保費</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 橙色橫幅說明 -->
+      <div class="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-4 text-white shadow-md flex items-center space-x-3">
+        <i data-lucide="info" class="w-6 h-6 flex-shrink-0 animate-pulse"></i>
+        <div>
+          <h3 class="font-bold text-sm">專為客戶而設 • 條款內容清晰直解</h3>
+          <p class="text-xs text-orange-100">醫療保障，本來就應該簡單、貼地、透明。告別生硬合約字眼，為您直接拆解每項保障的核心重點、賠償額度與領取現金補貼時機！</p>
+        </div>
+      </div>
+
+      <!-- 6 宮格重點保障項目詳解卡片 -->
+      <section>
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 flex items-center">
+            <i data-lucide="zap" class="w-5 h-5 text-fwd-orange mr-2"></i>
+            重點保障項目詳解 (2026最新升級)
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">為您直接說明各項保障的實際賠償安排及運作方式：</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- 卡片 1：額外現金補貼 (Second Claim) -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-orange-100 text-fwd-orange text-xs font-bold px-2.5 py-1 rounded-lg">最多人問</span>
+                <span class="text-xs text-gray-400">其他保障 第5節</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">額外現金補貼保障 (Second Claim)</h4>
+              <div class="bg-fwd-light/60 rounded-xl p-3.5 mb-4 border border-fwd-orange/10">
+                <p class="text-xs font-bold text-fwd-orange mb-1">公司醫保或第二間保險賠完，你仲有錢收！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  只要您曾住院，醫藥費由公司團體醫保或其他保險賠償先（就算已經賠足100%），只要有單據證明，富衛會直接額外發放每日 <strong class="text-gray-900">$1,000 現金津貼</strong>（自付費 $10万/$25万計劃為 $500），每傷病最多領取 60 日（即最高可獲 <strong class="text-fwd-orange">$60,000 現金</strong>）！
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>限額：每日 $1,000 (0-$5萬自付費)</span>
+              <span class="font-semibold text-gray-900">每年每傷病最多 60 日</span>
+            </div>
+          </div>
+
+          <!-- 卡片 2：額度機制 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-lg">額度機制</span>
+                <span class="text-xs text-gray-400">補充文件-賠償限制</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">每年最高保障 HK$1,500萬 / 1,850萬</h4>
+              <div class="bg-blue-50/60 rounded-xl p-3.5 mb-4 border border-blue-100">
+                <p class="text-xs font-bold text-blue-700 mb-1">唔同病有獨立額度，唔會一個病用晒副額度！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  額度按疾病獨立計算：年頭做十字韌帶手術有 1,500萬額度；年尾不幸患癌症，再有獨立 1,500萬額度！只要兩次入院相隔 90 日以上，同一病症的額度會重新全數重設。
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>每年限額：標準1,500萬 / 特等1,850萬</span>
+              <span class="font-semibold text-emerald-600">終身限額：無上限</span>
+            </div>
+          </div>
+
+          <!-- 卡片 3：日間手術現金保障 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-1 rounded-lg">免住院照拎</span>
+                <span class="text-xs text-gray-400">其他保障 第4節</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">日間手術現金保障 (雙倍優化)</h4>
+              <div class="bg-purple-50/60 rounded-xl p-3.5 mb-4 border border-purple-100">
+                <p class="text-xs font-bold text-purple-700 mb-1">唔使留宿過夜，做腸胃鏡小手術都有現金津貼！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  做日間瘜肉切除、照胃鏡腸鏡，全數報銷手術費之餘，去指定醫療服務提供者或中國內地做，額外發放 <strong class="text-purple-700">$3,600 現金</strong>；其他日間診所亦有 <strong class="text-purple-700">$1,800 現金</strong>。當日做完即走，每日最多1次。
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>指定網絡/內地：$3,600</span>
+              <span class="font-semibold text-gray-900">其他日間診所：$1,800</span>
+            </div>
+          </div>
+
+          <!-- 卡片 4：三大重疾額外加碼 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-lg">大病安全網</span>
+                <span class="text-xs text-gray-400">升級保障 第一部分(14)</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">三大重疾額外加碼 $200萬 / $250萬</h4>
+              <div class="bg-emerald-50/60 rounded-xl p-3.5 mb-4 border border-emerald-100">
+                <p class="text-xs font-bold text-emerald-700 mb-1">電療、化療、標靶、洗腎，自動加碼多 $250萬！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  若患癌症接受化療標靶、嚴重腎病洗腎（連家中租用洗腎機費用亦包）、或進行器官骨髓移植，基本額度用盡後，自動疊加額外 <strong class="text-emerald-700">200萬 (標準) / 250萬 (特等) 獨立額度</strong>，每年合共有高達 1,750 萬 / 2,100 萬 醫療開支防線。
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>基本保障：1,500萬/1,850萬</span>
+              <span class="font-semibold text-emerald-600">合共高達：1,750萬+/年</span>
+            </div>
+          </div>
+
+          <!-- 卡片 5：投保前未知的已有病症 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-lg">等候期極短</span>
+                <span class="text-xs text-gray-400">保單條款 第六部分第4節</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">投保前未知的已有病症</h4>
+              <div class="bg-amber-50/60 rounded-xl p-3.5 mb-4 border border-amber-100">
+                <p class="text-xs font-bold text-amber-700 mb-1">投保前未發現的暗病，保單生效第31日起100%全保！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  一般醫保往往需要等候 2至3年才按比例賠償 25%至 50%。醫家保/尊衛您僅設首 30日等候期，由第31日起直接按保障限額全數賠償，即使任何年齡確診的先天性疾病亦獲全面保障。
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>首 30 日：不保</span>
+              <span class="font-semibold text-emerald-600">第31日起：100% 全數保障</span>
+            </div>
+          </div>
+
+          <!-- 卡片 6：兒童發展保障 -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-lg">無索償回贈</span>
+                <span class="text-xs text-gray-400">補充文件-嬰兒及兒童發展保障</span>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">兒童發展保障 (評估與體檢津貼)</h4>
+              <div class="bg-rose-50/60 rounded-xl p-3.5 mb-4 border border-rose-100">
+                <p class="text-xs font-bold text-rose-700 mb-1">保單每連續生效滿 5 個保單年度，可獲津貼！</p>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  保單每連續生效滿 5 個保單年度後，緊接的下一個保單年度內只要憑收據，即可實報實銷領取兒童發展評估、訓練治療或健康檢查開支，自付費 $0-$5萬選項每次最高賠償 <strong class="text-rose-700">HK$2,000</strong>（直至受保人年滿 25 歲）。
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs pt-3 border-t border-gray-100 text-gray-500">
+              <span>週期：每滿5個保單年度</span>
+              <span class="font-semibold text-rose-600">上限：$2,000 (免住院)</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- 標籤 2：詳細保障表 (基本/升級/現金) -->
+    <div id="tab-details" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 flex items-center">
+              <i data-lucide="layers" class="w-5 h-5 text-fwd-orange mr-2"></i>
+              詳細保障表 (基本 / 升級 / 現金保障)
+            </h3>
+            <p class="text-xs text-gray-500 mt-1">點擊下方各保障分類標題，即可展開或收合詳細保障項目與限額清單：</p>
+          </div>
+          <button onclick="toggleAllAccordions()" class="text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition flex items-center space-x-1 cursor-pointer">
+            <i data-lucide="list-collapse" class="w-3.5 h-3.5"></i>
+            <span id="toggleAllBtnText">全部展開</span>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- 區塊 1：基本住院及手術保障 -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+            <button onclick="toggleAccordion('acc-basic')" class="w-full bg-gray-50 hover:bg-gray-100 p-4 text-left font-bold text-gray-900 flex justify-between items-center transition cursor-pointer">
+              <span class="flex items-center text-sm sm:text-base">
+                <i data-lucide="hospital" class="w-4 h-4 text-fwd-orange mr-2"></i>
+                一、基本保障 (住院、外科手術、癌症治療與門診護理)
+              </span>
+              <i data-lucide="chevron-down" id="icon-acc-basic" class="w-5 h-5 text-gray-500 transition-transform duration-200"></i>
+            </button>
+            <div id="acc-basic" class="hidden p-4 bg-white divide-y divide-gray-100 text-xs sm:text-sm">
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(a) 病房及膳食</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(b) 雜項開支 (手術用具、藥物、化驗等)</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(c) 主診醫生巡房費</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(d) 專科醫生費</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(e) 深切治療部 (ICU)</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(f) 外科醫生費 (不論手術複雜分類)</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(g) 麻醉科醫生費 & (h) 手術室費</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(i) 訂明診斷成像檢測 (CT, MRI, PET Scan)</span><span class="text-fwd-orange font-bold">全數保障 (住院及非住院均包)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(j) 訂明非手術癌症治療 (化療、標靶、免疫等)</span><span class="text-fwd-orange font-bold">全數保障 (實報實銷)</span></div>
+              <div class="py-2.5 flex justify-between items-center">
+                <div><span class="font-medium text-gray-700 block">(k) 入院前或出院後/日間手術前後門診護理</span><span class="text-gray-400 text-xs">前31日內每日1次，後90日內所有跟進門診</span></div>
+                <span class="text-fwd-orange font-bold">全數保障</span>
+              </div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">(l) 精神科治療 (香港/澳門境內住院)</span><span class="font-semibold text-gray-900">標準：每保單年度 $40,000 / 特等：全數保障</span></div>
+            </div>
+          </div>
+
+          <!-- 區塊 2：升級保障 (重建、捐贈、中風與重疾額外) -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+            <button onclick="toggleAccordion('acc-upgrade')" class="w-full bg-gray-50 hover:bg-gray-100 p-4 text-left font-bold text-gray-900 flex justify-between items-center transition cursor-pointer">
+              <span class="flex items-center text-sm sm:text-base">
+                <i data-lucide="shield-plus" class="w-4 h-4 text-fwd-orange mr-2"></i>
+                二、升級保障 (重建手術、中風復康、妊娠併發症與重疾額外防線)
+              </span>
+              <i data-lucide="chevron-down" id="icon-acc-upgrade" class="w-5 h-5 text-gray-500 transition-transform duration-200"></i>
+            </button>
+            <div id="acc-upgrade" class="hidden p-4 bg-white divide-y divide-gray-100 text-xs sm:text-sm">
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">1. 重建手術保障 (意外後>90日或乳房切除)</span><span class="font-semibold text-gray-900">每次意外/乳房切除術 $160,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">2. 重建手術的醫療裝置保障</span><span class="font-semibold text-gray-900">每保單年度每項 $96,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">3. 捐贈者保障 (心、腎、肝、肺、骨髓移植)</span><span class="font-semibold text-gray-900">總移植費用的 30%</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">4. 緊急意外門診治療 (意外後72小時內)</span><span class="text-fwd-orange font-bold">全數保障</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">5. 門診腎臟透析 (含家用透析機租借)</span><span class="text-fwd-orange font-bold">全數保障</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">6. 復康治療 (出院後90日內於註冊復康中心)</span><span class="font-semibold text-gray-900">每保單年度 $100,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">7. (a) 中風家居設備提升保障 (職業治療師建議)</span><span class="font-semibold text-gray-900">每次事故 $80,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">7. (b) 中風輔助保障 (專科、中醫、物理治療)</span><span class="font-semibold text-gray-900">每次 $1,000 (最多30次，每次事故上限 $10万)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">7. (c) 中風傷殘津貼保障 (喪失3項日常活動能力)</span><span class="font-semibold text-gray-900">每月 $10,000 (最多 24 個月)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">8. 善終服務 (末期疾病，預期壽命&lt;12個月)</span><span class="font-semibold text-gray-900">每保單年度 $100,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">9. 私家看護費用 (手術後或ICU調出後住院)</span><span class="text-fwd-orange font-bold">全數保障 (每保單年度最多 30 日)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">10. 出院後私家看護 (出院後 196 日內家居護理)</span><span class="text-fwd-orange font-bold">全數保障 (每保單年度最多 196 日)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">11. 陪床費 (住院期間陪伴者額外床位)</span><span class="text-fwd-orange font-bold">全數保障</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">12. 出院後/日間手術後的中醫治療</span><span class="font-semibold text-gray-900">每次 $600 (最多 15 次)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">13. 妊娠併發症保障 (生效滿12個月後確診)</span><span class="text-fwd-orange font-bold">全數保障</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">14. 癌症治療、腎臟透析及器官移植額外保障</span><span class="font-semibold text-emerald-600">標準：每保單年度高達 $200萬 / 特等：$250萬</span></div>
+            </div>
+          </div>
+
+          <!-- 區塊 3：其他保障與五大現金補貼 -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+            <button onclick="toggleAccordion('acc-cash')" class="w-full bg-gray-50 hover:bg-gray-100 p-4 text-left font-bold text-gray-900 flex justify-between items-center transition cursor-pointer">
+              <span class="flex items-center text-sm sm:text-base">
+                <i data-lucide="banknote" class="w-4 h-4 text-fwd-orange mr-2"></i>
+                三、其他保障與五大現金津貼 (不扣自付費照領)
+              </span>
+              <i data-lucide="chevron-down" id="icon-acc-cash" class="w-5 h-5 text-gray-500 transition-transform duration-200"></i>
+            </button>
+            <div id="acc-cash" class="hidden p-4 bg-white divide-y divide-gray-100 text-xs sm:text-sm">
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">1. 身故保障 & 2. 意外身故保障</span><span class="font-semibold text-gray-900">各 $40,000</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">3. 緊急門診牙科治療 (意外後3個月內)</span><span class="text-fwd-orange font-bold">全數保障</span></div>
+              <div class="py-2.5 flex justify-between items-center">
+                <div><span class="font-medium text-gray-700 block">4. 日間手術現金保障 (雙倍優化)</span><span class="text-gray-400 text-xs">指定醫療服務提供者/內地：$3,600；其他：$1,800</span></div>
+                <span class="font-semibold text-fwd-orange">每宗手術高達 $3,600</span>
+              </div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">5. 額外現金補貼保障 (Second Claim 雙糧)</span><span class="font-semibold text-gray-900">每日住院 $1,000 (最多60日)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">6. 港澳私家醫院入住低於合資格病房現金</span><span class="font-semibold text-gray-900">每日住院 $1,700 (最多30日)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">7. 大型及複雜手術現金保障</span><span class="font-semibold text-gray-900">大型 $4,000 / 複雜 $8,000 (特等：$6,000 / $12,000)</span></div>
+              <div class="py-2.5 flex justify-between items-center"><span class="font-medium text-gray-700">8. 港澳深切治療部現金保障 (連續3日或以上)</span><span class="font-semibold text-gray-900">每次住院 $8,000 (特等：$12,000)</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 標籤 3：嬰兒特別保障及兒童發展保障 -->
+    <div id="tab-family" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+        <div class="mb-6">
+          <span class="text-xs font-bold text-fwd-orange uppercase tracking-wider">家族傳承守護</span>
+          <h3 class="text-xl font-bold text-gray-900 mt-1">嬰兒之特別保障及兒童發展保障詳解</h3>
+          <p class="text-xs text-gray-500 mt-1">買一份保單，惠及下一代健康成長：</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 嬰兒之特別保障 -->
+          <div class="bg-gradient-to-br from-orange-50 to-amber-50/50 rounded-2xl p-6 border border-orange-200/60 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-fwd-orange text-white flex items-center justify-center shadow">
+                  <i data-lucide="baby" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900">嬰兒之特別保障 (跨代傳承守護)</h4>
+                  <span class="text-xs font-bold text-fwd-orange bg-white px-2 py-0.5 rounded-full border border-orange-200">免費獲贈連續 2 年獨立醫療保險</span>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-xs sm:text-sm text-gray-700 mb-4">
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>生效條件：</strong>本保單連續生效滿 2 個保單年度後。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>通知要求：</strong>受保人或配偶生育子女，出生後 180 日內書面通知富衛。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>尊貴待遇：</strong>免驗身、免健康證明、不收額外保費，即獲 2 年指定醫療保險！</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>名額無上限：</strong>適用子女數目不設上限 (每名新生兒適用一次)。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>額度獨立：</strong>賠償額度獨立計算，絕不扣減父母保單保額。</span></li>
+              </ul>
+            </div>
+            <div class="bg-white/80 rounded-xl p-3 text-xs text-gray-600 border border-orange-100">
+              <strong>涵蓋限額：</strong> 每年保障限額 $420,000 (含病房 $750/日、雜項 $14,000、外科手術最高 $50,000 等)。
+            </div>
+          </div>
+
+          <!-- 兒童發展保障 -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-2xl p-6 border border-blue-200/60 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
+                  <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900">兒童發展保障 (健康成長與預防)</h4>
+                  <span class="text-xs font-bold text-blue-600 bg-white px-2 py-0.5 rounded-full border border-blue-200">評估、訓練治療及體檢津貼</span>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-xs sm:text-sm text-gray-700 mb-4">
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>生效週期：</strong>保單每連續生效滿 5 個保單年度後，於第 6 年可用 1 次。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>受保年齡：</strong>受保人年齡直至年滿 25 歲 (實際年齡)。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>涵蓋項目：</strong>兒童發展評估、訓練治療、健康檢查。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>津貼金額：</strong>自付費 $0-$5萬選項：每次最高賠償 HK$2,000；自付費 $10萬/$25萬選項：每次最高賠償 HK$500。</span></li>
+                <li class="flex items-start"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i><span><strong>免住院要求：</strong>即使毋須住院，憑資格評估或體檢收據即可報銷。</span></li>
+              </ul>
+            </div>
+            <div class="bg-white/80 rounded-xl p-3 text-xs text-gray-600 border border-blue-100">
+              <strong>貼心提醒：</strong> 每 5 年支付 1 次，未使用的保障將被取消，不能轉移或退還現金。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 標籤 4：理賠機制與90日重設 -->
+    <div id="tab-claims" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 flex items-center">
+            <i data-lucide="refresh-cw" class="w-5 h-5 text-fwd-orange mr-2"></i>
+            理賠機制與 90 日重設規則
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">清晰了解同一傷病之賠償限額如何計算與重設：</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+            <div class="w-8 h-8 rounded-lg bg-orange-100 text-fwd-orange flex items-center justify-center font-bold text-sm mb-3">1</div>
+            <h4 class="font-bold text-gray-900 text-sm mb-2">90日獨立計算期</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              就同一傷病的每次住院或日間手術，若該次住院與<strong>前一次住院最後日期相隔超過 90 日</strong>，所有適用的保障限額及賠償總額將會<strong>完全重新計算</strong>，如同新病症處理。
+            </p>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+            <div class="w-8 h-8 rounded-lg bg-orange-100 text-fwd-orange flex items-center justify-center font-bold text-sm mb-3">2</div>
+            <h4 class="font-bold text-gray-900 text-sm mb-2">指定危疾免自付費</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              一旦確診 16 種指定危疾（如癌症、中風、急性心梗等），在主診醫生建議下直接因該危疾接受治療，<strong>保單原有的自付費將直接減至 $0</strong>，免除患者沉重的經濟負擔。
+            </p>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+            <div class="w-8 h-8 rounded-lg bg-orange-100 text-fwd-orange flex items-center justify-center font-bold text-sm mb-3">3</div>
+            <h4 class="font-bold text-gray-900 text-sm mb-2">跨港澳無憂免找數</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              透過「臻一尊貴優才醫護管理團隊」，成功安排入住泛亞區網絡醫院或<strong>中國內地所有三甲級醫院</strong>，即可享有無憂出院免找數服務，由富衛直接與醫院結算。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 標籤 5：保費及無索償折扣計算 -->
+    <div id="tab-calculator" class="tab-content hidden space-y-6">
+      <div id="calculator" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 flex items-center">
+            <i data-lucide="percent" class="w-5 h-5 text-fwd-orange mr-2"></i>
+            保費及無索償折扣計算機 (2026最新保費表)
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">自由選擇受保人條件、保障級別、自付費及無索償期，即時試算實質保費與折扣細節：</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <!-- 左側輸入控制面板 (對應參考圖一) -->
+          <div class="space-y-5 bg-gray-50 p-6 rounded-2xl border border-gray-200">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-2">受保人性別</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button type="button" id="genderMale" onclick="setGender('male')" class="py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-fwd-orange text-white shadow-sm cursor-pointer">
+                  <span>♂ 男性 (Male)</span>
+                </button>
+                <button type="button" id="genderFemale" onclick="setGender('female')" class="py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 cursor-pointer">
+                  <span>♀ 女性 (Female)</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">下次生日年齡 (1-81歲)</label>
+                <input type="number" id="calcAge" value="30" min="1" max="81" oninput="calculatePremium()" class="w-full text-sm bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                <span class="text-[10px] text-gray-400 mt-1 block">(投保年齡下次生日計算)</span>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">繳費模式</label>
+                <select id="calcMode" onchange="calculatePremium()" class="w-full text-sm bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                  <option value="annual">年繳 (Annual)</option>
+                  <option value="monthly">月繳 (Monthly)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">保障級別</label>
+              <select id="calcLevel" onchange="calculatePremium()" class="w-full text-sm bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                <option value="standard">標準保障級別 (每年限額 HK$1,500萬)</option>
+                <option value="superior">特等保障級別 (每年限額 HK$1,850萬)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">每年自付費選項</label>
+              <select id="calcDeductible" onchange="calculatePremium()" class="w-full text-sm bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                <option value="0">HK$ 0 自付費 (全數合資格費用)</option>
+                <option value="16000">HK$ 16,000 自付費</option>
+                <option value="25000">HK$ 25,000 自付費</option>
+                <option value="50000">HK$ 50,000 自付費</option>
+                <option value="100000" selected>HK$ 100,000 自付費 (Top-up精選)</option>
+                <option value="250000">HK$ 250,000 自付費 (Top-up精選)</option>
+              </select>
+            </div>
+
+            <div class="pt-3 border-t border-gray-200">
+              <label class="block text-xs font-bold text-gray-800 mb-1.5">無索償保費折扣設定 (最高合共減 25%)：</label>
+              
+              <div class="space-y-3 mt-2">
+                <div>
+                  <label class="block text-[11px] font-medium text-gray-600 mb-1">1. 個人連續無索償期</label>
+                  <select id="calcNcd" onchange="calculatePremium()" class="w-full text-xs bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                    <option value="0" selected>不足2年 / 曾索償 (0% 折扣)</option>
+                    <option value="2">連續 2 至 4 年 (10% 個人折扣)</option>
+                    <option value="5">連續 5 年或以上 (15% 個人折扣)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-medium text-gray-600 mb-1">2. 同一保單持有人持有且享個人無索償折扣之生效保單數</label>
+                  <select id="calcFamilyPolicies" onchange="calculatePremium()" class="w-full text-xs bg-white border border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-fwd-orange">
+                    <option value="1" selected>只有 1 份 / 其他保單無折扣 (額外 0%)</option>
+                    <option value="3">2 至 3 份保單 (額外 2.5%)</option>
+                    <option value="4">4 份保單 (額外 5.0%)</option>
+                    <option value="5">5 份或以上保單 (額外 10.0%)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-800">
+              *註：無索償保費折扣適用於尊衛您（寰譽版）基本計劃。
+            </div>
+          </div>
+
+          <!-- 右側試算結果明細面板 (完美對應參考圖二深色主題) -->
+          <div class="bg-gray-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-gray-800 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
+                <h4 class="font-bold text-white text-base">試算結果明細</h4>
+                <span id="badgeGenderAge" class="bg-fwd-orange text-white text-xs font-bold px-3 py-1 rounded-full shadow">男性 30歲 • 年繳</span>
+              </div>
+
+              <div class="space-y-4 mb-8 text-sm">
+                <div class="flex justify-between items-center text-gray-300">
+                  <span>尊衛您基本計劃標準保費：</span>
+                  <span id="resStandardPremium" class="font-bold text-white text-base">HK$ 4,751</span>
+                </div>
+                <div class="flex justify-between items-center text-gray-300">
+                  <span>可享無索償折扣率：</span>
+                  <span id="resTotalDiscountRate" class="font-bold text-emerald-400">0% (個人 0% + 家庭 0%)</span>
+                </div>
+                <div class="flex justify-between items-center text-gray-300 border-b border-gray-800 pb-3">
+                  <span>基本計劃獲扣減金額：</span>
+                  <span id="resDiscountAmount" class="font-bold text-red-400">- HK$ 0</span>
+                </div>
+              </div>
+
+              <div class="mb-8">
+                <span class="text-xs text-gray-400 block mb-1">應付實質保費 (折後)：</span>
+                <div class="flex items-baseline space-x-2">
+                  <span class="text-3xl sm:text-4xl font-extrabold text-fwd-orange" id="resFinalPremium">HK$ 4,751</span>
+                  <span id="resModeText" class="text-xs text-gray-400">/ 每年</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <button onclick="exportToPDF()" class="w-full bg-fwd-orange hover:bg-fwd-accent text-white font-bold text-sm py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                <span>將此預算輸出為 PDF 建議書</span>
+              </button>
+
+              <p class="text-[10px] text-gray-400 leading-relaxed border-t border-gray-800 pt-3">
+                ● 以上數值根據富衛官方標準保費表計算，只供參考。保費為非保證，並將每年按照受保人續保時之實際年齡釐定。如受保人有附加職業或居住地區風險，保費或會有所調整。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 標籤 6：不保事項全面解密 -->
+    <div id="tab-exclusions" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 flex items-center">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-fwd-orange mr-2"></i>
+            第七部分：一般不保事項全面解密 (13 大項目)
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">條款規定不予賠償的項目清單及附帶的例外承保情況：</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">1. 非醫療所需治療</span>
+            <p class="text-gray-600">任何非註冊醫生認為醫療所需的治療、藥物或檢測費用不獲賠償。</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">2. 純診斷或專職住院</span>
+            <p class="text-gray-600">純粹為接受診斷程序或物理/職業治療而住院的費用。<span class="text-emerald-600 font-semibold">（若醫生建議屬必要診斷則除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">3. 保單生效前已感染 HIV</span>
+            <p class="text-gray-600">生效前已感染愛滋病毒 (HIV) 及其相關傷病。<span class="text-emerald-600 font-semibold">（性侵犯、器官移植、輸血或母嬰感染除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">4. 濫用物質、自殘與非法活動</span>
+            <p class="text-gray-600">因過量服藥、酗酒、毒品、故意自殘、企圖自殺或參與非法活動引致的醫療費用。</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">5. 美容整容與視力矯正</span>
+            <p class="text-gray-600">以美容為目的或 LASIK 矯視手術。<span class="text-emerald-600 font-semibold">（意外後90日內接受的必要重建手術除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">6. 預防性治療與一般體檢</span>
+            <p class="text-gray-600">並無症狀的一般體檢、疫苗注射或保健品。<span class="text-emerald-600 font-semibold">（移除癌前病變或預防過往病復發除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">7. 常規牙科與口腔頜面</span>
+            <p class="text-gray-600">一般牙科治療。<span class="text-emerald-600 font-semibold">（因意外引致健全自然牙齒並於住院期間接受的急症治療除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">8. 產科狀況與不育治療</span>
+            <p class="text-gray-600">懷孕、分娩、流產檢測、避孕結紮、變性及不育人工受孕。<span class="text-emerald-600 font-semibold">（受保的 12 項妊娠併發症除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">9. 購買耐用品醫療設備</span>
+            <p class="text-gray-600">輪椅、家居呼吸機、助聽器、空氣清新機等。<span class="text-emerald-600 font-semibold">（住院期間或日間手術當日租用者除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">10. 傳統中醫與另類療法</span>
+            <p class="text-gray-600">中草藥、跌打、針灸、推拿、催眠或自然療法。<span class="text-emerald-600 font-semibold">（升級保障中出院後中醫跟進門診除外）</span></p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">11. 實驗性或未經證實技術</span>
+            <p class="text-gray-600">按治療所在地標準界定為實驗性或未經當地認可機構批准的醫療技術。</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+            <span class="font-bold text-gray-900 block mb-1">12. 已獲第三方/政府賠償費用</span>
+            <p class="text-gray-600">已由其他法律、政府或僱主保險計劃賠償的合資格費用（可抵扣自付費）。</p>
+          </div>
+          <div class="bg-gray-50 sm:col-span-2 lg:col-span-3 p-4 rounded-xl border border-gray-200 text-xs bg-orange-50/50">
+            <span class="font-bold text-gray-900 block mb-1">13. 戰爭與軍事行動</span>
+            <p class="text-gray-600">因戰爭（不論宣戰與否）、內戰、侵略、外敵行動、叛亂、革命或軍事政變所招致的治療費用。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 列印專用免責聲明頁尾 (PDF 匯出時自動顯示於最末頁底部保障自身) -->
+  <div class="print-only max-w-7xl mx-auto px-4 pt-3 mt-2 border-t border-gray-300 text-center">
+    <p class="text-[10px] text-gray-600 leading-relaxed font-medium">
+      本系統內容根據富衛官方保單條款 (LBC VHIS-FPG V112026H)、產品小冊子及 2026 年 11 月 18 日最新保障升級指引製作，僅供內部參考與客戶解說之用。<br>
+      一切保單權益與賠償細則均以官方正式保單條款為準。
+    </p>
+  </div>
+
+  <!-- 頁尾 Footer -->
+  <footer class="bg-gray-900 text-gray-400 text-xs py-8 border-t border-gray-800 no-print mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+      <p class="font-bold text-gray-300">富衛人壽保險（澳門）股份有限公司 • 尊衛您（寰譽版）醫療計劃客戶專屬互動系統</p>
+      <p class="text-[11px] text-gray-500 max-w-3xl mx-auto">
+        本系統內容根據富衛官方保單條款 (LBC VHIS-FPG V112026H)、產品小冊子及 2026 年 11 月 18 日最新保障升級指引製作，僅供內部參考與客戶解說之用。一切保單權益與賠償細則均以官方正式保單條款為準。
+      </p>
+      <p class="text-gray-600 text-[10px]">© 2026 FWD Insurance. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript 互動與 PDF 匯出邏輯 -->
+  <script>
+    let currentGender = 'male';
+
+    function setGender(g) {
+      currentGender = g;
+      if (g === 'male') {
+        document.getElementById('genderMale').className = "py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-fwd-orange text-white shadow-sm cursor-pointer";
+        document.getElementById('genderFemale').className = "py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 cursor-pointer";
+      } else {
+        document.getElementById('genderFemale').className = "py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-fwd-orange text-white shadow-sm cursor-pointer";
+        document.getElementById('genderMale').className = "py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 cursor-pointer";
+      }
+      calculatePremium();
+    }
+
+    // 初始化 Lucide 圖標
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      calculatePremium();
+    });
+
+    // 分頁切換功能
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-fwd-orange', 'text-white', 'shadow-sm');
+        btn.classList.add('text-gray-300', 'hover:bg-white/10', 'hover:text-white');
+      });
+
+      let targetEl = document.getElementById(tabId);
+      if (targetEl) {
+        targetEl.classList.remove('hidden');
+      }
+
+      let btnMap = {
+        'tab-highlights': 'btn-tab-highlights',
+        'tab-details': 'btn-tab-details',
+        'tab-family': 'btn-tab-family',
+        'tab-claims': 'btn-tab-claims',
+        'tab-calculator': 'btn-tab-calculator',
+        'tab-exclusions': 'btn-tab-exclusions',
+        'calculator': 'btn-tab-calculator'
+      };
+
+      let btnId = btnMap[tabId];
+      if (btnId) {
+        let btn = document.getElementById(btnId);
+        if (btn) {
+          btn.classList.remove('text-gray-300', 'hover:bg-white/10', 'hover:text-white');
+          btn.classList.add('bg-fwd-orange', 'text-white', 'shadow-sm');
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => lucide.createIcons(), 50);
+    }
+
+    // 詳細保障表折疊展開控制
+    function toggleAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById('icon-' + id);
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        el.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    let allExpanded = false;
+    function toggleAllAccordions() {
+      const accordions = ['acc-basic', 'acc-upgrade', 'acc-cash'];
+      const btnText = document.getElementById('toggleAllBtnText');
+      allExpanded = !allExpanded;
+      
+      accordions.forEach(id => {
+        const el = document.getElementById(id);
+        const icon = document.getElementById('icon-' + id);
+        if (allExpanded) {
+          el.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        } else {
+          el.classList.add('hidden');
+          icon.classList.remove('rotate-180');
+        }
+      });
+      btnText.textContent = allExpanded ? '全部收合' : '全部展開';
+    }
+
+    // 重設提案抬頭
+    function resetProposalHeader() {
+      document.getElementById('propClientName').value = "尊貴客戶";
+      document.getElementById('propAdvisorName').value = "富衛策劃顧問";
+      document.getElementById('propAdvisorTitle').value = "資深分區總監";
+      document.getElementById('propTeamName').value = "One Goal One Region";
+      document.getElementById('propAdvisorPhone').value = "+853 8988 6060";
+    }
+
+    // 匯出 PDF / 列印準備
+    function exportToPDF() {
+      document.getElementById('printClientName').textContent = document.getElementById('propClientName').value || '尊貴客戶';
+      document.getElementById('printAdvisorName').textContent = document.getElementById('propAdvisorName').value || '富衛策劃顧問';
+      document.getElementById('printAdvisorTitle').textContent = document.getElementById('propAdvisorTitle').value || '資深分區總監';
+      document.getElementById('printTeamName').textContent = document.getElementById('propTeamName').value || 'One Goal One Region';
+      document.getElementById('printAdvisorPhone').textContent = document.getElementById('propAdvisorPhone').value || '+853 8988 6060';
+      
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('hidden');
+      });
+
+      ['acc-basic', 'acc-upgrade', 'acc-cash'].forEach(id => {
+        document.getElementById(id).classList.remove('hidden');
+      });
+
+      window.print();
+
+      setTimeout(() => {
+        switchTab('tab-highlights');
+      }, 1000);
+    }
+
+    // 2026年11月最新官方標準保費數據庫 (下次生日年齡 1 歲至 100 歲逐歲精確收錄)
+    // 數組結構: [自付費0, 自付費16000, 自付費25000, 自付費50000, 自付費100000, 自付費250000]
+    const officialPremiumTable = {
+      standard: {
+        1: [9059, 4695, 4134, 3272, 2567, 2066],
+        2: [9059, 4695, 4134, 3272, 2567, 2066],
+        3: [9059, 4695, 4134, 3272, 2567, 2066],
+        4: [9059, 4695, 4134, 3272, 2567, 2066],
+        5: [9059, 4695, 4134, 3272, 2567, 2066],
+        6: [8282, 4002, 3541, 2770, 2293, 1852],
+        7: [8282, 4002, 3541, 2770, 2293, 1852],
+        8: [8282, 4002, 3541, 2770, 2293, 1852],
+        9: [8282, 4002, 3541, 2770, 2293, 1852],
+        10: [8282, 4002, 3541, 2770, 2293, 1852],
+        11: [8282, 4002, 3541, 2770, 2293, 1852],
+        12: [8282, 4002, 3541, 2770, 2293, 1852],
+        13: [8282, 4002, 3541, 2770, 2293, 1852],
+        14: [8282, 4002, 3541, 2770, 2293, 1852],
+        15: [8282, 4002, 3541, 2770, 2293, 1852],
+        16: [8282, 4002, 3541, 2770, 2293, 1852],
+        17: [8282, 4002, 3541, 2770, 2293, 1852],
+        18: [8282, 4002, 3541, 2770, 2293, 1852],
+        19: [8512, 4033, 3541, 2800, 2311, 1866],
+        20: [8581, 4197, 3636, 2860, 2354, 1899],
+        21: [8782, 4275, 3636, 2946, 2404, 1936],
+        22: [9053, 4346, 3636, 3023, 2461, 1981],
+        23: [9313, 4624, 3924, 3122, 2533, 2037],
+        24: [9505, 4638, 4020, 3209, 2597, 2087],
+        25: [9646, 5016, 4304, 3296, 2645, 2122],
+        26: [10120, 5032, 4304, 3370, 2703, 2168],
+        27: [10672, 5032, 4486, 3445, 2761, 2214],
+        28: [11217, 5392, 4584, 3518, 2818, 2260],
+        29: [11622, 5502, 4692, 3519, 2818, 2260],
+        30: [11882, 5613, 4791, 3546, 2836, 2274],
+        31: [12058, 5722, 4885, 3735, 2985, 2376],
+        32: [12331, 5830, 4893, 3735, 2985, 2376],
+        33: [12435, 5936, 5043, 3753, 2995, 2383],
+        34: [12702, 6001, 5164, 3783, 3018, 2400],
+        35: [12944, 6147, 5255, 3783, 3018, 2400],
+        36: [13405, 6231, 5422, 3888, 3094, 2442],
+        37: [13430, 6569, 5589, 4008, 3183, 2514],
+        38: [13705, 6569, 5589, 4008, 3183, 2514],
+        39: [14064, 6737, 5672, 4068, 3223, 2544],
+        40: [14175, 6737, 5672, 4091, 3236, 2554],
+        41: [14368, 6821, 5839, 4371, 3451, 2726],
+        42: [14646, 7242, 6089, 4683, 3691, 2915],
+        43: [15010, 7410, 6298, 4853, 3821, 3017],
+        44: [15709, 7748, 6657, 5130, 4032, 3184],
+        45: [16665, 8000, 6673, 5221, 4097, 3235],
+        46: [17498, 8417, 7406, 5708, 4480, 3484],
+        47: [18499, 8834, 7768, 5987, 4698, 3654],
+        48: [19079, 9335, 8320, 6412, 5031, 3913],
+        49: [19827, 9823, 8670, 6682, 5244, 4079],
+        50: [20657, 10321, 9005, 7002, 5494, 4273],
+        51: [21066, 10933, 9171, 7487, 5875, 4569],
+        52: [21857, 11280, 9515, 7866, 6172, 4800],
+        53: [23671, 11540, 9699, 8244, 6468, 5031],
+        54: [24722, 12060, 10387, 8623, 6765, 5262],
+        55: [25758, 12578, 10815, 9000, 7061, 5492],
+        56: [26869, 13027, 11085, 9391, 7449, 5814],
+        57: [28578, 13915, 11703, 9782, 7754, 6142],
+        58: [30231, 14803, 12494, 10175, 8060, 6385],
+        59: [31800, 15694, 13375, 10567, 8463, 6725],
+        60: [33968, 16849, 14257, 10962, 8773, 6971],
+        61: [35683, 17993, 15141, 11578, 9261, 7360],
+        62: [37461, 19003, 16206, 12242, 9786, 7776],
+        63: [40666, 20353, 17341, 12963, 10357, 8230],
+        64: [44904, 22401, 19093, 13858, 10939, 8666],
+        65: [50243, 24961, 21290, 14667, 11570, 9166],
+        66: [54572, 27440, 23156, 15366, 12115, 9596],
+        67: [58991, 29924, 25361, 16487, 12990, 10139],
+        68: [61317, 30461, 25805, 17547, 13657, 10624],
+        69: [62707, 31255, 26502, 18820, 14641, 11387],
+        70: [64776, 32304, 27455, 20111, 15635, 12161],
+        71: [66552, 33324, 28296, 21445, 16671, 12968],
+        72: [73579, 36852, 31270, 22728, 17670, 13743],
+        73: [77656, 38987, 33022, 24146, 18772, 14601],
+        74: [81663, 40729, 34722, 25474, 19805, 15405],
+        75: [85029, 42787, 36288, 26819, 20850, 16218],
+        76: [86577, 43798, 37198, 28259, 21970, 17089],
+        77: [92056, 46092, 39110, 29271, 22757, 17700],
+        78: [98428, 49213, 41838, 30740, 23898, 18588],
+        79: [101189, 50225, 42656, 31340, 24366, 18952],
+        80: [104385, 53158, 45115, 33146, 25769, 20043],
+        81: [106034, 54356, 46117, 35105, 27293, 21228],
+        82: [112174, 55597, 47279, 36040, 28020, 21793],
+        83: [115438, 57416, 48728, 37382, 29064, 22606],
+        84: [117485, 58352, 49469, 38828, 30187, 23479],
+        85: [119345, 59567, 50840, 40141, 31207, 24274],
+        86: [121485, 60316, 52683, 41596, 32339, 25154],
+        87: [123717, 61736, 53846, 42513, 33053, 25709],
+        88: [125670, 63238, 55199, 43583, 33883, 26355],
+        89: [127624, 64133, 56034, 44243, 34396, 26754],
+        90: [129670, 65703, 57555, 45443, 35330, 27480],
+        91: [131718, 66901, 58411, 46162, 35889, 27915],
+        92: [133856, 68293, 59484, 50176, 39009, 30342],
+        93: [135809, 69731, 60264, 51112, 39737, 30908],
+        94: [137856, 71001, 61239, 52232, 40608, 31585],
+        95: [140089, 72716, 61948, 53477, 41576, 32339],
+        96: [142134, 73867, 62577, 54486, 42360, 32948],
+        97: [144275, 75180, 63823, 56047, 43574, 33892],
+        98: [146864, 75948, 64623, 57712, 44868, 34899],
+        99: [149449, 77344, 65334, 58833, 45740, 35578],
+        100: [155620, 77805, 66213, 60120, 46741, 36355]
+      },
+      superior: {
+        1: [10786, 5574, 4882, 3841, 2994, 2421],
+        2: [10786, 5574, 4882, 3841, 2994, 2421],
+        3: [10786, 5574, 4882, 3841, 2994, 2421],
+        4: [10786, 5574, 4882, 3841, 2994, 2421],
+        5: [10786, 5574, 4882, 3841, 2994, 2421],
+        6: [9862, 4752, 4181, 3253, 2672, 2169],
+        7: [9862, 4752, 4181, 3253, 2672, 2169],
+        8: [9862, 4752, 4181, 3253, 2672, 2169],
+        9: [9862, 4752, 4181, 3253, 2672, 2169],
+        10: [9862, 4752, 4181, 3253, 2672, 2169],
+        11: [9862, 4752, 4181, 3253, 2672, 2169],
+        12: [9862, 4752, 4181, 3253, 2672, 2169],
+        13: [9862, 4752, 4181, 3253, 2672, 2169],
+        14: [9862, 4752, 4181, 3253, 2672, 2169],
+        15: [9862, 4752, 4181, 3253, 2672, 2169],
+        16: [9862, 4752, 4181, 3253, 2672, 2169],
+        17: [9862, 4752, 4181, 3253, 2672, 2169],
+        18: [9862, 4752, 4181, 3253, 2672, 2169],
+        19: [10135, 4787, 4181, 3286, 2693, 2184],
+        20: [10218, 4983, 4294, 3357, 2744, 2224],
+        21: [10457, 5076, 4294, 3458, 2802, 2267],
+        22: [10779, 5160, 4294, 3549, 2868, 2320],
+        23: [11090, 5491, 4633, 3665, 2953, 2386],
+        24: [11317, 5508, 4747, 3767, 3027, 2445],
+        25: [11487, 5957, 5082, 3869, 3082, 2485],
+        26: [12051, 5975, 5082, 3956, 3150, 2539],
+        27: [12708, 5975, 5298, 4044, 3218, 2593],
+        28: [13357, 6403, 5413, 4131, 3284, 2647],
+        29: [13841, 6534, 5541, 4133, 3284, 2647],
+        30: [14150, 6666, 5657, 4165, 3306, 2663],
+        31: [14362, 6795, 5769, 4385, 3479, 2782],
+        32: [14688, 6923, 5780, 4385, 3479, 2782],
+        33: [14812, 7049, 5956, 4408, 3492, 2791],
+        34: [15132, 7127, 6099, 4442, 3517, 2811],
+        35: [15419, 7302, 6207, 4442, 3517, 2811],
+        36: [15969, 7402, 6405, 4565, 3607, 2861],
+        37: [15999, 7802, 6601, 4707, 3712, 2945],
+        38: [16326, 7802, 6601, 4707, 3712, 2945],
+        39: [16753, 8002, 6699, 4778, 3757, 2981],
+        40: [16884, 8002, 6699, 4805, 3773, 2992],
+        41: [17114, 8102, 6897, 5133, 4024, 3193],
+        42: [17446, 8601, 7193, 5499, 4305, 3414],
+        43: [17878, 8802, 7439, 5699, 4455, 3534],
+        44: [18712, 9202, 7863, 6026, 4701, 3731],
+        45: [19850, 9502, 7882, 6131, 4777, 3790],
+        46: [20843, 9997, 8748, 6703, 5224, 4081],
+        47: [22035, 10492, 9175, 7030, 5478, 4281],
+        48: [22724, 11086, 9827, 7530, 5866, 4586],
+        49: [23616, 11667, 10240, 7848, 6114, 4778],
+        50: [24604, 12258, 10635, 8223, 6405, 5007],
+        51: [25093, 12986, 10832, 8792, 6850, 5353],
+        52: [26034, 13399, 11240, 9238, 7196, 5624],
+        53: [28195, 13707, 11456, 9682, 7541, 5894],
+        54: [29446, 14324, 12269, 10126, 7888, 6164],
+        55: [30682, 14940, 12774, 10569, 8233, 6434],
+        56: [32004, 15473, 13094, 11029, 8686, 6811],
+        57: [34040, 16527, 13823, 11488, 9041, 7197],
+        58: [36009, 17583, 14758, 11950, 9399, 7480],
+        59: [37878, 18641, 15798, 12410, 9868, 7879],
+        60: [40460, 20013, 16840, 12873, 10229, 8167],
+        61: [42502, 21370, 17883, 13597, 10798, 8622],
+        62: [44619, 22570, 19142, 14376, 11410, 9111],
+        63: [48437, 24174, 20481, 15224, 12076, 9642],
+        64: [53484, 26606, 22550, 16274, 12755, 10153],
+        65: [59843, 29645, 25146, 17224, 13491, 10645],
+        66: [64998, 32590, 27349, 18044, 14125, 11243],
+        67: [70261, 35540, 29953, 19361, 15146, 11877],
+        68: [73031, 36177, 30478, 20605, 15924, 12446],
+        69: [74686, 37118, 31301, 22100, 17071, 13341],
+        70: [77150, 38365, 32425, 23616, 18229, 14247],
+        71: [79265, 39576, 33420, 25182, 19438, 15192],
+        72: [87634, 43766, 36930, 26689, 20602, 16101],
+        73: [92489, 46301, 39000, 28354, 21887, 17105],
+        74: [97263, 48370, 41008, 29913, 23092, 18046],
+        75: [101272, 50813, 42858, 31492, 24310, 18999],
+        76: [103115, 52014, 43932, 33184, 25616, 20019],
+        77: [109641, 54740, 46190, 34373, 26533, 20736],
+        78: [117231, 58446, 49413, 36097, 27864, 21776],
+        79: [120519, 59648, 50378, 36802, 28410, 22203],
+        80: [124326, 63130, 53282, 38922, 30045, 23481],
+        81: [126290, 64553, 54467, 41224, 31821, 24870],
+        82: [133603, 66028, 55838, 42321, 32669, 25532],
+        83: [137491, 68188, 57550, 43898, 33887, 26483],
+        84: [139927, 69298, 58424, 45595, 35197, 27507],
+        85: [142143, 70743, 60044, 47137, 36387, 28438],
+        86: [144692, 71631, 62221, 48845, 37706, 29468],
+        87: [147351, 73319, 63593, 49923, 38537, 30119],
+        88: [149677, 75102, 65192, 51178, 39506, 30876],
+        89: [152004, 76166, 66179, 51954, 40105, 31343],
+        90: [154441, 78029, 67976, 53363, 41193, 32194],
+        91: [156879, 79452, 68985, 54207, 41845, 32704],
+        92: [159426, 81106, 70252, 58921, 45483, 35547],
+        93: [161753, 82813, 71173, 60020, 46331, 36209],
+        94: [164191, 84322, 72325, 61335, 47347, 37004],
+        95: [166850, 86358, 73163, 62798, 48476, 37886],
+        96: [169286, 87726, 73906, 63981, 49390, 38600],
+        97: [171835, 89285, 75377, 65815, 50804, 39706],
+        98: [174919, 90196, 76322, 67770, 52315, 40885],
+        99: [177998, 91856, 77162, 69087, 53330, 41679],
+        100: [185349, 92403, 78201, 70598, 54497, 42591]
+      }
+    };
+
+    function getOfficialBasePremium(level, age, deductible) {
+      const table = officialPremiumTable[level] || officialPremiumTable['standard'];
+      
+      // 逐歲精準查詢 (範圍 1 至 100 歲)
+      let targetAge = Math.min(Math.max(parseInt(age) || 30, 1), 100);
+      let row = table[targetAge];
+      
+      let dedMap = { '0': 0, '16000': 1, '25000': 2, '50000': 3, '100000': 4, '250000': 5 };
+      let colIdx = dedMap[deductible] !== undefined ? dedMap[deductible] : 4;
+      
+      return row[colIdx];
+    }
+
+    // 保費試算引擎
+    function calculatePremium() {
+      const age = parseInt(document.getElementById('calcAge').value) || 30;
+      const level = document.getElementById('calcLevel').value;
+      const deductible = document.getElementById('calcDeductible').value;
+      const mode = document.getElementById('calcMode').value;
+      const ncdYears = parseInt(document.getElementById('calcNcd').value) || 0;
+      const familyCount = parseInt(document.getElementById('calcFamilyPolicies').value) || 1;
+
+      // 取得官方對應逐歲精準保費 (官方標準保費男女同價)
+      let standardAnnual = getOfficialBasePremium(level, age, deductible);
+
+      // NCD 個人折扣
+      let personalNcdRate = 0;
+      if (ncdYears >= 5) personalNcdRate = 0.15;
+      else if (ncdYears >= 2) personalNcdRate = 0.10;
+
+      // 家庭額外 NCD 折扣
+      let familyNcdRate = 0;
+      if (familyCount >= 5) familyNcdRate = 0.10;
+      else if (familyCount === 4) familyNcdRate = 0.05;
+      else if (familyCount >= 2) familyNcdRate = 0.025;
+
+      let totalDiscountRate = personalNcdRate + familyNcdRate;
+      let discountAmount = Math.round(standardAnnual * totalDiscountRate);
+      let finalAmount = standardAnnual - discountAmount;
+
+      if (mode === 'monthly') {
+        standardAnnual = Number((standardAnnual * 0.09).toFixed(2));
+        discountAmount = Number((discountAmount * 0.09).toFixed(2));
+        finalAmount = Number((finalAmount * 0.09).toFixed(2));
+      }
+
+      // 更新介面
+      let genderStr = currentGender === 'male' ? '男性' : '女性';
+      let modeStr = mode === 'annual' ? '年繳' : '月繳';
+      document.getElementById('badgeGenderAge').textContent = `${genderStr} ${age}歲 • ${modeStr}`;
+      
+      document.getElementById('resStandardPremium').textContent = 'HK$ ' + standardAnnual.toLocaleString();
+      document.getElementById('resTotalDiscountRate').textContent = `${(totalDiscountRate * 100)}% (個人 ${(personalNcdRate * 100)}% + 家庭 ${(familyNcdRate * 100)}%)`;
+      document.getElementById('resDiscountAmount').textContent = `- HK$ ${discountAmount.toLocaleString()}`;
+      document.getElementById('resFinalPremium').textContent = 'HK$ ' + finalAmount.toLocaleString();
+      document.getElementById('resModeText').textContent = mode === 'annual' ? '/ 每年' : '/ 每月';
+    }
+  </script>
+</body>
+</html>
