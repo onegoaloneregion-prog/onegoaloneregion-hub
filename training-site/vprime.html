@@ -105,32 +105,40 @@
 </head>
 <body class="bg-fwd-lightbg text-slate-800 font-sans antialiased pb-16">
 
-    <!-- Sticky Navigation Header (Hidden on Print) -->
-    <header class="no-print sticky top-0 z-50 bg-fwd-darknavy text-white shadow-lg border-b border-fwd-orange/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
-            <div class="flex items-center space-x-2.5">
-                <span class="bg-fwd-orange text-white font-black text-xs px-2.5 py-1 rounded-md tracking-wider">FWD 富衛澳門</span>
-                <h1 class="font-bold text-sm sm:text-lg tracking-tight text-white truncate">尊衛您（寰譽版）旗艦醫療保障指南 <span class="text-[11px] font-normal text-amber-300 hidden sm:inline">2026年11月最新版</span></h1>
+   <!-- Sticky Header (已修正單行對齊，不換行、不截斷) -->
+    <header class="no-print sticky top-0 z-50 bg-[#0a2540] text-white shadow-lg border-b border-[#f37021]/30">
+        <div class="w-full max-w-[1440px] mx-auto px-4 xl:px-8 h-16 flex items-center justify-between gap-3">
+            
+            <!-- 左側：品牌標籤 + 計劃標題 -->
+            <div class="flex items-center gap-2.5 shrink-0">
+                <span class="bg-[#f37021] text-white font-black text-xs px-2.5 py-1 rounded-md tracking-wider whitespace-nowrap shrink-0">
+                    FWD 富衛澳門
+                </span>
+                <h1 class="font-bold text-sm xl:text-lg tracking-tight text-white whitespace-nowrap shrink-0">
+                    尊衛您（寰譽版）旗艦醫療保障指南 <span class="text-xs text-[#ff9f1c] font-semibold">2026</span>
+                </h1>
             </div>
-            <div class="flex items-center space-x-2">
-                <nav class="hidden xl:flex space-x-1 text-xs font-medium">
-                    <a href="#highlights" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">核心優勢</a>
-                    <a href="#comparison2026" class="px-2.5 py-1.5 rounded-md text-amber-300 font-bold hover:bg-fwd-navy transition">⭐ 2026市場比拼</a>
-                    <a href="#specs" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">標準vs特等</a>
-                    <a href="#calculator" class="px-2.5 py-1.5 rounded-md text-amber-300 font-bold hover:bg-fwd-navy transition">2026.11保費試算</a>
-                    <a href="#benefits" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">升級及現金保障</a>
-                    <a href="#fwdcare" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">養和及內地支援</a>
-                    <a href="#solutions" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">人生階段規劃</a>
-                    <a href="#faq" class="px-2.5 py-1.5 rounded-md hover:bg-fwd-navy transition">常見疑問</a>
-                </nav>
-                <button onclick="exportPDF()" class="bg-fwd-orange hover:bg-fwd-deeporange text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 cursor-pointer">
-                    <span>🖨️</span>
-                    <span>匯出 PDF 建議書</span>
-                </button>
-            </div>
+
+            <!-- 中間：導航連結 (強制單行不換行) -->
+            <nav class="hidden xl:flex items-center gap-1 text-xs 2xl:text-sm font-medium shrink-0">
+                <a href="#highlights" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">核心優勢</a>
+                <a href="#comparison" class="px-2 py-1.5 rounded-md text-[#ff9f1c] hover:bg-[#0f4c81] transition whitespace-nowrap">⭐ 2026市場比拼</a>
+                <a href="#specs" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">標準vs特等</a>
+                <a href="#calculator" class="px-2 py-1.5 rounded-md text-[#ff9f1c] hover:bg-[#0f4c81] transition whitespace-nowrap">2026.11保費試算</a>
+                <a href="#benefits" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">升級及現金保障</a>
+                <a href="#support" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">養和及內地支援</a>
+                <a href="#solutions" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">人生階段規劃</a>
+                <a href="#faq" class="px-2 py-1.5 rounded-md hover:bg-[#0f4c81] transition whitespace-nowrap">常見疑問</a>
+            </nav>
+
+            <!-- 右側：匯出 PDF 按鈕 -->
+            <button onclick="exportPDF()" class="bg-[#f37021] hover:bg-[#ff9f1c] text-white font-bold text-xs xl:text-sm px-3.5 py-2 rounded-xl shadow-md transition inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer">
+                <span>🖨️</span>
+                <span>匯出 PDF 建議書</span>
+            </button>
+
         </div>
     </header>
-
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
 
