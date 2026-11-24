@@ -3159,7 +3159,7 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
 
   // 2. 檢查附加保障
   var selectedRider = document.querySelector('input[name="crisisRiderRadio"]:checked');
-  var isKid = (selectedRider && selectedRider.value === 'kid');
+  var isKid = (selectedRider && (selectedRider.value === 'child' || selectedRider.value === 'kid'));
   var isFamily = (selectedRider && selectedRider.value === 'family');
 
   // 3. 讀取基準費率 unitRate
@@ -3236,21 +3236,33 @@ function calcCrisisFullPremium(age, gender, payTerm, rateType, sumInsured, isPro
     }
   }
 
-  // 6. 童步守護附加費
-  var kidAddonRate = 0;
-  if (isKid) {
-    var kCurrency = CRISIS_KID_ADDON_RATES[curr] || CRISIS_KID_ADDON_RATES['HKD'];
-    var kGroup = isPro ? kCurrency.pro : kCurrency.base;
-    kidAddonRate = kGroup[payTerm] || 0;
-  }
+// 6. 童步守護專用費率替換（附錄4：獨立每千元費率表，直接取代成人費率）
+      var kidAddonRate = 0;
+      if (isKid) {
+        var kidOfficialRates = {
+          base: {
+            HKD: { 10: 39.90, 15: 27.67, 20: 21.85, 25: 18.17, 30: 16.53 },
+            USD: { 10: 37.19, 15: 26.22, 20: 20.65, 25: 17.18, 30: 15.63 }
+          },
+          pro: {
+            HKD: { 10: 42.63, 15: 29.56, 20: 23.40, 25: 19.42, 30: 17.68 },
+            USD: { 10: 39.68, 15: 27.98, 20: 22.08, 25: 18.33, 30: 16.69 }
+          }
+        };
+        var kCurrTable = kidOfficialRates[isPro ? 'pro' : 'base'][curr] || kidOfficialRates[isPro ? 'pro' : 'base']['HKD'];
+        var termKey = parseInt(payTerm, 10) || 20;
+        if (kCurrTable[termKey] !== undefined) {
+          unitRate = kCurrTable[termKey];
+        }
+      }
 
-  // 7. 最終年繳保費計算
-  var netUnitRate = Math.max(0, unitRate - sizeDiscount);
-  var baseAnnual = (sumInsured / 1000) * netUnitRate;
-  var kidAnnual = (sumInsured / 1000) * kidAddonRate;
+      // 7. 最終年繳保費計算
+      var netUnitRate = Math.max(0, unitRate - sizeDiscount);
+      var baseAnnual = (sumInsured / 1000) * netUnitRate;
+      var kidAnnual = (sumInsured / 1000) * kidAddonRate;
 
-  return Math.round((baseAnnual + kidAnnual) * 100) / 100;
-}
+      return Math.round((baseAnnual + kidAnnual) * 100) / 100;
+    }
     
        // 2. 尊衛您 (寰譽版) - 標準保障級別 0-80 歲精確官方費率表 (港元 HKD)
     // 來源: FWD 官方 vPrime Signature Standard Schedule (2026.11.18 生效)
